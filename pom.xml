@@ -18,10 +18,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<properties>
+    <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-        <thymeleaf.version>3.0.0.BETA01</thymeleaf.version>
+        <thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
 	</properties>
 
 	<dependencies>

@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.service;
+package org.outofrange.crowdsupport.web;
 
 import org.springframework.stereotype.Controller;
 

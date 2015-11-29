@@ -1,13 +1,21 @@
 package org.outofrange.crowdsupport.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.nio.file.Path;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Venues")
 public class Venue extends BaseEntity {
+    @ManyToOne
+    @JoinTable(name = "city")
     private City city;
+
+    @Column(name = "name")
     private String name;
-    private Path imagePath;
+
+    @Column(name = "imagepath")
+    private String imagePath;
+
+    @OneToMany(mappedBy = "venue")
+    private List<DonationRequest> donationRequests;
 }
