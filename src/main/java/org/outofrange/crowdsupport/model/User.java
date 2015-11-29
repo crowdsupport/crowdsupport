@@ -2,7 +2,7 @@ package org.outofrange.crowdsupport.model;
 
 import java.nio.file.Path;
 
-public class User extends IdentifiedEntity {
+public class User extends BaseEntity {
     private String username;
     private String password;
     private String email;
