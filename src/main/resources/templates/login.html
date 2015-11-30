@@ -5,7 +5,26 @@
 <nav th:replace="include/default :: navbar"/>
 
 <main class="container">
-Login!
+    <div class="row">
+        <h1>Login</h1>
+    </div>
+
+    <div class="row">
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+                       th:autofocus="${username == null}" required="true" th:value="${username}"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" pattern=".{6,}"
+                       required="true" th:autofocus="${username != null}"
+                       title="Password has to have at least six characters"/>
+            </div>
+            <button type="submit" class="btn btn-default">Login!</button>
+        </form>
+    </div>
 </main>
 
 

@@ -1,23 +1,14 @@
 package org.outofrange.crowdsupport.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
+import javax.persistence.*;
 
 @MappedSuperclass
-public class BaseEntity {
-    @Id
-    @Column(name = "id")
-    private Long id;
-
+public class BaseEntity extends AbstractPersistable<Long> {
     @Version
     @Column(name = "version")
     private long version;
-
-    public Long getId() {
-        return id;
-    }
 
     public long getVersion() {
         return version;

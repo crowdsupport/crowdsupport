@@ -5,7 +5,30 @@
 <nav th:replace="include/default :: navbar"/>
 
 <main class="container">
-Register!
+    <div class="row">
+        <h1>We only need an username and a password to secure your account!</h1>
+    </div>
+
+    <div class="row">
+        <form action="/register" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="true"
+                       required="true"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" pattern=".{6,}"
+                       required="true"
+                       title="Password has to have at least six characters"/>
+            </div>
+            <div class="form-group">
+                <label for="email">E-Mail (optional)</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com"/>
+            </div>
+            <button type="submit" class="btn btn-default">Register!</button>
+        </form>
+    </div>
 </main>
 
 
