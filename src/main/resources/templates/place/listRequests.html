@@ -27,7 +27,7 @@
                 <span th:text="${request.promisedQuantity}">4</span> / <span th:text="${request.quantity}">15</span>
             </div>
 
-            <div th:if="${request.comments.size()} > 0">
+            <div th:if="${request.comments.size()} > 0" sec:authorize="${authenticated}">
                 <hr/>
                 <div th:each="comment : ${request.comments}" th:inline="text" class="box">
                     <p><b th:text="${comment.author.username}">Username</b>: [[${comment.text}]]</p>

@@ -11,6 +11,11 @@
     margin: 8px;
 }
 
+.dropdown-menu {
+    padding: 0px;
+    border-style: none;
+}
+
 body {
     padding-top: 70px;
     font-family: "PT Serif", serif;
