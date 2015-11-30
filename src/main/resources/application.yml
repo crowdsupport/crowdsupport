@@ -1,4 +1,10 @@
 spring:
+  thymeleaf:
+    mode: HTML5
+
+---
+
+spring:
   profiles: dev
   thymeleaf:
     cache: false

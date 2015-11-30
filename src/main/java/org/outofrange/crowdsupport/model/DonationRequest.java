@@ -1,13 +1,19 @@
 package org.outofrange.crowdsupport.model;
 
+import org.ocpsoft.prettytime.PrettyTime;
+import org.outofrange.crowdsupport.util.DateConverter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Table(name = "DonationRequests")
 public class DonationRequest extends BaseEntity {
+    private static final PrettyTime PRETTY_TIME = new PrettyTime(Locale.ENGLISH);
+
     @ManyToOne
     @JoinColumn(name = "place")
     private Place place;
@@ -17,9 +23,6 @@ public class DonationRequest extends BaseEntity {
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "createddatetime")
-    private LocalDateTime createdDateTime;
 
     @Column(name = "validtodatetime")
     private LocalDateTime validToDateTime;
@@ -55,14 +58,6 @@ public class DonationRequest extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
     }
 
     public LocalDateTime getValidToDateTime() {
@@ -112,11 +107,23 @@ public class DonationRequest extends BaseEntity {
         return promisedQuantity;
     }
 
+    public int getConfirmedQuantity() {
+        return (int)(getPromisedQuantity() * 0.4);
+    }
+
+    public float getConfirmedPercentage() {
+        return (float)(getConfirmedQuantity()) / getQuantity() * 100;
+    }
+
+    public float getPromisedPercentage() {
+        return (float)(getPromisedQuantity()) / getQuantity() * 100 - getConfirmedPercentage();
+    }
+
     public String getAge() {
-        return "30 minutes";
+        return PRETTY_TIME.format(DateConverter.toDate(getCreatedDateTime()));
     }
 
     public String getUntil() {
-        return "23:59";
+        return PRETTY_TIME.format(DateConverter.toDate(LocalDateTime.now().plusHours(6)));
     }
 }

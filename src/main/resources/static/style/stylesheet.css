@@ -62,3 +62,15 @@ h1 {
 .navbar-toggle .icon-bar {
     background-color: #FFF;
 }
+
+.navbar .filtertoggle {
+    margin: 8px;
+}
+
+.filtertoggle label.btn {
+    text-decoration: line-through;
+}
+
+.filtertoggle label.btn.active {
+    text-decoration: none;
+}
