@@ -18,8 +18,16 @@ public class State extends BaseEntity {
     @OneToMany(mappedBy = "state")
     private List<City> cities;
 
-    public State(String name) {
+    @Column(name = "identifier")
+    private String identifier;
+
+    public State() {
+
+    }
+
+    public State(String name, String identifier) {
         this.name = name;
+        this.identifier = identifier;
     }
 
     public String getName() {
@@ -36,5 +44,21 @@ public class State extends BaseEntity {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public List<City> getCities() {
+        return cities;
+    }
+
+    public void setCities(List<City> cities) {
+        this.cities = cities;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

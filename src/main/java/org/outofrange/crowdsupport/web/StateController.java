@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/support")
-public class CityController {
-    @RequestMapping(value = "/{state}/{city}", method = RequestMethod.GET)
-    public String listVenues(@PathVariable String state, @PathVariable String city) {
-        return "city/listVenues";
+public class StateController {
+    @RequestMapping(value = "/{state}", method = RequestMethod.GET)
+    public String listCities(@PathVariable String state) {
+        return "state/listCities";
     }
 }

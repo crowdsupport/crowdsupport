@@ -19,9 +19,16 @@ public class City extends BaseEntity {
     @OneToMany(mappedBy = "city")
     private List<Venue> venues;
 
-    public City(State state, String name) {
+    @Column(name = "identifier")
+    private String identifier;
+
+    public City() {
+    }
+
+    public City(State state, String name, String identifier) {
         this.state = state;
         this.name = name;
+        this.identifier = identifier;
     }
 
     public State getState() {
@@ -54,5 +61,13 @@ public class City extends BaseEntity {
 
     public void setVenues(List<Venue> venues) {
         this.venues = venues;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

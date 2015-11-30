@@ -15,12 +15,14 @@
 
     <div class="row center-block">
         <div th:each="city : ${cities}" class="citybox col-md-2 col-sm-6 col-xs-6">
-            <img th:src="${city.imagePath}" class="center-block"/>
+            <a th:href="'/support/' + ${city.state.identifier} + '/' + ${city.identifier}">
+                <img th:src="${city.imagePath}" class="center-block"/>
 
-            <div class="citytext">
-                <span th:text="${city.name}">Cityname</span><br/>
-                <span th:text="${city.state.name}">Statename</span>
-            </div>
+                <div class="citytext">
+                    <span th:text="${city.name}">Cityname</span><br/>
+                    <span th:text="${city.state.name}">Statename</span>
+                </div>
+            </a>
         </div>
     </div>
 </main>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/default :: head ('Blank title')"/>
+<body>
+<nav th:replace="include/default :: navbar"/>
+
+<main class="container">
+    <div th:text="${state}">State</div>
+    <div th:text="${city}">City</div>
+</main>
+
+<div th:include="include/default :: scripts"/>
+</body>
+</html>

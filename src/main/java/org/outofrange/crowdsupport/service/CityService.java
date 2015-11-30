@@ -17,16 +17,16 @@ public class CityService {
 
     public List<City> getRecentlyUsedCities() {
         final String placeHolder = "/image/placeholder.jpg";
-        State uk = new State("United Kingdom");
-        State austria = new State("Austria");
-        State germany = new State("Germany");
+        State uk = new State("United Kingdom", "unitedkingdom");
+        State austria = new State("Austria", "austria");
+        State germany = new State("Germany", "germany");
 
-        City preston = new City(uk, "Preston");
-        City vienna = new City(austria, "Vienna");
-        City salzburg = new City(austria, "Salzburg");
-        City hamburg = new City(germany, "Hamburg");
-        City london = new City(uk, "London");
-        City munich = new City(germany, "Munich");
+        City preston = new City(uk, "Preston", "preston");
+        City vienna = new City(austria, "Vienna", "vienna");
+        City salzburg = new City(austria, "Salzburg", "salzburg");
+        City hamburg = new City(germany, "Hamburg", "hamburg");
+        City london = new City(uk, "London", "london");
+        City munich = new City(germany, "Munich", "munich");
 
         final List<City> cities = Arrays.asList(preston, vienna, salzburg, hamburg, london, munich);
         cities.forEach(c -> c.setImagePath(placeHolder));
