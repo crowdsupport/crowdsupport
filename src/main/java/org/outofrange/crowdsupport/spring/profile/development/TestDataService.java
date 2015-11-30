@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.spring;
+package org.outofrange.crowdsupport.spring.profile.development;
 
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.Place;
@@ -10,6 +10,7 @@ import org.outofrange.crowdsupport.service.StateService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Profile("dev")
 public class TestDataService {
     private static final Logger log = LoggerFactory.getLogger(TestDataService.class);
 
