@@ -41,7 +41,7 @@
                         </ul>
                     </div>
                 </div>
-                <div th:if="${session.user == null}">
+                <div th:if="${session.user == null}" class="btn-group" role="group">
                     <a href="/login" class="btn btn-default">Login</a>
                     <a href="register" class="btn btn-default">Register</a>
                 </div>
