@@ -16,7 +16,7 @@ public class WelcomeController {
     private StateService stateService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String showWelcomePage(Model model) {
+    public String showAllStates(Model model) {
         final List<State> states = stateService.loadAllStates();
         model.addAttribute("states", states);
 
