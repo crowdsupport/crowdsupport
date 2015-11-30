@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport;
+package org.outofrange.crowdsupport.spring;
 
 import org.outofrange.crowdsupport.service.UserService;
 import org.springframework.context.annotation.Configuration;
