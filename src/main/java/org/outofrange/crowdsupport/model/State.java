@@ -25,9 +25,9 @@ public class State extends BaseEntity {
 
     }
 
-    public State(String name, String identifier) {
+    public State(String name) {
         this.name = name;
-        this.identifier = identifier;
+        this.identifier = name.toLowerCase().replaceAll("\\s+", "");
     }
 
     public String getName() {

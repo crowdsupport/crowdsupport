@@ -16,14 +16,14 @@ public class UserService {
     @Inject
     private PasswordEncoder passwordEncoder;
 
-    public boolean registerNewUser(User user) {
+    public User registerNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         if ("".equals(user.getEmail())) {
             user.setEmail(null);
         }
 
-        return userRepository.save(user) != null;
+        return userRepository.save(user);
     }
 
     public Optional<User> loadUser(String username, String password) {

@@ -9,30 +9,18 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CityService {
     @Inject
     private CityRepository cityRepository;
 
-    public List<City> getRecentlyUsedCities() {
-        final String placeHolder = "/image/placeholder.jpg";
-        State uk = new State("United Kingdom", "unitedkingdom");
-        State austria = new State("Austria", "austria");
-        State germany = new State("Germany", "germany");
+    public City save(City city) {
+        return cityRepository.save(city);
+    }
 
-        City preston = new City(uk, "Preston", "preston");
-        City vienna = new City(austria, "Vienna", "vienna");
-        City salzburg = new City(austria, "Salzburg", "salzburg");
-        City hamburg = new City(germany, "Hamburg", "hamburg");
-        City london = new City(uk, "London", "london");
-        City munich = new City(germany, "Munich", "munich");
-
-        final List<City> cities = Arrays.asList(preston, vienna, salzburg, hamburg, london, munich);
-        cities.forEach(c -> c.setImagePath(placeHolder));
-
-        Collections.shuffle(cities);
-
-        return cities;
+    public List<City> getAllCities() {
+        return cityRepository.findAll();
     }
 }

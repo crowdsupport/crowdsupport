@@ -17,7 +17,7 @@ public class WelcomeController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showWelcomePage(Model model) {
-        final List<City> cities = cityService.getRecentlyUsedCities();
+        final List<City> cities = cityService.getAllCities();
         model.addAttribute("cities", cities);
 
         return "welcome";

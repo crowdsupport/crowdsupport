@@ -25,10 +25,10 @@ public class City extends BaseEntity {
     public City() {
     }
 
-    public City(State state, String name, String identifier) {
+    public City(State state, String name) {
         this.state = state;
         this.name = name;
-        this.identifier = identifier;
+        this.identifier = name.toLowerCase().replaceAll("\\s+", "");
     }
 
     public State getState() {

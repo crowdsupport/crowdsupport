@@ -1,5 +1,6 @@
 package org.outofrange.crowdsupport.service;
 
+import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.StateRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,4 +10,8 @@ import javax.inject.Inject;
 public class StateService {
     @Inject
     private StateRepository stateRepository;
+
+    public State save(State state) {
+        return stateRepository.save(state);
+    }
 }
