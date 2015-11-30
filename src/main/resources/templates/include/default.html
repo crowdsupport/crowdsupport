@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head lang="en" th:fragment="head (title)">
     <meta charset="UTF-8"/>
@@ -29,11 +30,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <div class="navbar-right navbar-userarea">
-                <div th:unless="${session.user == null}">
+                <div sec:authorize="${authenticated}">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                            <span th:text="${session.user.username}">Testuser</span> <span class="caret"></span>
+                            <span th:text="'Test'">Testuser</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
                             <li><a href="/profile" class="btn btn-default" >Profile</a></li>
@@ -41,7 +42,7 @@
                         </ul>
                     </div>
                 </div>
-                <div th:if="${session.user == null}" class="btn-group" role="group">
+                <div sec:authorize="${not authenticated}" class="btn-group" role="group">
                     <a href="/login" class="btn btn-default">Login</a>
                     <a href="register" class="btn btn-default">Register</a>
                 </div>

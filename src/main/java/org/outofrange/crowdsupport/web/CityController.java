@@ -25,7 +25,7 @@ public class CityController {
             model.addAttribute("city", city.get());
             model.addAttribute("places", city.get().getPlaces());
 
-            return "city/listVenues";
+            return "city/listPlaces";
         } else {
             return "redirect:/support/" + stateIdentifier;
         }

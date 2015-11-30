@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.util;
+package org.outofrange.crowdsupport;
 
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.Place;

@@ -2,6 +2,9 @@ package org.outofrange.crowdsupport.service;
 
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +12,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @Inject
     private UserRepository userRepository;
 
@@ -26,13 +29,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> loadUser(String username, String password) {
-        final Optional<User> loadedUser = userRepository.findOneByUsername(username);
-
-        if (loadedUser.isPresent() && passwordEncoder.matches(password, loadedUser.get().getPassword())) {
-            return loadedUser;
-        }
-
-        return Optional.empty();
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findOneByUsername(username).get();
     }
 }

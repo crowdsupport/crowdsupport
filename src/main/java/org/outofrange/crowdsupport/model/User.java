@@ -1,14 +1,15 @@
 package org.outofrange.crowdsupport.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "Users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
     @Column(name = "username")
     private String username;
 
@@ -24,14 +25,13 @@ public class User extends BaseEntity {
     @Column(name = "admin")
     private boolean admin;
 
-    @Column(name = "activated")
-    private boolean activated;
+    @Column(name = "enabled")
+    private boolean enabled = true;
 
     @OneToMany(mappedBy = "author")
     private List<Comment> comments;
 
     public User() {
-
     }
 
     public User(String username, String password) {
@@ -43,10 +43,38 @@ public class User extends BaseEntity {
         return username;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return isEnabled();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isEnabled();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        final Set<GrantedAuthority> authorities = new HashSet<>();
+        if (isAdmin()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return authorities;
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
@@ -79,12 +107,13 @@ public class User extends BaseEntity {
         this.admin = admin;
     }
 
-    public boolean isActivated() {
-        return activated;
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public List<Comment> getComments() {
