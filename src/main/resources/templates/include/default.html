@@ -11,7 +11,7 @@
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="/style/stylesheet.css"/>
+    <link rel="stylesheet" th:href="@{/style/stylesheet.css}"/>
     <title th:text="'Crowdsupport - ' + ${title}">Crowdsupport - Subpage</title>
 </head>
 <body>
@@ -26,7 +26,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand navbar-left" href="/">Crowdsupport</a>
+            <a class="navbar-brand navbar-left" th:href="@{/}">Crowdsupport</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <div class="navbar-right navbar-userarea">
@@ -37,14 +37,14 @@
                             <span sec:authentication="name">Testuser</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="/profile" class="btn btn-default" >Profile</a></li>
-                            <li><a href="/logout" class="btn btn-default">Logout</a></li>
+                            <li><a th:href="@{/profile}" class="btn btn-default" >Profile</a></li>
+                            <li><a th:href="@{/logout}" class="btn btn-default">Logout</a></li>
                         </ul>
                     </div>
                 </div>
                 <div sec:authorize="${not authenticated}" class="btn-group" role="group">
-                    <a href="/login" class="btn btn-default">Login</a>
-                    <a href="register" class="btn btn-default">Register</a>
+                    <a th:href="@{/login}" class="btn btn-default">Login</a>
+                    <a th:href="@{/register}" class="btn btn-default">Register</a>
                 </div>
             </div>
 

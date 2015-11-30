@@ -15,7 +15,7 @@
 
     <div class="row center-block">
         <div th:each="state : ${states}" class="resultbox col-md-2 col-sm-6 col-xs-6">
-            <a th:href="'/support/' + ${state.identifier}">
+            <a th:href="@{/support/{s}(s=${state.identifier})}">
                 <img th:src="${state.imagePath}" class="center-block"/>
 
                 <div class="text">
