@@ -5,6 +5,7 @@ import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 @Service
 public class PlaceService {
@@ -13,5 +14,9 @@ public class PlaceService {
 
     public Place save(Place place) {
         return placeRepository.save(place);
+    }
+
+    public Optional<Place> load(String identifier) {
+        return placeRepository.findOneByIdentifier(identifier);
     }
 }

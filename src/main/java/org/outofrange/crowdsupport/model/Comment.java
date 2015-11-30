@@ -15,4 +15,39 @@ public class Comment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "donationrequest")
     private DonationRequest donationRequest;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public DonationRequest getDonationRequest() {
+        return donationRequest;
+    }
+
+    public void setDonationRequest(DonationRequest donationRequest) {
+        this.donationRequest = donationRequest;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

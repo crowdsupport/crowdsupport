@@ -14,7 +14,7 @@
     </div>
 
     <div class="row center-block">
-        <div th:each="place : ${places}" class="resultbox col-md-2 col-sm-6 col-xs-6">
+        <div th:each="place : ${places}" class="result box col-md-2 col-sm-6 col-xs-6">
             <a th:href="@{/support/{s}/{c}/{p}(s=${place.city.state.identifier},c=${place.city.identifier},p=${place.identifier})}">
                 <img th:src="${place.imagePath}" class="center-block"/>
 

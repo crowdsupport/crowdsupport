@@ -2,7 +2,7 @@
     background-image: linear-gradient(to bottom, #337AB7 0,#337AB7 100%);
 }
 
-.navbar .navbar-brand {
+.navbar .navbar-brand, .navbar .navbar-text {
     color: #fff;
     font-family: 'PT Sans Caption', sans-serif;
 }
@@ -34,21 +34,22 @@ h1 {
     margin-right: auto;
 }
 
-.resultbox {
-    height: 186px;
-    width: 146px;
-
+.box {
+    border: 1px solid #C0C0C0;
     padding: 5px;
     margin: 10px 5px;
-
-    border: 1px solid #C0C0C0;
 }
 
-.resultbox .text {
+.result {
+    height: 186px;
+    width: 146px;
+}
+
+.result .text {
     padding-left: 4px;
 }
 
-.resultbox img {
+.result img {
     height: auto;
     width: 128px;
 }

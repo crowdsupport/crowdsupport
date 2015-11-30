@@ -1,13 +1,7 @@
 package org.outofrange.crowdsupport.spring.profile.development;
 
-import org.outofrange.crowdsupport.model.City;
-import org.outofrange.crowdsupport.model.Place;
-import org.outofrange.crowdsupport.model.State;
-import org.outofrange.crowdsupport.model.User;
-import org.outofrange.crowdsupport.service.CityService;
-import org.outofrange.crowdsupport.service.PlaceService;
-import org.outofrange.crowdsupport.service.StateService;
-import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.model.*;
+import org.outofrange.crowdsupport.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -34,6 +28,12 @@ public class TestDataService {
 
     @Inject
     private PlaceService placeService;
+
+    @Inject
+    private DonationRequestService donationRequestService;
+
+    @Inject
+    private CommentService commentService;
 
     @PostConstruct
     public void init() {
@@ -89,5 +89,59 @@ public class TestDataService {
         trainOfHopeMainStation.setImagePath("https://pbs.twimg.com/profile_images/639504080411430912/WWA0UT5g.jpg");
         placeService.save(trainOfHope);
         placeService.save(trainOfHopeMainStation);
+
+        createRequests(trainOfHope);
+    }
+
+    private void createRequests(Place place) {
+        User user1 = userService.loadUserByUsername("admin");
+        User user2 = userService.loadUserByUsername("user");
+
+        DonationRequest water = new DonationRequest();
+        DonationRequest toothbrush = new DonationRequest();
+
+        water.setPlace(place);
+        toothbrush.setPlace(place);
+
+        water.setQuantity(30);
+        water.setTitle("Water");
+        water.setDescription("We need 30l water, as soon as possible!");
+
+        Comment waterComment1 = new Comment();
+        Comment waterComment2 = new Comment();
+        waterComment1.setQuantity(6);
+        waterComment1.setAuthor(user1);
+        waterComment1.setText("I can bring a six tray of water bottles! ETA: +1h");
+        waterComment2.setAuthor(user2);
+        waterComment2.setText("I'll bring some bottles from my office.");
+
+        waterComment1 = commentService.save(waterComment1);
+        waterComment2 = commentService.save(waterComment2);
+        water = donationRequestService.save(water);
+
+        water.addComment(waterComment1);
+        water.addComment(waterComment2);
+
+        water = donationRequestService.save(water);
+
+        toothbrush.setTitle("Toothbrushes!");
+        toothbrush.setDescription("We need new toothbrushes, a lot of them, all the time!");
+        donationRequestService.save(toothbrush);
+        Comment toothbrushComment = new Comment();
+        toothbrushComment.setDonationRequest(toothbrush);
+        toothbrushComment.setAuthor(user2);
+        toothbrushComment.setText("Got 2 spare toothbrushes at home, I'll bring them tomorrow.");
+        toothbrushComment = commentService.save(toothbrushComment);
+        toothbrush.addComment(toothbrushComment);
+
+        donationRequestService.save(toothbrush);
+
+
+        DonationRequest donationRequest = new DonationRequest();
+        donationRequest.setTitle("Baby food");
+        donationRequest.setDescription("We need baby food!");
+        donationRequest.setQuantity(10);
+        donationRequest.setPlace(place);
+        donationRequestService.save(donationRequest);
     }
 }

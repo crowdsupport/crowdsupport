@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="include/default :: head ('Can you help ' + ${place.name})"/>
+<body>
+<nav th:replace="include/default :: navbar"/>
+
+<main class="container">
+    <div class="row">
+        <nav class="navbar">
+            <p class="navbar-text"><span th:text="${place.name}">Name of place</span> @ <span
+                    th:text="${place.location}">Location</span>
+                (<span th:text="${place.city.name}">State</span>)
+            </p>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div th:each="request : ${requests}" class="box col-md-2 col-sm-4 col-xs-12">
+            <h3 th:text="${request.title}">Title</h3>
+
+            <p th:text="${request.description}">Description</p>
+
+            <div>Age: <span th:text="${request.age}">30 minutes</span></div>
+            <div>Needed until: <span th:text="${request.until}">10:28</span></div>
+            <div th:if="${request.quantity} > 0">
+                <span th:text="${request.promisedQuantity}">4</span> / <span th:text="${request.quantity}">15</span>
+            </div>
+
+            <div th:if="${request.comments.size()} > 0">
+                <hr/>
+                <div th:each="comment : ${request.comments}" th:inline="text" class="box">
+                    <p><b th:text="${comment.author.username}">Username</b>: [[${comment.text}]]</p>
+
+                    <p th:if="${comment.quantity} > 0">Quantity: [[${comment.quantity}]]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:include="include/default :: scripts"/>
+</body>
+</html>
