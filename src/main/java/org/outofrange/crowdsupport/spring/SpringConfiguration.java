@@ -18,7 +18,6 @@ public class SpringConfiguration {
 
     @Bean
     public DataSource dataSource() {
-
         return new DataSourceBuilder(getClass().getClassLoader()).driverClassName("org.h2.Driver")
                 .url("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE")
                 .username("sa").password("").build();
