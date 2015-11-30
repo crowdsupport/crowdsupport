@@ -4,11 +4,14 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Cities")
-public class City extends BaseEntity {
+@Table(name = "Venues")
+public class Place extends BaseEntity {
     @ManyToOne
-    @JoinColumn(name = "state")
-    private State state;
+    @JoinTable(name = "city")
+    private City city;
+
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "name")
     private String name;
@@ -16,27 +19,37 @@ public class City extends BaseEntity {
     @Column(name = "imagepath")
     private String imagePath;
 
-    @OneToMany(mappedBy = "city")
-    private List<Place> places;
+    @OneToMany(mappedBy = "place")
+    private List<DonationRequest> donationRequests;
 
     @Column(name = "identifier")
     private String identifier;
 
-    public City() {
+    public Place() {
     }
 
-    public City(State state, String name) {
-        this.state = state;
+    public Place(City city, String location, String name) {
+        this.city = city;
+        this.location = location;
         this.name = name;
+
         this.identifier = name.toLowerCase().replaceAll("\\s+", "");
     }
 
-    public State getState() {
-        return state;
+    public City getCity() {
+        return city;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getName() {
@@ -55,12 +68,12 @@ public class City extends BaseEntity {
         this.imagePath = imagePath;
     }
 
-    public List<Place> getPlaces() {
-        return places;
+    public List<DonationRequest> getDonationRequests() {
+        return donationRequests;
     }
 
-    public void setPlaces(List<Place> places) {
-        this.places = places;
+    public void setDonationRequests(List<DonationRequest> donationRequests) {
+        this.donationRequests = donationRequests;
     }
 
     public String getIdentifier() {

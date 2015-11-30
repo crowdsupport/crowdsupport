@@ -8,8 +8,8 @@ import java.util.List;
 @Table(name = "DonationRequests")
 public class DonationRequest extends BaseEntity {
     @ManyToOne
-    @JoinColumn(name = "venue")
-    private Venue venue;
+    @JoinColumn(name = "place")
+    private Place place;
 
     @Column(name = "createddatetime")
     private LocalDateTime createdDateTime;

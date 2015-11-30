@@ -3,5 +3,5 @@ package org.outofrange.crowdsupport.web;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class VenueController {
+public class PlaceController {
 }

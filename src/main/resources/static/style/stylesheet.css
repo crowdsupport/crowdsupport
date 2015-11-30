@@ -34,7 +34,7 @@ h1 {
     margin-right: auto;
 }
 
-.citybox {
+.resultbox {
     height: 186px;
     width: 146px;
 
@@ -44,12 +44,12 @@ h1 {
     border: 1px solid #C0C0C0;
 }
 
-.citybox .citytext {
+.resultbox .text {
     padding-left: 4px;
 }
 
-.citybox img {
-    height: 128px;
+.resultbox img {
+    height: auto;
     width: 128px;
 }
 

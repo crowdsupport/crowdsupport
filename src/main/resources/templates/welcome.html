@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include/default :: head ('Welcome!')"/>
+<head th:replace="include/default :: head ('Welcome')"/>
 <body>
 <nav th:replace="include/default :: navbar"/>
 
@@ -9,24 +9,21 @@
         <h1>Crowdsupport allows you to quickly see where your help is needed!</h1>
     </div>
     <div class="row">
-        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search for a location"/>
+        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search states"/>
     </div>
 
-
     <div class="row center-block">
-        <div th:each="city : ${cities}" class="citybox col-md-2 col-sm-6 col-xs-6">
-            <a th:href="'/support/' + ${city.state.identifier} + '/' + ${city.identifier}">
-                <img th:src="${city.imagePath}" class="center-block"/>
+        <div th:each="state : ${states}" class="resultbox col-md-2 col-sm-6 col-xs-6">
+            <a th:href="'/support/' + ${state.identifier}">
+                <img th:src="${state.imagePath}" class="center-block"/>
 
-                <div class="citytext">
-                    <span th:text="${city.name}">Cityname</span><br/>
-                    <span th:text="${city.state.name}">Statename</span>
+                <div class="text">
+                    <span th:text="${state.name}">Statename</span>
                 </div>
             </a>
         </div>
     </div>
 </main>
-
 
 <div th:include="include/default :: scripts"/>
 </body>

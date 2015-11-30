@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include/default :: head ('Login!')"/>
+<head th:replace="include/default :: head ('Login')"/>
 <body>
 <nav th:replace="include/default :: navbar"/>
 
@@ -18,9 +18,9 @@
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password" pattern=".{6,}"
+                <input type="password" class="form-control" id="password" name="password" pattern=".{4,}"
                        required="true" th:autofocus="${username != null}"
-                       title="Password has to have at least six characters"/>
+                       title="Password has to have at least four characters"/>
             </div>
             <button type="submit" class="btn btn-default">Login!</button>
         </form>

@@ -20,7 +20,11 @@ public class CityService {
         return cityRepository.save(city);
     }
 
-    public List<City> getAllCities() {
+    public List<City> loadAllCities() {
         return cityRepository.findAll();
+    }
+
+    public Optional<City> loadCity(String identifier) {
+        return cityRepository.findOneByIdentifier(identifier);
     }
 }
