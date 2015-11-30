@@ -19,7 +19,7 @@ public class CityController {
 
     @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}", method = RequestMethod.GET)
     public String listPlaces(Model model, @PathVariable String stateIdentifier, @PathVariable String cityIdentifier) {
-        final Optional<City> city = cityService.loadCity(cityIdentifier);
+        final Optional<City> city = cityService.load(cityIdentifier);
 
         if (city.isPresent() && city.get().getState().getIdentifier().equals(stateIdentifier)) {
             model.addAttribute("city", city.get());

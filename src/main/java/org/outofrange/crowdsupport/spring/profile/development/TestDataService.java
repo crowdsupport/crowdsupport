@@ -48,8 +48,8 @@ public class TestDataService {
         User admin = new User("admin", "admin");
         admin.setAdmin(true);
         User normal = new User("user", "user");
-        userService.registerNewUser(admin);
-        userService.registerNewUser(normal);
+        userService.save(admin);
+        userService.save(normal);
     }
 
     private void createStatesCitiesVenues() {
