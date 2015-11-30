@@ -25,6 +25,9 @@ public class Place extends BaseEntity {
     @Column(name = "identifier")
     private String identifier;
 
+    @Column(name = "active")
+    private boolean active;
+
     public Place() {
     }
 
@@ -82,5 +85,13 @@ public class Place extends BaseEntity {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
