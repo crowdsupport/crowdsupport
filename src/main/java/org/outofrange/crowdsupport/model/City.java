@@ -18,4 +18,41 @@ public class City extends BaseEntity {
 
     @OneToMany(mappedBy = "city")
     private List<Venue> venues;
+
+    public City(State state, String name) {
+        this.state = state;
+        this.name = name;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public List<Venue> getVenues() {
+        return venues;
+    }
+
+    public void setVenues(List<Venue> venues) {
+        this.venues = venues;
+    }
 }

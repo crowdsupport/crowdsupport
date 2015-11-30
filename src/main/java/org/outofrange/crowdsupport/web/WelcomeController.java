@@ -1,7 +1,7 @@
 package org.outofrange.crowdsupport.web;
 
-import org.outofrange.crowdsupport.model.State;
-import org.outofrange.crowdsupport.service.StateService;
+import org.outofrange.crowdsupport.model.City;
+import org.outofrange.crowdsupport.service.CityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +13,12 @@ import java.util.List;
 @Controller
 public class WelcomeController {
     @Inject
-    private StateService stateService;
+    private CityService cityService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showWelcomePage(Model model) {
-        final List<State> states = stateService.getRecentlyUsedStates();
-        model.addAttribute("states", states);
+        final List<City> cities = cityService.getRecentlyUsedCities();
+        model.addAttribute("cities", cities);
 
         return "welcome";
     }

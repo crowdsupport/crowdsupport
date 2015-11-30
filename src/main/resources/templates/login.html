@@ -16,24 +16,7 @@
 <nav th:include="include/header :: header" class="navbar navbar-fixed-top"></nav>
 
 <main class="container">
-    <div class="row">
-        <h1>Crowdsupport allows you to quickly see where your help is needed!</h1>
-    </div>
-    <div class="row">
-        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search for a location"/>
-    </div>
-
-
-    <div class="row center-block">
-        <div th:each="city : ${cities}" class="citybox col-md-2 col-sm-6 col-xs-6">
-            <img th:src="${city.imagePath}" class="center-block"/>
-
-            <div class="citytext">
-                <span th:text="${city.name}">Cityname</span><br/>
-                <span th:text="${city.state.name}">Statename</span>
-            </div>
-        </div>
-    </div>
+Login!
 </main>
 
 
