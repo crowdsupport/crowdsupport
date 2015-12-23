@@ -20,12 +20,10 @@ public class PlaceController {
     @RequestMapping(method = RequestMethod.GET)
     public String showAllRequests(@PathVariable String stateIdentifier, @PathVariable String cityIdentifier,
                                   @PathVariable String placeIdentifier, Model model) {
-        Optional<Place> place = placeService.load(placeIdentifier);
+        Optional<Place> place = placeService.load(stateIdentifier, cityIdentifier, placeIdentifier);
         final Place p = place.get();
 
-        if (place.isPresent() && placeIdentifier.equals(p.getIdentifier())
-                && cityIdentifier.equals(p.getCity().getIdentifier())
-                && stateIdentifier.equals(p.getCity().getState().getIdentifier())) {
+        if (place.isPresent()) {
             model.addAttribute("requests", p.getDonationRequests());
             model.addAttribute("place", p);
 

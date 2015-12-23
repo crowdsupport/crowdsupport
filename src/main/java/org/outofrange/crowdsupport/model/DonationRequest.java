@@ -24,7 +24,7 @@ public class DonationRequest extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "validtodatetime")
+    @Column(name = "validTo")
     private LocalDateTime validToDateTime;
 
     @Column(name = "quantity")
@@ -120,7 +120,7 @@ public class DonationRequest extends BaseEntity {
     }
 
     public String getAge() {
-        return PRETTY_TIME.format(DateConverter.toDate(getCreatedDateTime()));
+        return PRETTY_TIME.format(DateConverter.toDate(getCreatedDateTime().toLocalDateTime()));
     }
 
     public String getUntil() {

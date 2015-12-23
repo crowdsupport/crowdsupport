@@ -25,7 +25,14 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Optional<Place> load(String identifier) {
-        return placeRepository.findOneByIdentifier(identifier);
+    public Optional<Place> load(String stateIdentifier, String cityIdentifier, String placeIdentifier) {
+        final Optional<Place> place = placeRepository.findOneByIdentifier(placeIdentifier);
+
+        if (place.isPresent() && cityIdentifier.equals(place.get().getCity().getIdentifier()) &&
+                stateIdentifier.equals(place.get().getCity().getState().getIdentifier())) {
+            return place;
+        } else {
+            return Optional.empty();
+        }
     }
 }

@@ -2,8 +2,10 @@ package org.outofrange.crowdsupport.model;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
+import java.time.ZonedDateTime;
 
 @MappedSuperclass
 public class BaseEntity extends AbstractPersistable<Long> {
@@ -16,9 +18,9 @@ public class BaseEntity extends AbstractPersistable<Long> {
     }
 
     @Column(name = "created")
-    private LocalDateTime createdDateTime = LocalDateTime.now();
+    private ZonedDateTime createdDateTime = ZonedDateTime.now();
 
-    public LocalDateTime getCreatedDateTime() {
+    public ZonedDateTime getCreatedDateTime() {
         return createdDateTime;
     }
 }
