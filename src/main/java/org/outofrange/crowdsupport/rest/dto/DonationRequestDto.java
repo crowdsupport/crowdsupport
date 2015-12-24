@@ -7,6 +7,8 @@ import java.util.List;
  * @author Markus Möslinger
  */
 public class DonationRequestDto {
+    private Long id;
+
     private String title;
 
     private String description;
@@ -75,5 +77,13 @@ public class DonationRequestDto {
 
     public void setCreatedDateTime(ZonedDateTime createdDateTime) {
         this.createdDateTime = createdDateTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

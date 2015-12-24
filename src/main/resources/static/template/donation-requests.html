@@ -1,0 +1,32 @@
+<div class="row" id="donationrequests">
+    <div ng-repeat="donationRequest in ctrl.donationRequests" class="box col-md-2 col-sm-4 col-xs-12">
+        <div ng-controller="DonationRequestCtrl as donationRequestCtrl" ng-init="donationRequestCtrl.init(donationRequest)">
+            <h3>{{donationRequest.title}}</h3>
+
+            <p>{{donationRequest.description}}</p>
+
+            <div>Posted: <span class="time-ago" title="{{donationRequest.createdDateTime}}"></span></div>
+            <div ng-show="donationRequest.validToDateTime">Until: {{donationRequest.validToDateTime}}</div>
+            <div ng-if="donationRequest.quantity > 0">
+                Quantity
+            </div>
+
+            <div>
+                <div ng-show="donationRequest.comments">
+                    <div ng-repeat="comment in donationRequest.comments" class="box">
+                        <p><b>{{comment.author.username}}</b>: {{comment.text}}</p>
+
+                        <p ng-if="comment.quantity > 0">Quantity: {{comment.quantity}}</p>
+                    </div>
+                </div>
+
+                <div>
+                    <form ng-submit="donationRequestCtrl.addComment()" name="commentForm">
+                        <input type="text" placeholder="New comment..." ng-model="comment"/>
+                        <button ng-disabled="comment.length === 0">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

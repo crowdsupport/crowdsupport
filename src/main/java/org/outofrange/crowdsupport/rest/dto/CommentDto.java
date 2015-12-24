@@ -12,6 +12,10 @@ public class CommentDto {
 
     private ZonedDateTime createdDateTime;
 
+    private int quantity;
+
+    private Long donationRequestId;
+
     public String getText() {
         return text;
     }
@@ -34,5 +38,21 @@ public class CommentDto {
 
     public void setAuthor(UserDto author) {
         this.author = author;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Long getDonationRequestId() {
+        return donationRequestId;
+    }
+
+    public void setDonationRequestId(Long donationRequestId) {
+        this.donationRequestId = donationRequestId;
     }
 }

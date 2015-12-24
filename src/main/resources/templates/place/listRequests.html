@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="include/default :: head ('Can you help ' + ${place.name})"/>
-<body>
+<body ng-app="crowdsupport">
 <nav th:replace="include/default :: navbar"/>
 
 <main class="container">
@@ -16,49 +16,20 @@
             <div class="navbar-right filtertoggle">
                 <div class="btn-group" data-toggle="buttons">
                     <label class="btn btn-default active">
-                        <input type="checkbox" checked="checked"/> Active
+                        <input type="checkbox" checked="checked"/> Open
                     </label>
                     <label class="btn btn-warning active">
                         <input type="checkbox" checked="checked"/> Waiting for confirmation
                     </label>
                     <label class="btn btn-success">
-                        <input type="checkbox"/> Past
+                        <input type="checkbox"/> Done
                     </label>
                 </div>
             </div>
         </nav>
     </div>
 
-    <div class="row">
-        <div th:each="request : ${requests}" class="box col-md-2 col-sm-4 col-xs-12">
-            <h3 th:text="${request.title}">Title</h3>
-
-            <p th:text="${request.description}">Description</p>
-
-            <div>Posted: <span th:text="${request.age}">30m ago</span></div>
-            <div>Until: <span th:text="${request.until}">6 hours from now</span></div>
-            <div th:if="${request.quantity} > 0">
-                <span th:text="${request.promisedQuantity}">4</span> / <span th:text="${request.quantity}">15</span>
-
-                <div class="progress">
-                    <div class="progress-bar progress-bar-success" th:style="'width: ' + ${request.confirmedPercentage} + '%'">
-                        <span class="sr-only"></span>
-                    </div>
-                    <div class="progress-bar progress-bar-warning progress-bar-striped" th:style="'width: ' + ${request.promisedPercentage} + '%'">
-                        <span class="sr-only"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div th:if="${request.comments.size()} > 0" sec:authorize="${authenticated}">
-                <div th:each="comment : ${request.comments}" th:inline="text" class="box">
-                    <p><b th:text="${comment.author.username}">Username</b>: [[${comment.text}]]</p>
-
-                    <p th:if="${comment.quantity} > 0">Quantity: [[${comment.quantity}]]</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <donation-requests></donation-requests>
 </main>
 
 <div th:include="include/default :: scripts"/>

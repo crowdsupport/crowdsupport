@@ -1,7 +1,10 @@
 package org.outofrange.crowdsupport.web;
 
+import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.service.PlaceService;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +27,6 @@ public class PlaceController {
         final Place p = place.get();
 
         if (place.isPresent()) {
-            model.addAttribute("requests", p.getDonationRequests());
             model.addAttribute("place", p);
 
             return "place/listRequests";
