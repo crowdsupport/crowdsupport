@@ -34,7 +34,7 @@
 
         $scope.comment = "";
 
-        this.init = function(donationRequest) {
+        this.init = function (donationRequest) {
             that.donationRequest = donationRequest;
         };
 
@@ -56,9 +56,11 @@
             // TODO the donationRequests controller (the one which should only exist once per site) should register this,
             // and forward the comments to the appropriate donationRequest controller, so not every single donationRequest
             // listens to every single comment update
-
-            if (that.donationRequest.id == message.donationRequestId) {
-                that.donationRequest.comments.push(message);
+            if (message.changeType == "ADD" && message.entity == "CommentDto") {
+                message = message.payload;
+                if (that.donationRequest.id == message.donationRequestId) {
+                    that.donationRequest.comments.push(message);
+                }
             }
         });
     }]);

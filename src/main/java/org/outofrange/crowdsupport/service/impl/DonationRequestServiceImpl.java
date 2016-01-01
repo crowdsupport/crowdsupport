@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DonationRequestServiceImpl implements DonationRequestService {
@@ -21,5 +22,10 @@ public class DonationRequestServiceImpl implements DonationRequestService {
     @Override
     public List<DonationRequest> loadAll() {
         return donationRequestRepository.findAll();
+    }
+
+    @Override
+    public Optional<DonationRequest> loadWithId(long id) {
+        return Optional.ofNullable(donationRequestRepository.findOne(id));
     }
 }

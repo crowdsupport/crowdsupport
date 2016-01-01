@@ -1,9 +1,14 @@
 package org.outofrange.crowdsupport.web;
 
 import org.modelmapper.ModelMapper;
+import org.outofrange.crowdsupport.model.Comment;
 import org.outofrange.crowdsupport.model.User;
+import org.outofrange.crowdsupport.rest.dto.ChangeDto;
 import org.outofrange.crowdsupport.rest.dto.CommentDto;
 import org.outofrange.crowdsupport.rest.dto.UserDto;
+import org.outofrange.crowdsupport.service.CommentService;
+import org.outofrange.crowdsupport.service.DonationRequestService;
+import org.outofrange.crowdsupport.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,15 +26,24 @@ public class DonationRequestController {
     @Inject
     private ModelMapper mapper;
 
+    @Inject
+    private CommentService commentService;
+
+    @Inject
+    private DonationRequestService donationRequestService;
+
     @MessageMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/comments")
-    public CommentDto sendComment(@DestinationVariable String stateIdentifier, @DestinationVariable String cityIdentifier, @DestinationVariable String placeIdentifier, CommentDto commentDto) {
+    public ChangeDto<CommentDto> sendComment(@DestinationVariable String stateIdentifier, @DestinationVariable String cityIdentifier, @DestinationVariable String placeIdentifier, CommentDto commentDto) {
         log.info("Comment for {}: {}", placeIdentifier, commentDto);
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDto userDto = mapper.map(user, UserDto.class);
 
-        commentDto.setAuthor(userDto);
+        Comment comment = mapper.map(commentDto, Comment.class);
 
-        return commentDto;
+        comment.setAuthor(user);
+        comment.setDonationRequest(donationRequestService.loadWithId(commentDto.getDonationRequestId()).get());
+        commentService.save(comment);
+
+        return ChangeDto.add(mapper.map(comment, CommentDto.class));
     }
 }

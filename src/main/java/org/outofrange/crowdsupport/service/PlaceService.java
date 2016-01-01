@@ -4,6 +4,6 @@ import org.outofrange.crowdsupport.model.Place;
 
 import java.util.Optional;
 
-public interface PlaceService extends CrowdsupportService<Place> {
+public interface PlaceService extends BaseService<Place> {
     Optional<Place> load(String stateIdentifier, String cityIdentifier, String placeIdentifier);
 }
