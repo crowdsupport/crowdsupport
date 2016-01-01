@@ -43,7 +43,6 @@
 
             var commentDto = {
                 "text": $scope.comment,
-                "author": null,
                 "quantity": 0,
                 "donationRequestId": that.donationRequest.id
             };
