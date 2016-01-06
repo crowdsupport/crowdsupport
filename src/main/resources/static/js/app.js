@@ -28,11 +28,16 @@
         }
     });
 
-    app.controller("DonationRequestCtrl", ["$scope", "CommentService", function ($scope, CommentService) {
+    app.controller("LoginCtrl", function(UserService) {
+        UserService.loadUser();
+    });
+
+    app.controller("DonationRequestCtrl", function ($scope, CommentService, UserService) {
         var that = this;
         var donationRequest = {};
 
         $scope.comment = "";
+        $scope.UserService = UserService;
 
         this.init = function (donationRequest) {
             that.donationRequest = donationRequest;
@@ -63,5 +68,5 @@
                 }
             }
         });
-    }]);
+    });
 })();

@@ -1,7 +1,7 @@
 (function () {
     var app = angular.module("crowdsupport.services", []);
 
-    app.service("CommentService", function($q, $timeout) {
+    app.service("CommentService", function ($q, $timeout) {
 
         var service = {}, listener = $q.defer(), socket = {
             client: null,
@@ -9,7 +9,7 @@
         };
 
         service.RECONNECT_TIMEOUT = 30000;
-        service.IDENTIFIER = (function(){
+        service.IDENTIFIER = (function () {
             var url = window.location.href;
             var position = url.search(/support\//) + 8;
             return url.substring(position);
@@ -19,33 +19,33 @@
         service.CHAT_TOPIC = "/topic/" + service.IDENTIFIER + "/comments";
         service.CHAT_BROKER = "/app/" + service.IDENTIFIER + "/comments";
 
-        service.receive = function() {
+        service.receive = function () {
             return listener.promise;
         };
 
-        service.send = function(comment) {
+        service.send = function (comment) {
             socket.stomp.send(service.CHAT_BROKER, {
                 priority: 9
             }, JSON.stringify(comment));
         };
 
-        var reconnect = function() {
-            $timeout(function() {
+        var reconnect = function () {
+            $timeout(function () {
                 initialize();
             }, this.RECONNECT_TIMEOUT);
         };
 
-        var getComment = function(data) {
+        var getComment = function (data) {
             return JSON.parse(data);
         };
 
-        var startListener = function() {
-            socket.stomp.subscribe(service.CHAT_TOPIC, function(data) {
+        var startListener = function () {
+            socket.stomp.subscribe(service.CHAT_TOPIC, function (data) {
                 listener.notify(getComment(data.body));
             });
         };
 
-        var initialize = function() {
+        var initialize = function () {
             socket.client = new SockJS(service.SOCKET_URL);
             socket.stomp = Stomp.over(socket.client);
             socket.stomp.connect({}, startListener);
@@ -54,5 +54,37 @@
 
         initialize();
         return service;
-    })
+    });
+
+    app.service("UserService", function ($rootScope, $http) {
+        var service = {};
+        service.user = null;
+        service.storage = localStorage;
+
+        var userRestUrl = "/service/v1/user/current";
+
+        service.loadUser = function () {
+            if (service.user === null) {
+                if (service.storage.getItem("user") !== null) {
+                    service.user = angular.fromJson(service.storage.user);
+                } else {
+                    $http.get(userRestUrl).success(function (data) {
+                        service.user = data === "" ? null : angular.fromJson(data);
+                        service.storage.user = data === "" ? null : data;
+                    });
+                }
+            }
+        };
+
+        service.forgetUser = function () {
+            service.user = null;
+            service.storage.removeItem("user");
+        };
+
+        service.loggedIn = function () {
+            return service.user !== null;
+        };
+
+        return service;
+    });
 })();

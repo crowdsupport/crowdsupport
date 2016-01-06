@@ -20,7 +20,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div ng-show="UserService.user">
                     <form ng-submit="donationRequestCtrl.addComment()" name="commentForm">
                         <input type="text" placeholder="New comment..." ng-model="comment"/>
                         <button ng-disabled="comment.length === 0">Send</button>
