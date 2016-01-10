@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="include/default :: head ('Profile')"/>
+<body>
+<nav th:replace="include/default :: navbar"/>
+
+<main class="container">
+    <div class="row">
+        <form th:action="@{/profile}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="true"
+                       required="true" th:value="${username}" disabled="disabled"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" pattern="|.{4,}"
+                       placeholder="Want to change your password?"
+                       title="Password has to have at least four characters"/>
+            </div>
+            <div class="form-group">
+                <label for="email">E-Mail (optional)</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com" th:value="${email}"/>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+        </form>
+    </div>
+</main>
+
+<div th:include="include/default :: scripts"/>
+</body>
+</html>

@@ -9,11 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     @Inject
     private UserRepository userRepository;
@@ -25,13 +28,10 @@ public class UserServiceImpl implements UserService {
     private ModelMapper mapper;
 
     @Override
+    @Transactional(readOnly = false)
     public User save(User user) {
-        if (user.isNew()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            if ("".equals(user.getEmail())) {
-                user.setEmail(null);
-            }
+        if (user.rehashPassword()) {
+            user.setPasswordHash(passwordEncoder.encode(user.getPassword()));
         }
 
         return userRepository.save(user);
@@ -48,11 +48,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getCurrentUser() {
+    public Optional<User> getCurrentUser() {
         final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof User) {
-            return mapper.map(principal, UserDto.class);
+            return Optional.of((User) principal);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<User> getCurrentUserUpdated() {
+        final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof User) {
+            final User user = (User) principal;
+            return Optional.of(loadUserByUsername(user.getUsername()));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public UserDto getCurrentUserDto() {
+        final Optional<User> user = getCurrentUser();
+
+        if (user.isPresent()) {
+            return mapper.map(user.get(), UserDto.class);
         } else {
             return null;
         }

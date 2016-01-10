@@ -31,12 +31,14 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "author")
     private List<Comment> comments;
 
+    private boolean rehashPassword;
+
     public User() {
     }
 
     public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+        setUsername(username);
+        setPassword(password);
     }
 
     public String getUsername() {
@@ -81,6 +83,7 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+        rehashPassword = true;
     }
 
     public String getEmail() {
@@ -88,6 +91,10 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void setEmail(String email) {
+        if ("".equals(email)) {
+            email = null;
+        }
+
         this.email = email;
     }
 
@@ -122,5 +129,14 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public boolean rehashPassword() {
+        return rehashPassword;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.password = passwordHash;
+        rehashPassword = false;
     }
 }

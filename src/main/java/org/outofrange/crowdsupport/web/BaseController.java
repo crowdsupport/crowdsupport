@@ -19,7 +19,7 @@ public class BaseController {
     @ModelAttribute("currentUser")
     public String currentUserJson() {
         try {
-            return objectMapper.writeValueAsString(userService.getCurrentUser());
+            return objectMapper.writeValueAsString(userService.getCurrentUserDto());
         } catch (JsonProcessingException e) {
             return null;
         }
