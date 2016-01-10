@@ -1,9 +1,8 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
-import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
-import org.outofrange.crowdsupport.rest.dto.DonationRequestDto;
+import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.service.DonationRequestService;
 import org.outofrange.crowdsupport.service.PlaceService;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.rest.dto;
+package org.outofrange.crowdsupport.dto;
 
 import java.time.ZonedDateTime;
 import java.util.List;
