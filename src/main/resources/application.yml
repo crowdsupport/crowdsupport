@@ -1,9 +1,19 @@
 spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
   thymeleaf:
     mode: HTML5
   jackson:
     serialization:
       write_dates_as_timestamps: false
+server:
+  port: 80
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,application/javascript
+
 ---
 
 spring:
@@ -19,14 +29,5 @@ spring:
   jackson:
     serialization:
       indent_output: true
-
----
-
-spring:
-  profiles: prod
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
 server:
-  port: 80
+  port: 8080
