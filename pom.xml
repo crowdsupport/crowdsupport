@@ -22,6 +22,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
         <thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
+
+        <wro4j.version>1.7.9</wro4j.version>
 	</properties>
 
 	<dependencies>
@@ -107,8 +109,28 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+            <plugin>
+                <groupId>ro.isdc.wro4j</groupId>
+                <artifactId>wro4j-maven-plugin</artifactId>
+                <version>${wro4j.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <targetGroups>all</targetGroups>
+                    <minimize>true</minimize>
+                    <destinationFolder>${basedir}/src/main/resources/static/min/</destinationFolder>
+                    <contextFolder>${basedir}/src/main/resources/static</contextFolder>
+                    <wroFile>${basedir}/src/main/resources/wro4j.xml</wroFile>
+                    <ignoreMissingResources>false</ignoreMissingResources>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
-	
-
 </project>
