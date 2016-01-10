@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 @Controller
 @RequestMapping(value = "/register")
-public class RegisterController  {
+public class RegisterController extends BaseController {
     @Inject
     private UserService userService;
 

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/support/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}")
-public class PlaceController {
+public class PlaceController extends BaseController {
     @Inject
     private PlaceService placeService;
 

@@ -55,36 +55,4 @@
         initialize();
         return service;
     });
-
-    app.service("UserService", function ($rootScope, $http) {
-        var service = {};
-        service.user = null;
-        service.storage = localStorage;
-
-        var userRestUrl = "/service/v1/user/current";
-
-        service.loadUser = function () {
-            if (service.user === null) {
-                if (service.storage.getItem("user") !== null) {
-                    service.user = angular.fromJson(service.storage.user);
-                } else {
-                    $http.get(userRestUrl).success(function (data) {
-                        service.user = data === "" ? null : angular.fromJson(data);
-                        service.storage.user = data === "" ? null : data;
-                    });
-                }
-            }
-        };
-
-        service.forgetUser = function () {
-            service.user = null;
-            service.storage.removeItem("user");
-        };
-
-        service.loggedIn = function () {
-            return service.user !== null;
-        };
-
-        return service;
-    });
 })();

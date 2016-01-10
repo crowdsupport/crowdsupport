@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/support")
-public class StateController {
+public class StateController extends BaseController {
     @Inject
     private StateService stateService;
 

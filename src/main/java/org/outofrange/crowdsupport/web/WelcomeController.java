@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Controller
-public class WelcomeController {
+public class WelcomeController extends BaseController {
     @Inject
     private StateService stateService;
 

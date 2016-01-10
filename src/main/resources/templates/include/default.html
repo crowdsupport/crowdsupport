@@ -29,7 +29,8 @@
             <a class="navbar-brand navbar-left" th:href="@{/}">Crowdsupport</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <div class="navbar-right navbar-userarea" ng-controller="LoginCtrl as loginCtrl">
+            <div class="navbar-right navbar-userarea" ng-controller="LoginCtrl as loginCtrl"
+                 th:attr="ng-init='setUser(\'' + ${currentUser} + '\')'">
                 <div sec:authorize="${authenticated}">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"

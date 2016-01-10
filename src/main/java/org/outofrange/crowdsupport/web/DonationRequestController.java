@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import java.security.Security;
 
 @Controller
-public class DonationRequestController {
+public class DonationRequestController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(DonationRequestController.class);
 
     @Inject

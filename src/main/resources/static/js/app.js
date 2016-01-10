@@ -28,16 +28,19 @@
         }
     });
 
-    app.controller("LoginCtrl", function(UserService) {
-        UserService.loadUser();
+    app.controller("LoginCtrl", function($scope, $rootScope) {
+        $rootScope.user = null;
+
+        $scope.setUser = function(userJson) {
+            $rootScope.user = angular.fromJson(userJson);
+        };
     });
 
-    app.controller("DonationRequestCtrl", function ($scope, CommentService, UserService) {
+    app.controller("DonationRequestCtrl", function ($scope, CommentService) {
         var that = this;
         var donationRequest = {};
 
         $scope.comment = "";
-        $scope.UserService = UserService;
 
         this.init = function (donationRequest) {
             that.donationRequest = donationRequest;

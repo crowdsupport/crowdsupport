@@ -8,7 +8,7 @@
             <div>Posted: <span class="time-ago" title="{{donationRequest.createdDateTime}}"></span></div>
             <div ng-show="donationRequest.validToDateTime">Until: {{donationRequest.validToDateTime}}</div>
             <div ng-if="donationRequest.quantity > 0">
-                Quantity
+                Quantity: {{donationRequest.quantity}}
             </div>
 
             <div>
@@ -20,7 +20,7 @@
                     </div>
                 </div>
 
-                <div ng-show="UserService.user">
+                <div ng-show="$root.user">
                     <form ng-submit="donationRequestCtrl.addComment()" name="commentForm">
                         <input type="text" placeholder="New comment..." ng-model="comment"/>
                         <button ng-disabled="comment.length === 0">Send</button>

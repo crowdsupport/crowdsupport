@@ -1,8 +1,11 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.UserRepository;
+import org.outofrange.crowdsupport.rest.dto.UserDto;
 import org.outofrange.crowdsupport.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Inject
     private PasswordEncoder passwordEncoder;
+
+    @Inject
+    private ModelMapper mapper;
 
     @Override
     public User save(User user) {
@@ -42,5 +48,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findOneByUsername(username).get();
+    }
+
+    @Override
+    public UserDto getCurrentUser() {
+        final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof User) {
+            return mapper.map(principal, UserDto.class);
+        } else {
+            return null;
+        }
     }
 }
