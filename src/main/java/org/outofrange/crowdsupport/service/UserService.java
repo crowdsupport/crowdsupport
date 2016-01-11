@@ -16,4 +16,6 @@ public interface UserService extends BaseService<User>, UserDetailsService {
     Optional<User> getCurrentUserUpdated();
 
     UserDto getCurrentUserDto();
+
+    boolean isUserLoggedIn();
 }

@@ -28,6 +28,10 @@ public class Place extends BaseEntity {
     @Column(name = "active")
     private boolean active;
 
+    @OneToOne
+    @JoinColumn(name = "placeRequest")
+    private PlaceRequest placeRequest;
+
     public Place() {
     }
 
@@ -93,5 +97,13 @@ public class Place extends BaseEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public PlaceRequest getPlaceRequest() {
+        return placeRequest;
+    }
+
+    public void setPlaceRequest(PlaceRequest placeRequest) {
+        this.placeRequest = placeRequest;
     }
 }

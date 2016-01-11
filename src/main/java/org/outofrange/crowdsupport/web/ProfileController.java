@@ -45,7 +45,7 @@ public class ProfileController extends BaseController {
 
         userService.save(user);
 
-        redirectAttributes.addFlashAttribute("message", "Profile changed successfully");
+        redirectAttributes.addFlashAttribute("msg", "Profile changed successfully");
         return "redirect:/profile";
     }
 }

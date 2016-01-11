@@ -31,3 +31,6 @@ spring:
       indent_output: true
 server:
   port: 8080
+logging:
+  level:
+    org.outofrange.crowdsupport: TRACE

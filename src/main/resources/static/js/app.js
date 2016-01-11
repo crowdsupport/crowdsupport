@@ -28,10 +28,10 @@
         }
     });
 
-    app.controller("LoginCtrl", function($scope, $rootScope) {
+    app.controller("LoginCtrl", function ($scope, $rootScope) {
         $rootScope.user = null;
 
-        $scope.setUser = function(userJson) {
+        $scope.setUser = function (userJson) {
             $rootScope.user = angular.fromJson(userJson);
         };
     });
@@ -70,6 +70,48 @@
                     that.donationRequest.comments.push(message);
                 }
             }
+        });
+    });
+
+    app.controller("PlaceRequestCtrl", function ($scope, $http) {
+        $scope.city = {};
+        $scope.name = "";
+        $scope.identifier = "";
+        $scope.location = "";
+
+        $scope.cityname = "";
+        $scope.statename = "";
+
+        $scope.addCity = false;
+
+        this.submit = function () {
+            var formData = {
+                place: {
+                    name: $scope.name,
+                    identifier: $scope.identifier,
+                    location: $scope.location
+                }
+            };
+
+            if (!$scope.addCity) {
+                formData.place.city = $scope.city;
+            } else {
+                formData.city = $scope.cityname;
+                formData.state = $scope.statename;
+            }
+
+            var url = "/service/v1/place/request";
+
+            $http.post(url, formData).then(function(response) {
+                alert("Success");
+            }, function(response) {
+                alert("Oh oh");
+            });
+        };
+
+        $('#cty.typeahead').bind('typeahead:select', function (ev, suggestion) {
+            $scope.city = suggestion;
+            console.log('Selection: ' + JSON.stringify($scope.city));
         });
     });
 })();

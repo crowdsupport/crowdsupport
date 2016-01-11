@@ -1,14 +1,11 @@
 package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.model.City;
-import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.CityRepository;
 import org.outofrange.crowdsupport.service.CityService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +27,10 @@ public class CityServiceImpl implements CityService {
     @Override
     public Optional<City> load(String identifier) {
         return cityRepository.findOneByIdentifier(identifier);
+    }
+
+    @Override
+    public List<City> searchCities(String query) {
+        return cityRepository.findAllByNameContainingIgnoreCase(query);
     }
 }
