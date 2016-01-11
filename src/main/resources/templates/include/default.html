@@ -12,10 +12,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}">
-    <link rel="stylesheet" th:href="@{/style/stylesheet.css}"/>
+        <link rel="stylesheet" th:href="@{/style/stylesheet.css}"/>
     </th:block>
     <th:block th:if="${! #arrays.contains(@environment.getActiveProfiles(),'dev')}">
-    <link rel="stylesheet" th:href="@{/min/all.css}"/>
+        <link rel="stylesheet" th:href="@{/min/all.css}"/>
     </th:block>
 
     <title th:text="'Crowdsupport - ' + ${title}">Crowdsupport - Subpage</title>
@@ -59,37 +59,40 @@
     </div>
 </nav>
 
-<div th:fragment="scripts">
-<th:block th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+<th:block th:fragment="footer">
+    <div class="navbar navbar-fixed-bottom">
+        <p th:if="${message != null}" class="navbar-text" th:text="${message}">Message</p>
+    </div>
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
 
-    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.js"></script>
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
 
-    <script th:src="@{/js/timeago.js}"></script>
-    <script th:src="@{/js/services.js}"></script>
-    <script th:src="@{/js/app.js}"></script>
+        <script th:src="@{/js/timeago.js}"></script>
+        <script th:src="@{/js/services.js}"></script>
+        <script th:src="@{/js/app.js}"></script>
+    </th:block>
+    <th:block th:if="${! #arrays.contains(@environment.getActiveProfiles(),'dev')}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+                integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+                crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+        <script th:src="@{/min/all.js}"></script>
+    </th:block>
 </th:block>
-<th:block th:if="${! #arrays.contains(@environment.getActiveProfiles(),'dev')}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-
-    <script th:src="@{/min/all.js}"></script>
-</th:block>
-</div>
 </body>
 </html>
