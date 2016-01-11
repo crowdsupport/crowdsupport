@@ -60,13 +60,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getCurrentUserUpdated() {
-        final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final Optional<User> user = getCurrentUser();
 
-        if (principal instanceof User) {
-            final User user = (User) principal;
-            return Optional.of(loadUserByUsername(user.getUsername()));
+        if (user.isPresent()) {
+            return Optional.of(loadUserByUsername(user.get().getUsername()));
         } else {
-            return Optional.empty();
+            return user;
         }
     }
 
