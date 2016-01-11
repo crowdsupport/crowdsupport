@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/profile")
@@ -19,16 +20,21 @@ public class ProfileController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String showProfile(Model model) {
-        final User user = userService.getCurrentUserUpdated().get();
+        final Optional<User> optionalUser = userService.getCurrentUserUpdated();
+        if (optionalUser.isPresent()) {
+            final User user = optionalUser.get();
 
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("email", user.getEmail());
+            model.addAttribute("username", user.getUsername());
+            model.addAttribute("email", user.getEmail());
 
-        return "profile/show";
+            return "profile/show";
+        } else {
+            return "redirect:/";
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String editProfile(Model model, RedirectAttributes redirectAttributes, @RequestParam String email, @RequestParam String password) {
+    public String editProfile(RedirectAttributes redirectAttributes, @RequestParam String email, @RequestParam String password) {
         final User user = userService.getCurrentUserUpdated().get();
 
         user.setEmail(email);
