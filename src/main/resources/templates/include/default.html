@@ -44,6 +44,7 @@
                             <span sec:authentication="name">Testuser</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
+                            <li sec:authorize="${hasRole('ROLE_ADMIN')}"><a th:href="@{/admin}" class="btn btn-default">Admin panel</a></li>
                             <li><a th:href="@{/profile}" class="btn btn-default">Profile</a></li>
                             <li><a th:href="@{/request/newPlace}" class="btn btn-default">Request a new place</a></li>
                             <li><a th:href="@{/logout}" class="btn btn-default">Logout</a></li>
