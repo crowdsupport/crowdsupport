@@ -19,7 +19,17 @@
             })
             .state("requestedPlaces", {
                 url: "/admin/requestedPlaces",
-                templateUrl: "/template/admin/requestedPlaces.html"
+                templateUrl: "/template/admin/requestedPlaces.html",
+                controller: "RequestedPlacesCtrl as ctrl"
             });
+    });
+
+    app.controller("RequestedPlacesCtrl", function($http, $scope) {
+        $scope.allRequests = {};
+
+        $http.get("/service/v1/place/request").then(function (response) {
+            $scope.allRequests = response.data;
+        }, null);
+
     });
 })();

@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
+import org.outofrange.crowdsupport.dto.PlaceRequestDto;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.model.PlaceRequest;
@@ -45,7 +46,7 @@ public class PlaceRestService {
     @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/donationRequests",
             method = RequestMethod.GET)
     public List<DonationRequestDto> getDonationRequests(@PathVariable String stateIdentifier, @PathVariable String cityIdentifier,
-                                                     @PathVariable String placeIdentifier) {
+                                                        @PathVariable String placeIdentifier) {
         Optional<Place> place = placeService.load(stateIdentifier, cityIdentifier, placeIdentifier);
 
         if (place.isPresent()) {
@@ -61,5 +62,13 @@ public class PlaceRestService {
         placeRequestService.requestNewPlace(placeRequest);
 
         return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/place/request", method = RequestMethod.GET)
+    public List<PlaceRequestDto> getAllPlaceRequests() {
+        log.info("Requesting all place requests");
+
+        return placeRequestService.loadAll().stream()
+                .map(p -> mapper.map(p, PlaceRequestDto.class)).collect(Collectors.toList());
     }
 }
