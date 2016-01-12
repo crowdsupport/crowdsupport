@@ -1,15 +1,14 @@
 package org.outofrange.crowdsupport.spring;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
-import java.text.SimpleDateFormat;
+import javax.servlet.DispatcherType;
 
 @Configuration
 public class SpringConfiguration {
@@ -23,11 +22,16 @@ public class SpringConfiguration {
         return new ModelMapper();
     }
 
-/*    @Bean
-    public Jackson2ObjectMapperBuilder jacksonBuilder() {
-        Jackson2ObjectMapperBuilder b = new Jackson2ObjectMapperBuilder();
-        b.json().featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 
-        return b;
-    }*/
+        registrationBean.setFilter(new UrlRewriteFilter());
+        registrationBean.setDispatcherTypes(DispatcherType.REQUEST);
+        registrationBean.addUrlPatterns("/admin/*");
+        registrationBean.addInitParameter("logLevel", "INFO");
+        registrationBean.addInitParameter("confPath", "urlrewrite.xml");
+
+        return registrationBean;
+    }
 }

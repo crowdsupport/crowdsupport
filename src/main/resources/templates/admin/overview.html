@@ -1,37 +1,15 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="crowdsupport">
 <head th:replace="include/default :: head ('Admin Panel')"/>
 <body>
 <nav th:replace="include/default :: navbar"/>
 
 <main class="container">
-    <a th:href="@{/admin/requestedPlaces}"><div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
-        <div class="panel-heading">
-            <h3 class="panel-title">Requested Places</h3>
-        </div>
-        <div class="panel-body">
-            Add new places that users have requested!
-        </div>
-    </div></a>
-    <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
-        <div class="panel-heading">
-            <h3 class="panel-title">User Management</h3>
-        </div>
-        <div class="panel-body">
-            Here you can manage all your users: create new admins, delete users, ...
-        </div>
-    </div>
-    <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
-        <div class="panel-heading">
-            <h3 class="panel-title">Settings</h3>
-        </div>
-        <div class="panel-body">
-            Change application settings
-        </div>
-    </div>
+    <ui-view>Loading admin panel...</ui-view>
 </main>
 
 <th:block th:include="include/default :: footer"/>
+
 </body>
 </html>

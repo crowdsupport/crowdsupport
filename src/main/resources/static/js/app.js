@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.services"]);
+    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.services", "crowdsupport.admin"]);
 
     var SERVICE_PREFIX = "/service/v1/";
 
