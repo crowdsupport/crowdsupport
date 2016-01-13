@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("crowdsupport.admin", ["ui.router", "ui.bootstrap"]);
+    var app = angular.module("crowdsupport.admin", ["ui.router", "crowdsupport.widget.citySearch"]);
 
     app.config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
         $locationProvider.html5Mode(true);

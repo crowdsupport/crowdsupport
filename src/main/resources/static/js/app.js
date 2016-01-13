@@ -1,37 +1,5 @@
 (function () {
-    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.services", "crowdsupport.admin", "ui.bootstrap"]);
-
-    var SERVICE_PREFIX = "/service/v1/";
-
-    app.directive("citySearch", function () {
-        return {
-            restrict: "E",
-            transclude: true,
-            scope: {
-                ngModel: "=",
-                inputClass: "@",
-                inputId: "@"
-            },
-            controller: function ($scope, $http) {
-                $scope.queryCities = function (query) {
-                    return $http.get(SERVICE_PREFIX + "city", {
-                        params: {
-                            query: query
-                        }
-                    }).then(function (response) {
-                        return response.data;
-                    });
-                };
-
-                $scope.formatInput = function (model) {
-                    // TODO write nullOrEmpty function
-                    return model != null && Object.keys(model).length != 0 ?
-                    model.name + " (" + model.state.name + ")" : "";
-                };
-            },
-            templateUrl: "/template/widget/citySearch.html"
-        };
-    });
+    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.services", "crowdsupport.admin", "crowdsupport.widget.citySearch"]);
 
     app.directive("donationRequests", function () {
         return {
