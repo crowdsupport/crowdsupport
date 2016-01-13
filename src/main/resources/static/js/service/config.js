@@ -34,7 +34,12 @@
 
 // exposing ConfigService to global scope (be aware of possible clashes!),
 // therefore making it easily accessible from the console
-var cfg;
-window.onload = function () {
-    cfg = angular.element(document.body).injector().get("ConfigService");
+var debug = {
+    getAngular: function(item) {
+        return angular.element(document.body).injector().get(item);
+    }
 };
+window.onload = function () {
+    debug.config = debug.getAngular("ConfigService");
+};
+

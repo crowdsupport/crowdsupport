@@ -1,5 +1,5 @@
 <input type="text" ng-model="ngModel" class="{{inputClass}}" id="{{inputId}}"
-       uib-typeahead="city for city in queryCities($viewValue)" typeahead-loading="loadingCities"
+       uib-typeahead="city for city in query($viewValue)" typeahead-loading="loadingCities"
        typeahead-no-results="noCitiesFound" typeahead-template-url="/template/widget/citySearch/citySearchResult.html"
        typeahead-input-formatter="formatInput($model)" placeholder="Type to search"
        typeahead-on-select="onSelect($item)" autocomplete="off"/>
