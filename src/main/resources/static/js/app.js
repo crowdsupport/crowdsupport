@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.services", "crowdsupport.admin", "crowdsupport.widget.citySearch"]);
+    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.service.websocket", "crowdsupport.admin", "crowdsupport.widget.citySearch"]);
 
     app.directive("donationRequests", function () {
         return {
@@ -34,7 +34,7 @@
         };
     });
 
-    app.controller("DonationRequestCtrl", function ($scope, CommentService) {
+    app.controller("DonationRequestCtrl", function ($scope, Websocket) {
         var that = this;
         var donationRequest = {};
 
@@ -43,6 +43,8 @@
         this.init = function (donationRequest) {
             that.donationRequest = donationRequest;
         };
+
+        var identifier = getUrlAfterSupport() + "/comments";
 
         this.addComment = function () {
             console.log("Comment for request " + that.donationRequest.id + ": " + $scope.comment);
@@ -53,12 +55,12 @@
                 "donationRequestId": that.donationRequest.id
             };
 
-            CommentService.send(commentDto);
+            Websocket.send(identifier, commentDto);
 
             $scope.comment = "";
         };
 
-        CommentService.receive().then(null, null, function (message) {
+        Websocket.when(identifier).then(null, null, function (message) {
             // TODO the donationRequests controller (the one which should only exist once per site) should register this,
             // and forward the comments to the appropriate donationRequest controller, so not every single donationRequest
             // listens to every single comment update
