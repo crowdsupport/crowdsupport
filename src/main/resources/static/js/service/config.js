@@ -17,7 +17,7 @@
 
                 $delegate.debug = function () {
                     if (localStorage.getItem(KEY) !== "false") {
-                        debugFunction.apply(null, [].slice.call(arguments))
+                        debugFunction.apply(undefined, arguments);
                     }
                 };
 

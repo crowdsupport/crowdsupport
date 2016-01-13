@@ -1,6 +1,6 @@
 (function () {
-    angular.module('crowdsupport.widget.citySearch', ['ui.bootstrap'])
-        .directive("citySearch", function () {
+    angular.module('crowdsupport.widget.stateSearch', ['ui.bootstrap'])
+        .directive("stateSearch", function () {
             return {
                 restrict: "E",
                 transclude: true,
@@ -11,8 +11,8 @@
                     inputId: "@"
                 },
                 controller: function ($scope, $http) {
-                    $scope.queryCities = function (query) {
-                        return $http.get(SERVICE_PREFIX + "city", {
+                    $scope.queryStates = function (query) {
+                        return $http.get(SERVICE_PREFIX + "state", {
                             params: {
                                 query: query
                             }
@@ -22,15 +22,14 @@
                     };
 
                     $scope.formatInput = function (model) {
-                        return nullOrEmpty(model) ?
-                        model.name + " (" + model.state.name + ")": "";
+                        return nullOrEmpty(model) ? model.name : "";
                     };
 
                     $scope.onSelect = function($item) {
                         $.extend($scope.updateOnSelect, $item);
-                    }
+                    };
                 },
-                templateUrl: "/template/widget/citySearch/citySearch.html"
+                templateUrl: "/template/widget/stateSearch/stateSearch.html"
             };
         });
 })();

@@ -10,45 +10,68 @@
 
 <div class="panel panel-default" ng-repeat="request in allRequests">
     <div class="panel-body" ng-init="initRequest(request)">
-        <form class="form-horizontal">
+        <form class="form-horizontal" ng-submit="save($index)">
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">Name</label>
+                <label for="name" class="col-sm-1 control-label">Name</label>
                 <div class="col-sm-10 form-inline">
                     <input type="text" ng-model="request.place.name" id="name" class="form-control"/>
                     (<input type="text" ng-model="request.place.identifier" class="form-control"/>)
                 </div>
             </div>
             <div class="form-group" ng-show="request.ui.citySearch">
-                <label for="cty" class="col-sm-2 control-label">Ci<span style="display: none">This is a workaround for Chrome's stupid AutoFill feature</span>ty</label>
+                <label for="cty" class="col-sm-1 control-label">Ci<span class="noautofill">-.-</span>ty</label>
                 <div class="col-sm-10">
-                    <city-search ng-model="request.place.city" input-class="form-control" input-id="cty">
+                    <city-search ng-model="request.ui.city" update-on-select="request.place.city" input-class="form-control" input-id="cty">
                         No city found - <a href="" ng-click="request.ui.setCitySearch(false)">create new one!</a>
                     </city-search>
                 </div>
             </div>
             <div ng-hide="request.ui.citySearch">
                 <div class="form-group">
-                    City creation...<br/>
-                    <a href="" ng-click="request.ui.setCitySearch(true)">Back to city search</a>
+                    <label for="ctyName" class="col-sm-1 control-label">City name</label>
+                    <div class="col-sm-10 form-inline">
+                        <input type="text" ng-model="request.place.city.name" id="ctyName" class="form-control">
+                        (<input type="text" ng-model="request.place.city.identifier" class="form-control">)
+                        <p><a href="" ng-click="request.ui.setCitySearch(true)">Back to city search</a></p>
+                    </div>
                 </div>
-                <div ng-show="request.ui.stateSearch">
-                    State search...<br/>
-                    <a href="" ng-click="request.ui.setStateSearch(false)">Create a new state</a>
+                <div ng-show="request.ui.stateSearch" class="form-group">
+                    <label for="stt" class="col-sm-1 control-label">Sta<span class="noautofill">-.-</span>te</label>
+                    <div class="col-sm-10">
+                        <state-search ng-model="request.ui.state" update-on-select="request.place.city.state" input-class="form-control" input-id="stt">
+                            No city found - <a href="" ng-click="request.ui.setStateSearch(false)">Create a new state</a>
+                        </state-search>
+                    </div>
                 </div>
                 <div class="form-group" ng-hide="request.ui.stateSearch">
-                    State creation...<br/>
-                    <a href="" ng-click="request.ui.setStateSearch(true)">Back to state search</a>
+                    <label for="stateName" class="col-sm-1 control-label">State name</label>
+                    <div class="col-sm-10 form-inline">
+                        <input type="text" ng-model="request.place.city.state.name" id="stateName" class="form-control">
+                        (<input type="text" ng-model="request.place.city.state.identifier" class="form-control">)
+                        <p><a href="" ng-click="request.ui.setStateSearch(true)">Back to state search</a></p>
+                    </div>
                 </div>
             </div>
 
-
             <div class="form-group">
-                <label for="location" class="col-sm-2 control-label">Location</label>
+                <label for="location" class="col-sm-1 control-label">Location</label>
                 <div class="col-sm-10">
                     <input type="text" ng-model="request.place.location" id="location" class="form-control"/>
                 </div>
             </div>
-            Requested by {{request.requestingUser.username}}, on blabla
+            <div class="form-group">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    Requested by {{request.requestingUser.username}}, <span class="time-ago"
+                                                                            title="{{request.createdDateTime}}"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-1 pull-right">
+                <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+            </div>
         </form>
     </div>
 </div>

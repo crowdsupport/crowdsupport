@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.dto;
 
+import java.time.ZonedDateTime;
+
 public class PlaceRequestDto {
     private PlaceDto place;
 
@@ -8,6 +10,8 @@ public class PlaceRequestDto {
     private String state;
 
     private String city;
+
+    private ZonedDateTime createdDateTime;
 
     public PlaceDto getPlace() {
         return place;
@@ -39,5 +43,13 @@ public class PlaceRequestDto {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public ZonedDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(ZonedDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 }

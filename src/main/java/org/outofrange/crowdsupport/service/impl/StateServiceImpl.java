@@ -28,4 +28,9 @@ public class StateServiceImpl implements StateService {
     public List<State> loadAll() {
         return stateRepository.findAll();
     }
+
+    @Override
+    public List<State> searchStates(String query) {
+        return stateRepository.findAllByNameContainingIgnoreCase(query);
+    }
 }

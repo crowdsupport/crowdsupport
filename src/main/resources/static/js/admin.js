@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("crowdsupport.admin", ["ui.router", "crowdsupport.widget.citySearch"]);
+    var app = angular.module("crowdsupport.admin", ["ui.router", "crowdsupport.widget.citySearch", "crowdsupport.widget.stateSearch"]);
 
     app.config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
         $locationProvider.html5Mode(true);
@@ -24,27 +24,50 @@
             });
     });
 
-    app.controller("RequestedPlacesCtrl", function($http, $scope) {
+    app.controller("RequestedPlacesCtrl", function($http, $scope, $log) {
         $scope.allRequests = {};
 
         $http.get("/service/v1/place/request").then(function (response) {
             $scope.allRequests = response.data;
         }, null);
 
+        $scope.save = function(index) {
+            $log.debug("Saving donation request " + index);
+            $log.debug($scope.allRequests[index]);
+        };
+
         $scope.initRequest = function(request) {
             var citySelected = request.place.city !== null;
+            if (!citySelected) {
+                request.place.city = {
+                    name: request.city,
+                    identifier: null,
+                    state: {
+                        name: request.state,
+                        identifier: null
+                    }
+                }
+            }
+
             request.ui = {
                 citySearch: citySelected,
-                stateSearch: citySelected,
+                stateSearch: true,
+                city: request.place.city,
+                state: request.place.city.state,
                 setCitySearch: function(citySearch) {
                     if (citySearch == false) {
-                        // copy value to input field
+                        request.place.city = {
+                            state: {},
+                            name: request.ui.city
+                        };
                     }
                     request.ui.citySearch = citySearch;
                 },
                 setStateSearch: function(stateSearch) {
                     if (stateSearch == false) {
-                        // copy value to input field
+                        request.place.city.state = {
+                            name: request.ui.name
+                        };
                     }
                     request.ui.stateSearch = stateSearch;
                 }

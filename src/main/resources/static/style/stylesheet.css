@@ -134,3 +134,7 @@ h1 {
 .gist {
     font-size: 14px;
 }
+
+.noautofill {
+    display: none;
+}
