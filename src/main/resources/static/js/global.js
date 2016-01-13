@@ -1,7 +1,7 @@
 var SERVICE_PREFIX = "/service/v1/";
 
 var nullOrEmpty = function(obj) {
-    return obj != null && Object.keys(obj).length != 0;
+    return obj === null || Object.keys(obj).length === 0;
 };
 
 var getUrlAfterSupport = function() {

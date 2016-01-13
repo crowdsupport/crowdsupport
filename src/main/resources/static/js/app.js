@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.service.websocket", "crowdsupport.service.config",
-        "crowdsupport.admin", "crowdsupport.widget.citySearch"]);
+        "crowdsupport.admin", "crowdsupport.widget.search"]);
 
     app.directive("donationRequests", function () {
         return {
