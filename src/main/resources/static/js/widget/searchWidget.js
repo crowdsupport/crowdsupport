@@ -2,7 +2,6 @@
     angular.module('crowdsupport.widget.search', ['ui.bootstrap'])
         .factory("SearchWidget", function () {
             return function (serviceUrl, templateUrl, formatResult) {
-                console.log("Creating widget");
                 return {
                     restrict: "E",
                     transclude: true,
