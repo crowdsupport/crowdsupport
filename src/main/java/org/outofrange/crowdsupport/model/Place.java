@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,8 @@ public class Place extends BaseEntity {
     @Column(name = "imagepath")
     private String imagePath;
 
-    @OneToMany(mappedBy = "place")
-    private List<DonationRequest> donationRequests;
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private List<DonationRequest> donationRequests = new ArrayList<>();
 
     @Column(name = "identifier")
     private String identifier;

@@ -7,6 +7,8 @@ public class CityDto {
     
     private String identifier;
 
+    private String imagePath;
+
     public StateDto getState() {
         return state;
     }
@@ -29,5 +31,13 @@ public class CityDto {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

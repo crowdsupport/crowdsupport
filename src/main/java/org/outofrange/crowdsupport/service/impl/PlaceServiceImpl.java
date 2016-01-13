@@ -1,8 +1,13 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.Place;
+import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.outofrange.crowdsupport.service.PlaceService;
+import org.outofrange.crowdsupport.util.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -11,11 +16,15 @@ import java.util.Optional;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
+    private static final Logger log = LoggerFactory.getLogger(PlaceServiceImpl.class);
+
     @Inject
     private PlaceRepository placeRepository;
 
     @Override
     public Place save(Place place) {
+        log.debug("Saving place {}", place);
+
         return placeRepository.save(place);
     }
 
@@ -34,5 +43,12 @@ public class PlaceServiceImpl implements PlaceService {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Place> loadActivePlaces(String identifier) {
+        log.trace("Loading active places for city with identifier {}", identifier);
+
+        return placeRepository.findByActiveTrueAndCityIdentifier(identifier);
     }
 }

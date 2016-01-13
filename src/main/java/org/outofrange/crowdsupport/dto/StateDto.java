@@ -5,6 +5,8 @@ public class StateDto {
 
     private String identifier;
 
+    private String imagePath;
+
     public String getName() {
         return name;
     }
@@ -19,5 +21,13 @@ public class StateDto {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

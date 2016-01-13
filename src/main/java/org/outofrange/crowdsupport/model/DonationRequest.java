@@ -31,7 +31,7 @@ public class DonationRequest extends BaseEntity {
     private int quantity;
 
     @OneToMany(mappedBy = "donationRequest", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "active")
     private boolean active;

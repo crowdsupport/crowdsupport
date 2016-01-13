@@ -1,6 +1,10 @@
 package org.outofrange.crowdsupport.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,8 +20,8 @@ public class City extends BaseEntity {
     @Column(name = "imagepath")
     private String imagePath;
 
-    @OneToMany(mappedBy = "city")
-    private List<Place> places;
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+    private List<Place> places = new ArrayList<>();
 
     @Column(name = "identifier")
     private String identifier;
@@ -69,5 +73,41 @@ public class City extends BaseEntity {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        City city = (City) o;
+
+        return new EqualsBuilder()
+                .append(state, city.state)
+                .append(name, city.name)
+                .append(imagePath, city.imagePath)
+                .append(identifier, city.identifier)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(state)
+                .append(name)
+                .append(imagePath)
+                .append(identifier)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "identifier='" + identifier + '\'' +
+                ", name='" + name + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", state=" + state +
+                '}';
     }
 }

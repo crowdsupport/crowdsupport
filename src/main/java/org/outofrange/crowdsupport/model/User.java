@@ -28,8 +28,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled = true;
 
-    @OneToMany(mappedBy = "author")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     private boolean rehashPassword;
 

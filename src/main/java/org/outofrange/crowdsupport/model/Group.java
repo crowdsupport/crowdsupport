@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,5 +11,5 @@ public class Group extends BaseEntity {
     @JoinTable(name = "UsersGroups",
             joinColumns = {@JoinColumn(name = "group", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user", referencedColumnName = "id")})
-    private List<User> members;
+    private List<User> members = new ArrayList<>();
 }

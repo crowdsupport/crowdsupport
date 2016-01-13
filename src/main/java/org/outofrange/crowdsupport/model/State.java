@@ -1,9 +1,10 @@
 package org.outofrange.crowdsupport.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,8 +16,8 @@ public class State extends BaseEntity {
     @Column(name = "imagepath")
     private String imagePath;
 
-    @OneToMany(mappedBy = "state")
-    private List<City> cities;
+    @OneToMany(mappedBy = "state", cascade = CascadeType.ALL)
+    private List<City> cities = new ArrayList<>();
 
     @Column(name = "identifier")
     private String identifier;
@@ -60,5 +61,39 @@ public class State extends BaseEntity {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        State state = (State) o;
+
+        return new EqualsBuilder()
+                .append(name, state.name)
+                .append(imagePath, state.imagePath)
+                .append(identifier, state.identifier)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(name)
+                .append(imagePath)
+                .append(identifier)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "name='" + name + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", identifier='" + identifier + '\'' +
+                '}';
     }
 }

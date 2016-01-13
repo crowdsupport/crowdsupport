@@ -33,7 +33,17 @@
 
         $scope.save = function(index) {
             $log.debug("Saving donation request " + index);
-            $log.debug($scope.allRequests[index]);
+            var r = $scope.allRequests[index];
+            $log.debug(r);
+
+            $http.post("/service/v1/place", r).then(function(response) {
+                $log.debug("Place successfully posted");
+                $log.debug(response);
+                $scope.allRequests.splice(index, 1);
+            }, function(response) {
+                $log.debug("Error while saving");
+                $log.debug(response);
+            });
         };
 
         $scope.initRequest = function(request) {
@@ -42,9 +52,11 @@
                 request.place.city = {
                     name: request.city,
                     identifier: null,
+                    imagePath: "/image/placeholder.jpg",
                     state: {
                         name: request.state,
-                        identifier: null
+                        identifier: null,
+                        imagePath: "/image/placeholder.jpg"
                     }
                 }
             }

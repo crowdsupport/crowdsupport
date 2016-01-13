@@ -9,4 +9,6 @@ public interface StateService extends BaseService<State> {
     Optional<State> load(String identifier);
 
     List<State> searchStates(String query);
+
+    State saveOrRetrieveState(State state);
 }

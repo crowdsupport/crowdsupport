@@ -9,4 +9,6 @@ public interface CityService extends BaseService<City> {
     Optional<City> load(String identifier);
 
     List<City> searchCities(String query);
+
+    City saveOrRetrieveCity(City city);
 }

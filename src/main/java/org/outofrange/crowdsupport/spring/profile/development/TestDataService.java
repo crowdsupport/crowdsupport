@@ -87,6 +87,8 @@ public class TestDataService {
         trainOfHope.setImagePath(placeHolder);
         Place trainOfHopeMainStation = new Place(vienna, "Hauptbahnhof", "Train of Hope");
         trainOfHopeMainStation.setImagePath("https://pbs.twimg.com/profile_images/639504080411430912/WWA0UT5g.jpg");
+        trainOfHope.setActive(true);
+        trainOfHopeMainStation.setActive(true);
         placeService.save(trainOfHope);
         placeService.save(trainOfHopeMainStation);
 

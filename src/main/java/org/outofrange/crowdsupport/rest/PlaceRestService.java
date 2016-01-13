@@ -59,9 +59,18 @@ public class PlaceRestService {
     }
 
     @RequestMapping(value = "/place/request", method = RequestMethod.GET)
-    public List<PlaceRequestDto> getAllPlaceRequests() {
+    public List<PlaceRequestDto> getAllOpenPlaceRequests() {
         log.info("Requesting all place requests");
 
-        return mapper.mapToList(placeRequestService.loadAll(), PlaceRequestDto.class);
+        return mapper.mapToList(placeRequestService.loadAllWithInactivePlace(), PlaceRequestDto.class);
+    }
+
+    @RequestMapping(value = "/place", method = RequestMethod.POST)
+    public ResponseEntity<Void> saveNewPlace(@RequestBody PlaceRequest placeRequest) {
+        log.info("Saving previously created new place: {}", placeRequest);
+
+        placeRequestService.saveNewPlace(placeRequest);
+
+        return ResponseEntity.ok().build();
     }
 }
