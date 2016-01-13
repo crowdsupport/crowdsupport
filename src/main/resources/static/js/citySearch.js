@@ -1,4 +1,4 @@
-var cities = new Bloodhound({
+var citiesBloodhound = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
@@ -10,7 +10,7 @@ var cities = new Bloodhound({
 $('#cty.typeahead').typeahead(null, {
     name: 'city',
     display: 'name',
-    source: cities,
+    source: citiesBloodhound,
     highlight: true,
     templates: {
         empty: "<div class='empty-message'>No matching cities found</div>",

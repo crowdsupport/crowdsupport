@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("crowdsupport.admin", ["ui.router"]);
+    var app = angular.module("crowdsupport.admin", ["ui.router", "ui.bootstrap"]);
 
     app.config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
         $locationProvider.html5Mode(true);
@@ -31,5 +31,24 @@
             $scope.allRequests = response.data;
         }, null);
 
+        $scope.initRequest = function(request) {
+            var citySelected = request.place.city !== null;
+            request.ui = {
+                citySearch: citySelected,
+                stateSearch: citySelected,
+                setCitySearch: function(citySearch) {
+                    if (citySearch == false) {
+                        // copy value to input field
+                    }
+                    request.ui.citySearch = citySearch;
+                },
+                setStateSearch: function(stateSearch) {
+                    if (stateSearch == false) {
+                        // copy value to input field
+                    }
+                    request.ui.stateSearch = stateSearch;
+                }
+            };
+        };
     });
 })();

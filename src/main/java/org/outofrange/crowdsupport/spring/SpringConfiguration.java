@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.spring;
 
-import org.modelmapper.ModelMapper;
+import org.outofrange.crowdsupport.util.CsModelMapper;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +18,8 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public ModelMapper mapper() {
-        return new ModelMapper();
+    public CsModelMapper mapper() {
+        return new CsModelMapper();
     }
 
     @Bean

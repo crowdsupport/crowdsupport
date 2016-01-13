@@ -1,24 +1,21 @@
 package org.outofrange.crowdsupport.rest;
 
-import org.modelmapper.ModelMapper;
+import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.dto.PlaceRequestDto;
 import org.outofrange.crowdsupport.model.Place;
-import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.model.PlaceRequest;
-import org.outofrange.crowdsupport.service.DonationRequestService;
 import org.outofrange.crowdsupport.service.PlaceRequestService;
 import org.outofrange.crowdsupport.service.PlaceService;
 import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.util.CsModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Markus Möslinger
@@ -29,16 +26,13 @@ public class PlaceRestService {
     private static final Logger log = LoggerFactory.getLogger(PlaceRestService.class);
 
     @Inject
-    private DonationRequestService donationRequestService;
-
-    @Inject
     private PlaceService placeService;
 
     @Inject
     private PlaceRequestService placeRequestService;
 
     @Inject
-    private ModelMapper mapper;
+    private CsModelMapper mapper;
 
     @Inject
     private UserService userService;
@@ -50,7 +44,7 @@ public class PlaceRestService {
         Optional<Place> place = placeService.load(stateIdentifier, cityIdentifier, placeIdentifier);
 
         if (place.isPresent()) {
-            return place.get().getDonationRequests().stream().map(r -> mapper.map(r, DonationRequestDto.class)).collect(Collectors.toList());
+            return mapper.mapToList(place.get().getDonationRequests(), DonationRequestDto.class);
         } else {
             return null;
         }
@@ -68,7 +62,6 @@ public class PlaceRestService {
     public List<PlaceRequestDto> getAllPlaceRequests() {
         log.info("Requesting all place requests");
 
-        return placeRequestService.loadAll().stream()
-                .map(p -> mapper.map(p, PlaceRequestDto.class)).collect(Collectors.toList());
+        return mapper.mapToList(placeRequestService.loadAll(), PlaceRequestDto.class);
     }
 }

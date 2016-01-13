@@ -1,7 +1,37 @@
 (function () {
-    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.services", "crowdsupport.admin"]);
+    var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.services", "crowdsupport.admin", "ui.bootstrap"]);
 
     var SERVICE_PREFIX = "/service/v1/";
+
+    app.directive("citySearch", function () {
+        return {
+            restrict: "E",
+            transclude: true,
+            scope: {
+                ngModel: "=",
+                inputClass: "@",
+                inputId: "@"
+            },
+            controller: function ($scope, $http) {
+                $scope.queryCities = function (query) {
+                    return $http.get(SERVICE_PREFIX + "city", {
+                        params: {
+                            query: query
+                        }
+                    }).then(function (response) {
+                        return response.data;
+                    });
+                };
+
+                $scope.formatInput = function (model) {
+                    // TODO write nullOrEmpty function
+                    return model != null && Object.keys(model).length != 0 ?
+                    model.name + " (" + model.state.name + ")" : "";
+                };
+            },
+            templateUrl: "/template/widget/citySearch.html"
+        };
+    });
 
     app.directive("donationRequests", function () {
         return {
@@ -84,6 +114,15 @@
 
         $scope.addCity = false;
 
+        $scope.addCityInfo = function() {
+            $scope.cityname = $scope.city;
+            $scope.addCity = true;
+        };
+
+        $scope.searchCity = function() {
+            $scope.addCity = false;
+        }
+
         this.submit = function () {
             var formData = {
                 place: {
@@ -102,16 +141,11 @@
 
             var url = "/service/v1/place/request";
 
-            $http.post(url, formData).then(function(response) {
+            $http.post(url, formData).then(function (response) {
                 alert("Success");
-            }, function(response) {
+            }, function (response) {
                 alert("Oh oh");
             });
         };
-
-        $('#cty.typeahead').bind('typeahead:select', function (ev, suggestion) {
-            $scope.city = suggestion;
-            console.log('Selection: ' + JSON.stringify($scope.city));
-        });
     });
 })();

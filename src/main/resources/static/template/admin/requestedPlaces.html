@@ -1,7 +1,15 @@
+<script type="text/ng-template" id="customTemplate.html">
+    <a>
+        <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
+        <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+    </a>
+</script>
+
+
 <div class="row"><h3>Pending place requests</h3></div>
 
 <div class="panel panel-default" ng-repeat="request in allRequests">
-    <div class="panel-body">
+    <div class="panel-body" ng-init="initRequest(request)">
         <form class="form-horizontal">
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">Name</label>
@@ -10,12 +18,30 @@
                     (<input type="text" ng-model="request.place.identifier" class="form-control"/>)
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-show="request.ui.citySearch">
                 <label for="cty" class="col-sm-2 control-label">Ci<span style="display: none">This is a workaround for Chrome's stupid AutoFill feature</span>ty</label>
                 <div class="col-sm-10">
-                    <input type="text" ng-model="request.place.city.name" id="cty" class="form-control typeahead"/>
+                    <city-search ng-model="request.place.city" input-class="form-control" input-id="cty">
+                        No city found - <a href="" ng-click="request.ui.setCitySearch(false)">create new one!</a>
+                    </city-search>
                 </div>
             </div>
+            <div ng-hide="request.ui.citySearch">
+                <div class="form-group">
+                    City creation...<br/>
+                    <a href="" ng-click="request.ui.setCitySearch(true)">Back to city search</a>
+                </div>
+                <div ng-show="request.ui.stateSearch">
+                    State search...<br/>
+                    <a href="" ng-click="request.ui.setStateSearch(false)">Create a new state</a>
+                </div>
+                <div class="form-group" ng-hide="request.ui.stateSearch">
+                    State creation...<br/>
+                    <a href="" ng-click="request.ui.setStateSearch(true)">Back to state search</a>
+                </div>
+            </div>
+
+
             <div class="form-group">
                 <label for="location" class="col-sm-2 control-label">Location</label>
                 <div class="col-sm-10">
