@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Markus Möslinger
  */
-public class DonationRequestDto {
+public class DonationRequestDto extends BaseDto {
     private Long id;
 
     private String title;

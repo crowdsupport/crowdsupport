@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.dto;
 
-public class PlaceDto {
+public class PlaceDto extends BaseDto {
     private CityDto city;
 
     private String location;

@@ -5,7 +5,7 @@ import java.time.ZonedDateTime;
 /**
  * @author Markus Möslinger
  */
-public class CommentDto {
+public class CommentDto extends BaseDto {
     private String text;
 
     private UserDto author;

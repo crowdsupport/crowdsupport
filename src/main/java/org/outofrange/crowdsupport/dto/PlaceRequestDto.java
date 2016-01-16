@@ -2,7 +2,7 @@ package org.outofrange.crowdsupport.dto;
 
 import java.time.ZonedDateTime;
 
-public class PlaceRequestDto {
+public class PlaceRequestDto extends BaseDto {
     private Long id;
 
     private PlaceDto place;

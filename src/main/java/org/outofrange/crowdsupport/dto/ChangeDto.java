@@ -3,7 +3,7 @@ package org.outofrange.crowdsupport.dto;
 /**
  * @author Markus Möslinger
  */
-public class ChangeDto<T> {
+public class ChangeDto<T> extends BaseDto {
     public enum ChangeType {
         ADD, UPDATE, DELETE
     }

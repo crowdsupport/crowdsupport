@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.dto;
 
-public class StateDto {
+public class StateDto extends BaseDto {
     private String name;
 
     private String identifier;
