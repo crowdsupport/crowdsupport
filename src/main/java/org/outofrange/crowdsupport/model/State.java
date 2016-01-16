@@ -31,6 +31,12 @@ public class State extends BaseEntity {
         this.identifier = name.toLowerCase().replaceAll("\\s+", "");
     }
 
+    public State(String name, String identifier, String imagePath) {
+        this.name = name;
+        this.identifier = identifier;
+        this.imagePath = imagePath;
+    }
+
     public String getName() {
         return name;
     }

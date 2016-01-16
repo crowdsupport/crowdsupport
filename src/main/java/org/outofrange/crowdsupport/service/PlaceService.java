@@ -9,4 +9,6 @@ public interface PlaceService extends BaseService<Place> {
     Optional<Place> load(String stateIdentifier, String cityIdentifier, String placeIdentifier);
 
     List<Place> loadActivePlaces(String identifier);
+
+    void deletePlace(Place place);
 }

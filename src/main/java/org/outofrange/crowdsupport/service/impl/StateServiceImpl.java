@@ -32,6 +32,17 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
+    public State createState(String name, String identifier, String imagePath) {
+        if (load(identifier).isPresent()) {
+            throw new ServiceException("There is already a state saved with the identifier " + identifier);
+        }
+
+        final State state = new State(name, identifier, imagePath);
+
+        return save(state);
+    }
+
+    @Override
     public List<State> loadAll() {
         return stateRepository.findAll();
     }

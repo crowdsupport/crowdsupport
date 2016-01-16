@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.outofrange.crowdsupport.dto.DonationRequestDto;
+import org.outofrange.crowdsupport.dto.PlaceDto;
 import org.outofrange.crowdsupport.dto.PlaceRequestDto;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.PlaceRequest;
@@ -66,10 +67,19 @@ public class PlaceRestService {
     }
 
     @RequestMapping(value = "/place", method = RequestMethod.POST)
-    public ResponseEntity<Void> saveNewPlace(@RequestBody PlaceRequest placeRequest) {
+    public ResponseEntity<PlaceDto> saveNewPlace(@RequestBody PlaceRequest placeRequest) {
         log.info("Saving previously created new place: {}", placeRequest);
 
-        placeRequestService.saveNewPlace(placeRequest);
+        final PlaceRequest savedPlaceRequest = placeRequestService.saveNewPlace(placeRequest);
+
+        return ResponseEntity.ok(mapper.map(savedPlaceRequest.getPlace(), PlaceDto.class));
+    }
+
+    @RequestMapping(value = "/place/request/{requestId}/decline", method = RequestMethod.POST)
+    public ResponseEntity<Void> declinePlaceRequest(@PathVariable Long requestId) {
+        log.info("Declining place request with id {}", requestId);
+
+        placeRequestService.declinePlaceRequest(requestId);
 
         return ResponseEntity.ok().build();
     }

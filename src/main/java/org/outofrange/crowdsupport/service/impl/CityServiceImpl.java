@@ -1,8 +1,10 @@
 package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.model.City;
+import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.CityRepository;
 import org.outofrange.crowdsupport.service.CityService;
+import org.outofrange.crowdsupport.service.StateService;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,9 @@ public class CityServiceImpl implements CityService {
 
     @Inject
     private CityRepository cityRepository;
+
+    @Inject
+    private StateService stateService;
 
     @Override
     public City save(City city) {
@@ -54,5 +59,22 @@ public class CityServiceImpl implements CityService {
         }
 
         return save(city);
+    }
+
+    @Override
+    public City createCity(String name, String identifier, String imagePath, String stateIdentifier) {
+        if (cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, identifier).isPresent()) {
+            throw new ServiceException("There is already a city with an identifier of " + identifier +
+                    " in a state with the identifier " + stateIdentifier);
+        }
+
+        final Optional<State> loadedState = stateService.load(stateIdentifier);
+        if (!loadedState.isPresent()) {
+            throw new ServiceException("Found no state with identifier " + stateIdentifier);
+        }
+
+        final City newCity = new City(loadedState.get(), name, identifier, imagePath);
+
+        return cityRepository.save(newCity);
     }
 }

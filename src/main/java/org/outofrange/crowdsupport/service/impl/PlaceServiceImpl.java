@@ -51,4 +51,10 @@ public class PlaceServiceImpl implements PlaceService {
 
         return placeRepository.findByActiveTrueAndCityIdentifier(identifier);
     }
+
+    @Override
+    public void deletePlace(Place place) {
+        log.debug("Deleting place {}", place);
+        placeRepository.delete(place);
+    }
 }

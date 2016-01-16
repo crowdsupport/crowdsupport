@@ -6,10 +6,8 @@ import org.outofrange.crowdsupport.service.CityService;
 import org.outofrange.crowdsupport.util.CsModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -44,5 +42,15 @@ public class CityRestService {
         }
 
         return mapper.mapToList(cities, CityDto.class);
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<CityDto> createCity(@RequestBody CityDto cityDto) {
+        log.info("Creating city {}", cityDto);
+
+        final City createdCity = cityService.createCity(cityDto.getName(), cityDto.getIdentifier(),
+                cityDto.getImagePath(), cityDto.getState().getIdentifier());
+
+        return ResponseEntity.ok(mapper.map(createdCity, CityDto.class));
     }
 }

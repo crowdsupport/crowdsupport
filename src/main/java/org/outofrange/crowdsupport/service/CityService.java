@@ -11,4 +11,6 @@ public interface CityService extends BaseService<City> {
     List<City> searchCities(String query);
 
     City saveOrRetrieveCity(City city);
+
+    City createCity(String name, String identifier, String imagePath, String stateIdentifier);
 }

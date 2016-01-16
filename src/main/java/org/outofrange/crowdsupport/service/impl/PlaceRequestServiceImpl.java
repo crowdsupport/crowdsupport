@@ -1,7 +1,6 @@
 package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.model.City;
-import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.persistence.PlaceRequestRepository;
 import org.outofrange.crowdsupport.service.*;
@@ -25,13 +24,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     private CityService cityService;
 
     @Inject
-    private StateService stateService;
-
-    @Inject
     private PlaceService placeService;
-
-    @Inject
-    private UserService userService;
 
     @Override
     public PlaceRequest save(PlaceRequest entity) {
@@ -75,28 +68,42 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     public PlaceRequest saveNewPlace(PlaceRequest placeRequest) {
         log.trace("Saving new place {}", placeRequest);
 
-        final PlaceRequest placeRequestFromDb = placeRequestRepository.findByPlaceIdentifier(placeRequest.getPlace().getIdentifier()).get();
-        final Place placeFromDb = placeRequestFromDb.getPlace();
-
-        // save save save
-        final Optional<City> cityFromDb = cityService.load(placeRequest.getPlace().getCity().getIdentifier());
-        if (cityFromDb.isPresent()) {
-            if (cityFromDb.get().equals(placeRequest.getPlace().getCity())) {
-                placeFromDb.setCity(cityFromDb.get());
-            } else {
-                throw new ServiceException("Found existing city for identifier " + placeRequest.getPlace().getCity().getIdentifier());
-            }
-        } else {
-            placeFromDb.setCity(placeRequest.getPlace().getCity());
-
-            placeFromDb.getCity().setState(stateService.saveOrRetrieveState(placeRequest.getPlace().getCity().getState()));
-            placeFromDb.setCity(cityService.saveOrRetrieveCity(placeRequest.getPlace().getCity()));
+        final Optional<City> cityDb = cityService.load(placeRequest.getPlace().getCity().getIdentifier());
+        if (!cityDb.isPresent()) {
+            throw new ServiceException("Found no city with identifier " + placeRequest.getPlace().getCity().getIdentifier());
+        }
+        if (!cityDb.get().equals(placeRequest.getPlace().getCity())) {
+            throw new ServiceException("City in database differs from passed city!");
         }
 
-        placeFromDb.setActive(true);
-        placeRequest.setPlace(placeService.save(placeFromDb));
-        placeRequest.setRequestingUser(userService.loadUserByUsername(placeRequest.getRequestingUser().getUsername()));
+        final PlaceRequest placeRequestDb = placeRequestRepository.findOne(placeRequest.getId());
 
-        return save(placeRequest);
+        placeRequestDb.getPlace().setCity(cityDb.get());
+        placeRequestDb.getPlace().setActive(true);
+
+        return save(placeRequestDb);
+    }
+
+    @Override
+    public void declinePlaceRequest(Long placeRequestId) {
+        log.debug("Declining place request with id {}", placeRequestId);
+
+        final Optional<PlaceRequest> placeRequestDb = Optional.ofNullable(placeRequestRepository.findOne(placeRequestId));
+
+        if (!placeRequestDb.isPresent()) {
+            throw new ServiceException("Couldn't find place request to delete!");
+        }
+        if (placeRequestDb.get().getPlace().isActive()) {
+            throw new ServiceException("Place is already active!");
+        }
+
+        deletePlaceRequest(placeRequestDb.get());
+        placeService.deletePlace(placeRequestDb.get().getPlace());
+    }
+
+    public void deletePlaceRequest(PlaceRequest placeRequest) {
+        log.debug("Deleting place request {}", placeRequest);
+
+        placeRequestRepository.delete(placeRequest);
     }
 }

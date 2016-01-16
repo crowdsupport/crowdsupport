@@ -3,6 +3,8 @@ package org.outofrange.crowdsupport.dto;
 import java.time.ZonedDateTime;
 
 public class PlaceRequestDto {
+    private Long id;
+
     private PlaceDto place;
 
     private UserDto requestingUser;
@@ -51,5 +53,13 @@ public class PlaceRequestDto {
 
     public void setCreatedDateTime(ZonedDateTime createdDateTime) {
         this.createdDateTime = createdDateTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

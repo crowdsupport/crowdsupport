@@ -10,4 +10,6 @@ public interface PlaceRequestService extends BaseService<PlaceRequest> {
     PlaceRequest requestNewPlace(PlaceRequest placeRequest);
 
     PlaceRequest saveNewPlace(PlaceRequest placeRequest);
+
+    void declinePlaceRequest(Long requestId);
 }

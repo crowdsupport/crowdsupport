@@ -35,6 +35,13 @@ public class City extends BaseEntity {
         this.identifier = name.toLowerCase().replaceAll("\\s+", "");
     }
 
+    public City(State state, String name, String identifier, String imagePath) {
+        this.state = state;
+        this.name = name;
+        this.identifier = identifier;
+        this.imagePath = imagePath;
+    }
+
     public State getState() {
         return state;
     }
