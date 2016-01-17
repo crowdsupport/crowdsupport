@@ -25,11 +25,12 @@
 
 <main>
     <ui-view>bla</ui-view>
-
 </main>
 
 <div class="navbar navbar-fixed-bottom">
-    <p th:if="${msg != null}" class="navbar-text" th:text="${msg}">Message</p>
+    <div class="navbar-text statusbar">
+
+    </div>
 </div>
 <th:block th:if="${@config.isDebugEnabled()}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
@@ -49,6 +50,7 @@
     <script th:src="@{/js/service/config.js}"></script>
     <script th:src="@{/js/service/websocket.js}"></script>
     <script th:src="@{/js/service/rest.js}"></script>
+    <script th:src="@{/js/service/statusbar.js}"></script>
     <script th:src="@{/js/widget/timeago.js}"></script>
     <script th:src="@{/js/widget/searchWidget.js}"></script>
     <script th:src="@{/js/admin.js}"></script>

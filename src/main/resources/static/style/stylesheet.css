@@ -138,3 +138,27 @@ h1 {
 .noautofill {
     display: none;
 }
+
+/* Status bar */
+@keyframes fadein {
+    from {max-height: 0px}
+    to {max-height: 18px}
+}
+
+@keyframes fadeout {
+    from {max-height: 18px}
+    to {max-height: 0px}
+}
+
+.statusbar .message {
+    animation: fadein 0.5s forwards;
+    overflow: hidden;
+}
+
+.statusbar {
+    max-height: 18px;
+}
+
+.statusbar .message.old {
+    animation: fadeout 0.5s forwards;
+}

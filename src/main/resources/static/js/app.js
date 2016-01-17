@@ -1,6 +1,8 @@
 (function () {
     angular
-        .module("crowdsupport", ["timeAgo", "crowdsupport.service.websocket", "crowdsupport.service.config", "crowdsupport.admin", "crowdsupport.widget.search", "crowdsupport.service.rest", "ui.router"])
+        .module("crowdsupport", ["timeAgo", "crowdsupport.service.websocket", "crowdsupport.service.config",
+            "crowdsupport.admin", "crowdsupport.widget.search", "crowdsupport.service.rest", "ui.router",
+            "crowdsupport.service.statusbar"])
         .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
             $locationProvider.html5Mode(true);
 

@@ -36,8 +36,22 @@
 // exposing ConfigService to global scope (be aware of possible clashes!),
 // therefore making it easily accessible from the console
 var debug = {
-    getAngular: function(item) {
+    getAngular: function (item) {
         return angular.element(document.body).injector().get(item);
+    },
+    status: {
+        set: function(type, text) {
+            debug.getAngular("StatusService").newStatus({type: type, message: text});
+        },
+        success: function (text) {
+            debug.getAngular("StatusService").newStatus({type: "SUCCESS", message: text});
+        },
+        info: function (text) {
+            debug.getAngular("StatusService").newStatus({type: "INFO", message: text});
+        },
+        error: function (text) {
+            debug.getAngular("StatusService").newStatus({type: "ERROR", message: text});
+        }
     }
 };
 window.onload = function () {
