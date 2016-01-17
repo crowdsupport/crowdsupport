@@ -149,6 +149,9 @@
                 $log.debug("Disconnecting Websocket...");
                 stomp.disconnect(function () {
                     started = false;
+                    topics.forEach(function(topic) {
+                        topic.deferred.reject("Websocket disconnected");
+                    });
                     $log.debug("...Websocket disconnected");
                 });
             };
