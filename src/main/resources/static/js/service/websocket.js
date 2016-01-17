@@ -18,6 +18,7 @@
                     that.connect();
                 }, RECONNECT_TIMEOUT);
             };
+            stomp.debug = $log.debug;
 
             var started = false;
             this.ready = false;
