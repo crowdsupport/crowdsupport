@@ -1,5 +1,6 @@
 (function () {
-    angular.module('crowdsupport.widget.search', ['ui.bootstrap'])
+    angular
+        .module('crowdsupport.widget.search', ['ui.bootstrap'])
         .factory("SearchWidget", function () {
             return function (serviceUrl, templateUrl, formatResult) {
                 return {

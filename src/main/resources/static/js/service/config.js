@@ -1,7 +1,8 @@
 (function () {
     var KEY = "debugEnabled";
 
-    angular.module("crowdsupport.service.config", [])
+    angular
+        .module("crowdsupport.service.config", [])
         .config(function ($provide, $logProvider) {
             // AngularJS has debug enabled by default, but just to be sure...
             $logProvider.debugEnabled(true);

@@ -1,5 +1,6 @@
 (function () {
-    angular.module("crowdsupport.service.websocket", [])
+    angular
+        .module("crowdsupport.service.websocket", [])
         .service("Websocket", function ($q, $timeout, $log) {
             var that = this;
 

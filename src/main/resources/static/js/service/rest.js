@@ -1,7 +1,8 @@
 (function () {
     var SERVICE_PREFIX = "/service/v1";
 
-    angular.module("crowdsupport.service.rest", ["ngResource"])
+    angular
+        .module("crowdsupport.service.rest", ["ngResource"])
         .service("Rest", function($resource) {
             return {
                 State: $resource(SERVICE_PREFIX + "/state/:identifier"),
