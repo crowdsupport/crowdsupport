@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("crowdsupport.admin", ["ui.router", "crowdsupport.widget.search"]);
+    var app = angular.module("crowdsupport.admin", ["ui.router", "crowdsupport.widget.search", "crowdsupport.service.rest"]);
 
     app.config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
         $locationProvider.html5Mode(true);
@@ -24,19 +24,14 @@
             });
     });
 
-    app.controller("RequestedPlacesCtrl", function ($http, $scope, $log) {
-        $scope.allRequests = {};
-
-        $http.get("/service/v1/place/request").then(function (response) {
-            $scope.allRequests = response.data;
-        }, null);
+    app.controller("RequestedPlacesCtrl", function ($scope, $log, Rest) {
+        $scope.allRequests = Rest.Place.Request.query();
 
         $scope.save = function (index) {
             $log.debug("Saving donation request " + index);
-            var r = $scope.allRequests[index];
-            $log.debug(r);
+            var request = $scope.allRequests[index];
 
-            $http.post("/service/v1/place", r).then(function (response) {
+            request.$accept(function (response) {
                 $log.debug("Place successfully posted");
                 $log.debug(response);
                 $scope.removeRequest(index);
@@ -51,14 +46,16 @@
         };
 
         $scope.decline = function (index) {
-            $http.post(SERVICE_PREFIX + "place/request/" + $scope.allRequests[index].id + "/decline").then(function (response) {
+            var request = $scope.allRequests[index];
+
+            request.$decline(function(response) {
                 $log.debug("Request successfully declined");
                 $scope.removeRequest(index);
             });
         };
 
         $scope.createState = function (request) {
-            $http.post(SERVICE_PREFIX + "state", request.place.city.state).then(function (response) {
+            Rest.State.save(request.place.city.state, function(response) {
                 $log.debug("State successfully created");
                 request.place.city.state = response.data;
                 request.ui.state = response.data;
@@ -68,7 +65,7 @@
 
         $scope.createCity = function (request) {
             if (request.ui.stateSearch) {
-                $http.post(SERVICE_PREFIX + "city", request.place.city).then(function (response) {
+                Rest.City.save(request.place.city, function(response) {
                     $log.debug("City successfully created");
                     request.ui.city = response.data;
                     request.place.city = response.data;

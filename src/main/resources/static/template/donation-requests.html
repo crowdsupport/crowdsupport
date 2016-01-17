@@ -1,5 +1,5 @@
 <div class="row" id="donationrequests">
-    <div ng-repeat="donationRequest in ctrl.donationRequests" class="box col-md-2 col-sm-4 col-xs-12">
+    <div ng-repeat="donationRequest in donationRequests" class="box col-md-2 col-sm-4 col-xs-12">
         <div ng-controller="DonationRequestCtrl as donationRequestCtrl" ng-init="donationRequestCtrl.init(donationRequest)">
             <h3>{{donationRequest.title}}</h3>
 

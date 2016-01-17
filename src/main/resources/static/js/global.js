@@ -12,4 +12,4 @@ var getUrlAfterSupport = function() {
 
 var isString = function(s) {
     return typeof s === 'string' || s instanceof String;
-}
+};

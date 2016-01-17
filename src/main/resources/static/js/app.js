@@ -1,28 +1,14 @@
 (function () {
     var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.service.websocket", "crowdsupport.service.config",
-        "crowdsupport.admin", "crowdsupport.widget.search"]);
+        "crowdsupport.admin", "crowdsupport.widget.search", "crowdsupport.service.rest"]);
 
     app.directive("donationRequests", function () {
         return {
             restrict: 'E',
             templateUrl: '/template/donation-requests.html',
-            controller: ["$scope", "$http", function ($scope, $http) {
-                var that = this;
-                $scope.donationRequests = [];
-
-
-                this.identifier = (function () {
-                    var url = window.location.href;
-                    var position = url.search(/support\//) + 8;
-                    return url.substring(position);
-                })();
-
-                $http.get(SERVICE_PREFIX + this.identifier + "/donationRequests").success(function (data) {
-                    that.donationRequests = data;
-                });
-
-
-            }],
+            controller: function ($scope, Rest) {
+                $scope.donationRequests = Rest.DonationRequest.query();
+            },
             controllerAs: 'ctrl'
         }
     });
@@ -74,7 +60,7 @@
         });
     });
 
-    app.controller("PlaceRequestCtrl", function ($scope, $http) {
+    app.controller("PlaceRequestCtrl", function ($scope, Rest) {
         $scope.city = {};
         $scope.name = "";
         $scope.identifier = "";
@@ -110,11 +96,9 @@
                 formData.state = $scope.statename;
             }
 
-            var url = "/service/v1/place/request";
-
-            $http.post(url, formData).then(function (response) {
+            Rest.Place.Request.save(formData, function () {
                 alert("Success");
-            }, function (response) {
+            }, function () {
                 alert("Oh oh");
             });
         };
