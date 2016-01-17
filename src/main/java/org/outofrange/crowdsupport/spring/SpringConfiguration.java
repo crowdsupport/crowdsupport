@@ -32,7 +32,6 @@ public class SpringConfiguration {
         registrationBean.addInitParameter("confPath", "urlrewrite.xml");
         // TODO make configurable
         registrationBean.addInitParameter("logLevel", "DEBUG");
-        registrationBean.addInitParameter("confReloadCheckInterval", "0");
 
         return registrationBean;
     }

@@ -2,7 +2,7 @@
     var app = angular.module("crowdsupport.admin", ["ui.router", "crowdsupport.widget.search", "crowdsupport.service.rest"]);
 
     app.controller("RequestedPlacesCtrl", function ($scope, $log, Rest) {
-        $scope.allRequests = Rest.Place.Request.query();
+        $scope.allRequests = Rest.PlaceRequest.Request.query();
 
         $scope.save = function (index) {
             $log.debug("Saving donation request " + index);

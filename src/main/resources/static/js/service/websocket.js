@@ -53,7 +53,7 @@
             this.send = function (broker, data) {
                 var url = BROKER_PREFIX + broker;
                 connectIfNeeded();
-                var sending = function() {
+                var sending = function () {
                     $log.debug("Sending message to " + url);
                     $log.debug(data);
                     stomp.send(BROKER_PREFIX + broker, {priority: 9}, JSON.stringify(data));
@@ -65,6 +65,26 @@
                     $log.debug("Websocket not ready yet... buffering message to " + url);
                     $log.debug(data);
                     sendBuffer.push(sending);
+                }
+            };
+
+            this.unsubscribe = function (address) {
+                var url = TOPIC_PREFIX + address;
+                $log.debug("Unsubscribing from " + url + "...");
+
+                var t = $.grep(topics, function (topic) {
+                    return topic.address == url;
+                });
+
+                if (t.length != 0) {
+                    var topic = t[0];
+                    topic.subscription.unsubscribe();
+                    topic.deferred.reject("Unsubscribed");
+
+                    t = $.grep(topics, function (topic) {
+                        return topic.address != url;
+                    });
+                    topics = t;
                 }
             };
 
@@ -89,6 +109,8 @@
                         $log.debug("Websocket not ready yet... buffering subscription for " + url);
                         topic.bufferedSubscription = subscribe;
                     }
+                } else {
+                    $log.debug("Found existing subscription for " + url);
                 }
 
                 return topic.deferred.promise;
@@ -112,7 +134,7 @@
                     $log.debug("...subscription buffer cleared");
 
                     $log.debug("Clearing message buffer");
-                    sendBuffer.forEach(function(sendMessage) {
+                    sendBuffer.forEach(function (sendMessage) {
                         sendMessage();
                     });
                     sendBuffer.length = 0;

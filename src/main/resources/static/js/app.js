@@ -26,6 +26,7 @@
             .state("place", {
                 url: "/support/:stateIdentifier/:cityIdentifier/:placeIdentifier",
                 templateUrl: "/template/place.html",
+                controller: "PlaceController as placeCtrl"
             })
             .state("profile", {
                 url: "/profile",
@@ -46,27 +47,33 @@
             });
     });
 
-    app.controller("WelcomeController", function($scope, Rest) {
+    app.controller("WelcomeController", function ($scope, Rest) {
         $scope.states = Rest.State.query();
     });
 
-    app.controller("StateController", function($scope, Rest, $stateParams) {
+    app.controller("StateController", function ($scope, Rest, $stateParams) {
         $scope.state = Rest.State.get({identifier: $stateParams.stateIdentifier});
     });
 
-    app.controller("CityController", function($scope, Rest, $stateParams) {
-        $scope.city = Rest.City.get({identifier: $stateParams.cityIdentifier, stateIdentifier: $stateParams.stateIdentifier});
+    app.controller("CityController", function ($scope, Rest, $stateParams) {
+        $scope.city = Rest.City.get({
+            identifier: $stateParams.cityIdentifier,
+            stateIdentifier: $stateParams.stateIdentifier
+        });
     });
 
-    app.directive("donationRequests", function () {
-        return {
-            restrict: 'E',
-            templateUrl: '/template/widget/donation-requests.html',
-            controller: function ($scope, Rest) {
-                $scope.donationRequests = Rest.DonationRequest.query();
-            },
-            controllerAs: 'ctrl'
-        }
+    app.controller("PlaceController", function ($scope, Rest, $stateParams, Websocket) {
+        $scope.place = Rest.Place.get({
+            identifier: $stateParams.placeIdentifier,
+            cityIdentifier: $stateParams.cityIdentifier,
+            stateIdentifier: $stateParams.stateIdentifier
+        });
+
+        var identifier = getUrlAfterSupport() + "/comments";
+
+        $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            Websocket.unsubscribe(identifier);
+        });
     });
 
     app.controller("LoginCtrl", function ($scope, $rootScope) {
@@ -127,12 +134,12 @@
 
         $scope.addCity = false;
 
-        $scope.addCityInfo = function() {
+        $scope.addCityInfo = function () {
             $scope.cityname = $scope.city;
             $scope.addCity = true;
         };
 
-        $scope.searchCity = function() {
+        $scope.searchCity = function () {
             $scope.addCity = false;
         }
 
@@ -152,7 +159,7 @@
                 formData.state = $scope.statename;
             }
 
-            Rest.Place.Request.save(formData, function () {
+            Rest.PlaceRequest.Request.save(formData, function () {
                 alert("Success");
             }, function () {
                 alert("Oh oh");

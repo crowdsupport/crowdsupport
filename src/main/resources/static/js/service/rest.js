@@ -6,7 +6,8 @@
             return {
                 State: $resource(SERVICE_PREFIX + "/state/:identifier"),
                 City: $resource(SERVICE_PREFIX + "/city/:identifier"),
-                Place: {
+                Place: $resource(SERVICE_PREFIX + "/place/:identifier"),
+                PlaceRequest: {
                     Request: $resource(SERVICE_PREFIX + "/place/request", {}, {
                         decline: {
                             method: "POST",
@@ -21,8 +22,7 @@
                         }
                     })
                 },
-                DonationRequest: $resource(SERVICE_PREFIX + "/:sIdt/:cIdt/:pIdt/donationRequests",
-                    {sIdt: parseUrl().stateIdentifier, cIdt: parseUrl().cityIdentifier, pIdt: parseUrl().placeIdentifier})
+                DonationRequest: $resource(SERVICE_PREFIX + "/:sIdt/:cIdt/:pIdt/donationRequests")
             };
         });
 })();

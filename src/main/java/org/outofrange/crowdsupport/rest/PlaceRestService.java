@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.rest;
 import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.dto.PlaceDto;
 import org.outofrange.crowdsupport.dto.PlaceRequestDto;
+import org.outofrange.crowdsupport.dto.PlaceWithDonationRequestsDto;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.service.PlaceRequestService;
@@ -22,7 +23,7 @@ import java.util.Optional;
  * @author Markus Möslinger
  */
 @RestController
-@RequestMapping(value = "/service/v1")
+@RequestMapping(value = "/service/v1/place")
 public class PlaceRestService {
     private static final Logger log = LoggerFactory.getLogger(PlaceRestService.class);
 
@@ -51,7 +52,16 @@ public class PlaceRestService {
         }
     }
 
-    @RequestMapping(value = "/place/request", method = RequestMethod.POST)
+    @RequestMapping(value = "/{identifier}")
+    public ResponseEntity<PlaceWithDonationRequestsDto> getPlace(@PathVariable String identifier,
+                                                                 @RequestParam String cityIdentifier,
+                                                                 @RequestParam String stateIdentifier) {
+
+        return ResponseEntity.ok(mapper.map(placeService.load(stateIdentifier, cityIdentifier, identifier).get(),
+                PlaceWithDonationRequestsDto.class));
+    }
+
+    @RequestMapping(value = "/request", method = RequestMethod.POST)
     public ResponseEntity<Void> requestNewPlace(@RequestBody PlaceRequest placeRequest) {
         placeRequest.setRequestingUser(userService.getCurrentUserUpdated().get());
         placeRequestService.requestNewPlace(placeRequest);
@@ -59,14 +69,14 @@ public class PlaceRestService {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/place/request", method = RequestMethod.GET)
+    @RequestMapping(value = "/request", method = RequestMethod.GET)
     public List<PlaceRequestDto> getAllOpenPlaceRequests() {
         log.info("Requesting all place requests");
 
         return mapper.mapToList(placeRequestService.loadAllWithInactivePlace(), PlaceRequestDto.class);
     }
 
-    @RequestMapping(value = "/place", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<PlaceDto> saveNewPlace(@RequestBody PlaceRequest placeRequest) {
         log.info("Saving previously created new place: {}", placeRequest);
 
@@ -75,7 +85,7 @@ public class PlaceRestService {
         return ResponseEntity.ok(mapper.map(savedPlaceRequest.getPlace(), PlaceDto.class));
     }
 
-    @RequestMapping(value = "/place/request/{requestId}/decline", method = RequestMethod.POST)
+    @RequestMapping(value = "/request/{requestId}/decline", method = RequestMethod.POST)
     public ResponseEntity<Void> declinePlaceRequest(@PathVariable Long requestId) {
         log.info("Declining place request with id {}", requestId);
 
