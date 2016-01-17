@@ -1,11 +1,67 @@
 (function () {
     var app = angular.module("crowdsupport", ["timeAgo", "crowdsupport.service.websocket", "crowdsupport.service.config",
-        "crowdsupport.admin", "crowdsupport.widget.search", "crowdsupport.service.rest"]);
+        "crowdsupport.admin", "crowdsupport.widget.search", "crowdsupport.service.rest", "ui.router"]);
+
+    app.config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
+        $locationProvider.html5Mode(true);
+
+        $urlRouterProvider.otherwise("/");
+
+        $stateProvider
+            .state("welcome", {
+                url: "/",
+                templateUrl: "/template/welcome.html",
+                controller: "WelcomeController"
+            })
+            .state("state", {
+                url: "/support/:stateIdentifier",
+                templateUrl: "/template/state.html",
+                controller: "StateController"
+            })
+            .state("city", {
+                url: "/support/:stateIdentifier/:cityIdentifier",
+                templateUrl: "/template/city.html",
+                controller: "CityController"
+            })
+            .state("place", {
+                url: "/support/:stateIdentifier/:cityIdentifier/:placeIdentifier",
+                templateUrl: "/template/place.html",
+            })
+            .state("profile", {
+                url: "/profile",
+                templateUrl: "/template/profile.html"
+            })
+            .state("placeRequest", {
+                url: "/request/newPlace",
+                templateUrl: "/template/placerequest.html"
+            })
+            .state("admin", {
+                url: "/admin",
+                templateUrl: "/template/admin/overview.html"
+            })
+            .state("requestedPlaces", {
+                url: "/admin/requestedPlaces",
+                templateUrl: "/template/admin/requestedPlaces.html",
+                controller: "RequestedPlacesCtrl as ctrl"
+            });
+    });
+
+    app.controller("WelcomeController", function($scope, Rest) {
+        $scope.states = Rest.State.query();
+    });
+
+    app.controller("StateController", function($scope, Rest, $stateParams) {
+        $scope.state = Rest.State.get({identifier: $stateParams.stateIdentifier});
+    });
+
+    app.controller("CityController", function($scope, Rest, $stateParams) {
+        $scope.city = Rest.City.get({identifier: $stateParams.cityIdentifier, stateIdentifier: $stateParams.stateIdentifier});
+    });
 
     app.directive("donationRequests", function () {
         return {
             restrict: 'E',
-            templateUrl: '/template/donation-requests.html',
+            templateUrl: '/template/widget/donation-requests.html',
             controller: function ($scope, Rest) {
                 $scope.donationRequests = Rest.DonationRequest.query();
             },

@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.outofrange.crowdsupport.dto.CityDto;
+import org.outofrange.crowdsupport.dto.CityWithPlacesDto;
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.service.CityService;
 import org.outofrange.crowdsupport.util.CsModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,5 +54,14 @@ public class CityRestService {
                 cityDto.getImagePath(), cityDto.getState().getIdentifier());
 
         return ResponseEntity.ok(mapper.map(createdCity, CityDto.class));
+    }
+
+    @RequestMapping(value = "/{identifier}", method = RequestMethod.GET)
+    public ResponseEntity<CityDto> getCity(@PathVariable String identifier, @RequestParam String stateIdentifier) {
+        log.info("Getting city with identifier {} in state with identifier {}", identifier, stateIdentifier);
+
+        final Optional<City> loadedCity = cityService.load(identifier, stateIdentifier);
+
+        return ResponseEntity.ok(mapper.map(loadedCity.get(), CityWithPlacesDto.class));
     }
 }

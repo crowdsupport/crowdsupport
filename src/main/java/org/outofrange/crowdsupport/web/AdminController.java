@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.inject.Inject;
 
-@Controller
 @RequestMapping(value = "/admin")
 public class AdminController extends BaseController {
     @Inject

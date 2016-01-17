@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
 
-@Controller
 public class DonationRequestController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(DonationRequestController.class);
 

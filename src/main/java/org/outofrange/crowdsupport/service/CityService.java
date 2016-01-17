@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CityService extends BaseService<City> {
-    Optional<City> load(String identifier);
+    Optional<City> load(String identifier, String stateIdentifier);
 
     List<City> searchCities(String query);
 

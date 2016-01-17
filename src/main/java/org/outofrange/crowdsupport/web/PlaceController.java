@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.inject.Inject;
 import java.util.Optional;
 
-@Controller
 @RequestMapping(value = "/support/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}")
 public class PlaceController extends BaseController {
     @Inject

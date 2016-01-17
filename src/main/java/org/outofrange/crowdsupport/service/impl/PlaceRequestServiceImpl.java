@@ -48,7 +48,8 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
         if (placeRequest.getPlace().getCity() != null) {
             final String cityIdentifier = placeRequest.getPlace().getCity().getIdentifier();
-            final Optional<City> city = cityService.load(cityIdentifier);
+            final String stateIdentifier = placeRequest.getPlace().getCity().getState().getIdentifier();
+            final Optional<City> city = cityService.load(cityIdentifier, stateIdentifier);
 
             if (city.isPresent()) {
                 log.trace("Found existing city attached to place request: {}", city.get());
@@ -68,7 +69,8 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     public PlaceRequest saveNewPlace(PlaceRequest placeRequest) {
         log.trace("Saving new place {}", placeRequest);
 
-        final Optional<City> cityDb = cityService.load(placeRequest.getPlace().getCity().getIdentifier());
+        final Optional<City> cityDb = cityService.load(placeRequest.getPlace().getCity().getIdentifier(),
+                placeRequest.getPlace().getCity().getState().getIdentifier());
         if (!cityDb.isPresent()) {
             throw new ServiceException("Found no city with identifier " + placeRequest.getPlace().getCity().getIdentifier());
         }

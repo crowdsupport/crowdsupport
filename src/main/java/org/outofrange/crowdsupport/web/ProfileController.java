@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.inject.Inject;
 import java.util.Optional;
 
-@Controller
 @RequestMapping(value = "/profile")
 public class ProfileController extends BaseController {
     @Inject

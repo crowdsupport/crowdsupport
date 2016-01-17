@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row">
+        <h1>Crowdsupport allows you to quickly see where your help is needed!</h1>
+    </div>
+    <div class="row">
+        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search states"/>
+    </div>
+
+    <div class="row center-block">
+        <div ng-repeat="state in states" class="result box col-md-2 col-sm-6 col-xs-6">
+            <a href="/support/{{state.identifier}}">
+                <img src="{{state.imagePath}}" class="center-block"/>
+
+                <div class="text">
+                    <span>{{state.name}}</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

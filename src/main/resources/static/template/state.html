@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row">
+        <h1>These cities in {{state.name}} need your support!</h1>
+    </div>
+    <div class="row">
+        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search for a city"/>
+    </div>
+
+    <div class="row center-block">
+        <div ng-repeat="city in state.cities" class="result box col-md-2 col-sm-6 col-xs-6">
+            <a href="/support/{{city.state.identifier}}/{{city.identifier}}">
+                <img src="{{city.imagePath}}" class="center-block"/>
+
+                <div class="text">
+                    {{city.name}}
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <h1>These places in {{city.name}} need your support!</h1>
+    </div>
+    <div class="row">
+        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search for a place"/>
+    </div>
+
+    <div class="row center-block">
+        <div ng-repeat="place in city.places" class="result box col-md-2 col-sm-6 col-xs-6">
+            <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}">
+                <img src="{{place.imagePath}}" class="center-block"/>
+
+                <div class="text">
+                    {{place.name}}
+                    ({{place.location}})
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

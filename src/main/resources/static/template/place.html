@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="crowdsupport">
-<head th:replace="include/default :: head ('Can you help ' + ${place.name})"/>
-<body>
-<nav th:replace="include/default :: navbar"/>
-
-<main class="container">
+<div class="container">
     <div class="row">
         <nav class="navbar">
             <p class="navbar-text"><span th:text="${place.name}">Name of place</span> @ <span
@@ -30,8 +23,4 @@
     </div>
 
     <donation-requests></donation-requests>
-</main>
-
-<th:block th:include="include/default :: footer"/>
-</body>
-</html>
+</div>

@@ -37,8 +37,8 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public Optional<City> load(String identifier) {
-        return cityRepository.findOneByIdentifier(identifier);
+    public Optional<City> load(String identifier, String stateIdentifier) {
+        return cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, identifier);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public City saveOrRetrieveCity(City city) {
-        final Optional<City> loadedCity = load(city.getIdentifier());
+        final Optional<City> loadedCity = load(city.getIdentifier(), city.getState().getIdentifier());
 
         if (loadedCity.isPresent()) {
             if (loadedCity.get().equals(city)) {

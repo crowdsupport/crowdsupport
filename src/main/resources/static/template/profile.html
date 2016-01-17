@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="crowdsupport">
-<head th:replace="include/default :: head ('Profile')"/>
-<body>
-<nav th:replace="include/default :: navbar"/>
-
-<main class="container">
+<div class="container">
     <div class="row">
         <form th:action="@{/profile}" method="post">
             <div class="form-group">
@@ -26,8 +19,4 @@
             <button type="submit" class="btn btn-default">Save</button>
         </form>
     </div>
-</main>
-
-<th:block th:include="include/default :: footer"/>
-</body>
-</html>
+</div>

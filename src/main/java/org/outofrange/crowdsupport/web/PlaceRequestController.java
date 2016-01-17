@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.inject.Inject;
 
-@Controller
 @RequestMapping(value = "/request/newPlace")
 public class PlaceRequestController extends BaseController {
     @Inject

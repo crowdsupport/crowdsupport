@@ -9,7 +9,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
 
-@Controller
 @RequestMapping(value = "/register")
 public class RegisterController extends BaseController {
     @Inject

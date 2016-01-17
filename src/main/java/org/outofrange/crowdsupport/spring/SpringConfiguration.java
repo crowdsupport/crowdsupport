@@ -28,9 +28,11 @@ public class SpringConfiguration {
 
         registrationBean.setFilter(new UrlRewriteFilter());
         registrationBean.setDispatcherTypes(DispatcherType.REQUEST);
-        registrationBean.addUrlPatterns("/admin/*");
-        registrationBean.addInitParameter("logLevel", "INFO");
+        registrationBean.addUrlPatterns("/*");
         registrationBean.addInitParameter("confPath", "urlrewrite.xml");
+        // TODO make configurable
+        registrationBean.addInitParameter("logLevel", "DEBUG");
+        registrationBean.addInitParameter("confReloadCheckInterval", "0");
 
         return registrationBean;
     }

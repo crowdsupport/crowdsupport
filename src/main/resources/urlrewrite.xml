@@ -7,7 +7,7 @@
 <urlrewrite>
     <rule>
         <name>Angular Route</name>
-        <from>^/admin/.*$</from>
-        <to last="true">/admin</to>
+        <from>^/(?!service|js|style|template).*$</from>
+        <to last="true">/</to>
     </rule>
 </urlrewrite>

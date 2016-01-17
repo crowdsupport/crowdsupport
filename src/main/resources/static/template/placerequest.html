@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="crowdsupport">
-<head th:replace="include/default :: head ('Request a new place')"/>
-<body>
-<nav th:replace="include/default :: navbar"/>
-
-<main class="container">
+<div class="container">
     <div class="row" ng-controller="PlaceRequestCtrl as ctrl">
         <form  ng-submit="ctrl.submit()">
             <div class="form-group">
@@ -42,8 +35,4 @@
             <input type="submit" class="btn btn-default" value="Request new place"/>
         </form>
     </div>
-</main>
-
-<th:block th:include="include/default :: footer"/>
-</body>
-</html>
+</div>
