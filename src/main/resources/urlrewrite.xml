@@ -14,7 +14,7 @@
 
     <rule>
         <name>Angular Route</name>
-        <from>^/(?!service|js|style|template|ws|app).*$</from>
+        <from>^/(?!service|js|style|template|ws|app|h2-console|favicon.ico).*$</from>
         <to last="true">/</to>
     </rule>
 </urlrewrite>

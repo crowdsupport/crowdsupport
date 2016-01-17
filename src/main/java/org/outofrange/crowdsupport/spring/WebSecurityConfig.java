@@ -26,13 +26,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Inject
     private UserService userService;
 
+    @Inject
+    private Config config;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().permitAll()
                 .and().formLogin().loginPage("/login").permitAll()
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessHandler(logoutSuccessHandler())
-        .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class).csrf().csrfTokenRepository(csrfTokenRepository());
+        .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
+                .csrf().csrfTokenRepository(csrfTokenRepository()).ignoringAntMatchers("/h2-console/**");
+
+        if (config.isDebugEnabled()) {
+            http.headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**");
+        }
     }
 
     private CsrfTokenRepository csrfTokenRepository() {

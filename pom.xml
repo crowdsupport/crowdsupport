@@ -137,7 +137,7 @@
                 <configuration>
                     <targetGroups>all</targetGroups>
                     <minimize>true</minimize>
-                    <destinationFolder>${basedir}/src/main/resources/static/min/</destinationFolder>
+                    <destinationFolder>src/main/resources/static/r/min/</destinationFolder>
                     <contextFolder>${basedir}/src/main/resources/static</contextFolder>
                     <wroFile>${basedir}/src/main/resources/wro4j.xml</wroFile>
                     <ignoreMissingResources>false</ignoreMissingResources>
