@@ -8,10 +8,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
+import javax.inject.Inject;
 import javax.servlet.DispatcherType;
 
 @Configuration
 public class SpringConfiguration {
+    @Inject
+    private Config config;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -31,8 +35,15 @@ public class SpringConfiguration {
         registrationBean.addUrlPatterns("/*");
         registrationBean.addInitParameter("confPath", "urlrewrite.xml");
         // TODO make configurable
-        registrationBean.addInitParameter("logLevel", "DEBUG");
+        if (config.isDebugEnabled()) {
+            registrationBean.addInitParameter("logLevel", "DEBUG");
+        }
 
         return registrationBean;
+    }
+
+    @Bean
+    public Config config() {
+        return new Config();
     }
 }

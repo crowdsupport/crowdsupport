@@ -6,6 +6,13 @@
 
 <urlrewrite>
     <rule>
+        <name>Strip version</name>
+        <note>That's bad. But we can reference ie. all-1.2.js and respond with all.js</note>
+        <from>^(/min/.+?)-.+(\..+?)$</from>
+        <to last="true">$1$2</to>
+    </rule>
+
+    <rule>
         <name>Angular Route</name>
         <from>^/(?!service|js|style|template|ws|app).*$</from>
         <to last="true">/</to>
