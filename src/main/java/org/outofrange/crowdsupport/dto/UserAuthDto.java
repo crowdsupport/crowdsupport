@@ -3,7 +3,7 @@ package org.outofrange.crowdsupport.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserAuthDto {
+public class UserAuthDto extends BaseDto {
     private long exp;
 
     private String username;
@@ -34,5 +34,13 @@ public class UserAuthDto {
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAuthDto{" +
+                "exp=" + exp +
+                ", username='" + username + '\'' +
+                '}';
     }
 }

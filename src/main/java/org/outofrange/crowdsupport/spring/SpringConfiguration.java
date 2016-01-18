@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.spring;
 
 import org.outofrange.crowdsupport.util.CsModelMapper;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,8 @@ public class SpringConfiguration {
             registrationBean.addInitParameter("logLevel", "DEBUG");
         }
 
+        // we have to do our rewriting first, before security sees us /o\
+        registrationBean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
         return registrationBean;
     }
 

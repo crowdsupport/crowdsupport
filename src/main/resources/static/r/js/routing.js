@@ -1,6 +1,7 @@
 (function() {
     angular
-        .module('crowdsupport.routing', ['crowdsupport.controller', 'crowdsupport.service.rest', 'ui.router', 'ui.router.title'])
+        .module('crowdsupport.routing', ['crowdsupport.controller', 'crowdsupport.service.rest', 'crowdsupport.service.auth',
+            'ui.router', 'ui.router.title'])
         .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
             $locationProvider.html5Mode(true);
 
@@ -42,7 +43,7 @@
                     },
                     resolve: {
                         $cityRest: function(Rest, $stateParams) {
-                            return Rest.City.get({ identifier: $stateParams.cityIdentifier, stateIdentifier: $stateParams.stateIdentifier})
+                            return Rest.City.get({ identifier: $stateParams.cityIdentifier, stateIdentifier: $stateParams.stateIdentifier});
                         },
                         $title: function ($cityRest) {
                             return $cityRest.$promise.then(function(city) {
@@ -76,8 +77,12 @@
                 })
                 .state('profile', {
                     url: '/profile',
+                    controller: 'ProfileController',
                     templateUrl: '/r/template/profile.html',
                     resolve: {
+                        $user: function(Auth) {
+                            return Auth.updateUser().$promise;
+                        },
                         $title: function () {
                             return 'Profile';
                         }

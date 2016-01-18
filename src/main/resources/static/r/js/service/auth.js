@@ -39,5 +39,11 @@
                     $rootScope.user = retrieveUser();
                 });
             };
+
+            this.updateUser = function () {
+                $log.debug("Updating user model");
+                $rootScope.user = retrieveUser();
+                return $rootScope.user;
+            };
         });
 })();

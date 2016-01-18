@@ -113,5 +113,18 @@
                     alert('Oh oh');
                 });
             };
+        })
+        .controller('ProfileController', function($scope, $user, Auth, Rest, $log, StatusService) {
+            $scope.user = {};
+            $scope.user.username = $user.username;
+            $scope.user.email = $user.email;
+
+            $scope.submit = function() {
+                $log.debug("Submitting profile data");
+                Rest.User.save($scope.user, function(response) {
+                    StatusService.newStatus(response);
+                    Auth.updateUser();
+                });
+            };
         });
 })();
