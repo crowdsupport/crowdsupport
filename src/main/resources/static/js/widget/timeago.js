@@ -1,9 +1,9 @@
 (function () {
     angular
         .module('timeAgo', [])
-        .directive("timeAgo", function ($q) {
+        .directive('timeAgo', function ($q) {
             return {
-                restrict: "C",
+                restrict: 'C',
                 scope: {
                     title: '@'
                 },

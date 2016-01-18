@@ -1,16 +1,16 @@
 (function () {
     angular
         .module('crowdsupport.widget.search', ['ui.bootstrap'])
-        .factory("SearchWidget", function () {
+        .factory('SearchWidget', function () {
             return function (serviceUrl, templateUrl, formatResult) {
                 return {
-                    restrict: "E",
+                    restrict: 'E',
                     transclude: true,
                     scope: {
-                        updateOnSelect: "=",
-                        ngModel: "=",
-                        inputClass: "@",
-                        inputId: "@"
+                        updateOnSelect: '=',
+                        ngModel: '=',
+                        inputClass: '@',
+                        inputId: '@'
                     },
                     controller: function ($scope, $http) {
                         $scope.query = function (query) {
@@ -24,7 +24,7 @@
                         };
 
                         $scope.formatInput = function (model) {
-                            return nullOrEmpty(model) ? "" : formatResult(model);
+                            return nullOrEmpty(model) ? '' : formatResult(model);
                         };
 
                         $scope.onSelect = function ($item) {
@@ -35,18 +35,18 @@
                 };
             };
         })
-        .directive("citySearch", function (SearchWidget) {
+        .directive('citySearch', function (SearchWidget) {
             var format = function (model) {
-                return model.name + " (" + model.state.name + ")";
+                return model.name + ' (' + model.state.name + ')';
             };
 
-            return new SearchWidget(SERVICE_PREFIX + "city", "/template/widget/citySearch/citySearch.html", format);
+            return new SearchWidget(SERVICE_PREFIX + 'city', '/template/widget/citySearch/citySearch.html', format);
         })
-        .directive("stateSearch", function (SearchWidget) {
+        .directive('stateSearch', function (SearchWidget) {
             var format = function (model) {
                 return model.name;
             };
 
-            return new SearchWidget(SERVICE_PREFIX + "state", "/template/widget/stateSearch/stateSearch.html", format);
+            return new SearchWidget(SERVICE_PREFIX + 'state', '/template/widget/stateSearch/stateSearch.html', format);
         });
 })();
