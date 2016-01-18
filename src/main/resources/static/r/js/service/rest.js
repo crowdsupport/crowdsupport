@@ -25,6 +25,17 @@
                 },
                 DonationRequest: $resource(SERVICE_PREFIX + '/:sIdt/:cIdt/:pIdt/donationRequests'),
                 User: $resource(SERVICE_PREFIX + '/user', {}, {
+                    create: {
+                        method: 'POST',
+                        url: SERVICE_PREFIX + '/user'
+                    },
+                    update: {
+                        method: 'PUT',
+                        url: SERVICE_PREFIX + '/user/:username',
+                        params: {
+                            username: '@username'
+                        }
+                    },
                     login: {
                         method: 'POST',
                         url: SERVICE_PREFIX + '/user/login',

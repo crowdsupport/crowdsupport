@@ -38,6 +38,7 @@
         <script th:src="@{/r/js/global.js}"></script>
         <script th:src="@{/r/js/service/config.js}"></script>
         <script th:src="@{/r/js/service/websocket.js}"></script>
+        <script th:src="@{/r/js/service/previousstate.js}"></script>
         <script th:src="@{/r/js/service/rest.js}"></script>
         <script th:src="@{/r/js/service/auth.js}"></script>
         <script th:src="@{/r/js/service/statusbar.js}"></script>
@@ -109,12 +110,12 @@
                         </ul>
                     </div>
                 </div>
-                <div class="btn-group" role="group" ng-hide="$root.auth">
+                <div class="btn-group" id="login" role="group" ng-hide="$root.auth">
                     <form>
-                        <input type="text" placeholder="Username..." ng-model="username"/>
-                        <input type="password" placeholder="Password..." ng-model="password"/>
+                        <input type="text" class="username" placeholder="Username..." ng-model="username"/>
+                        <input type="password" class="password" placeholder="Password..." ng-model="password"/>
                         <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
-                        <button class="btn btn-default">Register</button>
+                        <a th:href="@{/register}" class="btn btn-default">Register</a>
                     </form>
                 </div>
             </div>

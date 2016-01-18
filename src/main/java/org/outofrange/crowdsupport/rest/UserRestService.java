@@ -8,10 +8,7 @@ import org.outofrange.crowdsupport.util.CsModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -39,18 +36,34 @@ public class UserRestService {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ResponseDto<UserDto>> saveUserDetails(@RequestBody UserDto userDto) {
+    public ResponseEntity<ResponseDto<UserDto>> createUser(@RequestBody UserDto userDto) {
+        log.info("Register user: {}", userDto);
+
+        if (userService.isUserLoggedIn()) {
+            return ResponseEntity.badRequest().body(ResponseDto.error("Registration not allowed when logged in", null));
+        }
+
+        final User user = mapper.map(userDto, User.class);
+        return ResponseEntity.ok(ResponseDto.success("Registration was successful", mapper.map(userService.save(user), UserDto.class)));
+    }
+
+    @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
+    public ResponseEntity<ResponseDto<UserDto>> updateUser(@RequestBody UserDto userDto, @PathVariable String username) {
         log.info("Updating user: {}",  userDto);
 
         final User user = userService.getCurrentUserUpdated().get();
+        if (user.getUsername().equals(username)) {
 
-        user.setEmail(userDto.getEmail());
+            user.setEmail(userDto.getEmail());
 
-        if (userDto.getPassword() != null && !"".equals(userDto.getPassword())) {
-            user.setPassword(userDto.getPassword());
+            if (userDto.getPassword() != null && !"".equals(userDto.getPassword())) {
+                user.setPassword(userDto.getPassword());
+            }
+
+            final UserDto savedUserDto = mapper.map(userService.save(user), UserDto.class);
+            return ResponseEntity.ok(ResponseDto.success("Profile data changed successfully", savedUserDto));
+        } else {
+            return ResponseEntity.badRequest().body(ResponseDto.error("Passed username differs from token", null));
         }
-
-        final UserDto savedUserDto = mapper.map(userService.save(user), UserDto.class);
-        return ResponseEntity.ok(ResponseDto.success("Profile data changed successfully", savedUserDto));
     }
 }

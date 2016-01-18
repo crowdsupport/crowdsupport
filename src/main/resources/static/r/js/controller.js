@@ -2,7 +2,7 @@
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.admin', 'crowdsupport.widget.search', 'crowdsupport.service.rest',
-            'crowdsupport.service.statusbar', 'crowdsupport.service.auth'])
+            'crowdsupport.service.statusbar', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate'])
         .controller('WelcomeController', function ($scope, Rest) {
             $scope.states = Rest.State.query();
         })
@@ -121,9 +121,28 @@
 
             $scope.submit = function() {
                 $log.debug("Submitting profile data");
-                Rest.User.save($scope.user, function(response) {
+                Rest.User.update($scope.user, function(response) {
                     StatusService.newStatus(response);
                     Auth.updateUser();
+                });
+            };
+        })
+        .controller('RegistrationController', function($scope, Auth, Rest, StatusService, $previousState, $state) {
+            $scope.user = {};
+
+            $scope.register = function() {
+                Rest.User.create($scope.user, function(response) {
+                    var e = angular.element("#login .password");
+                    e.scope().username = $scope.user.username;
+                    e.focus();
+
+                    if (!$previousState.get().state.abstract) {
+                        $previousState.go();
+                    } else {
+                        $state.go("welcome");
+                    }
+
+                    StatusService.newStatus(response);
                 });
             };
         });

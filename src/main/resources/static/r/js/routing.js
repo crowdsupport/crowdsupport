@@ -88,6 +88,16 @@
                         }
                     }
                 })
+                .state('register', {
+                    url: '/register',
+                    controller: 'RegistrationController',
+                    templateUrl: '/r/template/register.html',
+                    resolve: {
+                        $title: function() {
+                            return 'Registration';
+                        }
+                    }
+                })
                 .state('placeRequest', {
                     url: '/request/newPlace',
                     templateUrl: '/r/template/placerequest.html',

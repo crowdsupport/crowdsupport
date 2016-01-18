@@ -1,7 +1,7 @@
 (function () {
     angular
-        .module('crowdsupport.service.auth', ['crowdsupport.service.rest', 'angular-jwt'])
-        .service('Auth', function (Rest, $rootScope, $log, jwtHelper) {
+        .module('crowdsupport.service.auth', ['crowdsupport.service.rest', 'angular-jwt', 'crowdsupport.service.statusbar'])
+        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, StatusService) {
             var retrieveUser = function () {
                 $log.debug("Retrieving user...");
                 return Rest.User.get({}, function () {
@@ -36,6 +36,7 @@
                     localStorage.setItem("token", response.data);
 
                     $log.debug("...logged in");
+                    StatusService.success("Login successful");
                     $rootScope.user = retrieveUser();
                 });
             };

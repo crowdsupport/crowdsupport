@@ -33,6 +33,14 @@
 
             this.statusPromise = deferred.promise;
 
+            this.success = function(message) {
+                this.newStatus({type: "SUCCESS", message: message});
+            };
+
+            this.error = function(message) {
+                this.newStatus({type: "ERROR", message: message});
+            };
+
             this.newStatus = function(newStatus) {
                 $log.debug('New status: ' + JSON.stringify(newStatus));
 

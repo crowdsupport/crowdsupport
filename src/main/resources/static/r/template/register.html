@@ -4,21 +4,21 @@
     </div>
 
     <div class="row">
-        <form th:action="@{/register}" method="post">
+        <form ng-submit="register()">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="true"
-                       required="true"/>
+                       required="true" ng-model="user.username"/>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" name="password" pattern=".{4,}"
-                       required="true"
+                       required="true" ng-model="user.password"
                        title="Password has to have at least four characters"/>
             </div>
             <div class="form-group">
                 <label for="email">E-Mail (optional)</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com"/>
+                <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com" ng-model="user.email"/>
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>
