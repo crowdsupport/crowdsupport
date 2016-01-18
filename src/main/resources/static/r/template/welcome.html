@@ -9,7 +9,7 @@
     <div class="row center-block">
         <div ng-repeat="state in states" class="result box col-md-2 col-sm-6 col-xs-6">
             <a href="/support/{{state.identifier}}">
-                <img src="{{state.imagePath}}" class="center-block"/>
+                <img ng-src="{{state.imagePath}}" class="center-block"/>
 
                 <div class="text">
                     <span>{{state.name}}</span>

@@ -4,7 +4,7 @@
 <head lang="en">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <base th:href="@{/}" />
+    <base th:href="@{/}"/>
     <link href='https://fonts.googleapis.com/css?family=PT+Sans+Caption|PT+Sans|PT+Serif' rel='stylesheet'
           type='text/css'/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -14,12 +14,61 @@
     <th:block th:if="${@config.isDebugEnabled()}">
         <link rel="stylesheet" th:href="@{/r/style/stylesheet.css}"/>
     </th:block>
-    <th:block th:if="${!@config.isDebugEnabled()}">
+    <th:block th:unless="${@config.isDebugEnabled()}">
         <link rel="stylesheet" th:href="@{'/r/min/all-' + ${@config.getVersion()} + '.css'}"/>
     </th:block>
 
+    <th:block th:if="${@config.isDebugEnabled()}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.js"></script>
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+        <script type="text/javascript"
+                src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
+
+        <script th:src="@{/r/js/thirdparty/angular-ui-router-title.js}"></script>
+        <script th:src="@{/r/js/global.js}"></script>
+        <script th:src="@{/r/js/service/config.js}"></script>
+        <script th:src="@{/r/js/service/websocket.js}"></script>
+        <script th:src="@{/r/js/service/rest.js}"></script>
+        <script th:src="@{/r/js/service/auth.js}"></script>
+        <script th:src="@{/r/js/service/statusbar.js}"></script>
+        <script th:src="@{/r/js/widget/timeago.js}"></script>
+        <script th:src="@{/r/js/widget/searchWidget.js}"></script>
+        <script th:src="@{/r/js/admin.js}"></script>
+        <script th:src="@{/r/js/controller.js}"></script>
+        <script th:src="@{/r/js/routing.js}"></script>
+        <script th:src="@{/r/js/app.js}"></script>
+    </th:block>
+    <th:block th:unless="${@config.isDebugEnabled()}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+                integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+                crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+        <script type="text/javascript"
+                src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.min.js"></script>
+
+        <script th:src="@{'/r/min/all-' + ${@config.getVersion()} + '.js'}"></script>
+    </th:block>
+
 
     <title ng-bind="($title || 'Home') + ' - Crowdsupport'">Crowdsupport</title>
 </head>
@@ -44,8 +93,8 @@
                 </div>
             </div>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <div ng-controller="UserController" class="navbar-right navbar-userarea ng-cloak">
+        <div id="navbar" class="navbar-collapse collapse ng-cloak">
+            <div ng-controller="UserController" class="navbar-right navbar-userarea">
                 <div ng-show="$root.auth">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
@@ -82,52 +131,6 @@
 
     </div>
 </div>
-<th:block th:if="${@config.isDebugEnabled()}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
 
-    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
-
-    <script th:src="@{/r/js/thirdparty/angular-ui-router-title.js}"></script>
-    <script th:src="@{/r/js/global.js}"></script>
-    <script th:src="@{/r/js/service/config.js}"></script>
-    <script th:src="@{/r/js/service/websocket.js}"></script>
-    <script th:src="@{/r/js/service/rest.js}"></script>
-    <script th:src="@{/r/js/service/statusbar.js}"></script>
-    <script th:src="@{/r/js/service/auth.js}"></script>
-    <script th:src="@{/r/js/widget/timeago.js}"></script>
-    <script th:src="@{/r/js/widget/searchWidget.js}"></script>
-    <script th:src="@{/r/js/admin.js}"></script>
-    <script th:src="@{/r/js/controller.js}"></script>
-    <script th:src="@{/r/js/routing.js}"></script>
-    <script th:src="@{/r/js/app.js}"></script>
-</th:block>
-<th:block th:if="${!@config.isDebugEnabled()}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.min.js"></script>
-
-    <script th:src="@{'/r/min/all-' + ${@config.getVersion()} + '.js'}"></script>
-</th:block>
 </body>
 </html>
