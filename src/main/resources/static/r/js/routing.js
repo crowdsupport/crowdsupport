@@ -14,7 +14,7 @@
                     controller: 'WelcomeController',
                     resolve: {
                         $title: function () {
-                            return 'Home';
+                            return 'Welcome';
                         }
                     }
                 })
