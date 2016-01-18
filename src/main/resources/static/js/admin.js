@@ -1,19 +1,19 @@
 (function () {
     angular
-        .module("crowdsupport.admin", ["ui.router", "crowdsupport.widget.search", "crowdsupport.service.rest"])
-        .controller("RequestedPlacesCtrl", function ($scope, $log, Rest) {
+        .module('crowdsupport.admin', ['crowdsupport.widget.search', 'crowdsupport.service.rest'])
+        .controller('RequestedPlacesCtrl', function ($scope, $log, Rest) {
             $scope.allRequests = Rest.PlaceRequest.Request.query();
 
             $scope.save = function (index) {
-                $log.debug("Saving donation request " + index);
+                $log.debug('Saving donation request ' + index);
                 var request = $scope.allRequests[index];
 
                 request.$accept(function (response) {
-                    $log.debug("Place successfully posted");
+                    $log.debug('Place successfully posted');
                     $log.debug(response);
                     $scope.removeRequest(index);
                 }, function (response) {
-                    $log.debug("Error while saving");
+                    $log.debug('Error while saving');
                     $log.debug(response);
                 });
             };
@@ -26,14 +26,14 @@
                 var request = $scope.allRequests[index];
 
                 request.$decline(function (response) {
-                    $log.debug("Request successfully declined");
+                    $log.debug('Request successfully declined');
                     $scope.removeRequest(index);
                 });
             };
 
             $scope.createState = function (request) {
                 Rest.State.save(request.place.city.state, function (response) {
-                    $log.debug("State successfully created");
+                    $log.debug('State successfully created');
                     request.place.city.state = response.data;
                     request.ui.state = response.data;
                     request.ui.setStateSearch(true);
@@ -43,7 +43,7 @@
             $scope.createCity = function (request) {
                 if (request.ui.stateSearch) {
                     Rest.City.save(request.place.city, function (response) {
-                        $log.debug("City successfully created");
+                        $log.debug('City successfully created');
                         request.ui.city = response.data;
                         request.place.city = response.data;
                         request.ui.setCitySearch(true);
@@ -57,11 +57,11 @@
                     request.place.city = {
                         name: request.city,
                         identifier: null,
-                        imagePath: "/image/placeholder.jpg",
+                        imagePath: '/image/placeholder.jpg',
                         state: {
                             name: request.state,
                             identifier: null,
-                            imagePath: "/image/placeholder.jpg"
+                            imagePath: '/image/placeholder.jpg'
                         }
                     }
                 }

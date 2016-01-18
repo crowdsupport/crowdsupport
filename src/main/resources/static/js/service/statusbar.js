@@ -1,7 +1,7 @@
 (function() {
     angular
-        .module("crowdsupport.service.statusbar", [])
-        .service("StatusService", function($q, $log) {
+        .module('crowdsupport.service.statusbar', [])
+        .service('StatusService', function($q, $log) {
             var defaultTemplate = function(status) {
                 var glyph;
                 var glyphify = function(sign) {
@@ -9,17 +9,17 @@
                 };
 
                 switch (status.type) {
-                    case "SUCCESS":
-                        glyph = glyphify("ok-sign");
+                    case 'SUCCESS':
+                        glyph = glyphify('ok-sign');
                         break;
-                    case "INFO":
-                        glyph = glyphify("info-sign");
+                    case 'INFO':
+                        glyph = glyphify('info-sign');
                         break;
-                    case "ERROR":
-                        glyph = glyphify("remove-sign");
+                    case 'ERROR':
+                        glyph = glyphify('remove-sign');
                         break;
                     default:
-                        glyph = "";
+                        glyph = '';
                         break;
                 }
 
@@ -34,7 +34,7 @@
             this.statusPromise = deferred.promise;
 
             this.newStatus = function(newStatus) {
-                $log.debug("New status: " + JSON.stringify(newStatus));
+                $log.debug('New status: ' + JSON.stringify(newStatus));
 
                 newStatus.defaultHtml = defaultTemplate(newStatus);
 

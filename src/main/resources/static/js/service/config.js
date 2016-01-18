@@ -1,15 +1,15 @@
 (function () {
-    var KEY = "debugEnabled";
+    var KEY = 'debugEnabled';
 
     angular
-        .module("crowdsupport.service.config", [])
+        .module('crowdsupport.service.config', [])
         .config(function ($provide, $logProvider) {
             // AngularJS has debug enabled by default, but just to be sure...
             $logProvider.debugEnabled(true);
 
             // Disabling localStorageDebug (if not set)
             if (localStorage.getItem(KEY) === null) {
-                localStorage.setItem(KEY, "false");
+                localStorage.setItem(KEY, 'false');
             }
 
             // add a check for localStorageDebug before actually calling $log.debug(...)
@@ -17,7 +17,7 @@
                 var debugFunction = $delegate.debug;
 
                 $delegate.debug = function () {
-                    if (localStorage.getItem(KEY) !== "false") {
+                    if (localStorage.getItem(KEY) !== 'false') {
                         debugFunction.apply(undefined, arguments);
                     }
                 };
@@ -25,9 +25,9 @@
                 return $delegate;
             });
         })
-        .service("ConfigService", function ($log) {
+        .service('ConfigService', function ($log) {
             this.debugEnabled = function (flag) {
-                $log.info("Setting debugEnabled to " + flag);
+                $log.info('Setting debugEnabled to ' + flag);
                 localStorage.setItem(KEY, flag.toString());
             }
         });
@@ -41,20 +41,20 @@ var debug = {
     },
     status: {
         set: function(type, text) {
-            debug.getAngular("StatusService").newStatus({type: type, message: text});
+            debug.getAngular('StatusService').newStatus({type: type, message: text});
         },
         success: function (text) {
-            debug.getAngular("StatusService").newStatus({type: "SUCCESS", message: text});
+            debug.getAngular('StatusService').newStatus({type: 'SUCCESS', message: text});
         },
         info: function (text) {
-            debug.getAngular("StatusService").newStatus({type: "INFO", message: text});
+            debug.getAngular('StatusService').newStatus({type: 'INFO', message: text});
         },
         error: function (text) {
-            debug.getAngular("StatusService").newStatus({type: "ERROR", message: text});
+            debug.getAngular('StatusService').newStatus({type: 'ERROR', message: text});
         }
     }
 };
 window.onload = function () {
-    debug.config = debug.getAngular("ConfigService");
+    debug.config = debug.getAngular('ConfigService');
 };
 

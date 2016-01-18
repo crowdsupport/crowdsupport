@@ -1,12 +1,12 @@
 (function () {
     angular
-        .module("crowdsupport.service.websocket", [])
-        .service("Websocket", function ($q, $timeout, $log) {
+        .module('crowdsupport.service.websocket', [])
+        .service('Websocket', function ($q, $timeout, $log) {
             var that = this;
 
-            var SOCKET_URL = "/ws";
-            var TOPIC_PREFIX = "/topic/";
-            var BROKER_PREFIX = "/app/";
+            var SOCKET_URL = '/ws';
+            var TOPIC_PREFIX = '/topic/';
+            var BROKER_PREFIX = '/app/';
 
             var RECONNECT_TIMEOUT = 30000;
 
@@ -14,7 +14,7 @@
             var stomp = Stomp.over(client);
             stomp.onclose = function () {
                 $timeout(function () {
-                    $log.debug("Connection lost...");
+                    $log.debug('Connection lost...');
                     that.connect();
                 }, RECONNECT_TIMEOUT);
             };
@@ -27,7 +27,7 @@
             var sendBuffer = [];
 
             var getTopic = function (address) {
-                var t = $.grep(topics, function (topic, i) {
+                var t = $.grep(topics, function (topic) {
                     return topic.address == address;
                 });
 
@@ -56,7 +56,7 @@
                 var url = BROKER_PREFIX + broker;
                 connectIfNeeded();
                 var sending = function () {
-                    $log.debug("Sending message to " + url);
+                    $log.debug('Sending message to ' + url);
                     $log.debug(data);
                     stomp.send(BROKER_PREFIX + broker, {priority: 9}, JSON.stringify(data));
                 };
@@ -64,7 +64,7 @@
                 if (that.ready) {
                     sending();
                 } else {
-                    $log.debug("Websocket not ready yet... buffering message to " + url);
+                    $log.debug('Websocket not ready yet... buffering message to ' + url);
                     $log.debug(data);
                     sendBuffer.push(sending);
                 }
@@ -72,7 +72,7 @@
 
             this.unsubscribe = function (address) {
                 var url = TOPIC_PREFIX + address;
-                $log.debug("Unsubscribing from " + url + "...");
+                $log.debug('Unsubscribing from ' + url + '...');
 
                 var t = $.grep(topics, function (topic) {
                     return topic.address == url;
@@ -81,7 +81,7 @@
                 if (t.length != 0) {
                     var topic = t[0];
                     topic.subscription.unsubscribe();
-                    topic.deferred.reject("Unsubscribed");
+                    topic.deferred.reject('Unsubscribed');
 
                     t = $.grep(topics, function (topic) {
                         return topic.address != url;
@@ -96,9 +96,9 @@
                 var topic = getTopic(url);
 
                 var subscribe = function () {
-                    $log.debug("Subscribing to " + url);
+                    $log.debug('Subscribing to ' + url);
                     topic.subscription = stomp.subscribe(url, function (data) {
-                        $log.debug("Received data from " + url);
+                        $log.debug('Received data from ' + url);
                         $log.debug(data);
                         topic.deferred.notify(JSON.parse(data.body));
                     });
@@ -108,51 +108,51 @@
                     if (that.ready) {
                         subscribe();
                     } else if (topic.bufferedSubscription === null) {
-                        $log.debug("Websocket not ready yet... buffering subscription for " + url);
+                        $log.debug('Websocket not ready yet... buffering subscription for ' + url);
                         topic.bufferedSubscription = subscribe;
                     }
                 } else {
-                    $log.debug("Found existing subscription for " + url);
+                    $log.debug('Found existing subscription for ' + url);
                 }
 
                 return topic.deferred.promise;
             };
 
             this.connect = function () {
-                $log.debug("Starting Websocket...");
+                $log.debug('Starting Websocket...');
                 started = true;
 
                 stomp.connect({}, function () {
                     that.ready = true;
-                    $log.debug("...Websocket ready");
+                    $log.debug('...Websocket ready');
 
-                    $log.debug("Clearing subscription buffer...");
+                    $log.debug('Clearing subscription buffer...');
                     topics.forEach(function (topic) {
                         if (topic.bufferedSubscription !== null) {
                             topic.bufferedSubscription();
                             topic.bufferedSubscription = null;
                         }
                     });
-                    $log.debug("...subscription buffer cleared");
+                    $log.debug('...subscription buffer cleared');
 
-                    $log.debug("Clearing message buffer");
+                    $log.debug('Clearing message buffer');
                     sendBuffer.forEach(function (sendMessage) {
                         sendMessage();
                     });
                     sendBuffer.length = 0;
-                    $log.debug("Message buffer cleared");
+                    $log.debug('Message buffer cleared');
                 });
             };
 
             this.disconnect = function () {
                 that.ready = false;
-                $log.debug("Disconnecting Websocket...");
+                $log.debug('Disconnecting Websocket...');
                 stomp.disconnect(function () {
                     started = false;
                     topics.forEach(function(topic) {
-                        topic.deferred.reject("Websocket disconnected");
+                        topic.deferred.reject('Websocket disconnected');
                     });
-                    $log.debug("...Websocket disconnected");
+                    $log.debug('...Websocket disconnected');
                 });
             };
         });

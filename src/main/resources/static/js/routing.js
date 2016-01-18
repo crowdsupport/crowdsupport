@@ -1,26 +1,26 @@
 (function() {
     angular
-        .module("crowdsupport.routing", ["crowdsupport.controller", "crowdsupport.service.rest", "ui.router", "ui.router.title"])
+        .module('crowdsupport.routing', ['crowdsupport.controller', 'crowdsupport.service.rest', 'ui.router', 'ui.router.title'])
         .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
             $locationProvider.html5Mode(true);
 
-            $urlRouterProvider.otherwise("/");
+            $urlRouterProvider.otherwise('/');
 
             $stateProvider
-                .state("welcome", {
-                    url: "/",
-                    templateUrl: "/template/welcome.html",
-                    controller: "WelcomeController",
+                .state('welcome', {
+                    url: '/',
+                    templateUrl: '/template/welcome.html',
+                    controller: 'WelcomeController',
                     resolve: {
                         $title: function () {
-                            return "Home";
+                            return 'Home';
                         }
                     }
                 })
-                .state("state", {
-                    url: "/support/:stateIdentifier",
-                    templateUrl: "/template/state.html",
-                    controller: "StateController",
+                .state('state', {
+                    url: '/support/:stateIdentifier',
+                    templateUrl: '/template/state.html',
+                    controller: 'StateController',
                     resolve: {
                         $stateRest: function(Rest, $stateParams) {
                             return Rest.State.get({identifier: $stateParams.stateIdentifier});
@@ -32,12 +32,12 @@
                         }
                     }
                 })
-                .state("state.city", {
-                    url: "^/support/:stateIdentifier/:cityIdentifier",
+                .state('state.city', {
+                    url: '^/support/:stateIdentifier/:cityIdentifier',
                     views: {
                         '@': {
-                            templateUrl: "/template/city.html",
-                            controller: "CityController"
+                            templateUrl: '/template/city.html',
+                            controller: 'CityController'
                         }
                     },
                     resolve: {
@@ -51,12 +51,12 @@
                         }
                     }
                 })
-                .state("state.city.place", {
-                    url: "^/support/:stateIdentifier/:cityIdentifier/:placeIdentifier",
+                .state('state.city.place', {
+                    url: '^/support/:stateIdentifier/:cityIdentifier/:placeIdentifier',
                     views: {
                         '@': {
-                            templateUrl: "/template/place.html",
-                            controller: "PlaceController as placeCtrl"
+                            templateUrl: '/template/place.html',
+                            controller: 'PlaceController as placeCtrl'
                         }
                     },
                     resolve: {
@@ -74,44 +74,44 @@
                         }
                     }
                 })
-                .state("profile", {
-                    url: "/profile",
-                    templateUrl: "/template/profile.html",
+                .state('profile', {
+                    url: '/profile',
+                    templateUrl: '/template/profile.html',
                     resolve: {
                         $title: function () {
-                            return "Profile";
+                            return 'Profile';
                         }
                     }
                 })
-                .state("placeRequest", {
-                    url: "/request/newPlace",
-                    templateUrl: "/template/placerequest.html",
+                .state('placeRequest', {
+                    url: '/request/newPlace',
+                    templateUrl: '/template/placerequest.html',
                     resolve: {
                         $title: function () {
-                            return "Request new place";
+                            return 'Request new place';
                         }
                     }
                 })
-                .state("admin", {
-                    url: "/admin",
-                    templateUrl: "/template/admin/overview.html",
+                .state('admin', {
+                    url: '/admin',
+                    templateUrl: '/template/admin/overview.html',
                     resolve: {
                         $title: function () {
-                            return "Admin";
+                            return 'Admin';
                         }
                     }
                 })
-                .state("admin.requestedPlaces", {
-                    url: "/requestedPlaces",
+                .state('admin.requestedPlaces', {
+                    url: '/requestedPlaces',
                     views: {
                         '@': {
-                            templateUrl: "/template/admin/requestedPlaces.html",
-                            controller: "RequestedPlacesCtrl as ctrl"
+                            templateUrl: '/template/admin/requestedPlaces.html',
+                            controller: 'RequestedPlacesCtrl as ctrl'
                         }
                     },
                     resolve: {
                         $title: function () {
-                            return "Requested places";
+                            return 'Requested places';
                         }
                     }
                 });
