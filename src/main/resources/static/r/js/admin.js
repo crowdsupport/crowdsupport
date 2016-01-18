@@ -1,7 +1,7 @@
 (function () {
     angular
-        .module('crowdsupport.admin', ['crowdsupport.widget.search', 'crowdsupport.service.rest'])
-        .controller('RequestedPlacesCtrl', function ($scope, $log, Rest) {
+        .module('crowdsupport.admin', ['crowdsupport.widget.search', 'crowdsupport.service.rest', 'crowdsupport.service.status'])
+        .controller('RequestedPlacesCtrl', function ($scope, $log, Rest, Status) {
             $scope.allRequests = Rest.PlaceRequest.Request.query();
 
             $scope.save = function (index) {
@@ -10,11 +10,11 @@
 
                 request.$accept(function (response) {
                     $log.debug('Place successfully posted');
-                    $log.debug(response);
+                    Status.success('Place successfully published');
                     $scope.removeRequest(index);
                 }, function (response) {
                     $log.debug('Error while saving');
-                    $log.debug(response);
+                    Status.error('Error while saving status');
                 });
             };
 
@@ -27,6 +27,7 @@
 
                 request.$decline(function (response) {
                     $log.debug('Request successfully declined');
+                    Status.success('Request successfully declined');
                     $scope.removeRequest(index);
                 });
             };

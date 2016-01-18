@@ -76,7 +76,7 @@ public class PlaceRestService {
         return mapper.mapToList(placeRequestService.loadAllWithInactivePlace(), PlaceRequestDto.class);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<PlaceDto> saveNewPlace(@RequestBody PlaceRequest placeRequest) {
         log.info("Saving previously created new place: {}", placeRequest);
 
