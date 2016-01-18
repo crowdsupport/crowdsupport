@@ -9,7 +9,7 @@
             $stateProvider
                 .state('welcome', {
                     url: '/',
-                    templateUrl: '/template/welcome.html',
+                    templateUrl: '/r/template/welcome.html',
                     controller: 'WelcomeController',
                     resolve: {
                         $title: function () {
@@ -19,7 +19,7 @@
                 })
                 .state('state', {
                     url: '/support/:stateIdentifier',
-                    templateUrl: '/template/state.html',
+                    templateUrl: '/r/template/state.html',
                     controller: 'StateController',
                     resolve: {
                         $stateRest: function(Rest, $stateParams) {
@@ -36,7 +36,7 @@
                     url: '^/support/:stateIdentifier/:cityIdentifier',
                     views: {
                         '@': {
-                            templateUrl: '/template/city.html',
+                            templateUrl: '/r/template/city.html',
                             controller: 'CityController'
                         }
                     },
@@ -55,7 +55,7 @@
                     url: '^/support/:stateIdentifier/:cityIdentifier/:placeIdentifier',
                     views: {
                         '@': {
-                            templateUrl: '/template/place.html',
+                            templateUrl: '/r/template/place.html',
                             controller: 'PlaceController as placeCtrl'
                         }
                     },
@@ -76,7 +76,7 @@
                 })
                 .state('profile', {
                     url: '/profile',
-                    templateUrl: '/template/profile.html',
+                    templateUrl: '/r/template/profile.html',
                     resolve: {
                         $title: function () {
                             return 'Profile';
@@ -85,7 +85,7 @@
                 })
                 .state('placeRequest', {
                     url: '/request/newPlace',
-                    templateUrl: '/template/placerequest.html',
+                    templateUrl: '/r/template/placerequest.html',
                     resolve: {
                         $title: function () {
                             return 'Request new place';
@@ -94,7 +94,7 @@
                 })
                 .state('admin', {
                     url: '/admin',
-                    templateUrl: '/template/admin/overview.html',
+                    templateUrl: '/r/template/admin/overview.html',
                     resolve: {
                         $title: function () {
                             return 'Admin';
@@ -105,7 +105,7 @@
                     url: '/requestedPlaces',
                     views: {
                         '@': {
-                            templateUrl: '/template/admin/requestedPlaces.html',
+                            templateUrl: '/r/template/admin/requestedPlaces.html',
                             controller: 'RequestedPlacesCtrl as ctrl'
                         }
                     },

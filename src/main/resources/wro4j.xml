@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
 
     <group name="all">
-        <js>/js/**.js</js>
-        <css>/style/**.css</css>
+        <js>/r/js/**.js</js>
+        <css>/r/style/**.css</css>
     </group>
 </groups>

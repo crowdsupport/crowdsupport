@@ -40,13 +40,13 @@
                 return model.name + ' (' + model.state.name + ')';
             };
 
-            return new SearchWidget(SERVICE_PREFIX + 'city', '/template/widget/citySearch/citySearch.html', format);
+            return new SearchWidget(SERVICE_PREFIX + 'city', '/r/template/widget/citySearch/citySearch.html', format);
         })
         .directive('stateSearch', function (SearchWidget) {
             var format = function (model) {
                 return model.name;
             };
 
-            return new SearchWidget(SERVICE_PREFIX + 'state', '/template/widget/stateSearch/stateSearch.html', format);
+            return new SearchWidget(SERVICE_PREFIX + 'state', '/r/template/widget/stateSearch/stateSearch.html', format);
         });
 })();

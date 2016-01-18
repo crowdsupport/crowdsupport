@@ -2,7 +2,7 @@
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.admin', 'crowdsupport.widget.search', 'crowdsupport.service.rest',
-            'crowdsupport.service.statusbar'])
+            'crowdsupport.service.statusbar', 'crowdsupport.service.auth'])
         .controller('WelcomeController', function ($scope, Rest) {
             $scope.states = Rest.State.query();
         })
@@ -21,12 +21,17 @@
                 Websocket.unsubscribe(identifier);
             });
         })
-        .controller('LoginCtrl', function ($scope, $rootScope) {
-            $rootScope.user = null;
+        .controller('UserController', function ($scope, $rootScope, Auth) {
+            $scope.username = "";
+            $scope.password = "";
 
-            $scope.setUser = function (userJson) {
-                $rootScope.user = angular.fromJson(userJson);
+            $scope.login = function () {
+                Auth.login($scope.username, $scope.password);
+                $scope.username = "";
+                $scope.password = "";
             };
+
+            $scope.logout = Auth.logout;
         })
         .controller('DonationRequestCtrl', function ($scope, Websocket) {
             var that = this;

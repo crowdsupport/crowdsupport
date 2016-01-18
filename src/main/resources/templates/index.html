@@ -12,10 +12,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>
     <th:block th:if="${@config.isDebugEnabled()}">
-        <link rel="stylesheet" th:href="@{/style/stylesheet.css}"/>
+        <link rel="stylesheet" th:href="@{/r/style/stylesheet.css}"/>
     </th:block>
     <th:block th:if="${!@config.isDebugEnabled()}">
-        <link rel="stylesheet" th:href="@{'/min/all-' + ${@config.getVersion()} + '.css'}"/>
+        <link rel="stylesheet" th:href="@{'/r/min/all-' + ${@config.getVersion()} + '.css'}"/>
     </th:block>
 
 
@@ -45,25 +45,28 @@
             </div>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <div class="navbar-right navbar-userarea" ng-controller="LoginCtrl as loginCtrl"
-                 th:attr="ng-init='setUser(\'' + ${currentUser} + '\')'">
-                <div sec:authorize="${authenticated}">
+            <div ng-controller="UserController" class="navbar-right navbar-userarea ng-cloak">
+                <div ng-show="$root.auth">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                            <span sec:authentication="name">Testuser</span> <span class="caret"></span>
+                            <span>{{$root.user.username}}</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li sec:authorize="${hasRole('ROLE_ADMIN')}"><a th:href="@{/admin}" class="btn btn-default">Admin panel</a></li>
+                            <li><a th:href="@{/admin}" class="btn btn-default">Admin panel</a></li>
                             <li><a th:href="@{/profile}" class="btn btn-default">Profile</a></li>
                             <li><a th:href="@{/request/newPlace}" class="btn btn-default">Request a new place</a></li>
-                            <li><a th:href="@{/logout}" class="btn btn-default">Logout</a></li>
+                            <li><a href="" class="btn btn-default" ng-click="logout()">Logout</a></li>
                         </ul>
                     </div>
                 </div>
-                <div sec:authorize="${not authenticated}" class="btn-group" role="group">
-                    <a th:href="@{/login}" class="btn btn-default">Login</a>
-                    <a th:href="@{/register}" class="btn btn-default">Register</a>
+                <div class="btn-group" role="group" ng-hide="$root.auth">
+                    <form>
+                        <input type="text" placeholder="Username..." ng-model="username"/>
+                        <input type="password" placeholder="Password..." ng-model="password"/>
+                        <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
+                        <button class="btn btn-default">Register</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -91,19 +94,21 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
 
-    <script th:src="@{/js/thirdparty/angular-ui-router-title.js}"></script>
-    <script th:src="@{/js/global.js}"></script>
-    <script th:src="@{/js/service/config.js}"></script>
-    <script th:src="@{/js/service/websocket.js}"></script>
-    <script th:src="@{/js/service/rest.js}"></script>
-    <script th:src="@{/js/service/statusbar.js}"></script>
-    <script th:src="@{/js/widget/timeago.js}"></script>
-    <script th:src="@{/js/widget/searchWidget.js}"></script>
-    <script th:src="@{/js/admin.js}"></script>
-    <script th:src="@{/js/controller.js}"></script>
-    <script th:src="@{/js/routing.js}"></script>
-    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/r/js/thirdparty/angular-ui-router-title.js}"></script>
+    <script th:src="@{/r/js/global.js}"></script>
+    <script th:src="@{/r/js/service/config.js}"></script>
+    <script th:src="@{/r/js/service/websocket.js}"></script>
+    <script th:src="@{/r/js/service/rest.js}"></script>
+    <script th:src="@{/r/js/service/statusbar.js}"></script>
+    <script th:src="@{/r/js/service/auth.js}"></script>
+    <script th:src="@{/r/js/widget/timeago.js}"></script>
+    <script th:src="@{/r/js/widget/searchWidget.js}"></script>
+    <script th:src="@{/r/js/admin.js}"></script>
+    <script th:src="@{/r/js/controller.js}"></script>
+    <script th:src="@{/r/js/routing.js}"></script>
+    <script th:src="@{/r/js/app.js}"></script>
 </th:block>
 <th:block th:if="${!@config.isDebugEnabled()}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
@@ -120,8 +125,9 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.min.js"></script>
 
-    <script th:src="@{'/min/all-' + ${@config.getVersion()} + '.js'}"></script>
+    <script th:src="@{'/r/min/all-' + ${@config.getVersion()} + '.js'}"></script>
 </th:block>
 </body>
 </html>

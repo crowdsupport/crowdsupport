@@ -5,6 +5,7 @@ import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.dto.UserDto;
 import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.spring.security.UserAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -61,11 +62,12 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getCurrentUser() {
         log.trace("Reading current user from security context...");
 
-        final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final Object userAuth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (principal instanceof User) {
-            log.trace("Found user: {}", principal);
-            return Optional.of((User) principal);
+        if (userAuth instanceof UserAuthentication) {
+            final UserAuthentication u = (UserAuthentication) userAuth;
+            log.trace("Found user: {}", u.getDetails());
+            return Optional.of(u.getDetails());
         } else {
             log.trace("Found no user");
             return Optional.empty();
@@ -80,17 +82,6 @@ public class UserServiceImpl implements UserService {
             return Optional.of(loadUserByUsername(user.get().getUsername()));
         } else {
             return user;
-        }
-    }
-
-    @Override
-    public UserDto getCurrentUserDto() {
-        final Optional<User> user = getCurrentUser();
-
-        if (user.isPresent()) {
-            return mapper.map(user.get(), UserDto.class);
-        } else {
-            return null;
         }
     }
 

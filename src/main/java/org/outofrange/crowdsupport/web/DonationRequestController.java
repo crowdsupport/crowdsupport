@@ -1,10 +1,10 @@
 package org.outofrange.crowdsupport.web;
 
 import org.modelmapper.ModelMapper;
-import org.outofrange.crowdsupport.model.Comment;
-import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.dto.ChangeDto;
 import org.outofrange.crowdsupport.dto.CommentDto;
+import org.outofrange.crowdsupport.model.Comment;
+import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.DonationRequestService;
 import org.slf4j.Logger;
@@ -12,11 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
 
-public class DonationRequestController extends BaseController {
+public class DonationRequestController {
     private static final Logger log = LoggerFactory.getLogger(DonationRequestController.class);
 
     @Inject

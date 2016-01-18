@@ -53,7 +53,7 @@ public class TestDataService {
     }
 
     private void createStatesCitiesVenues() {
-        final String placeHolder = "/image/placeholder.jpg";
+        final String placeHolder = "/r/image/placeholder.jpg";
 
         State uk = new State("United Kingdom");
         State austria = new State("Austria");

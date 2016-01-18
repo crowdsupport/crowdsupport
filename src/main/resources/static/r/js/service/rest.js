@@ -23,7 +23,16 @@
                         }
                     })
                 },
-                DonationRequest: $resource(SERVICE_PREFIX + '/:sIdt/:cIdt/:pIdt/donationRequests')
+                DonationRequest: $resource(SERVICE_PREFIX + '/:sIdt/:cIdt/:pIdt/donationRequests'),
+                User: $resource(SERVICE_PREFIX + '/user', {}, {
+                    login: {
+                        method: 'POST',
+                        url: SERVICE_PREFIX + '/user/login',
+                        transformResponse: function(data, headers){
+                            return { data: headers()['authorization'] };
+                        }
+                    }
+                })
             };
         });
 })();
