@@ -11,12 +11,13 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 public class TokenAuthenticationService {
 
 	private static final String AUTH_HEADER_NAME = "authorization";
-	private static final long TEN_DAYS = 1000 * 60 * 60 * 24 * 10;
 
 	private final TokenHandler tokenHandler;
 
@@ -33,7 +34,7 @@ public class TokenAuthenticationService {
 
 	public void addAuthentication(HttpServletResponse response, UserAuthentication authentication) {
 		final UserAuthDto user = mapper.map(authentication.getDetails(), UserAuthDto.class);
-		user.setExp(System.currentTimeMillis() + TEN_DAYS);
+		user.setExp(LocalDateTime.now().plusDays(7).toEpochSecond(ZoneOffset.UTC));
 		response.addHeader(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user));
 	}
 

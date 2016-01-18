@@ -1,7 +1,7 @@
 (function () {
     angular
-        .module('crowdsupport.service.auth', ['crowdsupport.service.rest', 'angular-jwt', 'crowdsupport.service.statusbar'])
-        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, StatusService) {
+        .module('crowdsupport.service.auth', ['crowdsupport.service.rest', 'angular-jwt', 'crowdsupport.service.status'])
+        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, Status) {
             var retrieveUser = function () {
                 $log.debug("Retrieving user...");
                 return Rest.User.get({}, function () {
@@ -13,8 +13,15 @@
             var initUser = function () {
                 var token = localStorage.getItem('token');
                 var user = null;
-                if (token !== null && !jwtHelper.isTokenExpired(token)) {
-                    return retrieveUser();
+                if (token !== null) {
+                    if (!jwtHelper.isTokenExpired(token)) {
+                        $log.debug("Found non expired token!");
+                        $log.debug(jwtHelper.decodeToken(token));
+                        $log.debug(jwtHelper.getTokenExpirationDate(token));
+                        return retrieveUser();
+                    } else {
+                        Status.info("Session expired. Please log in again!");
+                    }
                 }
 
                 return user;
@@ -36,7 +43,7 @@
                     localStorage.setItem("token", response.data);
 
                     $log.debug("...logged in");
-                    StatusService.success("Login successful");
+                    Status.success("Login successful");
                     $rootScope.user = retrieveUser();
                 });
             };

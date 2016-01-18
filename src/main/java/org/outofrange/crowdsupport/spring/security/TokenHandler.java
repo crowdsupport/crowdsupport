@@ -11,6 +11,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -50,7 +52,7 @@ public final class TokenHandler {
 				boolean validHash = Arrays.equals(createHmac(firstPart.getBytes()), hash);
 				if (validHash) {
 					final UserAuthDto user = fromJSON(userBytes);
-					if (new Date().getTime() < user.getExp()) {
+					if (LocalDateTime.now().isBefore(LocalDateTime.ofEpochSecond(user.getExp(), 0, ZoneOffset.UTC))) {
 						return user;
 					}
 				}

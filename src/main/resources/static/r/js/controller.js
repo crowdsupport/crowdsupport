@@ -2,7 +2,7 @@
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.admin', 'crowdsupport.widget.search', 'crowdsupport.service.rest',
-            'crowdsupport.service.statusbar', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate'])
+            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate'])
         .controller('WelcomeController', function ($scope, Rest) {
             $scope.states = Rest.State.query();
         })
@@ -114,7 +114,7 @@
                 });
             };
         })
-        .controller('ProfileController', function($scope, $user, Auth, Rest, $log, StatusService) {
+        .controller('ProfileController', function($scope, $user, Auth, Rest, $log, Status) {
             $scope.user = {};
             $scope.user.username = $user.username;
             $scope.user.email = $user.email;
@@ -122,12 +122,12 @@
             $scope.submit = function() {
                 $log.debug("Submitting profile data");
                 Rest.User.update($scope.user, function(response) {
-                    StatusService.newStatus(response);
+                    Status.newStatus(response);
                     Auth.updateUser();
                 });
             };
         })
-        .controller('RegistrationController', function($scope, Auth, Rest, StatusService, $previousState, $state) {
+        .controller('RegistrationController', function($scope, Auth, Rest, Status, $previousState, $state) {
             $scope.user = {};
 
             $scope.register = function() {
@@ -142,7 +142,7 @@
                         $state.go("welcome");
                     }
 
-                    StatusService.newStatus(response);
+                    Status.newStatus(response);
                 });
             };
         });

@@ -41,16 +41,16 @@ var debug = {
     },
     status: {
         set: function(type, text) {
-            debug.getAngular('StatusService').newStatus({type: type, message: text});
+            debug.getAngular('Status').newStatus({type: type, message: text});
         },
         success: function (text) {
-            debug.getAngular('StatusService').newStatus({type: 'SUCCESS', message: text});
+            debug.getAngular('Status').newStatus({type: 'SUCCESS', message: text});
         },
         info: function (text) {
-            debug.getAngular('StatusService').newStatus({type: 'INFO', message: text});
+            debug.getAngular('Status').newStatus({type: 'INFO', message: text});
         },
         error: function (text) {
-            debug.getAngular('StatusService').newStatus({type: 'ERROR', message: text});
+            debug.getAngular('Status').newStatus({type: 'ERROR', message: text});
         }
     }
 };

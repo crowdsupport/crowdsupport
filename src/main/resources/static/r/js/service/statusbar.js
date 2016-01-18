@@ -1,7 +1,7 @@
 (function() {
     angular
-        .module('crowdsupport.service.statusbar', [])
-        .service('StatusService', function($q, $log) {
+        .module('crowdsupport.service.status', [])
+        .service('Status', function($q, $log) {
             var defaultTemplate = function(status) {
                 var glyph;
                 var glyphify = function(sign) {
@@ -27,7 +27,7 @@
             };
 
             var pastStatus = [];
-            var currentStatus = {};
+            this.currentStatus = {};
 
             var deferred = $q.defer();
 
@@ -41,24 +41,34 @@
                 this.newStatus({type: "ERROR", message: message});
             };
 
+            this.info = function(message) {
+                this.newStatus({type: "INFO", message: message});
+            };
+
             this.newStatus = function(newStatus) {
                 $log.debug('New status: ' + JSON.stringify(newStatus));
 
                 newStatus.defaultHtml = defaultTemplate(newStatus);
 
-                pastStatus.push(currentStatus);
-                currentStatus = newStatus;
+                pastStatus.push(this.currentStatus);
+                this.currentStatus = newStatus;
                 deferred.notify(newStatus);
             };
         })
         .directive('statusbar', function() {
             return {
                 restrict: 'C',
-                controller: function(StatusService) {
-                    StatusService.statusPromise.then(null, null, function(newStatus) {
+                controller: function(Status) {
+                    var addStatus = function(newStatus) {
                         $('.statusbar .message').last().addClass('old');
                         $('.statusbar').append(newStatus.defaultHtml);
-                    });
+                    };
+
+                    Status.statusPromise.then(null, null, addStatus);
+
+                    if (!nullOrEmpty(Status.currentStatus)) {
+                        addStatus(Status.currentStatus);
+                    }
                 }
             }
         });
