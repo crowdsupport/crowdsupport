@@ -22,6 +22,13 @@
             });
 
             var $previousState = {
+                backOrHome: function() {
+                    if (!$previousState.get().state.abstract) {
+                        return $previousState.go();
+                    } else {
+                        return $state.go("welcome");
+                    }
+                },
                 get: function (memoName) {
                     return memoName ? memos[memoName] : previous;
                 },

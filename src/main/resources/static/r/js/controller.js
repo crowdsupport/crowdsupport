@@ -71,7 +71,7 @@
                 }
             });
         })
-        .controller('PlaceRequestCtrl', function ($scope, Rest) {
+        .controller('PlaceRequestCtrl', function ($scope, Rest, $previousState, Status) {
             $scope.city = {};
             $scope.name = '';
             $scope.identifier = '';
@@ -108,9 +108,10 @@
                 }
 
                 Rest.PlaceRequest.Request.save(formData, function () {
-                    alert('Success');
+                    Status.success("Successfully requested place");
+                    $previousState.backOrHome();
                 }, function () {
-                    alert('Oh oh');
+                    Status.error("Error while requesting place");
                 });
             };
         })
@@ -127,7 +128,7 @@
                 });
             };
         })
-        .controller('RegistrationController', function($scope, Auth, Rest, Status, $previousState, $state) {
+        .controller('RegistrationController', function($scope, Auth, Rest, Status, $previousState) {
             $scope.user = {};
 
             $scope.register = function() {
@@ -136,11 +137,7 @@
                     e.scope().username = $scope.user.username;
                     e.focus();
 
-                    if (!$previousState.get().state.abstract) {
-                        $previousState.go();
-                    } else {
-                        $state.go("welcome");
-                    }
+                    $previousState.backOrHome();
 
                     Status.newStatus(response);
                 });

@@ -100,6 +100,7 @@
                 })
                 .state('placeRequest', {
                     url: '/request/newPlace',
+                    controller: 'PlaceRequestCtrl as ctrl',
                     templateUrl: '/r/template/placerequest.html',
                     resolve: {
                         $title: function () {

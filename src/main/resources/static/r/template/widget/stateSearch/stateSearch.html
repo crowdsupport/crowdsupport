@@ -1,6 +1,6 @@
 <input type="text" ng-model="ngModel" ng-model-options="{getterSetter: true}" class="{{inputClass}}" id="{{inputId}}"
        uib-typeahead="state for state in query($viewValue)" typeahead-loading="loadingStates"
-       typeahead-no-results="noStatesFound" typeahead-template-url="/template/widget/stateSearch/stateSearchResult.html"
+       typeahead-no-results="noStatesFound" typeahead-template-url="/r/template/widget/stateSearch/stateSearchResult.html"
        typeahead-input-formatter="formatInput($model)" placeholder="Type to search"
        typeahead-on-select="onSelect($item)" autocomplete="off"/>
 <i ng-show="loadingStates" class="glyphicon glyphicon-refresh"></i>
