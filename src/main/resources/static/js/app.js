@@ -2,7 +2,7 @@
     angular
         .module("crowdsupport", ["timeAgo", "crowdsupport.service.websocket", "crowdsupport.service.config",
             "crowdsupport.admin", "crowdsupport.widget.search", "crowdsupport.service.rest", "ui.router",
-            "crowdsupport.service.statusbar"])
+            "crowdsupport.service.statusbar", "ui.router.title"])
         .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
             $locationProvider.html5Mode(true);
 
@@ -12,59 +12,123 @@
                 .state("welcome", {
                     url: "/",
                     templateUrl: "/template/welcome.html",
-                    controller: "WelcomeController"
+                    controller: "WelcomeController",
+                    resolve: {
+                        $title: function () {
+                            return "Home";
+                        }
+                    }
                 })
                 .state("state", {
                     url: "/support/:stateIdentifier",
                     templateUrl: "/template/state.html",
-                    controller: "StateController"
+                    controller: "StateController",
+                    resolve: {
+                        $stateRest: function(Rest, $stateParams) {
+                            return Rest.State.get({identifier: $stateParams.stateIdentifier});
+                        },
+                        $title: function ($stateRest) {
+                            return $stateRest.$promise.then(function(state) {
+                                return state.name;
+                            });
+                        }
+                    }
                 })
-                .state("city", {
-                    url: "/support/:stateIdentifier/:cityIdentifier",
-                    templateUrl: "/template/city.html",
-                    controller: "CityController"
+                .state("state.city", {
+                    url: "^/support/:stateIdentifier/:cityIdentifier",
+                    views: {
+                        '@': {
+                            templateUrl: "/template/city.html",
+                            controller: "CityController"
+                        }
+                    },
+                    resolve: {
+                        $cityRest: function(Rest, $stateParams) {
+                            return Rest.City.get({ identifier: $stateParams.cityIdentifier, stateIdentifier: $stateParams.stateIdentifier})
+                        },
+                        $title: function ($cityRest) {
+                            return $cityRest.$promise.then(function(city) {
+                                return city.name;
+                            });
+                        }
+                    }
                 })
-                .state("place", {
-                    url: "/support/:stateIdentifier/:cityIdentifier/:placeIdentifier",
-                    templateUrl: "/template/place.html",
-                    controller: "PlaceController as placeCtrl"
+                .state("state.city.place", {
+                    url: "^/support/:stateIdentifier/:cityIdentifier/:placeIdentifier",
+                    views: {
+                        '@': {
+                            templateUrl: "/template/place.html",
+                            controller: "PlaceController as placeCtrl"
+                        }
+                    },
+                    resolve: {
+                        $placeRest: function(Rest, $stateParams) {
+                            return Rest.Place.get({
+                                identifier: $stateParams.placeIdentifier,
+                                cityIdentifier: $stateParams.cityIdentifier,
+                                stateIdentifier: $stateParams.stateIdentifier
+                            });
+                        },
+                        $title: function ($placeRest) {
+                            return $placeRest.$promise.then(function(place) {
+                                return place.name;
+                            });
+                        }
+                    }
                 })
                 .state("profile", {
                     url: "/profile",
-                    templateUrl: "/template/profile.html"
+                    templateUrl: "/template/profile.html",
+                    resolve: {
+                        $title: function () {
+                            return "Profile";
+                        }
+                    }
                 })
                 .state("placeRequest", {
                     url: "/request/newPlace",
-                    templateUrl: "/template/placerequest.html"
+                    templateUrl: "/template/placerequest.html",
+                    resolve: {
+                        $title: function () {
+                            return "Request new place";
+                        }
+                    }
                 })
                 .state("admin", {
                     url: "/admin",
-                    templateUrl: "/template/admin/overview.html"
+                    templateUrl: "/template/admin/overview.html",
+                    resolve: {
+                        $title: function () {
+                            return "Admin";
+                        }
+                    }
                 })
-                .state("requestedPlaces", {
-                    url: "/admin/requestedPlaces",
-                    templateUrl: "/template/admin/requestedPlaces.html",
-                    controller: "RequestedPlacesCtrl as ctrl"
+                .state("admin.requestedPlaces", {
+                    url: "/requestedPlaces",
+                    views: {
+                        '@': {
+                            templateUrl: "/template/admin/requestedPlaces.html",
+                            controller: "RequestedPlacesCtrl as ctrl"
+                        }
+                    },
+                    resolve: {
+                        $title: function () {
+                            return "Requested places";
+                        }
+                    }
                 });
         })
         .controller("WelcomeController", function ($scope, Rest) {
             $scope.states = Rest.State.query();
         })
-        .controller("StateController", function ($scope, Rest, $stateParams) {
-            $scope.state = Rest.State.get({identifier: $stateParams.stateIdentifier});
+        .controller("StateController", function ($scope, $stateRest) {
+            $scope.state = $stateRest;
         })
-        .controller("CityController", function ($scope, Rest, $stateParams) {
-            $scope.city = Rest.City.get({
-                identifier: $stateParams.cityIdentifier,
-                stateIdentifier: $stateParams.stateIdentifier
-            });
+        .controller("CityController", function ($scope, $cityRest) {
+            $scope.city = $cityRest;
         })
-        .controller("PlaceController", function ($scope, Rest, $stateParams, Websocket) {
-            $scope.place = Rest.Place.get({
-                identifier: $stateParams.placeIdentifier,
-                cityIdentifier: $stateParams.cityIdentifier,
-                stateIdentifier: $stateParams.stateIdentifier
-            });
+        .controller("PlaceController", function ($scope, $placeRest, Websocket) {
+            $scope.place = $placeRest;
 
             var identifier = getUrlAfterSupport() + "/comments";
 

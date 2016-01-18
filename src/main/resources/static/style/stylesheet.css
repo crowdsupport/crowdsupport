@@ -2,7 +2,7 @@
     background-image: linear-gradient(to bottom, #337AB7 0,#337AB7 100%);
 }
 
-.navbar .navbar-brand, .navbar .navbar-text {
+.navbar .navbar-brand, .navbar .navbar-text, .navbar .navbar-link {
     color: #fff;
     font-family: 'PT Sans Caption', sans-serif;
 }
