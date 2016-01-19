@@ -86,6 +86,9 @@
                         $title: function () {
                             return 'Profile';
                         }
+                    },
+                    data: {
+                        authorities: AuthStore.ROLE_USER
                     }
                 })
                 .state('register', {
@@ -96,9 +99,6 @@
                         $title: function() {
                             return 'Registration';
                         }
-                    },
-                    data: {
-                        authorities: AuthStore.ROLE_USER
                     }
                 })
                 .state('placeRequest', {
