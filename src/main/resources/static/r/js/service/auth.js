@@ -1,7 +1,7 @@
 (function () {
     angular
         .module('crowdsupport.service.auth', ['crowdsupport.service.rest', 'ui.router', 'angular-jwt', 'crowdsupport.service.status'])
-        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, $state) {
+        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, $state, $q) {
             var retrieveUser = function () {
                 $log.debug('Retrieving user...');
 
@@ -49,11 +49,21 @@
                 return $rootScope.user;
             };
 
-            var isUserAuthorizedForState = function (state) {
+            var isAuthorizedForStatePromise = function (state) {
                 if (state.data && state.data.authorities) {
-                    return $rootScope.user !== null && $rootScope.user.has(state.data.authorities);
+                    if ($rootScope.user) {
+                        return $rootScope.user.$promise.then(function (user) {
+                            return user.has(state.data.authorities);
+                        });
+                    } else {
+                        return $q(function (resolve) {
+                            resolve(false);
+                        });
+                    }
                 } else {
-                    return true;
+                    return $q(function (resolve) {
+                        resolve(true);
+                    });
                 }
             };
 
@@ -62,17 +72,21 @@
                 $rootScope.user = null;
                 $rootScope.auth = false;
 
-                if (!isUserAuthorizedForState($state.current)) {
-                    $state.go('welcome');
-                }
+                isAuthorizedForStatePromise($state.current).then(function(authorized) {
+                    if (!authorized) {
+                        $state.go('welcome');
+                    }
+                });
             };
 
             $rootScope.$on('$stateChangeStart', function (evt, toState) {
-                if (!isUserAuthorizedForState(toState)) {
-                    evt.preventDefault();
-                    $rootScope.$emit('$stateChangeError');
-                    $state.go('welcome');
-                }
+                isAuthorizedForStatePromise(toState).then(function(authorized) {
+                    if (!authorized) {
+                        evt.preventDefault();
+                        $rootScope.$emit('$stateChangeError');
+                        $state.go('welcome');
+                    }
+                });
             });
         })
         .directive('auth', function (ngIfDirective) {
@@ -108,4 +122,5 @@
 
             return filter;
         });
-})();
+})
+();
