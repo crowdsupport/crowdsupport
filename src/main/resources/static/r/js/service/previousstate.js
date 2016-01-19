@@ -1,23 +1,23 @@
 (function () {
     angular
         .module('crowdsupport.service.previousstate', [])
-        .service("$previousState", function ($rootScope, $state) {
+        .service('$previousState', function ($rootScope, $state) {
             var previous = null;
             var memos = {};
 
             var lastPrevious = null;
 
-            $rootScope.$on("$stateChangeStart", function (evt, toState, toStateParams, fromState, fromStateParams) {
+            $rootScope.$on('$stateChangeStart', function (evt, toState, toStateParams, fromState, fromStateParams) {
                 lastPrevious = previous;
                 previous = {state: fromState, params: fromStateParams};
             });
 
-            $rootScope.$on("$stateChangeError", function () {
+            $rootScope.$on('$stateChangeError', function () {
                 previous = lastPrevious;
                 lastPrevious = null;
             });
 
-            $rootScope.$on("$stateChangeSuccess", function () {
+            $rootScope.$on('$stateChangeSuccess', function () {
                 lastPrevious = null;
             });
 
@@ -26,7 +26,7 @@
                     if (!$previousState.get().state.abstract) {
                         return $previousState.go();
                     } else {
-                        return $state.go("welcome");
+                        return $state.go('welcome');
                     }
                 },
                 get: function (memoName) {

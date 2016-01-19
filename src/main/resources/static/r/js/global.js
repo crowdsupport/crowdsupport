@@ -37,14 +37,14 @@ var isString = function (s) {
 
 // polyfills
 if (!String.prototype.startsWith) {
-    String.prototype.startsWith = function(searchString, position) {
+    String.prototype.startsWith = function (searchString, position) {
         position = position || 0;
         return this.indexOf(searchString, position) === position;
     };
 }
 
 if (!String.prototype.endsWith) {
-    String.prototype.endsWith = function(searchString, position) {
+    String.prototype.endsWith = function (searchString, position) {
         var subjectString = this.toString();
         if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
             position = subjectString.length;
@@ -54,3 +54,31 @@ if (!String.prototype.endsWith) {
         return lastIndex !== -1 && lastIndex === position;
     };
 }
+
+var containsAll = function (haystack, needles) {
+    if (Array.isArray(haystack)) {
+        if (Array.isArray(needles)) {
+            // we are looking for multiple needles in a big haystack
+            return needles.every(function (v) {
+                return haystack.indexOf(v) !== -1;
+            });
+        } else {
+            // we are only looking for one needle in a big haystack
+            return haystack.indexOf(needles) !== -1;
+        }
+    } else {
+        if (Array.isArray(needles)) {
+            // we won't find multiple needles in a single straw
+            return false;
+        } else {
+            // we got a needle and a straw - maybe we are lucky!
+            return haystack == needles;
+        }
+    }
+};
+
+var AuthorityStore = {
+    PROCESS_PLACE_REQUESTS: 'PROCESS_PLACE_REQUESTS',
+    ROLE_ADMIN: 'ROLE_ADMIN',
+    ROLE_USER: 'ROLE_USER'
+};

@@ -62,8 +62,8 @@ public class TestDataService {
         normal = userService.save(normal);
 
         Permission permission = permissionRepository.save(new Permission(PermissionStore.PROCESS_PLACE_REQUESTS));
-        Role adminRole = authorityService.createRole(new Role(RoleStore.ADMIN, permission));
-        Role userRole = authorityService.createRole(new Role(RoleStore.USER));
+        Role adminRole = authorityService.createRole(new Role(RoleStore.ADMIN, permission).setSystemRole(true));
+        Role userRole = authorityService.createRole(new Role(RoleStore.USER).setSystemRole(true));
         authorityService.setRolesForUser(admin, Arrays.asList(adminRole, userRole));
         authorityService.setRolesForUser(normal, Collections.singletonList(userRole));
     }

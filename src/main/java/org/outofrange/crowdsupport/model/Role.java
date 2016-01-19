@@ -2,7 +2,6 @@ package org.outofrange.crowdsupport.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -23,6 +22,9 @@ public class Role extends BaseEntity implements GrantedAuthority {
     @JoinTable(name = "RolePermissions", joinColumns = {@JoinColumn(name = "role")},
             inverseJoinColumns = {@JoinColumn(name = "permission")})
     private Set<Permission> permissions = new HashSet<>();
+
+    @Column(name = "systemrole")
+    private boolean systemRole;
 
     protected Role() {
         // framework constructor
@@ -89,5 +91,14 @@ public class Role extends BaseEntity implements GrantedAuthority {
     @Override
     public String toString() {
         return getAuthority();
+    }
+
+    public boolean isSystemRole() {
+        return systemRole;
+    }
+
+    public Role setSystemRole(boolean systemRole) {
+        this.systemRole = systemRole;
+        return this;
     }
 }

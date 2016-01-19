@@ -96,6 +96,9 @@
                         $title: function() {
                             return 'Registration';
                         }
+                    },
+                    data: {
+                        authorities: AuthorityStore.ROLE_USER
                     }
                 })
                 .state('placeRequest', {
@@ -115,6 +118,9 @@
                         $title: function () {
                             return 'Admin';
                         }
+                    },
+                    data: {
+                        authorities: AuthorityStore.ROLE_ADMIN
                     }
                 })
                 .state('admin.requestedPlaces', {
