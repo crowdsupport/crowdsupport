@@ -32,12 +32,6 @@
             $rootScope.user = initUser();
             $rootScope.auth = false;
 
-            this.logout = function () {
-                localStorage.removeItem('token');
-                $rootScope.user = null;
-                $rootScope.auth = false;
-            };
-
             this.login = function (username, password) {
                 $log.debug('Logging in...');
 
@@ -55,27 +49,40 @@
                 return $rootScope.user;
             };
 
+            var isUserAuthorizedForState = function (state) {
+                if (state.data && state.data.authorities) {
+                    return $rootScope.user !== null && $rootScope.user.has(state.data.authorities);
+                } else {
+                    return true;
+                }
+            };
+
+            this.logout = function () {
+                localStorage.removeItem('token');
+                $rootScope.user = null;
+                $rootScope.auth = false;
+
+                if (!isUserAuthorizedForState($state.current)) {
+                    $state.go('welcome');
+                }
+            };
+
             $rootScope.$on('$stateChangeStart', function (evt, toState) {
-                if (toState.data && toState.data.authorities) {
-                    $rootScope.user.$promise.then(function (user) {
-                        if (!user.has(toState.data.authorities)) {
-                            $log.debug('Accessed url without permission!');
-                            evt.preventDefault();
-                            $rootScope.$emit('$stateChangeError');
-                            $state.go('welcome');
-                        }
-                    });
+                if (!isUserAuthorizedForState(toState)) {
+                    evt.preventDefault();
+                    $rootScope.$emit('$stateChangeError');
+                    $state.go('welcome');
                 }
             });
         })
-        .directive('auth', function(ngIfDirective) {
+        .directive('auth', function (ngIfDirective) {
             var original = angular.extend({}, ngIfDirective[0]);
             var originalLink = original.link;
 
             original.name = 'auth';
             original.compile = undefined;
-            original.link = function($scope, $element, $attr, ctrl, $transclude) {
-                var roles = $attr.auth.trim().split(/\s+/).map(function(role) {
+            original.link = function ($scope, $element, $attr, ctrl, $transclude) {
+                var roles = $attr.auth.trim().split(/\s+/).map(function (role) {
                     return '"' + AuthStore[role] + '"';
                 }).join(', ');
 
@@ -85,10 +92,10 @@
 
             return original;
         })
-        .filter('auth', function($rootScope) {
-            var filter = function(input) {
+        .filter('auth', function ($rootScope) {
+            var filter = function (input) {
                 if ($rootScope.user && $rootScope.user.has) {
-                    var roleValues = input.trim().split(/\s+/).map(function(role) {
+                    var roleValues = input.trim().split(/\s+/).map(function (role) {
                         return AuthStore[role];
                     });
 
