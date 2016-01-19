@@ -83,6 +83,8 @@ var containsAll = function (haystack, needles) {
 
 var AuthStore = {
     PROCESS_PLACE_REQUESTS: 'PROCESS_PLACE_REQUESTS',
+    MANAGE_ROLES: 'MANAGE_ROLES',
+    MANAGE_USERS: 'MANAGE_USERS',
     ROLE_ADMIN: 'ROLE_ADMIN',
     ROLE_USER: 'ROLE_USER'
 };

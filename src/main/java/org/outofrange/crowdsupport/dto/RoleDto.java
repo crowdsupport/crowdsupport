@@ -17,11 +17,11 @@ public class RoleDto extends BaseDto {
         this.name = name;
     }
 
-    public List<String> getPermission() {
+    public List<String> getPermissions() {
         return permissions;
     }
 
-    public void setPermission(List<String> permissions) {
+    public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
     }
 

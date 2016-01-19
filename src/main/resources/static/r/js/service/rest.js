@@ -44,7 +44,26 @@
                         }
                     }
                 }),
-                Role: $resource(SERVICE_PREFIX + '/role')
+                Role: $resource(SERVICE_PREFIX + '/role/:name', {name: '@name'}, {
+                    assignPermissions: {
+                        method: 'POST',
+                        url: SERVICE_PREFIX + '/role/:name/assignPermissions',
+                        params: {
+                            name: '@name'
+                        },
+                        transformRequest: function(roleDto) {
+                            return angular.toJson(roleDto.permissions);
+                        },
+                        transformResponse: function(response) {
+                            var r = angular.fromJson(response);
+                            var newResponse = r.data;
+                            r.data = null;
+                            newResponse.message = r;
+                            return newResponse;
+                        }
+                    }
+                }),
+                Permission: $resource(SERVICE_PREFIX + '/permission')
             };
         });
 })();

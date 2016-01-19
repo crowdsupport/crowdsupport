@@ -92,17 +92,17 @@
                 };
             };
         })
-        .controller('UserManagementController', function($scope, $log, Rest, Status, Auth, $rootScope) {
+        .controller('UserManagementController', function ($scope, $log, Rest, Status, Auth, $rootScope) {
             $scope.allRoles = Rest.Role.query();
             $scope.editUser = {};
 
-            $scope.isSearchValid = function() {
+            $scope.isSearchValid = function () {
                 return typeof $scope.search === 'object';
             };
 
-            $scope.save = function() {
+            $scope.save = function () {
                 console.log($scope.editUser);
-                Rest.User.update({username: $scope.search.username, all: true}, $scope.editUser, function(response) {
+                Rest.User.update({username: $scope.search.username, all: true}, $scope.editUser, function (response) {
                     Status.newStatus(response);
 
                     // edited your own user?
@@ -115,6 +115,52 @@
                             Status.info('You\'ve changed your username to ' + response.data.username + ', please relogin')
                         }
                     }
+                });
+            };
+        })
+        .controller('RoleManagementController', function ($roles, $permissions, $scope, $log, Rest, Status, Auth, $uibModal) {
+            $scope.allRoles = $roles;
+            $scope.allPermissions = $permissions;
+
+            $scope.selectedRole = $scope.allRoles[0];
+
+            $scope.addRole = function () {
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: '/r/template/admin/roleCreateModal.html',
+                    controller: 'RoleCreateController'
+                }).result.then(function () {
+                    return Rest.Role.query().$promise;
+                }).then(function (roles) {
+                    $scope.allRoles = roles;
+                    $scope.selectedRole = $scope.allRoles[0];
+                });
+            };
+
+            $scope.removeSelectedRole = function () {
+                $scope.selectedRole.$delete(function (response) {
+                    Status.newStatus(response);
+                    $scope.selectedRole = $scope.allRoles[0];
+                    Auth.updateUser();
+                    Rest.Role.query().$promise.then(function (roles) {
+                        $scope.allRoles = roles;
+                        $scope.selectedRole = $scope.allRoles[0];
+                    });
+                });
+            };
+
+            $scope.assignPermissions = function () {
+                $scope.selectedRole.$assignPermissions(function (response) {
+                    Status.newStatus(response.message);
+                    Auth.updateUser();
+                });
+            };
+        })
+        .controller('RoleCreateController', function ($scope, Rest, Status, $uibModalInstance) {
+            $scope.create = function () {
+                Rest.Role.save($scope.roleName, function (response) {
+                    Status.newStatus(response);
+                    $uibModalInstance.close(response.data);
                 });
             };
         });

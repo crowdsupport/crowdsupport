@@ -2,6 +2,7 @@ package org.outofrange.crowdsupport.spring.profile.development;
 
 import org.outofrange.crowdsupport.model.*;
 import org.outofrange.crowdsupport.persistence.PermissionRepository;
+import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.service.*;
 import org.outofrange.crowdsupport.util.PermissionStore;
 import org.outofrange.crowdsupport.util.RoleStore;
@@ -14,7 +15,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -46,6 +46,9 @@ public class TestDataService {
     @Inject
     private PermissionRepository permissionRepository;
 
+    @Inject
+    private RoleRepository roleRepository;
+
     @PostConstruct
     public void init() {
         log.info("Creating test data");
@@ -61,9 +64,15 @@ public class TestDataService {
         admin = userService.save(admin);
         normal = userService.save(normal);
 
-        Permission permission = permissionRepository.save(new Permission(PermissionStore.PROCESS_PLACE_REQUESTS));
-        Role adminRole = authorityService.createRole(new Role(RoleStore.ADMIN, permission).setSystemRole(true));
-        Role userRole = authorityService.createRole(new Role(RoleStore.USER).setSystemRole(true));
+        Permission[] permissions = new Permission[] {
+                permissionRepository.save(new Permission(PermissionStore.PROCESS_PLACE_REQUESTS)),
+                permissionRepository.save(new Permission(PermissionStore.MANAGE_USERS)),
+                permissionRepository.save(new Permission(PermissionStore.MANAGE_ROLES))
+        };
+
+        Role adminRole = roleRepository.save(new Role(RoleStore.ADMIN, permissions).setSystemRole(true));
+        Role userRole = roleRepository.save(new Role(RoleStore.USER).setSystemRole(true));
+
         authorityService.setRolesForUser(admin, Arrays.asList(adminRole, userRole));
         authorityService.setRolesForUser(normal, Collections.singletonList(userRole));
     }

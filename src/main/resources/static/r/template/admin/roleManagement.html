@@ -1,0 +1,28 @@
+<div class="container form-horizontal">
+    <div class="row">
+        <div class="form-group">
+            <select class="form-control" ng-options="aRole as aRole.name for aRole in allRoles"
+                    ng-model="selectedRole"></select>
+            <div class="pull-right">
+                <button class="btn btn-default" ng-click="addRole()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button class="btn btn-default" ng-click="removeSelectedRole()" ng-disabled="selectedRole.systemRole">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <select multiple="multiple" class="form-control" ng-model="selectedRole.permissions"
+                ng-options="aPerm as aPerm for aPerm in allPermissions | orderBy">
+            <option value="">(no permissions)</option>
+        </select>
+        <div class="pull-right">
+            <button class="btn btn-default" ng-click="assignPermissions()">
+                <span class="glyphicon glyphicon-ok"></span>
+            </button>
+        </div>
+    </div>
+</div>

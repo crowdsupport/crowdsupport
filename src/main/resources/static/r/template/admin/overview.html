@@ -1,5 +1,5 @@
 <div class="container">
-    <a href="/admin/requestedPlaces">
+    <a auth="PROCESS_PLACE_REQUESTS" href="/admin/requestedPlaces">
         <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
             <div class="panel-heading">
                 <h3 class="panel-title">Requested Places</h3>
@@ -9,13 +9,23 @@
             </div>
         </div>
     </a>
-    <a href="/admin/userManagement">
+    <a auth="MANAGE_USERS" href="/admin/userManagement">
         <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
             <div class="panel-heading">
                 <h3 class="panel-title">User Management</h3>
             </div>
             <div class="panel-body">
                 Here you can manage all your users: create new admins, delete users, ...
+            </div>
+        </div>
+    </a>
+    <a auth="MANAGE_ROLES" href="/admin/roleManagement">
+        <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
+            <div class="panel-heading">
+                <h3 class="panel-title">Role Management</h3>
+            </div>
+            <div class="panel-body">
+                Add new roles and assign permissions
             </div>
         </div>
     </a>

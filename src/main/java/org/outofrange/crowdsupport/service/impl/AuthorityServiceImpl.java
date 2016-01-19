@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
@@ -31,12 +32,13 @@ public class AuthorityServiceImpl implements AuthorityService {
     private PermissionRepository permissionRepository;
 
     @Override
-    public Role setPermissionsForRole(Role role, Collection<Permission> permissions) {
+    public Role setPermissionsForRole(String role, Collection<String> permissions) {
         log.debug("Setting permissions for role {}: {}", role, permissions);
 
-        final Role roleDb = roleRepository.findOne(role.getId());
+        final Role roleDb = roleRepository.findOneByName(role).get();
 
-        roleDb.setPermissions(permissions);
+        roleDb.setPermissions(permissions.stream()
+                .map(p -> permissionRepository.findOneByName(p).get()).collect(Collectors.toSet()));
 
         return roleRepository.save(roleDb);
     }
@@ -53,19 +55,24 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public Role createRole(Role role) {
-        log.debug("Creating role {}", role);
+    public Role createRole(String roleName) {
+        log.debug("Creating role {}", roleName);
 
-        if (roleRepository.findOneByName(role.getName()).isPresent()) {
-            throw new ServiceException("Already found a role with name " + role.getName());
+        if (roleRepository.findOneByName(roleName).isPresent()) {
+            throw new ServiceException("Already found a role called " + roleName);
         }
 
-        return roleRepository.save(role);
+        return roleRepository.save(new Role(roleName));
     }
 
     @Override
-    public void deleteRole(Role role) {
-        log.debug("Deleting role {}", role);
+    public void deleteRole(String roleName) {
+        log.debug("Deleting role {}", roleName);
+
+        final Role role = roleRepository.findOneByName(roleName).get();
+        if (role.isSystemRole()) {
+            throw new ServiceException("Can't delete system roles");
+        }
 
         roleRepository.delete(role);
     }

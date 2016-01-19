@@ -135,6 +135,9 @@
                         $title: function () {
                             return 'Requested places';
                         }
+                    },
+                    data: {
+                        authorities: [AuthStore.ROLE_ADMIN, AuthStore.PROCESS_PLACE_REQUESTS]
                     }
                 })
                 .state('admin.users', {
@@ -149,6 +152,32 @@
                         $title: function () {
                             return 'User Management';
                         }
+                    },
+                    data: {
+                        authorities: [AuthStore.ROLE_ADMIN, AuthStore.MANAGE_USERS]
+                    }
+                })
+                .state('admin.roles', {
+                    url: '/roleManagement',
+                    views: {
+                        '@': {
+                            templateUrl: '/r/template/admin/roleManagement.html',
+                            controller: 'RoleManagementController as ctrl'
+                        }
+                    },
+                    resolve: {
+                        $title: function () {
+                            return 'Role Management';
+                        },
+                        $roles: function (Rest) {
+                            return Rest.Role.query().$promise;
+                        },
+                        $permissions: function(Rest) {
+                            return Rest.Permission.query().$promise;
+                        }
+                    },
+                    data: {
+                        authorities: [AuthStore.ROLE_ADMIN, AuthStore.MANAGE_ROLES]
                     }
                 });
         });

@@ -1,7 +1,7 @@
 (function () {
     angular
         .module('crowdsupport.service.auth', ['crowdsupport.service.rest', 'ui.router', 'angular-jwt', 'crowdsupport.service.status'])
-        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, $state, $q) {
+        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, $state, $q, Status) {
             var retrieveUser = function () {
                 $log.debug('Retrieving user...');
 
@@ -43,12 +43,6 @@
                 }).$promise;
             };
 
-            this.updateUser = function () {
-                $log.debug('Updating user model');
-                $rootScope.user = retrieveUser();
-                return $rootScope.user;
-            };
-
             var isAuthorizedForStatePromise = function (state) {
                 if (state.data && state.data.authorities) {
                     if ($rootScope.user) {
@@ -67,12 +61,24 @@
                 }
             };
 
+            this.updateUser = function () {
+                $log.debug('Updating user model');
+                $rootScope.user = retrieveUser();
+                isAuthorizedForStatePromise($state.current).then(function (authorized) {
+                    if (!authorized) {
+                        $state.go('welcome');
+                        Status.info("You no longer have permission to see this page!");
+                    }
+                });
+                return $rootScope.user;
+            };
+
             this.logout = function () {
                 localStorage.removeItem('token');
                 $rootScope.user = null;
                 $rootScope.auth = false;
 
-                isAuthorizedForStatePromise($state.current).then(function(authorized) {
+                isAuthorizedForStatePromise($state.current).then(function (authorized) {
                     if (!authorized) {
                         $state.go('welcome');
                     }
@@ -80,7 +86,7 @@
             };
 
             $rootScope.$on('$stateChangeStart', function (evt, toState) {
-                isAuthorizedForStatePromise(toState).then(function(authorized) {
+                isAuthorizedForStatePromise(toState).then(function (authorized) {
                     if (!authorized) {
                         evt.preventDefault();
                         $rootScope.$emit('$stateChangeError');
