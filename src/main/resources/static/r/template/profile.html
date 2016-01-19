@@ -4,7 +4,7 @@
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="true"
-                       required="true" ng-model="user.username" disabled="disabled"/>
+                       required="true" ng-model="user.username" ng-disabled="!('ROLE_ADMIN' | auth)"/>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>

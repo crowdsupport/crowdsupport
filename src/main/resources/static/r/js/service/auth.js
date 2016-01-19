@@ -84,5 +84,21 @@
             };
 
             return original;
+        })
+        .filter('auth', function($rootScope) {
+            var filter = function(input) {
+                if ($rootScope.user && $rootScope.user.has) {
+                    var roleValues = input.trim().split(/\s+/).map(function(role) {
+                        return AuthStore[role];
+                    });
+
+                    return $rootScope.user.has(roleValues);
+                } else {
+                    return false;
+                }
+            };
+            filter.$stateful = true;
+
+            return filter;
         });
 })();
