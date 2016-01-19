@@ -43,7 +43,11 @@ public class Role extends BaseEntity implements GrantedAuthority {
     }
 
     public void setName(String name) {
-        this.name = name.toUpperCase().replaceAll("\\s+", "_");
+        final String sanitizedName = name.toUpperCase().replaceAll("\\s+", "_");
+        if (!sanitizedName.startsWith(ROLE_PREFIX)) {
+            throw new IllegalArgumentException("Role name has to start with " + ROLE_PREFIX);
+        }
+        this.name = sanitizedName;
     }
 
     public Set<Permission> getPermissions() {
@@ -63,7 +67,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return ROLE_PREFIX + getName();
+        return getName();
     }
 
     @Override

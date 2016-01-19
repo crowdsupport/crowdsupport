@@ -136,6 +136,20 @@
                             return 'Requested places';
                         }
                     }
+                })
+                .state('admin.users', {
+                    url: '/userManagement',
+                    views: {
+                        '@': {
+                            templateUrl: '/r/template/admin/userManagement.html',
+                            controller: 'UserManagementController as ctrl'
+                        }
+                    },
+                    resolve: {
+                        $title: function () {
+                            return 'User Management';
+                        }
+                    }
                 });
         });
 })();

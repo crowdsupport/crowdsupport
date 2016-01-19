@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 @RequestMapping(value = "/service/v1/user")
@@ -25,7 +26,7 @@ public class UserRestService {
     @Inject
     private CsModelMapper mapper;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/current", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getCurrentUser() {
         final Optional<User> currentUser = userService.getCurrentUserUpdated();
 
@@ -34,6 +35,20 @@ public class UserRestService {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<UserDto>> getUsers(@RequestParam(required = false) String query) {
+        final List<User> users;
+        if (query == null) {
+            log.info("Loading all users");
+            users = userService.loadAll();
+        } else {
+            log.info("Loading users like {}", query);
+            users = userService.queryUsers(query);
+        }
+
+        return ResponseEntity.ok(mapper.mapToList(users, UserDto.class));
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -49,22 +64,16 @@ public class UserRestService {
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseDto<UserDto>> updateUser(@RequestBody UserDto userDto, @PathVariable String username) {
-        log.info("Updating user: {}",  userDto);
+    public ResponseEntity<ResponseDto<UserDto>> updateUser(@RequestBody UserDto userDto, @PathVariable String username,
+                                                           @RequestParam(required = false) boolean all) {
+        log.info("Updating user: {}",  username);
 
-        final User user = userService.getCurrentUserUpdated().get();
-        if (user.getUsername().equals(username)) {
-
-            user.setEmail(userDto.getEmail());
-
-            if (userDto.getPassword() != null && !"".equals(userDto.getPassword())) {
-                user.setPassword(userDto.getPassword());
-            }
-
-            final UserDto savedUserDto = mapper.map(userService.save(user), UserDto.class);
-            return ResponseEntity.ok(ResponseDto.success("Profile data changed successfully", savedUserDto));
+        if (Boolean.TRUE.equals(all)) {
+            final UserDto savedUserDto = mapper.map(userService.updateAll(username, userDto), UserDto.class);
+            return ResponseEntity.ok(ResponseDto.success("Data for user " + username + " changed successfully", savedUserDto));
         } else {
-            return ResponseEntity.badRequest().body(ResponseDto.error("Passed username differs from token", null));
+            final UserDto savedUserDto = mapper.map(userService.updateProfile(userDto), UserDto.class);
+            return ResponseEntity.ok(ResponseDto.success("Profile data changed successfully", savedUserDto));
         }
     }
 }

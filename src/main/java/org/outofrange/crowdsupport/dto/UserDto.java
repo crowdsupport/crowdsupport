@@ -21,6 +21,8 @@ public class UserDto extends BaseDto {
 
     private Set<String> authorities;
 
+    private Set<String> roles;
+
     public String getUsername() {
         return username;
     }
@@ -61,6 +63,14 @@ public class UserDto extends BaseDto {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     @Override

@@ -2,10 +2,12 @@ package org.outofrange.crowdsupport.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.model.User;
+import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.dto.UserDto;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.security.UserAuthentication;
+import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,12 +33,15 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Inject
+    private RoleRepository roleRepository;
+
+    @Inject
     private ModelMapper mapper;
 
     @Override
     @Transactional(readOnly = false)
     public User save(User user) {
-        log.trace("Saving user {}", user);
+        log.debug("Saving user {}", user);
 
         if (user.rehashPassword()) {
             user.setPasswordHash(passwordEncoder.encode(user.getPassword()));
@@ -45,31 +51,74 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public User updateProfile(UserDto userDto) {
+        final User self = getCurrentUserUpdated().get();
+
+        if (!self.getUsername().equals(userDto.getUsername())) {
+            throw new ServiceException("Updating different user is not allowed!");
+        }
+
+        return updateUser(self, userDto, false);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public User updateAll(String username, UserDto userDto) {
+        final User user = userRepository.findOneByUsername(username).get();
+
+        return updateUser(user, userDto, true);
+    }
+
+    private User updateUser(User user, UserDto userDto, boolean all) {
+        user.setEmail(userDto.getEmail());
+        user.setImagePath(userDto.getImagePath());
+
+        if (userDto.getPassword() != null && !"".equals(userDto.getPassword())) {
+            user.setPassword(userDto.getPassword());
+        }
+
+        if (all) {
+            user.setUsername(userDto.getUsername());
+            user.setRoles(userDto.getRoles().stream().map(r -> roleRepository.findOneByName(r).get()).collect(Collectors.toSet()));
+        }
+
+        return userRepository.save(user);
+    }
+
+    @Override
     public List<User> loadAll() {
-        log.trace("Loading all users");
+        log.debug("Loading all users");
 
         return userRepository.findAll();
+    }
+    
+    @Override
+    public List<User> queryUsers(String like) {
+        log.debug("Searching users for {}", like);
+        
+        return userRepository.findAllByUsernameContainingIgnoreCase(like);
     }
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.trace("Loading user by username: {}", username);
+        log.debug("Loading user by username: {}", username);
 
         return userRepository.findOneByUsername(username).get();
     }
 
     @Override
     public Optional<User> getCurrentUser() {
-        log.trace("Reading current user from security context...");
+        log.debug("Reading current user from security context...");
 
         final Object userAuth = SecurityContextHolder.getContext().getAuthentication();
 
         if (userAuth instanceof UserAuthentication) {
             final UserAuthentication u = (UserAuthentication) userAuth;
-            log.trace("Found user: {}", u.getDetails());
+            log.debug("Found user: {}", u.getDetails());
             return Optional.of(u.getDetails());
         } else {
-            log.trace("Found no user");
+            log.debug("Found no user");
             return Optional.empty();
         }
     }

@@ -1,7 +1,7 @@
 (function () {
     angular
         .module('crowdsupport.admin', ['crowdsupport.widget.search', 'crowdsupport.service.rest', 'crowdsupport.service.status'])
-        .controller('RequestedPlacesCtrl', function ($scope, $log, Rest, Status) {
+        .controller('RequestedPlacesCtrl', function ($scope, Rest, Status) {
             $scope.allRequests = Rest.PlaceRequest.Request.query();
 
             $scope.save = function (index) {
@@ -90,6 +90,32 @@
                         request.ui.stateSearch = stateSearch;
                     }
                 };
+            };
+        })
+        .controller('UserManagementController', function($scope, $log, Rest, Status, Auth, $rootScope) {
+            $scope.allRoles = Rest.Role.query();
+            $scope.editUser = {};
+
+            $scope.isSearchValid = function() {
+                return typeof $scope.search === 'object';
+            };
+
+            $scope.save = function() {
+                console.log($scope.editUser);
+                Rest.User.update({username: $scope.search.username, all: true}, $scope.editUser, function(response) {
+                    Status.newStatus(response);
+
+                    // edited your own user?
+                    if ($scope.search.username == $rootScope.user.username) {
+                        // kept username the same?
+                        if ($scope.search.username == response.data.username) {
+                            Auth.updateUser();
+                        } else {
+                            Auth.logout();
+                            Status.info('You\'ve changed your username to ' + response.data.username + ', please relogin')
+                        }
+                    }
+                });
             };
         });
 })();

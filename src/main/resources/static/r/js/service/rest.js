@@ -24,7 +24,7 @@
                     })
                 },
                 DonationRequest: $resource(SERVICE_PREFIX + '/:sIdt/:cIdt/:pIdt/donationRequests'),
-                User: $resource(SERVICE_PREFIX + '/user', {}, {
+                User: $resource(SERVICE_PREFIX + '/user/current', {}, {
                     create: {
                         method: 'POST',
                         url: SERVICE_PREFIX + '/user'
@@ -43,7 +43,8 @@
                             return { data: headers()['authorization'] };
                         }
                     }
-                })
+                }),
+                Role: $resource(SERVICE_PREFIX + '/role')
             };
         });
 })();

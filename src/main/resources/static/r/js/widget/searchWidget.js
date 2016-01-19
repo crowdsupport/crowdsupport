@@ -10,7 +10,9 @@
                         updateOnSelect: '=',
                         ngModel: '=',
                         inputClass: '@',
-                        inputId: '@'
+                        inputId: '@',
+                        loading: '=',
+                        noResults: '='
                     },
                     controller: function ($scope, $http) {
                         $scope.query = function (query) {
@@ -48,5 +50,12 @@
             };
 
             return new SearchWidget(SERVICE_PREFIX + 'state', '/r/template/widget/stateSearch/stateSearch.html', format);
+        })
+        .directive('userSearch', function(SearchWidget) {
+            var format = function (model) {
+                return model.username;
+            };
+
+            return new SearchWidget(SERVICE_PREFIX + 'user', '/r/template/widget/userSearch/userSearch.html', format);
         });
 })();

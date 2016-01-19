@@ -1,7 +1,7 @@
 var SERVICE_PREFIX = '/service/v1/';
 
 var nullOrEmpty = function (obj) {
-    return obj === null || Object.keys(obj).length === 0;
+    return obj === null || obj === undefined || Object.keys(obj).length === 0;
 };
 
 var getUrlAfterSupport = function () {
@@ -34,6 +34,10 @@ var isResourceUrl = function (url) {
 var isString = function (s) {
     return typeof s === 'string' || s instanceof String;
 };
+
+var isObject = function(obj) {
+    return typeof obj === 'object';
+}
 
 // polyfills
 if (!String.prototype.startsWith) {

@@ -1,0 +1,9 @@
+<input type="text" ng-model="ngModel" class="{{inputClass}}" id="{{inputId}}"
+       uib-typeahead="user for user in query($viewValue)" typeahead-loading="loading"
+       typeahead-no-results="noResults" typeahead-template-url="/r/template/widget/userSearch/userSearchResult.html"
+       typeahead-input-formatter="formatInput($model)" placeholder="Type to search"
+       typeahead-on-select="onSelect($item)" autocomplete="off"/>
+<i ng-show="loading" class="glyphicon glyphicon-refresh"></i>
+<div ng-show="noResults">
+    <i class="glyphicon glyphicon-remove"></i> <span ng-transclude></span>
+</div>
