@@ -73,7 +73,7 @@
 
     <title ng-bind="($title || 'Home') + ' - Crowdsupport'">Crowdsupport</title>
 </head>
-<body ng-controller="AuthorityController">
+<body>
 <nav th:fragment="navbar" class="navbar navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -103,7 +103,7 @@
                             <span>{{$root.user.username}}</span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-if="sec.has(sec.ROLE_ADMIN)"><a th:href="@{/admin}" class="btn btn-default">Admin panel</a></li>
+                            <li auth="ROLE_ADMIN"><a th:href="@{/admin}" class="btn btn-default">Admin panel</a></li>
                             <li><a th:href="@{/profile}" class="btn btn-default">Profile</a></li>
                             <li><a th:href="@{/request/newPlace}" class="btn btn-default">Request a new place</a></li>
                             <li><a href="" class="btn btn-default" ng-click="logout()">Logout</a></li>
@@ -129,7 +129,6 @@
 
 <div class="navbar navbar-fixed-bottom">
     <div class="navbar-text statusbar">
-
     </div>
 </div>
 

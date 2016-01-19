@@ -38,18 +38,6 @@
 
             $scope.logout = Auth.logout;
         })
-        .controller('AuthorityController', function ($scope, $rootScope) {
-
-            $scope.sec = {
-                has: function(required) {
-                    return $rootScope.user && $rootScope.user.has && $rootScope.user.has(required);
-                }
-            };
-
-            Object.keys(AuthStore).forEach(function(key) {
-                $scope.sec[key] = AuthStore[key];
-            });
-        })
         .controller('DonationRequestCtrl', function ($scope, Websocket) {
             var that = this;
             var donationRequest = {};
