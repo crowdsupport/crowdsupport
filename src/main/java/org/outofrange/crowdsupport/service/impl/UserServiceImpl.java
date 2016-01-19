@@ -1,15 +1,15 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.modelmapper.ModelMapper;
+import org.outofrange.crowdsupport.dto.UserDto;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
-import org.outofrange.crowdsupport.dto.UserDto;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.security.UserAuthentication;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,9 +35,6 @@ public class UserServiceImpl implements UserService {
     @Inject
     private RoleRepository roleRepository;
 
-    @Inject
-    private ModelMapper mapper;
-
     @Override
     @Transactional(readOnly = false)
     public User save(User user) {
@@ -52,6 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = false)
+    @PreAuthorize("hasRole(@role.USER)")
     public User updateProfile(UserDto userDto) {
         final User self = getCurrentUserUpdated().get();
 
@@ -64,6 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = false)
+    @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     public User updateAll(String username, UserDto userDto) {
         final User user = userRepository.findOneByUsername(username).get();
 
@@ -87,6 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     public List<User> loadAll() {
         log.debug("Loading all users");
 
@@ -94,6 +94,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     public List<User> queryUsers(String like) {
         log.debug("Searching users for {}", like);
         

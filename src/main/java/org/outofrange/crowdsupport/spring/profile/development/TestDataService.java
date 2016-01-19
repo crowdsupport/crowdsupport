@@ -41,9 +41,6 @@ public class TestDataService {
     private CommentService commentService;
 
     @Inject
-    private AuthorityService authorityService;
-
-    @Inject
     private PermissionRepository permissionRepository;
 
     @Inject
@@ -61,20 +58,25 @@ public class TestDataService {
         log.info("Create users");
         User admin = new User("admin", "admin");
         User normal = new User("user", "user");
-        admin = userService.save(admin);
-        normal = userService.save(normal);
 
         Permission[] permissions = new Permission[] {
                 permissionRepository.save(new Permission(PermissionStore.PROCESS_PLACE_REQUESTS)),
                 permissionRepository.save(new Permission(PermissionStore.MANAGE_USERS)),
-                permissionRepository.save(new Permission(PermissionStore.MANAGE_ROLES))
+                permissionRepository.save(new Permission(PermissionStore.MANAGE_ROLES)),
+                permissionRepository.save(new Permission(PermissionStore.MANAGE_CITIES)),
+                permissionRepository.save(new Permission(PermissionStore.MANAGE_PLACES)),
+                permissionRepository.save(new Permission(PermissionStore.MANAGE_STATES)),
+                permissionRepository.save(new Permission(PermissionStore.QUERY_USERS))
         };
 
         Role adminRole = roleRepository.save(new Role(RoleStore.ADMIN, permissions).setSystemRole(true));
         Role userRole = roleRepository.save(new Role(RoleStore.USER).setSystemRole(true));
 
-        authorityService.setRolesForUser(admin, Arrays.asList(adminRole, userRole));
-        authorityService.setRolesForUser(normal, Collections.singletonList(userRole));
+        admin.setRoles(Arrays.asList(adminRole, userRole));
+        normal.setRoles(Arrays.asList(userRole));
+
+        admin = userService.save(admin);
+        normal = userService.save(normal);
     }
 
     private void createStatesCitiesVenues() {

@@ -10,6 +10,7 @@ import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -32,6 +33,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     private PermissionRepository permissionRepository;
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
     public Role setPermissionsForRole(String role, Collection<String> permissions) {
         log.debug("Setting permissions for role {}: {}", role, permissions);
 
@@ -44,6 +46,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
     public User setRolesForUser(User user, Collection<Role> roles) {
         log.debug("Setting roles for user {}: {}", user, roles);
 
@@ -55,6 +58,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
     public Role createRole(String roleName) {
         log.debug("Creating role {}", roleName);
 
@@ -66,6 +70,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
     public void deleteRole(String roleName) {
         log.debug("Deleting role {}", roleName);
 

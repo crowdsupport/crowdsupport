@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.spring;
 
 import org.outofrange.crowdsupport.util.CsModelMapper;
+import org.outofrange.crowdsupport.util.PermissionStore;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +21,6 @@ public class SpringConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public CsModelMapper mapper() {
-        return new CsModelMapper();
     }
 
     @Bean

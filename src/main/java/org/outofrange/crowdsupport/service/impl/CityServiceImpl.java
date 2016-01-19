@@ -8,6 +8,7 @@ import org.outofrange.crowdsupport.service.StateService;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -62,6 +63,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_CITIES)")
     public City createCity(String name, String identifier, String imagePath, String stateIdentifier) {
         if (cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, identifier).isPresent()) {
             throw new ServiceException("There is already a city with an identifier of " + identifier +

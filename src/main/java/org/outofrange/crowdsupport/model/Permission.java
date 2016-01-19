@@ -2,7 +2,6 @@ package org.outofrange.crowdsupport.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -30,8 +29,8 @@ public class Permission extends BaseEntity implements GrantedAuthority {
         // framework constructor
     }
 
-    public Permission(String name) {
-        setName(name);
+    public Permission(String permission) {
+        setName(permission);
     }
 
     @Override

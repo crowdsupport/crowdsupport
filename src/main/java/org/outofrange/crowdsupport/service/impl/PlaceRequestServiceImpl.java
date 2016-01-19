@@ -7,6 +7,7 @@ import org.outofrange.crowdsupport.service.*;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -66,6 +67,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_PLACES)")
     public PlaceRequest saveNewPlace(PlaceRequest placeRequest) {
         log.trace("Saving new place {}", placeRequest);
 
@@ -87,6 +89,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_PLACES)")
     public void declinePlaceRequest(Long placeRequestId) {
         log.debug("Declining place request with id {}", placeRequestId);
 

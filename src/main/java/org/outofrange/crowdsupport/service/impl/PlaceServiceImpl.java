@@ -1,11 +1,8 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.Place;
-import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.outofrange.crowdsupport.service.PlaceService;
-import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
