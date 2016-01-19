@@ -98,7 +98,7 @@
                         }
                     },
                     data: {
-                        authorities: AuthorityStore.ROLE_USER
+                        authorities: AuthStore.ROLE_USER
                     }
                 })
                 .state('placeRequest', {
@@ -120,7 +120,7 @@
                         }
                     },
                     data: {
-                        authorities: AuthorityStore.ROLE_ADMIN
+                        authorities: AuthStore.ROLE_ADMIN
                     }
                 })
                 .state('admin.requestedPlaces', {

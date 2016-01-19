@@ -77,7 +77,7 @@ var containsAll = function (haystack, needles) {
     }
 };
 
-var AuthorityStore = {
+var AuthStore = {
     PROCESS_PLACE_REQUESTS: 'PROCESS_PLACE_REQUESTS',
     ROLE_ADMIN: 'ROLE_ADMIN',
     ROLE_USER: 'ROLE_USER'

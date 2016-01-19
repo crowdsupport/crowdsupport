@@ -6,7 +6,8 @@
                 $log.debug('Retrieving user...');
 
                 return Rest.User.get({}, function (user) {
-                    user.hasAuthorities = function (required) {
+                    user.has = function (required) {
+                        $log.debug("Checking for " + required);
                         return containsAll(user.authorities, required);
                     };
                     $rootScope.auth = true;
@@ -59,7 +60,7 @@
             $rootScope.$on('$stateChangeStart', function (evt, toState) {
                 if (toState.data && toState.data.authorities) {
                     $rootScope.user.$promise.then(function (user) {
-                        if (!user.hasAuthorities(toState.data.authorities)) {
+                        if (!user.has(toState.data.authorities)) {
                             $log.debug('Accessed url without permission!');
                             evt.preventDefault();
                             $rootScope.$emit('$stateChangeError');
