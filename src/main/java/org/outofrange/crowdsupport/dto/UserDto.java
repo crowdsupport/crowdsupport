@@ -2,6 +2,10 @@ package org.outofrange.crowdsupport.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Set;
 
 /**
  * @author Markus Möslinger
@@ -14,6 +18,8 @@ public class UserDto extends BaseDto {
     private String email;
 
     private String password;
+
+    private Set<String> authorities;
 
     public String getUsername() {
         return username;
@@ -49,12 +55,21 @@ public class UserDto extends BaseDto {
         this.password = password;
     }
 
+    public Set<String> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
     public String toString() {
-        return "UserDto{" +
-                "username='" + username + '\'' +
-                ", imagePath='" + imagePath + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return new ToStringBuilder(this)
+                .append("username", username)
+                .append("imagePath", imagePath)
+                .append("email", email)
+                .append("authorities", authorities)
+                .toString();
     }
 }

@@ -1,12 +1,13 @@
 (function () {
     angular
         .module('crowdsupport.service.auth', ['crowdsupport.service.rest', 'angular-jwt', 'crowdsupport.service.status'])
-        .service('Auth', function (Rest, $rootScope, $log, jwtHelper, Status) {
+        .service('Auth', function (Rest, $rootScope, $log, jwtHelper) {
             var retrieveUser = function () {
                 $log.debug("Retrieving user...");
-                return Rest.User.get({}, function () {
+                return Rest.User.get({}, function (response) {
                     $rootScope.auth = true;
                     $log.debug("...retrieved user");
+                    $log.debug(response);
                 });
             };
 
@@ -39,13 +40,12 @@
             this.login = function (username, password) {
                 $log.debug("Logging in...");
 
-                Rest.User.login({username: username, password: password}, function (response) {
+                return Rest.User.login({username: username, password: password}, function (response) {
                     localStorage.setItem("token", response.data);
 
                     $log.debug("...logged in");
-                    Status.success("Login successful");
                     $rootScope.user = retrieveUser();
-                });
+                }).$promise;
             };
 
             this.updateUser = function () {

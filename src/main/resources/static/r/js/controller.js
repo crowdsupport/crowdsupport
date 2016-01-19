@@ -21,13 +21,18 @@
                 Websocket.unsubscribe(identifier);
             });
         })
-        .controller('UserController', function ($scope, $rootScope, Auth) {
+        .controller('UserController', function ($scope, $rootScope, Auth, Status) {
             $scope.username = "";
             $scope.password = "";
 
             $scope.login = function () {
-                Auth.login($scope.username, $scope.password);
-                $scope.username = "";
+                Auth.login($scope.username, $scope.password).then(function(response) {
+                    $scope.username = "";
+                    Status.success("Successfully logged in");
+                }, function(response) {
+                    Status.error("Could not log in - are your credentials correct?");
+                });
+
                 $scope.password = "";
             };
 

@@ -1,7 +1,10 @@
 package org.outofrange.crowdsupport.spring.profile.development;
 
 import org.outofrange.crowdsupport.model.*;
+import org.outofrange.crowdsupport.persistence.PermissionRepository;
 import org.outofrange.crowdsupport.service.*;
+import org.outofrange.crowdsupport.util.PermissionStore;
+import org.outofrange.crowdsupport.util.RoleStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -35,6 +40,12 @@ public class TestDataService {
     @Inject
     private CommentService commentService;
 
+    @Inject
+    private AuthorityService authorityService;
+
+    @Inject
+    private PermissionRepository permissionRepository;
+
     @PostConstruct
     public void init() {
         log.info("Creating test data");
@@ -46,10 +57,15 @@ public class TestDataService {
     private void createUsers() {
         log.info("Create users");
         User admin = new User("admin", "admin");
-        admin.setAdmin(true);
         User normal = new User("user", "user");
-        userService.save(admin);
-        userService.save(normal);
+        admin = userService.save(admin);
+        normal = userService.save(normal);
+
+        Permission permission = permissionRepository.save(new Permission(PermissionStore.PROCESS_PLACE_REQUESTS));
+        Role adminRole = authorityService.createRole(new Role(RoleStore.ADMIN, permission));
+        Role userRole = authorityService.createRole(new Role(RoleStore.USER));
+        authorityService.setRolesForUser(admin, Arrays.asList(adminRole, userRole));
+        authorityService.setRolesForUser(normal, Collections.singletonList(userRole));
     }
 
     private void createStatesCitiesVenues() {

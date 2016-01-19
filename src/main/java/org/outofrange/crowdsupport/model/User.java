@@ -22,14 +22,15 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "imagepath")
     private String imagePath;
 
-    @Column(name = "admin")
-    private boolean admin;
-
     @Column(name = "enabled")
     private boolean enabled = true;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "UserRoles", joinColumns = {@JoinColumn(name = "user")}, inverseJoinColumns = {@JoinColumn(name = "role")})
+    private Set<Role> roles = new HashSet<>();
 
     private boolean rehashPassword;
 
@@ -67,11 +68,10 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         final Set<GrantedAuthority> authorities = new HashSet<>();
-        if (isAdmin()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        final Set<Role> roles = getRoles();
+        roles.forEach(r -> authorities.addAll(r.getPermissions()));
+        authorities.addAll(roles);
 
         return authorities;
     }
@@ -106,14 +106,6 @@ public class User extends BaseEntity implements UserDetails {
         this.imagePath = imagePath;
     }
 
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -138,5 +130,20 @@ public class User extends BaseEntity implements UserDetails {
     public void setPasswordHash(String passwordHash) {
         this.password = passwordHash;
         rehashPassword = false;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        final Set<Role> roleSet;
+        if (roles instanceof Set) {
+            roleSet = (Set<Role>) roles;
+        } else {
+            roleSet = new HashSet<>(roles);
+        }
+
+        this.roles = roleSet;
     }
 }
