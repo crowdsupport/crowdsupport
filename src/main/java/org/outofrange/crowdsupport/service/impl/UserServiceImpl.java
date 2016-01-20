@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.outofrange.crowdsupport.dto.UserDto;
+import org.outofrange.crowdsupport.dto.CurrentUserDto;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = false)
     @PreAuthorize("hasRole(@role.USER)")
-    public User updateProfile(UserDto userDto) {
+    public User updateProfile(CurrentUserDto userDto) {
         final User self = getCurrentUserUpdated().get();
 
         if (!self.getUsername().equals(userDto.getUsername())) {
@@ -63,13 +63,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = false)
     @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
-    public User updateAll(String username, UserDto userDto) {
+    public User updateAll(String username, CurrentUserDto userDto) {
         final User user = userRepository.findOneByUsername(username).get();
 
         return updateUser(user, userDto, true);
     }
 
-    private User updateUser(User user, UserDto userDto, boolean all) {
+    private User updateUser(User user, CurrentUserDto userDto, boolean all) {
         user.setEmail(userDto.getEmail());
         user.setImagePath(userDto.getImagePath());
 

@@ -7,7 +7,7 @@ public class PlaceRequestDto extends BaseDto {
 
     private PlaceDto place;
 
-    private UserDto requestingUser;
+    private CurrentUserDto requestingUser;
 
     private String state;
 
@@ -23,11 +23,11 @@ public class PlaceRequestDto extends BaseDto {
         this.place = place;
     }
 
-    public UserDto getRequestingUser() {
+    public CurrentUserDto getRequestingUser() {
         return requestingUser;
     }
 
-    public void setRequestingUser(UserDto requestingUser) {
+    public void setRequestingUser(CurrentUserDto requestingUser) {
         this.requestingUser = requestingUser;
     }
 

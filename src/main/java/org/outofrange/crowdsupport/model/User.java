@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Users")
@@ -31,6 +32,9 @@ public class User extends BaseEntity implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "UserRoles", joinColumns = {@JoinColumn(name = "user")}, inverseJoinColumns = {@JoinColumn(name = "role")})
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(mappedBy = "members")
+    private List<Team> teams;
 
     private boolean rehashPassword;
 
@@ -145,5 +149,9 @@ public class User extends BaseEntity implements UserDetails {
         }
 
         this.roles = roleSet;
+    }
+
+    public List<Place> getManagedPlaces() {
+        return teams.stream().map(Team::getPlace).collect(Collectors.toList());
     }
 }
