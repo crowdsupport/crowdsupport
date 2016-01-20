@@ -33,6 +33,10 @@ public class Place extends BaseEntity {
     @JoinColumn(name = "placeRequest")
     private PlaceRequest placeRequest;
 
+    @OneToOne
+    @JoinColumn(name = "team")
+    private Team team;
+
     public Place() {
     }
 
