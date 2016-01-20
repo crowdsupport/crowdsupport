@@ -1,6 +1,5 @@
 package org.outofrange.crowdsupport.spring.logging;
 
-import org.outofrange.crowdsupport.spring.logging.RequestLoggingUtility;
 import org.slf4j.MDC;
 import org.springframework.boot.logging.logback.ColorConverter;
 
