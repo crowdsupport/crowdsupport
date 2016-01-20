@@ -31,10 +31,6 @@ public class SpringConfiguration {
         registrationBean.setDispatcherTypes(DispatcherType.REQUEST);
         registrationBean.addUrlPatterns("/*");
         registrationBean.addInitParameter("confPath", "urlrewrite.xml");
-        // TODO make configurable
-        if (config.isDebugEnabled()) {
-            registrationBean.addInitParameter("logLevel", "DEBUG");
-        }
 
         // we have to do our rewriting first, before security sees us /o\
         registrationBean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
