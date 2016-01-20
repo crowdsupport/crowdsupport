@@ -17,4 +17,19 @@
             </a>
         </div>
     </div>
+
+    <div class="row center-block" ng-if="$root.user.managedPlaces.length > 0">
+        <h2>Your teams</h2>
+        <!-- TODO: replace with template -->
+        <div ng-repeat="place in $root.user.managedPlaces" class="result box col-md-2 col-sm-6 col-xs-6">
+            <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}">
+                <img src="{{place.imagePath}}" class="center-block"/>
+
+                <div class="text">
+                    {{place.name}}
+                    ({{place.location}})
+                </div>
+            </a>
+        </div>
+    </div>
 </div>

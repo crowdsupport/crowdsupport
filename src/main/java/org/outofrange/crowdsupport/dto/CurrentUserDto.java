@@ -1,9 +1,7 @@
 package org.outofrange.crowdsupport.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.outofrange.crowdsupport.model.Place;
 
 import java.util.List;
 import java.util.Set;
@@ -14,13 +12,16 @@ import java.util.Set;
 public class CurrentUserDto extends UserDto {
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<String> authorities;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<String> roles;
 
-    private List<Place> managedPlaces;
+    private List<PlaceDto> managedPlaces;
 
     public String getEmail() {
         return email;
@@ -30,12 +31,10 @@ public class CurrentUserDto extends UserDto {
         this.email = email;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
-    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -56,11 +55,11 @@ public class CurrentUserDto extends UserDto {
         this.roles = roles;
     }
 
-    public List<Place> getManagedPlaces() {
+    public List<PlaceDto> getManagedPlaces() {
         return managedPlaces;
     }
 
-    public void setManagedPlaces(List<Place> managedPlaces) {
+    public void setManagedPlaces(List<PlaceDto> managedPlaces) {
         this.managedPlaces = managedPlaces;
     }
 

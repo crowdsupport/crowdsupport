@@ -111,4 +111,12 @@ public class Place extends BaseEntity {
     public void setPlaceRequest(PlaceRequest placeRequest) {
         this.placeRequest = placeRequest;
     }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

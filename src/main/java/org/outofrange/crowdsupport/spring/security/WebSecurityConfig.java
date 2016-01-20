@@ -37,6 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .headers().cacheControl().disable().and()
+
                 .exceptionHandling().and()
                 .anonymous().and()
                 .servletApi().and()

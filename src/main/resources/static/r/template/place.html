@@ -17,6 +17,9 @@
                         <input type="checkbox"/> Done
                     </label>
                 </div>
+                <div ng-if="inTeam()">
+                    <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/team"><span class="glyphicon glyphicon-wrench"></span></a>
+                </div>
             </div>
         </nav>
     </div>

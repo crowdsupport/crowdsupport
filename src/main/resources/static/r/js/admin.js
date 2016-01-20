@@ -1,7 +1,7 @@
 (function () {
     angular
         .module('crowdsupport.admin', ['crowdsupport.widget.search', 'crowdsupport.service.rest', 'crowdsupport.service.status'])
-        .controller('RequestedPlacesCtrl', function ($scope, Rest, Status) {
+        .controller('RequestedPlacesCtrl', function ($scope, Rest, Status, $log) {
             $scope.allRequests = Rest.PlaceRequest.Request.query();
 
             $scope.save = function (index) {
@@ -14,7 +14,7 @@
                     $scope.removeRequest(index);
                 }, function (response) {
                     $log.debug('Error while saving');
-                    Status.error('Error while saving status');
+                    Status.error('Error while saving place');
                 });
             };
 
