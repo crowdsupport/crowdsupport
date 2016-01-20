@@ -2,7 +2,9 @@ package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.PlaceRequest;
+import org.outofrange.crowdsupport.model.Team;
 import org.outofrange.crowdsupport.persistence.PlaceRequestRepository;
+import org.outofrange.crowdsupport.persistence.TeamRepository;
 import org.outofrange.crowdsupport.service.*;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
@@ -20,6 +22,9 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
     @Inject
     private PlaceRequestRepository placeRequestRepository;
+
+    @Inject
+    private TeamRepository teamRepository;
 
     @Inject
     private CityService cityService;
@@ -44,6 +49,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     }
 
     @Override
+    @PreAuthorize("hasRole(@role.USER)")
     public PlaceRequest requestNewPlace(PlaceRequest placeRequest) {
         log.trace("Requesting new place: {}", placeRequest);
 
@@ -84,6 +90,11 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
         placeRequestDb.getPlace().setCity(cityDb.get());
         placeRequestDb.getPlace().setActive(true);
+
+        final Team team = new Team(placeRequestDb.getPlace());
+        team.getMembers().add(placeRequestDb.getRequestingUser());
+
+        // TODO notify user about accepting new place
 
         return save(placeRequestDb);
     }

@@ -33,7 +33,7 @@ public class Place extends BaseEntity {
     @JoinColumn(name = "placeRequest")
     private PlaceRequest placeRequest;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team")
     private Team team;
 
