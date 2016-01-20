@@ -62,9 +62,9 @@ public class RequestLoggingUtility extends OncePerRequestFilter implements Servl
 
         MDC.put(ID_PROPERTY, requestId);
         MDC.put(COLOR_PROPERTY, getNextColor());
-        MDC.put(START_TIME_PROPERTY, String.valueOf(ZonedDateTime.now().toInstant().getEpochSecond()));
+        MDC.put(START_TIME_PROPERTY, String.valueOf(System.nanoTime()));
 
-        log.debug("Start of request {}", requestId);
+        log.trace("Start of request {}", requestId);
 
         filterChain.doFilter(request, response);
     }
@@ -73,11 +73,12 @@ public class RequestLoggingUtility extends OncePerRequestFilter implements Servl
     public void requestDestroyed(ServletRequestEvent sre) {
         final String requestId = MDC.get(ID_PROPERTY);
         if(requestId != null) {
-            final ZonedDateTime now = ZonedDateTime.now();
-            final ZonedDateTime start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(MDC.get(START_TIME_PROPERTY))),
-                    now.getZone());
+            final long nanos = System.nanoTime() - Long.valueOf(MDC.get(START_TIME_PROPERTY));
+            final long ms = nanos / 1000000;
 
-            log.debug("End of request {} (took ~{}ms)", requestId, Duration.between(start, now).toMillis());
+            log.trace("End of request {} (took {}ms on server)", requestId, ms);
+
+            MDC.clear();
         }
     }
 
