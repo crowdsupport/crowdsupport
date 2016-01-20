@@ -139,7 +139,7 @@
                     <minimize>true</minimize>
                     <destinationFolder>src/main/resources/static/r/min/</destinationFolder>
                     <contextFolder>${basedir}/src/main/resources/static</contextFolder>
-                    <wroFile>${basedir}/src/main/resources/wro4j.xml</wroFile>
+                    <wroFile>wro4j.xml</wroFile>
                     <ignoreMissingResources>false</ignoreMissingResources>
                 </configuration>
             </plugin>
