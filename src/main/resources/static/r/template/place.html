@@ -1,12 +1,12 @@
-<div class="container">
+<div class="container place">
     <div class="row">
         <nav class="navbar">
             <p class="navbar-text">{{place.name}} @ {{place.location}}
                 ({{place.city.name}})
             </p>
 
-            <div class="navbar-right filtertoggle">
-                <div class="btn-group" data-toggle="buttons">
+            <div class="navbar-right options">
+                <span class="btn-group filtertoggle" data-toggle="buttons">
                     <label class="btn btn-default active">
                         <input type="checkbox" checked="checked"/> Open
                     </label>
@@ -16,10 +16,10 @@
                     <label class="btn btn-success">
                         <input type="checkbox"/> Done
                     </label>
-                </div>
-                <div ng-if="inTeam()">
-                    <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/team"><span class="glyphicon glyphicon-wrench"></span></a>
-                </div>
+                </span>
+                <span class="wrench" ng-if="inTeam()">
+                    <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/manage"><span class="glyphicon glyphicon-wrench"></span></a>
+                </span>
             </div>
         </nav>
     </div>

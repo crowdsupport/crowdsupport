@@ -49,6 +49,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/r/**").permitAll()
 
+                // allow connections to websocket
+                .antMatchers("/ws/**").permitAll()
+
                 //allow anonymous POSTs to login
                 .antMatchers(HttpMethod.POST, "/service/v1/user/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/service/v1/user").permitAll()

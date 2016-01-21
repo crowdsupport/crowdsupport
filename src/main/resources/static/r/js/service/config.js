@@ -52,6 +52,9 @@ var debug = {
         error: function (text) {
             debug.getAngular('Status').newStatus({type: 'ERROR', message: text});
         }
+    },
+    user: function() {
+        return debug.getAngular('$rootScope').user;
     }
 };
 window.onload = function () {

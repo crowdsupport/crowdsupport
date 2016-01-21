@@ -1,4 +1,4 @@
-(function() {
+(function () {
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.admin', 'crowdsupport.widget.search', 'crowdsupport.service.rest',
@@ -12,7 +12,7 @@
         .controller('CityController', function ($scope, $cityRest) {
             $scope.city = $cityRest;
         })
-        .controller('PlaceController', function ($scope, $placeRest, Websocket) {
+        .controller('PlaceController', function ($scope, $placeRest, Websocket, $rootScope) {
             $scope.place = $placeRest;
 
             var identifier = getUrlAfterSupport() + '/comments';
@@ -20,16 +20,28 @@
             $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 Websocket.unsubscribe(identifier);
             });
+
+            $scope.inTeam = function () {
+                if (!$rootScope.user || !$rootScope.user.managedPlaces) {
+                    return false;
+                }
+
+                return $rootScope.user.managedPlaces.findIndex(function(p) {
+                        return p.identifier === $scope.place.identifier
+                            && p.city.identifier === $scope.place.city.identifier
+                            && p.city.state.identifier === $scope.place.city.state.identifier;
+                }) >= 0;
+            };
         })
         .controller('UserController', function ($scope, $rootScope, Auth, Status) {
             $scope.username = '';
             $scope.password = '';
 
             $scope.login = function () {
-                Auth.login($scope.username, $scope.password).then(function(response) {
+                Auth.login($scope.username, $scope.password).then(function (response) {
                     $scope.username = '';
                     Status.success('Successfully logged in');
-                }, function(response) {
+                }, function (response) {
                     Status.error('Could not log in - are your credentials correct?');
                 });
 
@@ -120,24 +132,24 @@
                 });
             };
         })
-        .controller('ProfileController', function($scope, $user, Auth, Rest, $log, Status) {
+        .controller('ProfileController', function ($scope, $user, Auth, Rest, $log, Status) {
             $scope.user = {};
             $scope.user.username = $user.username;
             $scope.user.email = $user.email;
 
-            $scope.submit = function() {
+            $scope.submit = function () {
                 $log.debug("Submitting profile data");
-                Rest.User.update($scope.user, function(response) {
+                Rest.User.update($scope.user, function (response) {
                     Status.newStatus(response);
                     Auth.updateUser();
                 });
             };
         })
-        .controller('RegistrationController', function($scope, Auth, Rest, Status, $previousState) {
+        .controller('RegistrationController', function ($scope, Auth, Rest, Status, $previousState) {
             $scope.user = {};
 
-            $scope.register = function() {
-                Rest.User.create($scope.user, function(response) {
+            $scope.register = function () {
+                Rest.User.create($scope.user, function (response) {
                     var e = angular.element("#login .password");
                     e.scope().username = $scope.user.username;
                     e.focus();

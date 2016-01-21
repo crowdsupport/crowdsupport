@@ -64,7 +64,7 @@ h1 {
     background-color: #FFF;
 }
 
-.navbar .filtertoggle {
+.navbar .options {
     margin: 8px;
 }
 
@@ -74,6 +74,12 @@ h1 {
 
 .filtertoggle label.btn.active {
     text-decoration: none;
+}
+
+.place .navbar .options .wrench .glyphicon {
+    color: white;
+    top: 4px;
+    margin-left: 6px;
 }
 
 /* Typeahead */
