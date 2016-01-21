@@ -1,7 +1,10 @@
 package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.model.Place;
+import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.PlaceRepository;
+import org.outofrange.crowdsupport.persistence.TeamRepository;
+import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.service.PlaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,12 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Inject
     private PlaceRepository placeRepository;
+
+    @Inject
+    private UserRepository userRepository;
+
+    @Inject
+    private TeamRepository teamRepository;
 
     @Override
     public Place save(Place place) {
@@ -53,5 +62,31 @@ public class PlaceServiceImpl implements PlaceService {
     public void deletePlace(Place place) {
         log.debug("Deleting place {}", place);
         placeRepository.delete(place);
+    }
+
+    @Override
+    public void addUserToTeam(Place place, String username) {
+        log.debug("Adding user {} to team of place {}", username, place);
+
+        final Place placeDb = placeRepository.findOneByIdentifier(place.getIdentifier()).get();
+        final User userDb = userRepository.findOneByUsername(username).get();
+
+        placeDb.getTeam().getMembers().add(userDb);
+
+        // we don't need to save the whole place again
+        teamRepository.save(placeDb.getTeam());
+    }
+
+    @Override
+    public void removeUserFromTeam(Place place, String username) {
+        log.debug("Removing user {} from team of place {}", username, place);
+
+        final Place placeDb = placeRepository.findOneByIdentifier(place.getIdentifier()).get();
+        final User userDb = userRepository.findOneByUsername(username).get();
+
+        placeDb.getTeam().getMembers().remove(userDb);
+
+        // we don't need to save the whole place again
+        teamRepository.save(placeDb.getTeam());
     }
 }

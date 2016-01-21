@@ -7,7 +7,13 @@
             return {
                 State: $resource(SERVICE_PREFIX + '/state/:identifier'),
                 City: $resource(SERVICE_PREFIX + '/city/:identifier'),
-                Place: $resource(SERVICE_PREFIX + '/place/:identifier'),
+                Place: $resource(SERVICE_PREFIX + '/place/:identifier', {}),
+                PlaceMembers: $resource(SERVICE_PREFIX + '/place/:sIdt/:cIdt/:pIdt/member/:username', {
+                    sIdt: '@city.state.identifier',
+                    cIdt: '@city.identifier',
+                    pIdt: '@identifier',
+                    username: '@username'
+                }),
                 PlaceRequest: {
                     Request: $resource(SERVICE_PREFIX + '/place/request', {}, {
                         decline: {

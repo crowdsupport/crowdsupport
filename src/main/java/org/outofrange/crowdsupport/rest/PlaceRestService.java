@@ -1,9 +1,6 @@
 package org.outofrange.crowdsupport.rest;
 
-import org.outofrange.crowdsupport.dto.DonationRequestDto;
-import org.outofrange.crowdsupport.dto.PlaceDto;
-import org.outofrange.crowdsupport.dto.PlaceRequestDto;
-import org.outofrange.crowdsupport.dto.PlaceWithDonationRequestsDto;
+import org.outofrange.crowdsupport.dto.*;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.service.PlaceRequestService;
@@ -39,8 +36,7 @@ public class PlaceRestService {
     @Inject
     private UserService userService;
 
-    @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/donationRequests",
-            method = RequestMethod.GET)
+    @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/donationRequests", method = RequestMethod.GET)
     public List<DonationRequestDto> getDonationRequests(@PathVariable String stateIdentifier, @PathVariable String cityIdentifier,
                                                         @PathVariable String placeIdentifier) {
         Optional<Place> place = placeService.load(stateIdentifier, cityIdentifier, placeIdentifier);
@@ -49,6 +45,50 @@ public class PlaceRestService {
             return mapper.mapToList(place.get().getDonationRequests(), DonationRequestDto.class);
         } else {
             return null;
+        }
+    }
+
+    @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/member", method = RequestMethod.GET)
+    public List<UserDto> getTeamMembers(@PathVariable String stateIdentifier, @PathVariable String cityIdentifier,
+                                        @PathVariable String placeIdentifier) {
+        log.info("Requesting all users for place {}", placeIdentifier);
+
+        final Optional<Place> place = placeService.load(stateIdentifier, cityIdentifier, placeIdentifier);
+
+        if (place.isPresent()) {
+            return mapper.mapToList(place.get().getTeam().getMembers(), UserDto.class);
+        } else {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/member", method = RequestMethod.POST)
+    public ResponseEntity<ResponseDto<Void>> addTeamMember(@PathVariable String stateIdentifier, @PathVariable String cityIdentifier,
+                                        @PathVariable String placeIdentifier, @RequestBody String username) {
+        log.info("Adding team member {} to place {}", username, placeIdentifier);
+
+        final Optional<Place> place = placeService.load(stateIdentifier, cityIdentifier, placeIdentifier);
+
+        if (place.isPresent()) {
+            placeService.addUserToTeam(place.get(), username);
+            return ResponseEntity.ok(ResponseDto.success("Added user " + username + " successfully to place"));
+        } else {
+            return ResponseEntity.badRequest().body(ResponseDto.error("Couldn't add user " + username + " to place"));
+        }
+    }
+
+    @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/member/{username}", method = RequestMethod.DELETE)
+    public ResponseEntity<ResponseDto<Void>> removeTeamMember(@PathVariable String stateIdentifier, @PathVariable String cityIdentifier,
+                                                           @PathVariable String placeIdentifier, @PathVariable String username) {
+        log.info("Removing team member {} to place {}", username, placeIdentifier);
+
+        final Optional<Place> place = placeService.load(stateIdentifier, cityIdentifier, placeIdentifier);
+
+        if (place.isPresent()) {
+            placeService.removeUserFromTeam(place.get(), username);
+            return ResponseEntity.ok(ResponseDto.success("Removed user " + username + " successfully from place"));
+        } else {
+            return ResponseEntity.badRequest().body(ResponseDto.error("Couldn't remove user " + username + " from place"));
         }
     }
 

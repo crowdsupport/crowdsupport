@@ -66,12 +66,33 @@
                                 identifier: $stateParams.placeIdentifier,
                                 cityIdentifier: $stateParams.cityIdentifier,
                                 stateIdentifier: $stateParams.stateIdentifier
-                            });
+                            }).$promise;
                         },
                         $title: function ($placeRest) {
                             return $placeRest.$promise.then(function(place) {
                                 return place.name;
                             });
+                        }
+                    }
+                })
+                .state('state.city.place.management', {
+                    url: '^/support/:stateIdentifier/:cityIdentifier/:placeIdentifier/manage',
+                    views: {
+                        '@': {
+                            templateUrl: '/r/template/placeManagement.html',
+                            controller: 'PlaceManagementController as placeManagementCtrl'
+                        }
+                    },
+                    resolve: {
+                        $members: function(Rest, $placeRest) {
+                            return Rest.PlaceMembers.query({
+                                sIdt: $placeRest.city.state.identifier,
+                                cIdt: $placeRest.city.identifier,
+                                pIdt: $placeRest.identifier
+                            }).$promise;
+                        },
+                        $title: function() {
+                            return "Management";
                         }
                     }
                 })

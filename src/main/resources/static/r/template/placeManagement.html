@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Place Management for {{place.name}}</h3>
+            </div>
+            <div class="panel-body" ng-init="setActiveTab('general')">
+                <ul class="nav nav-tabs place-tabs" role="tablist">
+                    <li role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a>
+                    </li>
+                    <li role="presentation"><a href="#members" aria-controls="members" role="tab" data-toggle="tab">Members</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane" id="general">
+                        General settings
+                    </div>
+                    <div role="tabpanel" class="tab-pane form-horizontal" id="members">
+                        <div class="row">
+                            <div class="form-group">
+                                <form>
+                                    <div class="col-sm-2">
+                                        <user-search ng-model="search" update-on-select="editUser"
+                                                     input-class="form-control" input-id="user"
+                                                     loading="loading" no-results="noResults">
+                                        </user-search>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button ng-click="addMember()" ng-disabled="!isSearchValid()"
+                                                class="btn btn-default">
+                                            <span class="glyphicon glyphicon-ok"></span> Add member
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="current-members" class="control-label col-sm-2">Current members</label>
+                            <div id="current-members" class="col-sm-2">
+                                <div ng-repeat="member in members" class="current-member">
+                                    <a href="" ng-click="removeMember(member.username)">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a> {{member.username}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

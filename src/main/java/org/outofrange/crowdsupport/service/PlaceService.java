@@ -11,4 +11,8 @@ public interface PlaceService extends BaseService<Place> {
     List<Place> loadActivePlaces(String identifier);
 
     void deletePlace(Place place);
+
+    void addUserToTeam(Place place, String username);
+
+    void removeUserFromTeam(Place place, String username);
 }

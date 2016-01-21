@@ -26,11 +26,78 @@
                     return false;
                 }
 
-                return $rootScope.user.managedPlaces.findIndex(function(p) {
+                return $rootScope.user.managedPlaces.findIndex(function (p) {
                         return p.identifier === $scope.place.identifier
                             && p.city.identifier === $scope.place.city.identifier
                             && p.city.state.identifier === $scope.place.city.state.identifier;
-                }) >= 0;
+                    }) >= 0;
+            };
+        })
+        .controller('PlaceManagementController', function ($scope, $placeRest, $members, Rest, Status) {
+            $scope.place = $placeRest;
+            $scope.members = $members;
+
+            $scope.setActiveTab = function (initial) {
+                var activeClass = 'active';
+
+                var hash = window.location.hash;
+                var tabId;
+
+                if (hash) {
+                    tabId = hash.substr(1);
+                } else {
+                    hash = '#' + initial;
+                    tabId = initial;
+                }
+
+                var liElement = $('.place-tabs li:has(a[href=' + hash + '])');
+                if (liElement.length === 1) {
+                    liElement.addClass(activeClass);
+                    $('.tab-content #' + tabId).addClass(activeClass);
+                } else {
+                    $('.place-tabs li:has(a[href=#' + initial + '])').addClass(activeClass);
+                    $('.tab-content #' + initial).addClass(activeClass);
+                }
+            };
+
+            $scope.isSearchValid = function () {
+                if (typeof $scope.search !== 'object') {
+                    return false;
+                }
+
+                return $scope.members.findIndex(function (m) {
+                        return m.username === $scope.search.username;
+                    }) === -1;
+            };
+
+            var getRequestParam = function() {
+                return {
+                    sIdt: $scope.place.city.state.identifier,
+                    cIdt: $scope.place.city.identifier,
+                    pIdt: $scope.place.identifier
+                };
+            };
+
+            $scope.addMember = function () {
+                // do rest stuff
+                Rest.PlaceMembers.save(getRequestParam(), $scope.search.username, function (response) {
+                    Status.newStatus(response);
+
+                    $scope.members.push($scope.search);
+                });
+            };
+
+            $scope.removeMember = function (username) {
+                var param = getRequestParam();
+                param.username = username;
+
+                Rest.PlaceMembers.delete(param, function (response) {
+                    Status.newStatus(response);
+
+                    $scope.members = $.grep($scope.members, function (e) {
+                        return e.username !== username;
+                    });
+                });
             };
         })
         .controller('UserController', function ($scope, $rootScope, Auth, Status) {

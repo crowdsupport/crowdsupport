@@ -82,6 +82,14 @@ h1 {
     margin-left: 6px;
 }
 
+.tab-pane#members .row {
+    margin: 15px;
+}
+
+div.current-member {
+    margin-top: 5px;
+}
+
 /* Typeahead */
 .typeahead {
     background-color: #fff;
