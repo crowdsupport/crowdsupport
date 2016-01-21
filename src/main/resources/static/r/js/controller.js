@@ -2,7 +2,7 @@
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.admin', 'crowdsupport.widget.search', 'crowdsupport.service.rest',
-            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate'])
+            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap'])
         .controller('WelcomeController', function ($scope, Rest) {
             $scope.states = Rest.State.query();
         })
