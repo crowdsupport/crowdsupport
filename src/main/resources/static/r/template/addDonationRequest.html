@@ -26,7 +26,8 @@
                 <div ng-hide="neverExpires">
                     <div class="input-group">
                         <input type="text" class="form-control" datetime-picker="dd.MM.yyyy HH:mm" ng-model="date"
-                               min-date="minDate" close-text="Close" is-open="opened" timepicker-options="timeOptions"/>
+                               min-date="minDate" close-text="Close" is-open="opened" timepicker-options="timeOptions"
+                               ng-required="!neverExpires"/>
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="opened = true"><i
                                             class="glyphicon glyphicon-calendar"></i></button>
@@ -45,7 +46,7 @@
                     </div>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" placeholder="Liters, bottles, people..."
-                               ng-model="request.quantityUnit"/>
+                               ng-model="request.quantityUnit" ng-required="request.quantity"/>
                     </div>
                 </div>
             </div>
