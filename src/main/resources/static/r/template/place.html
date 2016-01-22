@@ -19,7 +19,7 @@
                 </span>
                 <span class="wrench" ng-if="inTeam()">
                     <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/manage"><span uib-tooltip="Manage place" class="btn glyphicon glyphicon-wrench"></span></a>
-                    <a href=""><span uib-tooltip="Add request" tooltip-append-to-body="true" class="btn glyphicon glyphicon-plus"></span></a>
+                    <a href="" ng-click="addRequest()"><span uib-tooltip="Add request" tooltip-append-to-body="true" class="btn glyphicon glyphicon-plus"></span></a>
                 </span>
             </div>
         </nav>

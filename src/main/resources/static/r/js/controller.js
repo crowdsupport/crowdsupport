@@ -2,7 +2,8 @@
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.admin', 'crowdsupport.widget.search', 'crowdsupport.service.rest',
-            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap'])
+            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
+            'ui.bootstrap.datetimepicker'])
         .controller('WelcomeController', function ($scope, Rest) {
             $scope.states = Rest.State.query();
         })
@@ -12,7 +13,7 @@
         .controller('CityController', function ($scope, $cityRest) {
             $scope.city = $cityRest;
         })
-        .controller('PlaceController', function ($scope, $placeRest, Websocket, $rootScope) {
+        .controller('PlaceController', function ($scope, $placeRest, Websocket, $rootScope, $uibModal) {
             $scope.place = $placeRest;
 
             var identifier = getUrlAfterSupport() + '/comments';
@@ -31,6 +32,36 @@
                             && p.city.identifier === $scope.place.city.identifier
                             && p.city.state.identifier === $scope.place.city.state.identifier;
                     }) >= 0;
+            };
+
+            $scope.addRequest = function () {
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: '/r/template/addDonationRequest.html',
+                    controller: 'AddDonationRequestController'
+                });
+            }
+        })
+        .controller('AddDonationRequestController', function ($scope, Rest, Status, $uibModalInstance, $timeout) {
+            $scope.request = {};
+            $scope.neverExpires = true;
+            $scope.minDate = new Date();
+            $scope.date = new Date();
+
+            $scope.create = function () {
+                $uibModalInstance.close($scope.request);
+            };
+
+            $scope.openDatePicker = function () {
+                $timeout(function () {
+                    console.log("Open");
+                    $scope.opened = true;
+                });
+            };
+
+            $scope.timeOptions = {
+                readonlyInput: false,
+                showMeridian: false
             };
         })
         .controller('PlaceManagementController', function ($scope, $placeRest, $members, Rest, Status) {
@@ -70,7 +101,7 @@
                     }) === -1;
             };
 
-            var getRequestParam = function() {
+            var getRequestParam = function () {
                 return {
                     sIdt: $scope.place.city.state.identifier,
                     cIdt: $scope.place.city.identifier,
