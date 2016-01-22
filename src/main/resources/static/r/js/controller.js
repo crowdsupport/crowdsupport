@@ -165,7 +165,7 @@
 
             $scope.logout = Auth.logout;
         })
-        .controller('DonationRequestCtrl', function ($scope, Websocket) {
+        .controller('DonationRequestCtrl', function ($scope, Websocket, Rest, Status) {
             var that = this;
             var donationRequest = {};
 
@@ -178,6 +178,7 @@
             var identifier = getUrlAfterSupport() + '/comments';
 
             this.addComment = function () {
+                console.log($scope.$parent);
                 console.log('Comment for request ' + that.donationRequest.id + ': ' + $scope.comment);
 
                 var commentDto = {
@@ -186,7 +187,10 @@
                     'donationRequestId': that.donationRequest.id
                 };
 
-                Websocket.send(identifier, commentDto);
+                Rest.Comments.save({id: $scope.$parent.place.id}, commentDto, function(response) {
+                    Status.newStatus(response);
+                });
+                // Websocket.send(identifier, commentDto);
 
                 $scope.comment = '';
             };

@@ -1,17 +1,47 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.outofrange.crowdsupport.dto.ChangeDto;
+import org.outofrange.crowdsupport.dto.CommentDto;
 import org.outofrange.crowdsupport.model.Comment;
+import org.outofrange.crowdsupport.model.Place;
+import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.CommentRepository;
+import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
+import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.outofrange.crowdsupport.service.CommentService;
+import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.util.CsModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.text.MessageFormat;
 import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
+    private static final Logger log = LoggerFactory.getLogger(CommentServiceImpl.class);
+
     @Inject
     private CommentRepository commentRepository;
+
+    @Inject
+    private PlaceRepository placeRepository;
+
+    @Inject
+    private DonationRequestRepository donationRequestRepository;
+
+    @Inject
+    private SimpMessagingTemplate template;
+
+    @Inject
+    private UserService userService;
+
+    @Inject
+    private CsModelMapper mapper;
 
     @Override
     public Comment save(Comment comment) {
@@ -21,5 +51,24 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> loadAll() {
         return commentRepository.findAll();
+    }
+
+    @Override
+    public Comment addComment(Long placeId, Long donationRequestId, Comment comment) {
+        log.debug("Comment for place with id {}: {}", placeId, comment);
+
+        final Place place = placeRepository.findOne(placeId);
+
+        User user = userService.getCurrentUserUpdated().get();
+
+        comment.setAuthor(user);
+        comment.setDonationRequest(donationRequestRepository.getOne(donationRequestId));
+        comment = save(comment);
+
+        final String topic = "/topic/" + place.getCity().getState().getIdentifier() + "/" +
+                place.getCity().getIdentifier() + "/" + place.getIdentifier() + "/comments";
+        template.convertAndSend(topic, ChangeDto.add(mapper.map(comment, CommentDto.class)));
+
+        return comment;
     }
 }

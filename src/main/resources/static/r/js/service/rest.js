@@ -14,6 +14,7 @@
                     pIdt: '@identifier',
                     username: '@username'
                 }),
+                Comments: $resource(SERVICE_PREFIX + '/place/:id/comments'),
                 PlaceRequest: {
                     Request: $resource(SERVICE_PREFIX + '/place/request', {}, {
                         decline: {

@@ -1,17 +1,16 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.outofrange.crowdsupport.dto.*;
+import org.outofrange.crowdsupport.model.Comment;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.PlaceRequest;
-import org.outofrange.crowdsupport.service.DonationRequestService;
-import org.outofrange.crowdsupport.service.PlaceRequestService;
-import org.outofrange.crowdsupport.service.PlaceService;
-import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.service.*;
 import org.outofrange.crowdsupport.util.CsModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -40,6 +39,12 @@ public class PlaceRestService {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private CommentService commentService;
+
+    @Inject
+    private SimpMessagingTemplate template;
 
     @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/donationRequests", method = RequestMethod.GET)
     public List<DonationRequestDto> getDonationRequests(@PathVariable String stateIdentifier, @PathVariable String cityIdentifier,
@@ -146,5 +151,14 @@ public class PlaceRestService {
         placeRequestService.declinePlaceRequest(requestId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/{placeId}/comments", method = RequestMethod.POST)
+    public ResponseEntity<ResponseDto<Void>> addComment(@PathVariable Long placeId, @RequestBody CommentDto commentDto) {
+        log.info("Comment for place with id {}: {}", placeId, commentDto);
+
+        commentService.addComment(placeId, commentDto.getDonationRequestId(), mapper.map(commentDto, Comment.class));
+
+        return ResponseEntity.ok(ResponseDto.success("Successfully posted comment"));
     }
 }
