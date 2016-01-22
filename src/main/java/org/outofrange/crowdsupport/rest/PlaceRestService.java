@@ -1,8 +1,10 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.outofrange.crowdsupport.dto.*;
+import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.PlaceRequest;
+import org.outofrange.crowdsupport.service.DonationRequestService;
 import org.outofrange.crowdsupport.service.PlaceRequestService;
 import org.outofrange.crowdsupport.service.PlaceService;
 import org.outofrange.crowdsupport.service.UserService;
@@ -31,6 +33,9 @@ public class PlaceRestService {
     private PlaceRequestService placeRequestService;
 
     @Inject
+    private DonationRequestService donationRequestService;
+
+    @Inject
     private CsModelMapper mapper;
 
     @Inject
@@ -46,6 +51,15 @@ public class PlaceRestService {
         } else {
             return null;
         }
+    }
+
+    @RequestMapping(value = "/{placeId}/donationRequests", method = RequestMethod.POST)
+    public ResponseEntity<ResponseDto<Void>> addDonationRequest(@PathVariable Long placeId, @RequestBody DonationRequestDto donationRequestDto) {
+        log.info("Adding new donation request {}", donationRequestDto);
+
+        placeService.addDonationRequest(placeId, mapper.map(donationRequestDto, DonationRequest.class));
+
+        return ResponseEntity.ok(ResponseDto.success("Successfully added new donation request"));
     }
 
     @RequestMapping(value = "/{stateIdentifier}/{cityIdentifier}/{placeIdentifier}/member", method = RequestMethod.GET)

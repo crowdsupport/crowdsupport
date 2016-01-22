@@ -1,5 +1,6 @@
 package org.outofrange.crowdsupport.service;
 
+import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface PlaceService extends BaseService<Place> {
     void addUserToTeam(Place place, String username);
 
     void removeUserFromTeam(Place place, String username);
+
+    void addDonationRequest(Long placeId, DonationRequest donationRequest);
 }

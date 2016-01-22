@@ -29,7 +29,7 @@
                         }
                     })
                 },
-                DonationRequest: $resource(SERVICE_PREFIX + '/:sIdt/:cIdt/:pIdt/donationRequests'),
+                DonationRequest: $resource(SERVICE_PREFIX + '/place/:id/donationRequests'),
                 User: $resource(SERVICE_PREFIX + '/user/current', {}, {
                     create: {
                         method: 'POST',

@@ -38,7 +38,8 @@
                 $uibModal.open({
                     animation: true,
                     templateUrl: '/r/template/addDonationRequest.html',
-                    controller: 'AddDonationRequestController'
+                    controller: 'AddDonationRequestController',
+                    scope: $scope
                 });
             }
         })
@@ -48,8 +49,24 @@
             $scope.minDate = new Date();
             $scope.date = new Date();
 
+            var getRequestParam = function () {
+                return {
+                    id: $scope.$parent.place.id
+                };
+            };
+
             $scope.create = function () {
-                $uibModalInstance.close($scope.request);
+                var r = $scope.request;
+                if (!neverExpires) {
+                    r.validTo = $scope.date;
+                }
+                r.active = true;
+
+                Rest.DonationRequest.save(getRequestParam(), r, function(response) {
+                    Status.newStatus(response);
+
+                    $uibModalInstance.close($scope.request);
+                });
             };
 
             $scope.openDatePicker = function () {

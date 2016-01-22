@@ -1,7 +1,9 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.User;
+import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.outofrange.crowdsupport.persistence.TeamRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
@@ -20,6 +22,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Inject
     private PlaceRepository placeRepository;
+
+    @Inject
+    private DonationRequestRepository donationRequestRepository;
 
     @Inject
     private UserRepository userRepository;
@@ -88,5 +93,14 @@ public class PlaceServiceImpl implements PlaceService {
 
         // we don't need to save the whole place again
         teamRepository.save(placeDb.getTeam());
+    }
+
+    @Override
+    public void addDonationRequest(Long placeId, DonationRequest donationRequest) {
+        log.debug("Adding donation request {} to place {}", donationRequest, placeId);
+
+        final Place placeDb = placeRepository.findOne(placeId);
+        donationRequest.setPlace(placeDb);
+        donationRequestRepository.save(donationRequest);
     }
 }
