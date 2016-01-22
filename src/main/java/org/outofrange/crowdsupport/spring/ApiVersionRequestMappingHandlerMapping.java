@@ -1,6 +1,7 @@
 package org.outofrange.crowdsupport.spring;
 
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.condition.*;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -24,11 +25,13 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
             // Concatenate our ApiVersion with the usual request mapping
             info = createApiVersionInfo(methodAnnotation, methodCondition).combine(info);
         } else {
-            ApiVersion typeAnnotation = AnnotationUtils.findAnnotation(handlerType, ApiVersion.class);
-            if(typeAnnotation != null) {
-                RequestCondition<?> typeCondition = getCustomTypeCondition(handlerType);
-                // Concatenate our ApiVersion with the usual request mapping
-                info = createApiVersionInfo(typeAnnotation, typeCondition).combine(info);
+            if (method.isAnnotationPresent(RequestMapping.class)) {
+                ApiVersion typeAnnotation = AnnotationUtils.findAnnotation(handlerType, ApiVersion.class);
+                if(typeAnnotation != null) {
+                    RequestCondition<?> typeCondition = getCustomTypeCondition(handlerType);
+                    // Concatenate our ApiVersion with the usual request mapping
+                    info = createApiVersionInfo(typeAnnotation, typeCondition).combine(info);
+                }
             }
         }
 
