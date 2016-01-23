@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.dto;
 
-public class PlaceDto extends BaseDto {
+public class PlaceDto extends LinkBaseDto {
     private CityDto city;
 
     private String location;
@@ -49,5 +49,10 @@ public class PlaceDto extends BaseDto {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Override
+    protected String self() {
+        return "/place/" + getId();
     }
 }

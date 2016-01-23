@@ -2,7 +2,7 @@ package org.outofrange.crowdsupport.dto;
 
 import java.time.ZonedDateTime;
 
-public class PlaceRequestDto extends BaseDto {
+public class PlaceRequestDto extends LinkBaseDto {
     private Long id;
 
     private PlaceDto place;
@@ -61,5 +61,10 @@ public class PlaceRequestDto extends BaseDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    protected String self() {
+        return "/placeRequest/" + getId();
     }
 }
