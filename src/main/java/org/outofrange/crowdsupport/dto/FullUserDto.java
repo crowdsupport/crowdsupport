@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * @author Markus Möslinger
  */
-public class CurrentUserDto extends UserDto {
+public class FullUserDto extends UserDto {
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

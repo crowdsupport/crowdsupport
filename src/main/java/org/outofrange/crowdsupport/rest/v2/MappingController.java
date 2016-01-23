@@ -19,6 +19,10 @@ public abstract class MappingController {
         return mapper;
     }
 
+    protected <T> T map(Object source, Class<T> destination) {
+        return mapper.map(source, destination);
+    }
+
     protected <T> List<T> mapToList(Collection<?> source, Class<T> destination) {
         return mapCollection(source, destination).collect(Collectors.toList());
     }

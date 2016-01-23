@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 public class CommentDto extends BaseDto {
     private String text;
 
-    private CurrentUserDto author;
+    private FullUserDto author;
 
     private ZonedDateTime createdDateTime;
 
@@ -32,11 +32,11 @@ public class CommentDto extends BaseDto {
         this.text = text;
     }
 
-    public CurrentUserDto getAuthor() {
+    public FullUserDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(CurrentUserDto author) {
+    public void setAuthor(FullUserDto author) {
         this.author = author;
     }
 

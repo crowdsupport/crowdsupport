@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.dto;
 
-public class UserDto extends BaseDto {
+public class UserDto extends LinkBaseDto {
     private String username;
 
     private String imagePath;
@@ -19,5 +19,10 @@ public class UserDto extends BaseDto {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Override
+    protected String self() {
+        return "/user/" + getId();
     }
 }

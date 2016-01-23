@@ -1,11 +1,13 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.outofrange.crowdsupport.dto.CurrentUserDto;
+import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
+import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.security.UserAuthentication;
+import org.outofrange.crowdsupport.util.RoleStore;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,9 @@ public class UserServiceImpl implements UserService {
     @Inject
     private RoleRepository roleRepository;
 
+    @Inject
+    private AuthorityService authorityService;
+
     @Override
     @Transactional(readOnly = false)
     public User save(User user) {
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = false)
     @PreAuthorize("hasRole(@role.USER)")
-    public User updateProfile(CurrentUserDto userDto) {
+    public User updateProfile(FullUserDto userDto) {
         final User self = getCurrentUserUpdated().get();
 
         if (!self.getUsername().equals(userDto.getUsername())) {
@@ -61,15 +66,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createUser(FullUserDto userDto) {
+        log.debug("Creating user: {}", userDto);
+
+        final User user = new User(userDto.getUsername(), userDto.getPassword());
+        user.setEmail(userDto.getEmail());
+        user.setImagePath(userDto.getImagePath());
+        user.setEnabled(true);
+        user.getRoles().add(authorityService.loadRole(RoleStore.USER));
+
+        return userRepository.save(user);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
-    public User updateAll(String username, CurrentUserDto userDto) {
+    public User updateAll(String username, FullUserDto userDto) {
         final User user = userRepository.findOneByUsername(username).get();
 
         return updateUser(user, userDto, true);
     }
 
-    private User updateUser(User user, CurrentUserDto userDto, boolean all) {
+    @Override
+    @Transactional(readOnly = false)
+    @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
+    public User updateAll(long userId, FullUserDto userDto) {
+        final User user = userRepository.findOne(userId);
+
+        return updateUser(user, userDto, true);
+    }
+
+    private User updateUser(User user, FullUserDto userDto, boolean all) {
         user.setEmail(userDto.getEmail());
         user.setImagePath(userDto.getImagePath());
 
@@ -99,6 +126,13 @@ public class UserServiceImpl implements UserService {
         log.debug("Searching users for {}", like);
         
         return userRepository.findAllByUsernameContainingIgnoreCase(like);
+    }
+
+    @Override
+    public User loadUser(long id) {
+        log.debug("Loading user with id {}", id);
+
+        return userRepository.findOne(id);
     }
 
     @Override

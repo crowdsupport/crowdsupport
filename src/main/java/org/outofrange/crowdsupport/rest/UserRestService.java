@@ -1,7 +1,7 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.outofrange.crowdsupport.dto.ResponseDto;
-import org.outofrange.crowdsupport.dto.CurrentUserDto;
+import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.util.CsModelMapper;
@@ -27,18 +27,18 @@ public class UserRestService {
     private CsModelMapper mapper;
 
     @RequestMapping(value = "/current", method = RequestMethod.GET)
-    public ResponseEntity<CurrentUserDto> getCurrentUser() {
+    public ResponseEntity<FullUserDto> getCurrentUser() {
         final Optional<User> currentUser = userService.getCurrentUserUpdated();
 
         if (currentUser.isPresent()) {
-            return ResponseEntity.ok(mapper.map(currentUser.get(), CurrentUserDto.class));
+            return ResponseEntity.ok(mapper.map(currentUser.get(), FullUserDto.class));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<CurrentUserDto>> getUsers(@RequestParam(required = false) String query) {
+    public ResponseEntity<List<FullUserDto>> getUsers(@RequestParam(required = false) String query) {
         final List<User> users;
         if (query == null) {
             log.info("Loading all users");
@@ -48,11 +48,11 @@ public class UserRestService {
             users = userService.queryUsers(query);
         }
 
-        return ResponseEntity.ok(mapper.mapToList(users, CurrentUserDto.class));
+        return ResponseEntity.ok(mapper.mapToList(users, FullUserDto.class));
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ResponseDto<CurrentUserDto>> createUser(@RequestBody CurrentUserDto userDto) {
+    public ResponseEntity<ResponseDto<FullUserDto>> createUser(@RequestBody FullUserDto userDto) {
         log.info("Register user: {}", userDto);
 
         if (userService.isUserLoggedIn()) {
@@ -60,19 +60,19 @@ public class UserRestService {
         }
 
         final User user = mapper.map(userDto, User.class);
-        return ResponseEntity.ok(ResponseDto.success("Registration was successful", mapper.map(userService.save(user), CurrentUserDto.class)));
+        return ResponseEntity.ok(ResponseDto.success("Registration was successful", mapper.map(userService.save(user), FullUserDto.class)));
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseDto<CurrentUserDto>> updateUser(@RequestBody CurrentUserDto userDto, @PathVariable String username,
-                                                                  @RequestParam(required = false) boolean all) {
+    public ResponseEntity<ResponseDto<FullUserDto>> updateUser(@RequestBody FullUserDto userDto, @PathVariable String username,
+                                                               @RequestParam(required = false) boolean all) {
         log.info("Updating user: {}",  username);
 
         if (Boolean.TRUE.equals(all)) {
-            final CurrentUserDto savedUserDto = mapper.map(userService.updateAll(username, userDto), CurrentUserDto.class);
+            final FullUserDto savedUserDto = mapper.map(userService.updateAll(username, userDto), FullUserDto.class);
             return ResponseEntity.ok(ResponseDto.success("Data for user " + username + " changed successfully", savedUserDto));
         } else {
-            final CurrentUserDto savedUserDto = mapper.map(userService.updateProfile(userDto), CurrentUserDto.class);
+            final FullUserDto savedUserDto = mapper.map(userService.updateProfile(userDto), FullUserDto.class);
             return ResponseEntity.ok(ResponseDto.success("Profile data changed successfully", savedUserDto));
         }
     }
