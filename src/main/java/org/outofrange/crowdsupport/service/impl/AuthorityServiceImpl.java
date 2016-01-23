@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,14 +60,35 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
-    public Role createRole(String roleName) {
+    public Role createRoleIfNeeded(String roleName) {
         log.debug("Creating role {}", roleName);
 
-        if (roleRepository.findOneByName(roleName).isPresent()) {
-            throw new ServiceException("Already found a role called " + roleName);
+        final Optional<Role> roleDb = roleRepository.findOneByName(roleName);
+        if (!roleDb.isPresent()) {
+            return roleRepository.save(new Role(roleName));
+        } else {
+            return roleDb.get();
         }
+    }
 
-        return roleRepository.save(new Role(roleName));
+    @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
+    public Role addPermissionToRole(String roleName, String permission) {
+        log.debug("Adding permission {} to role {}");
+
+        final Role roleDb = roleRepository.findOneByName(roleName).get();
+        roleDb.addPermission(permissionRepository.findOneByName(permission).get());
+        return roleRepository.save(roleDb);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
+    public Role removePermissionFromRole(String roleName, String permission) {
+        log.debug("Adding permission {} to role {}");
+
+        final Role roleDb = roleRepository.findOneByName(roleName).get();
+        roleDb.removePermission(permissionRepository.findOneByName(permission).get());
+        return roleRepository.save(roleDb);
     }
 
     @Override
@@ -87,6 +109,13 @@ public class AuthorityServiceImpl implements AuthorityService {
         log.debug("Querying all roles");
 
         return new HashSet<>(roleRepository.findAll());
+    }
+
+    @Override
+    public Role loadRole(String name) {
+        log.debug("Loading role with name {}", name);
+
+        return roleRepository.findOneByName(name).get();
     }
 
     @Override

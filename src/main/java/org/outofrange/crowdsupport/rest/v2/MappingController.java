@@ -1,7 +1,6 @@
 package org.outofrange.crowdsupport.rest.v2;
 
 import org.modelmapper.ModelMapper;
-import org.outofrange.crowdsupport.util.CsModelMapper;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.stream.Stream;
 public abstract class MappingController {
     private final ModelMapper mapper;
 
-    public MappingController(CsModelMapper mapper) {
+    public MappingController(ModelMapper mapper) {
         this.mapper = mapper;
     }
 

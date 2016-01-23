@@ -12,11 +12,17 @@ public interface AuthorityService {
 
     User setRolesForUser(User user, Collection<Role> role);
 
-    Role createRole(String name);
+    Role createRoleIfNeeded(String name);
+
+    Role addPermissionToRole(String roleName, String permission);
+
+    Role removePermissionFromRole(String roleName, String permission);
 
     void deleteRole(String roleName);
 
     Set<Role> loadAllRoles();
+
+    Role loadRole(String name);
 
     Set<Permission> loadAllPermissions();
 }

@@ -11,7 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
+import javax.inject.Inject;
 import javax.servlet.DispatcherType;
+import javax.servlet.ServletContext;
 
 @Configuration
 public class SpringConfiguration {
@@ -52,7 +54,8 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public Config config() {
-        return new Config();
+    @Inject
+    public Config config(ServletContext servletContext) {
+        return new Config(servletContext);
     }
 }

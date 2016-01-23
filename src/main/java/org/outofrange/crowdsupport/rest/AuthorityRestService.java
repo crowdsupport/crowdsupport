@@ -33,7 +33,7 @@ public class AuthorityRestService {
         log.info("Creating new role with name {}", roleName);
 
         return ResponseEntity.ok(ResponseDto.success("Successfully created role " + roleName,
-                mapper.map(authorityService.createRole(roleName), RoleDto.class)));
+                mapper.map(authorityService.createRoleIfNeeded(roleName), RoleDto.class)));
     }
 
     @RequestMapping(value = "/role/{roleName}", method = RequestMethod.DELETE)

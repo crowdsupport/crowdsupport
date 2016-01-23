@@ -5,10 +5,18 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import java.util.Arrays;
 
 @Component
 public class Config {
+    public static ServletContext servletContext;
+
+    @Inject
+    public Config(ServletContext servletContext) {
+        Config.servletContext = servletContext;
+    }
+
     @Value("${crowdsupport.version}")
     private String version;
 
@@ -21,5 +29,9 @@ public class Config {
 
     public String getVersion() {
         return version;
+    }
+
+    public static String getContextPath() {
+        return servletContext != null ? servletContext.getContextPath() : null;
     }
 }

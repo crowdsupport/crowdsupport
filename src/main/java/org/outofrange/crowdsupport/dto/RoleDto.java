@@ -2,7 +2,7 @@ package org.outofrange.crowdsupport.dto;
 
 import java.util.List;
 
-public class RoleDto extends BaseDto {
+public class RoleDto extends LinkBaseDto {
     private String name;
 
     private List<String> permissions;
@@ -31,5 +31,10 @@ public class RoleDto extends BaseDto {
 
     public void setSystemRole(boolean systemRole) {
         this.systemRole = systemRole;
+    }
+
+    @Override
+    protected String self() {
+        return "/role/" + getName();
     }
 }

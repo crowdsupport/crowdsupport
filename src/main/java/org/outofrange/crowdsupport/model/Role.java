@@ -65,6 +65,14 @@ public class Role extends BaseEntity implements GrantedAuthority {
         this.permissions = permissionSet;
     }
 
+    public void addPermission(Permission permission) {
+        permissions.add(permission);
+    }
+
+    public void removePermission(Permission permission) {
+        permissions.remove(permission);
+    }
+
     @Override
     public String getAuthority() {
         return getName();
