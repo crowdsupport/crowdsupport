@@ -33,6 +33,11 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
+    public State load(long id) {
+        return stateRepository.findOne(id);
+    }
+
+    @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_STATES)")
     public State createState(String name, String identifier, String imagePath) {
         if (load(identifier).isPresent()) {

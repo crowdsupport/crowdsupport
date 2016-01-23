@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.dto;
 
-public class StateDto extends BaseDto {
+public class StateDto extends LinkBaseDto {
     private String name;
 
     private String identifier;
@@ -29,5 +29,10 @@ public class StateDto extends BaseDto {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Override
+    protected String self() {
+        return "/state/" + getId();
     }
 }

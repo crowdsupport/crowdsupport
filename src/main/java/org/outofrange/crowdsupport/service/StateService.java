@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface StateService extends BaseService<State> {
     Optional<State> load(String identifier);
 
+    State load(long id);
+
     State createState(String name, String identifier, String imagepath);
 
     List<State> searchStates(String query);
