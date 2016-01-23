@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.inject.Inject;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,7 @@ public class PlaceRequestRestController extends TypeMappingController<PlaceReque
 
     private PlaceRequestService placeRequestService;
 
+    @Inject
     public PlaceRequestRestController(ModelMapper mapper, PlaceRequestService placeRequestService) {
         super(mapper, PlaceRequestDto.class);
         this.placeRequestService = placeRequestService;
