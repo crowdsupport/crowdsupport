@@ -28,7 +28,7 @@ public class StateRestController extends TypedMappingController<StateDto> {
         this.stateService = stateService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "!query")
+    @RequestMapping(method = RequestMethod.GET, params = {"!query", "!identifier"})
     public List<StateDto> getAllStates() {
         log.info("Querying all states");
 
@@ -40,6 +40,13 @@ public class StateRestController extends TypedMappingController<StateDto> {
         log.info("Querying all states like {}", query);
 
         return mapToList(stateService.searchStates(query));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "identifier")
+    public StateWithCitiesDto getStateWithIdentifier(@RequestParam String identifier) {
+        log.info("Querying state with identifier {}", identifier);
+
+        return map(stateService.load(identifier).get(), StateWithCitiesDto.class);
     }
 
     @RequestMapping(value = "/{stateId}", method = RequestMethod.GET)

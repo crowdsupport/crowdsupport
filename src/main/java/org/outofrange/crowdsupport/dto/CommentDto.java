@@ -58,6 +58,6 @@ public class CommentDto extends LinkBaseDto {
 
     @Override
     protected String self() {
-        return "/comment" + getId();
+        return "/comment/" + getId();
     }
 }

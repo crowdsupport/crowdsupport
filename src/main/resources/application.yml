@@ -6,6 +6,10 @@ spring:
   thymeleaf:
     mode: HTML5
   jackson:
+    mapper:
+      use_getters_as_setters: false
+    deserialization:
+      fail_on_unknown_properties: false
     serialization:
       write_dates_as_timestamps: false
 server:

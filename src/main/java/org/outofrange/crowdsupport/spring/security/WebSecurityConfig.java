@@ -53,17 +53,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ws/**").permitAll()
 
                 //allow anonymous POSTs to login
-                .antMatchers(HttpMethod.POST, "/service/v1/user/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/service/v1/user").permitAll()
+                .antMatchers(HttpMethod.POST, "/service/v*/user/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/service/v*/user").permitAll()
 
                 //allow anonymous GETs to API
-                .antMatchers(HttpMethod.GET, "/service/v1/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/service/v*/**").permitAll()
 
                 //all other request need to be authenticated
                 .anyRequest().hasRole("USER").and()
 
                 // custom JSON based authentication by POST of {"username":"<name>","password":"<password>"} which sets the token header upon authentication
                 .addFilterBefore(new StatelessLoginFilter("/service/v1/user/login", tokenAuthenticationService, userService,
+                        authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessLoginFilter("/service/v2/user/login", tokenAuthenticationService, userService,
                         authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 
                 // custom Token based authentication based on the header previously given to the client

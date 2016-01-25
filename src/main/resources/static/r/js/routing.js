@@ -1,7 +1,7 @@
-(function() {
+(function () {
     angular
-        .module('crowdsupport.routing', ['crowdsupport.controller', 'crowdsupport.service.rest', 'crowdsupport.service.auth',
-            'ui.router', 'ui.router.title'])
+        .module('crowdsupport.routing', ['crowdsupport.controller', 'crowdsupport.service.auth',
+            'ui.router', 'ui.router.title', 'restangular'])
         .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
             $locationProvider.html5Mode(true);
 
@@ -15,6 +15,9 @@
                     resolve: {
                         $title: function () {
                             return 'Welcome';
+                        },
+                        $states: function (Restangular) {
+                            return Restangular.all('state').getList();
                         }
                     }
                 })
@@ -23,13 +26,11 @@
                     templateUrl: '/r/template/state.html',
                     controller: 'StateController',
                     resolve: {
-                        $stateRest: function(Rest, $stateParams) {
-                            return Rest.State.get({identifier: $stateParams.stateIdentifier});
+                        $stateRest: function (Restangular, $stateParams) {
+                            return Restangular.one('state').get({identifier: $stateParams.stateIdentifier});
                         },
                         $title: function ($stateRest) {
-                            return $stateRest.$promise.then(function(state) {
-                                return state.name;
-                            });
+                            return $stateRest.name;
                         }
                     }
                 })
@@ -42,13 +43,14 @@
                         }
                     },
                     resolve: {
-                        $cityRest: function(Rest, $stateParams) {
-                            return Rest.City.get({ identifier: $stateParams.cityIdentifier, stateIdentifier: $stateParams.stateIdentifier});
+                        $cityRest: function (Restangular, $stateParams) {
+                            return Restangular.one('city').get({
+                                identifier: $stateParams.cityIdentifier,
+                                stateIdentifier: $stateParams.stateIdentifier
+                            });
                         },
                         $title: function ($cityRest) {
-                            return $cityRest.$promise.then(function(city) {
-                                return city.name;
-                            });
+                            return $cityRest.name;
                         }
                     }
                 })
@@ -61,17 +63,15 @@
                         }
                     },
                     resolve: {
-                        $placeRest: function(Rest, $stateParams) {
-                            return Rest.Place.get({
+                        $placeRest: function (Restangular, $stateParams) {
+                            return Restangular.one('place').get({
                                 identifier: $stateParams.placeIdentifier,
                                 cityIdentifier: $stateParams.cityIdentifier,
                                 stateIdentifier: $stateParams.stateIdentifier
-                            }).$promise;
+                            });
                         },
                         $title: function ($placeRest) {
-                            return $placeRest.$promise.then(function(place) {
-                                return place.name;
-                            });
+                            return $placeRest.name;
                         }
                     }
                 })
@@ -84,14 +84,10 @@
                         }
                     },
                     resolve: {
-                        $members: function(Rest, $placeRest) {
-                            return Rest.PlaceMembers.query({
-                                sIdt: $placeRest.city.state.identifier,
-                                cIdt: $placeRest.city.identifier,
-                                pIdt: $placeRest.identifier
-                            }).$promise;
+                        $members: function ($placeRest) {
+                            return $placeRest.all('team').getList();
                         },
-                        $title: function() {
+                        $title: function () {
                             return "Management";
                         }
                     }
@@ -101,7 +97,7 @@
                     controller: 'ProfileController',
                     templateUrl: '/r/template/profile.html',
                     resolve: {
-                        $user: function(Auth) {
+                        $user: function (Auth) {
                             return Auth.updateUser().$promise;
                         },
                         $title: function () {
@@ -117,7 +113,7 @@
                     controller: 'RegistrationController',
                     templateUrl: '/r/template/register.html',
                     resolve: {
-                        $title: function() {
+                        $title: function () {
                             return 'Registration';
                         }
                     }
@@ -153,6 +149,9 @@
                         }
                     },
                     resolve: {
+                        $allRequests: function (Restangular) {
+                            return Restangular.all('placeRequest').getList();
+                        },
                         $title: function () {
                             return 'Requested places';
                         }
@@ -170,6 +169,9 @@
                         }
                     },
                     resolve: {
+                        $allRoles: function (Restangular) {
+                            return Restangular.all('role').getList();
+                        },
                         $title: function () {
                             return 'User Management';
                         }
@@ -190,11 +192,11 @@
                         $title: function () {
                             return 'Role Management';
                         },
-                        $roles: function (Rest) {
-                            return Rest.Role.query().$promise;
+                        $roles: function (Restangular) {
+                            return Restangular.all('role').getList();
                         },
-                        $permissions: function(Rest) {
-                            return Rest.Permission.query().$promise;
+                        $permissions: function (Restangular) {
+                            return Restangular.all('permission').getList();
                         }
                     },
                     data: {

@@ -1,18 +1,18 @@
 (function () {
     angular
-        .module('crowdsupport.admin', ['crowdsupport.widget.search', 'crowdsupport.service.rest', 'crowdsupport.service.status'])
-        .controller('RequestedPlacesCtrl', function ($scope, Rest, Status, $log) {
-            $scope.allRequests = Rest.PlaceRequest.Request.query();
+        .module('crowdsupport.admin', ['crowdsupport.widget.search', 'restangular', 'crowdsupport.service.status'])
+        .controller('RequestedPlacesCtrl', function ($scope, $allRequests, Restangular, Status, $log) {
+            $scope.allRequests = $allRequests;
 
             $scope.save = function (index) {
                 $log.debug('Saving donation request ' + index);
                 var request = $scope.allRequests[index];
 
-                request.$accept(function (response) {
+                request.post('accept', request).then(function () {
                     $log.debug('Place successfully posted');
                     Status.success('Place successfully published');
                     $scope.removeRequest(index);
-                }, function (response) {
+                }, function () {
                     $log.debug('Error while saving');
                     Status.error('Error while saving place');
                 });
@@ -25,7 +25,7 @@
             $scope.decline = function (index) {
                 var request = $scope.allRequests[index];
 
-                request.$decline(function (response) {
+                request.remove().then(function () {
                     $log.debug('Request successfully declined');
                     Status.success('Request successfully declined');
                     $scope.removeRequest(index);
@@ -33,21 +33,25 @@
             };
 
             $scope.createState = function (request) {
-                Rest.State.save(request.place.city.state, function (response) {
+                Restangular.all('state').post(request.place.city.state).then(function (response) {
                     $log.debug('State successfully created');
-                    request.place.city.state = response.data;
-                    request.ui.state = response.data;
+                    request.place.city.state = response;
+                    request.ui.state = response;
                     request.ui.setStateSearch(true);
+
+                    Status.success('Successfully created new state');
                 });
             };
 
             $scope.createCity = function (request) {
                 if (request.ui.stateSearch) {
-                    Rest.City.save(request.place.city, function (response) {
+                    Restangular.all('city').post(request.place.city).then(function (response) {
                         $log.debug('City successfully created');
-                        request.ui.city = response.data;
-                        request.place.city = response.data;
+                        request.ui.city = response;
+                        request.place.city = response;
                         request.ui.setCitySearch(true);
+
+                        Status.success('Successfully created new city');
                     });
                 }
             };
@@ -92,8 +96,8 @@
                 };
             };
         })
-        .controller('UserManagementController', function ($scope, $log, Rest, Status, Auth, $rootScope) {
-            $scope.allRoles = Rest.Role.query();
+        .controller('UserManagementController', function ($scope, $log, $allRoles, Restangular, Status, Auth, $rootScope) {
+            $scope.allRoles = $allRoles;
             $scope.editUser = {};
 
             $scope.isSearchValid = function () {
@@ -102,23 +106,23 @@
 
             $scope.save = function () {
                 console.log($scope.editUser);
-                Rest.User.update({username: $scope.search.username, all: true}, $scope.editUser, function (response) {
-                    Status.newStatus(response);
+                $scope.editUser.patch($scope.editUser).then(function (response) {
+                    Status.success('Successfully edited user');
 
                     // edited your own user?
                     if ($scope.search.username == $rootScope.user.username) {
                         // kept username the same?
-                        if ($scope.search.username == response.data.username) {
+                        if ($scope.search.username == response.username) {
                             Auth.updateUser();
                         } else {
                             Auth.logout();
-                            Status.info('You\'ve changed your username to ' + response.data.username + ', please relogin')
+                            Status.info('You\'ve changed your username to ' + response.username + ', please relogin')
                         }
                     }
                 });
             };
         })
-        .controller('RoleManagementController', function ($roles, $permissions, $scope, $log, Rest, Status, Auth, $uibModal) {
+        .controller('RoleManagementController', function ($roles, $permissions, $scope, $log, Restangular, Status, Auth, $uibModal) {
             $scope.allRoles = $roles;
             $scope.allPermissions = $permissions;
 
@@ -130,7 +134,7 @@
                     templateUrl: '/r/template/admin/roleCreateModal.html',
                     controller: 'RoleCreateController'
                 }).result.then(function () {
-                    return Rest.Role.query().$promise;
+                    return Restangular.all('role').getList();
                 }).then(function (roles) {
                     $scope.allRoles = roles;
                     $scope.selectedRole = $scope.allRoles[0];
@@ -138,11 +142,12 @@
             };
 
             $scope.removeSelectedRole = function () {
-                $scope.selectedRole.$delete(function (response) {
-                    Status.newStatus(response);
+                Restangular.one('role', $scope.selectedRole.name).remove().then(function () {
+                    Status.success('Successfully deleted role');
+
                     $scope.selectedRole = $scope.allRoles[0];
                     Auth.updateUser();
-                    Rest.Role.query().$promise.then(function (roles) {
+                    Restangular.all('role').getList().then(function (roles) {
                         $scope.allRoles = roles;
                         $scope.selectedRole = $scope.allRoles[0];
                     });
@@ -150,17 +155,19 @@
             };
 
             $scope.assignPermissions = function () {
-                $scope.selectedRole.$assignPermissions(function (response) {
-                    Status.newStatus(response.message);
+                console.log($scope.selectedRole);
+                Restangular.one('role', $scope.selectedRole.name)
+                Restangular.one('role', $scope.selectedRole.name).customPUT($scope.selectedRole.permissions, 'permissions').then(function () {
+                    Status.success('Successfully changed permissions');
                     Auth.updateUser();
                 });
             };
         })
-        .controller('RoleCreateController', function ($scope, Rest, Status, $uibModalInstance) {
+        .controller('RoleCreateController', function ($scope, Restangular, Status, $uibModalInstance) {
             $scope.create = function () {
-                Rest.Role.save($scope.roleName, function (response) {
-                    Status.newStatus(response);
-                    $uibModalInstance.close(response.data);
+                Restangular.one('role', $scope.roleName).put().then(function (response) {
+                    Status.success('Successfully created role ' + $scope.roleName);
+                    $uibModalInstance.close(response);
                 });
             };
         });

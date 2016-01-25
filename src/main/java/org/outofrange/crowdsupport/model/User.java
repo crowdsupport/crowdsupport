@@ -34,7 +34,7 @@ public class User extends BaseEntity implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(mappedBy = "members")
-    private List<Team> teams;
+    private List<Team> teams = new ArrayList<>();
 
     private boolean rehashPassword;
 
@@ -144,8 +144,10 @@ public class User extends BaseEntity implements UserDetails {
         final Set<Role> roleSet;
         if (roles instanceof Set) {
             roleSet = (Set<Role>) roles;
-        } else {
+        } else if (roles != null) {
             roleSet = new HashSet<>(roles);
+        } else {
+            roleSet = new HashSet<>();
         }
 
         this.roles = roleSet;

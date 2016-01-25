@@ -3,15 +3,18 @@ package org.outofrange.crowdsupport.rest.v2;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.dto.UserDto;
+import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @ApiVersion("2")
@@ -35,10 +38,10 @@ public class UserRestController extends TypedMappingController<UserDto> {
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "query")
-    public List<UserDto> getAllUsersLike(@RequestParam String query) {
+    public List<FullUserDto> getAllUsersLike(@RequestParam String query) {
         log.info("Querying all users like {}", query);
 
-        return mapToList(userService.queryUsers(query));
+        return mapToList(userService.queryUsers(query), FullUserDto.class);
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
@@ -55,7 +58,7 @@ public class UserRestController extends TypedMappingController<UserDto> {
         return getMapper().map(userService.updateAll(userId, userDto), FullUserDto.class);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<FullUserDto> createUser(@RequestBody FullUserDto userDto) {
         log.info("Creating new user with dto {}", userDto);
 
@@ -65,14 +68,18 @@ public class UserRestController extends TypedMappingController<UserDto> {
     }
 
     @RequestMapping(value = "/current", method = RequestMethod.GET)
-    public FullUserDto getCurrentUser() {
-        log.info("Querying logged in user");
+    public ResponseEntity<FullUserDto> getCurrentUser() {
+        final Optional<User> currentUser = userService.getCurrentUserUpdated();
 
-        return map(userService.getCurrentUserUpdated(), FullUserDto.class);
+        if (currentUser.isPresent()) {
+            return ResponseEntity.ok(map(currentUser.get(), FullUserDto.class));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/current", method = RequestMethod.PATCH)
-    public FullUserDto changeOwnUserDetails(FullUserDto userDto) {
+    public FullUserDto changeOwnUserDetails(@RequestBody FullUserDto userDto) {
         log.info("Changing details for logged in user");
 
         return map(userService.updateProfile(userDto), FullUserDto.class);

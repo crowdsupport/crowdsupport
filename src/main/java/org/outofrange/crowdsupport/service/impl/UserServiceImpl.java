@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     public User updateProfile(FullUserDto userDto) {
         final User self = getCurrentUserUpdated().get();
 
-        if (!self.getUsername().equals(userDto.getUsername())) {
+        if (userDto.getUsername() != null && !self.getUsername().equals(userDto.getUsername())) {
             throw new ServiceException("Updating different user is not allowed!");
         }
 
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.getRoles().add(authorityService.loadRole(RoleStore.USER));
 
-        return userRepository.save(user);
+        return save(user);
     }
 
     @Override
@@ -97,16 +97,25 @@ public class UserServiceImpl implements UserService {
     }
 
     private User updateUser(User user, FullUserDto userDto, boolean all) {
-        user.setEmail(userDto.getEmail());
-        user.setImagePath(userDto.getImagePath());
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        if (userDto.getImagePath() != null) {
+            user.setImagePath(userDto.getImagePath());
+        }
 
         if (userDto.getPassword() != null && !"".equals(userDto.getPassword())) {
             user.setPassword(userDto.getPassword());
         }
 
         if (all) {
-            user.setUsername(userDto.getUsername());
-            user.setRoles(userDto.getRoles().stream().map(r -> roleRepository.findOneByName(r).get()).collect(Collectors.toSet()));
+            if (userDto.getImagePath() != null) {
+                user.setUsername(userDto.getUsername());
+            }
+            if (userDto.getRoles() != null) {
+                user.setRoles(userDto.getRoles().stream().map(r -> roleRepository.findOneByName(r).get()).collect(Collectors.toSet()));
+            }
         }
 
         return userRepository.save(user);

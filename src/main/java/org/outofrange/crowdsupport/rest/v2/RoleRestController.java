@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -58,17 +59,10 @@ public class RoleRestController extends TypedMappingController<RoleDto> {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/{roleName}/permissions/{permission}", method = RequestMethod.PUT)
-    public RoleDto addPermissionToRole(@PathVariable String roleName, @PathVariable String permission) {
-        log.info("Adding permission {} to role with name {}", permission, roleName);
+    @RequestMapping(value = "/{roleName}/permissions", method = RequestMethod.PUT)
+    public RoleDto changePermissionAssignment(@PathVariable String roleName, @RequestBody List<String> permissions) {
+        log.info("Adding permission {} to role with name {}", permissions, roleName);
 
-        return map(authorityService.addPermissionToRole(roleName, permission));
-    }
-
-    @RequestMapping(value = "/{roleName}/permissions/{permission}", method = RequestMethod.DELETE)
-    public RoleDto removePermissionToRole(@PathVariable String roleName, @PathVariable String permission) {
-        log.info("Removing permission {} from role with name {}", permission, roleName);
-
-        return map(authorityService.removePermissionFromRole(roleName, permission));
+        return map(authorityService.setPermissionsForRole(roleName, permissions));
     }
 }

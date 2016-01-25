@@ -32,6 +32,9 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     @Inject
     private PlaceService placeService;
 
+    @Inject
+    private UserService userService;
+
     @Override
     public PlaceRequest save(PlaceRequest entity) {
         log.trace("Saving place request: {}", entity);
@@ -52,6 +55,8 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     @PreAuthorize("hasRole(@role.USER)")
     public PlaceRequest requestNewPlace(PlaceRequest placeRequest) {
         log.trace("Requesting new place: {}", placeRequest);
+
+        placeRequest.setRequestingUser(userService.getCurrentUserUpdated().get());
 
         if (placeRequest.getPlace().getCity() != null) {
             final String cityIdentifier = placeRequest.getPlace().getCity().getIdentifier();

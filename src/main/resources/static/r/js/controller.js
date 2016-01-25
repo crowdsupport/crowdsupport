@@ -1,11 +1,11 @@
 (function () {
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
-            'crowdsupport.admin', 'crowdsupport.widget.search', 'crowdsupport.service.rest',
+            'crowdsupport.admin', 'crowdsupport.widget.search',
             'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker'])
-        .controller('WelcomeController', function ($scope, Rest) {
-            $scope.states = Rest.State.query();
+            'ui.bootstrap.datetimepicker', 'restangular'])
+        .controller('WelcomeController', function ($scope, $states) {
+            $scope.states = $states;
         })
         .controller('StateController', function ($scope, $stateRest) {
             $scope.state = $stateRest;
@@ -43,17 +43,13 @@
                 });
             }
         })
-        .controller('AddDonationRequestController', function ($scope, Rest, Status, $uibModalInstance, $timeout) {
+        .controller('AddDonationRequestController', function ($scope, Restangular, Status, $uibModalInstance, $timeout) {
             $scope.request = {};
             $scope.neverExpires = true;
             $scope.minDate = new Date();
             $scope.date = new Date();
 
-            var getRequestParam = function () {
-                return {
-                    id: $scope.$parent.place.id
-                };
-            };
+            var place = $scope.$parent.place;
 
             $scope.create = function () {
                 var r = $scope.request;
@@ -62,8 +58,9 @@
                 }
                 r.active = true;
 
-                Rest.DonationRequest.save(getRequestParam(), r, function(response) {
-                    Status.newStatus(response);
+                console.log(place);
+                place.post('donationRequests', r).then(function () {
+                    Status.success("Successfully created new donation request");
 
                     $uibModalInstance.close($scope.request);
                 });
@@ -71,7 +68,6 @@
 
             $scope.openDatePicker = function () {
                 $timeout(function () {
-                    console.log("Open");
                     $scope.opened = true;
                 });
             };
@@ -81,9 +77,11 @@
                 showMeridian: false
             };
         })
-        .controller('PlaceManagementController', function ($scope, $placeRest, $members, Rest, Status) {
+        .controller('PlaceManagementController', function ($scope, $placeRest, $members, Restangular, Status) {
             $scope.place = $placeRest;
             $scope.members = $members;
+
+            var place = $scope.place;
 
             $scope.setActiveTab = function (initial) {
                 var activeClass = 'active';
@@ -118,29 +116,17 @@
                     }) === -1;
             };
 
-            var getRequestParam = function () {
-                return {
-                    sIdt: $scope.place.city.state.identifier,
-                    cIdt: $scope.place.city.identifier,
-                    pIdt: $scope.place.identifier
-                };
-            };
-
             $scope.addMember = function () {
-                // do rest stuff
-                Rest.PlaceMembers.save(getRequestParam(), $scope.search.username, function (response) {
-                    Status.newStatus(response);
+                place.one('team', $scope.search.username).put().then(function () {
+                    Status.success('Successfully added ' + $scope.search.username + ' to team');
 
                     $scope.members.push($scope.search);
                 });
             };
 
             $scope.removeMember = function (username) {
-                var param = getRequestParam();
-                param.username = username;
-
-                Rest.PlaceMembers.delete(param, function (response) {
-                    Status.newStatus(response);
+                place.one('team', username).remove().then(function () {
+                    Status.success('Successfully deleted ' + username + ' from team');
 
                     $scope.members = $.grep($scope.members, function (e) {
                         return e.username !== username;
@@ -165,9 +151,10 @@
 
             $scope.logout = Auth.logout;
         })
-        .controller('DonationRequestCtrl', function ($scope, Websocket, Rest, Status) {
+        .controller('DonationRequestCtrl', function ($scope, Websocket, Restangular, Status) {
             var that = this;
             var donationRequest = {};
+            var place = $scope.$parent.place;
 
             $scope.comment = '';
 
@@ -178,7 +165,6 @@
             var identifier = getUrlAfterSupport() + '/comments';
 
             this.addComment = function () {
-                console.log($scope.$parent);
                 console.log('Comment for request ' + that.donationRequest.id + ': ' + $scope.comment);
 
                 var commentDto = {
@@ -187,10 +173,10 @@
                     'donationRequestId': that.donationRequest.id
                 };
 
-                Rest.Comments.save({id: $scope.$parent.place.id}, commentDto, function(response) {
-                    Status.newStatus(response);
-                });
-                // Websocket.send(identifier, commentDto);
+                Restangular.one('donationRequest', that.donationRequest.id).post('comments', commentDto)
+                    .then(function () {
+                        Status.success('Successfully created new comment');
+                    });
 
                 $scope.comment = '';
             };
@@ -207,7 +193,7 @@
                 }
             });
         })
-        .controller('PlaceRequestCtrl', function ($scope, Rest, $previousState, Status) {
+        .controller('PlaceRequestCtrl', function ($scope, Restangular, $previousState, Status) {
             $scope.city = {};
             $scope.name = '';
             $scope.identifier = '';
@@ -243,39 +229,39 @@
                     formData.state = $scope.statename;
                 }
 
-                Rest.PlaceRequest.Request.save(formData, function () {
-                    Status.success("Successfully requested place");
+                Restangular.all('placeRequest').post(formData).then(function () {
+                    Status.success('Successfully requested place');
                     $previousState.backOrHome();
                 }, function () {
-                    Status.error("Error while requesting place");
+                    Status.error('Error while requesting place');
                 });
             };
         })
-        .controller('ProfileController', function ($scope, $user, Auth, Rest, $log, Status) {
+        .controller('ProfileController', function ($scope, $user, Auth, Restangular, $log, Status) {
             $scope.user = {};
             $scope.user.username = $user.username;
             $scope.user.email = $user.email;
 
             $scope.submit = function () {
-                $log.debug("Submitting profile data");
-                Rest.User.update($scope.user, function (response) {
-                    Status.newStatus(response);
+                $log.debug('Submitting profile data');
+                Restangular.one('user', 'current').patch($scope.user).then(function () {
+                    Status.success('Successfully updated new user');
                     Auth.updateUser();
                 });
             };
         })
-        .controller('RegistrationController', function ($scope, Auth, Rest, Status, $previousState) {
+        .controller('RegistrationController', function ($scope, Auth, Restangular, Status, $previousState) {
             $scope.user = {};
 
             $scope.register = function () {
-                Rest.User.create($scope.user, function (response) {
-                    var e = angular.element("#login .password");
+                Restangular.all('user').post($scope.user).then(function () {
+                    var e = angular.element('#login .password');
                     e.scope().username = $scope.user.username;
                     e.focus();
 
                     $previousState.backOrHome();
 
-                    Status.newStatus(response);
+                    Status.success('Successfully registered new user');
                 });
             };
         });

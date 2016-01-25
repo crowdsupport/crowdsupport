@@ -18,7 +18,7 @@ public class FullUserDto extends UserDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<String> authorities;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty
     private Set<String> roles;
 
     private List<PlaceDto> managedPlaces;

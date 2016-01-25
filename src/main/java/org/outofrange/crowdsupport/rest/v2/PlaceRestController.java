@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.rest.v2;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.dto.PlaceDto;
+import org.outofrange.crowdsupport.dto.PlaceWithDonationRequestsDto;
 import org.outofrange.crowdsupport.dto.UserDto;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.service.PlaceService;
@@ -29,11 +30,19 @@ public class PlaceRestController extends TypedMappingController<PlaceDto> {
         this.placeService = placeService;
     }
 
+    @RequestMapping(method = RequestMethod.GET, params = {"identifier", "cityIdentifier", "stateIdentifier"})
+    public PlaceWithDonationRequestsDto getPlaceWithIdentifier(@RequestParam String identifier, @RequestParam String cityIdentifier,
+                                                                   @RequestParam String stateIdentifier) {
+        log.info("Querying place in {}/{} named {}", cityIdentifier, stateIdentifier, identifier);
+
+        return map(placeService.load(stateIdentifier, cityIdentifier, identifier).get(), PlaceWithDonationRequestsDto.class);
+    }
+
     @RequestMapping(value = "/{placeId}", method = RequestMethod.GET)
-    public PlaceDto getPlace(@PathVariable Long placeId) {
+    public PlaceWithDonationRequestsDto getPlace(@PathVariable Long placeId) {
         log.info("Querying place with id {}", placeId);
 
-        return map(placeService.loadPlace(placeId));
+        return map(placeService.loadPlace(placeId), PlaceWithDonationRequestsDto.class);
     }
 
     @RequestMapping(value = "/{placeId}/team", method = RequestMethod.GET)

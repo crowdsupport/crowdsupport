@@ -27,7 +27,7 @@ public class CityRestController extends TypedMappingController<CityDto> {
         this.cityService = cityService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "!query")
+    @RequestMapping(method = RequestMethod.GET, params = {"!query", "!identifier", "!stateIdentifier"})
     public List<CityDto> getAllCities() {
         log.info("Querying all cities");
 
@@ -39,6 +39,13 @@ public class CityRestController extends TypedMappingController<CityDto> {
         log.info("Querying all cities like {}", query);
 
         return mapToList(cityService.searchCities(query));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"identifier", "stateIdentifier"})
+    public CityWithPlacesDto getCityWithIdentifier(@RequestParam String stateIdentifier, String identifier) {
+        log.info("Querying city in {} named {}", stateIdentifier, identifier);
+
+        return map(cityService.load(identifier, stateIdentifier).get(), CityWithPlacesDto.class);
     }
 
     @RequestMapping(value = "/{cityId}", method = RequestMethod.GET)

@@ -36,20 +36,20 @@ public class PlaceRequestRestController extends TypedMappingController<PlaceRequ
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<PlaceRequestDto> createNewPlaceRequest(@RequestBody PlaceRequestDto placeRequestDto) {
-        log.info("Requesting new place {}", placeRequestDto);
+    public ResponseEntity<PlaceRequestDto> createNewPlaceRequest(@RequestBody PlaceRequest placeRequest) {
+        log.info("Requesting new place {}", placeRequest);
 
-        final PlaceRequest requestedPlace = placeRequestService.requestNewPlace(map(placeRequestDto, PlaceRequest.class));
+        final PlaceRequest requestedPlace = placeRequestService.requestNewPlace(placeRequest);
         final PlaceRequestDto requestedPlaceDto = map(requestedPlace);
 
         return ResponseEntity.created(requestedPlaceDto.uri()).body(requestedPlaceDto);
     }
 
     @RequestMapping(value = "/{requestId}/accept", method = RequestMethod.POST)
-    public ResponseEntity<PlaceDto> acceptPlaceRequest(@PathVariable Long requestId, @RequestBody PlaceRequestDto placeRequestDto) {
+    public ResponseEntity<PlaceDto> acceptPlaceRequest(@PathVariable Long requestId, @RequestBody PlaceRequest placeRequest) {
         log.info("Accepting place request with id {}", requestId);
 
-        final PlaceRequest savedPlaceRequest = placeRequestService.saveNewPlace(map(placeRequestDto, PlaceRequest.class));
+        final PlaceRequest savedPlaceRequest = placeRequestService.saveNewPlace(placeRequest);
         final PlaceDto placeDto = map(savedPlaceRequest.getPlace(), PlaceDto.class);
 
         return ResponseEntity.created(placeDto.uri()).body(placeDto);
