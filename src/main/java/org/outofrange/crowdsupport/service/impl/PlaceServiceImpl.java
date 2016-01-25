@@ -83,6 +83,32 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    public Place addUserToTeam(long placeId, String username) {
+        log.debug("Adding user {} to team of place with id {}", username, placeId);
+
+        final Place placeDb = placeRepository.findOne(placeId);
+        final User userDb = userRepository.findOneByUsername(username).get();
+
+        if (!placeDb.getTeam().getMembers().contains(userDb)) {
+            placeDb.getTeam().getMembers().add(userDb);
+
+            // we don't need to save the whole place again
+            placeDb.setTeam(teamRepository.save(placeDb.getTeam()));
+        } else {
+            log.debug("Nothing to do, user with username {} already in team of place {}", username, placeDb);
+        }
+
+        return placeDb;
+    }
+
+    @Override
+    public Place loadPlace(long id) {
+        log.debug("Loading place with id {}", id);
+
+        return placeRepository.findOne(id);
+    }
+
+    @Override
     public void removeUserFromTeam(Place place, String username) {
         log.debug("Removing user {} from team of place {}", username, place);
 
@@ -96,11 +122,28 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void addDonationRequest(Long placeId, DonationRequest donationRequest) {
+    public Place removeUserFromTeam(Long placeId, String username) {
+        log.debug("Removing user {} from team of place with id {}", username, placeId);
+
+        final Place placeDb = placeRepository.findOne(placeId);
+        final User userDb = userRepository.findOneByUsername(username).get();
+
+        if (placeDb.getTeam().getMembers().remove(userDb)) {
+            // we don't need to save the whole place again
+            placeDb.setTeam(teamRepository.save(placeDb.getTeam()));
+        } else {
+            log.debug("Nothing to do, found no user with username {} in team of place {}", username, placeDb);
+        }
+
+        return placeDb;
+    }
+
+    @Override
+    public DonationRequest addDonationRequest(Long placeId, DonationRequest donationRequest) {
         log.debug("Adding donation request {} to place {}", donationRequest, placeId);
 
         final Place placeDb = placeRepository.findOne(placeId);
         donationRequest.setPlace(placeDb);
-        donationRequestRepository.save(donationRequest);
+        return donationRequestRepository.save(donationRequest);
     }
 }

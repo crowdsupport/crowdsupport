@@ -5,7 +5,7 @@ import java.time.ZonedDateTime;
 /**
  * @author Markus Möslinger
  */
-public class CommentDto extends BaseDto {
+public class CommentDto extends LinkBaseDto {
     private String text;
 
     private FullUserDto author;
@@ -54,5 +54,10 @@ public class CommentDto extends BaseDto {
 
     public void setDonationRequestId(Long donationRequestId) {
         this.donationRequestId = donationRequestId;
+    }
+
+    @Override
+    protected String self() {
+        return "/comment" + getId();
     }
 }

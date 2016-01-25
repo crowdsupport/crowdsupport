@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Markus Möslinger
  */
-public class DonationRequestDto extends BaseDto {
+public class DonationRequestDto extends LinkBaseDto {
     private Long id;
 
     private String title;
@@ -85,5 +85,10 @@ public class DonationRequestDto extends BaseDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    protected String self() {
+        return "/donationRequest/" + getId();
     }
 }

@@ -15,7 +15,13 @@ public interface PlaceService extends BaseService<Place> {
 
     void addUserToTeam(Place place, String username);
 
+    Place addUserToTeam(long placeId, String username);
+
+    Place loadPlace(long id);
+
     void removeUserFromTeam(Place place, String username);
 
-    void addDonationRequest(Long placeId, DonationRequest donationRequest);
+    Place removeUserFromTeam(Long placeId, String username);
+
+    DonationRequest addDonationRequest(Long placeId, DonationRequest donationRequest);
 }
