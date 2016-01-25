@@ -1,7 +1,7 @@
 package org.outofrange.crowdsupport.service;
 
-import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.dto.FullUserDto;
+import org.outofrange.crowdsupport.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,15 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserService extends BaseService<User>, UserDetailsService {
+public interface UserService extends UserDetailsService {
     User updateProfile(FullUserDto userDto);
 
     User createUser(FullUserDto userDto);
 
-    User updateAll(String username, FullUserDto userDto);
-
-    @Transactional(readOnly = false)
-    @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     User updateAll(long userId, FullUserDto userDto);
 
     List<User> queryUsers(String like);
@@ -32,5 +28,7 @@ public interface UserService extends BaseService<User>, UserDetailsService {
 
     Optional<User> getCurrentUserUpdated();
 
-    boolean isUserLoggedIn();
+    User save(User entity);
+
+    List<User> loadAll();
 }

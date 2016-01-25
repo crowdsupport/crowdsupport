@@ -2,8 +2,10 @@ package org.outofrange.crowdsupport.service;
 
 import org.outofrange.crowdsupport.model.DonationRequest;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface DonationRequestService extends BaseService<DonationRequest> {
-    Optional<DonationRequest> loadWithId(long id);
+public interface DonationRequestService {
+    DonationRequest save(DonationRequest entity);
+
+    List<DonationRequest> loadAll();
 }

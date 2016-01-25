@@ -8,7 +8,6 @@ import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.CommentRepository;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
-import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.util.CsModelMapper;
@@ -26,9 +25,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Inject
     private CommentRepository commentRepository;
-
-    @Inject
-    private PlaceRepository placeRepository;
 
     @Inject
     private DonationRequestRepository donationRequestRepository;
@@ -50,25 +46,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> loadAll() {
         return commentRepository.findAll();
-    }
-
-    @Override
-    public Comment addComment(Long placeId, Long donationRequestId, Comment comment) {
-        log.debug("Comment for place with id {}: {}", placeId, comment);
-
-        final Place place = placeRepository.findOne(placeId);
-
-        User user = userService.getCurrentUserUpdated().get();
-
-        comment.setAuthor(user);
-        comment.setDonationRequest(donationRequestRepository.getOne(donationRequestId));
-        comment = save(comment);
-
-        final String topic = "/topic/" + place.getCity().getState().getIdentifier() + "/" +
-                place.getCity().getIdentifier() + "/" + place.getIdentifier() + "/comments";
-        template.convertAndSend(topic, ChangeDto.add(mapper.map(comment, CommentDto.class)));
-
-        return comment;
     }
 
     @Override

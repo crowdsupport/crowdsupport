@@ -4,7 +4,7 @@ import org.outofrange.crowdsupport.model.PlaceRequest;
 
 import java.util.List;
 
-public interface PlaceRequestService extends BaseService<PlaceRequest> {
+public interface PlaceRequestService {
     List<PlaceRequest> loadAllWithInactivePlace();
 
     PlaceRequest requestNewPlace(PlaceRequest placeRequest);
@@ -12,4 +12,8 @@ public interface PlaceRequestService extends BaseService<PlaceRequest> {
     PlaceRequest saveNewPlace(PlaceRequest placeRequest);
 
     void declinePlaceRequest(Long requestId);
+
+    PlaceRequest save(PlaceRequest entity);
+
+    List<PlaceRequest> loadAll();
 }

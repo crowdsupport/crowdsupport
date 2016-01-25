@@ -81,15 +81,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = false)
     @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
-    public User updateAll(String username, FullUserDto userDto) {
-        final User user = userRepository.findOneByUsername(username).get();
-
-        return updateUser(user, userDto, true);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     public User updateAll(long userId, FullUserDto userDto) {
         final User user = userRepository.findOne(userId);
 
@@ -178,8 +169,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public boolean isUserLoggedIn() {
-        return getCurrentUser().isPresent();
-    }
 }

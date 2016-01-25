@@ -53,21 +53,6 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City saveOrRetrieveCity(City city) {
-        final Optional<City> loadedCity = load(city.getIdentifier(), city.getState().getIdentifier());
-
-        if (loadedCity.isPresent()) {
-            if (loadedCity.get().equals(city)) {
-                return loadedCity.get();
-            } else {
-                throw new ServiceException("Found different city with same identifier: " + loadedCity.get());
-            }
-        }
-
-        return save(city);
-    }
-
-    @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_CITIES)")
     public City createCity(String name, String identifier, String imagePath, String stateIdentifier) {
         if (cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, identifier).isPresent()) {

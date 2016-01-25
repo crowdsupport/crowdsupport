@@ -59,18 +59,4 @@ public class StateServiceImpl implements StateService {
         return stateRepository.findAllByNameContainingIgnoreCase(query);
     }
 
-    @Override
-    public State saveOrRetrieveState(State state) {
-        final Optional<State> loadedState = stateRepository.findOneByIdentifier(state.getIdentifier());
-
-        if (loadedState.isPresent()) {
-            if (loadedState.get().equals(state)) {
-                return loadedState.get();
-            } else {
-                throw new ServiceException("Found different state with same identifier: " + loadedState.get());
-            }
-        } else {
-            return save(state);
-        }
-    }
 }

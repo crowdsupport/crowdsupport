@@ -2,10 +2,8 @@ package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.model.Permission;
 import org.outofrange.crowdsupport.model.Role;
-import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.PermissionRepository;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
-import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
@@ -23,9 +21,6 @@ import java.util.stream.Collectors;
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
     private static final Logger log = LoggerFactory.getLogger(AuthorityServiceImpl.class);
-
-    @Inject
-    private UserRepository userRepository;
 
     @Inject
     private RoleRepository roleRepository;
@@ -48,18 +43,6 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
-    public User setRolesForUser(User user, Collection<Role> roles) {
-        log.debug("Setting roles for user {}: {}", user, roles);
-
-        final User userDb = userRepository.findOne(user.getId());
-
-        userDb.setRoles(roles);
-
-        return userRepository.save(userDb);
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
     public Role createRoleIfNeeded(String roleName) {
         log.debug("Creating role {}", roleName);
 
@@ -69,26 +52,6 @@ public class AuthorityServiceImpl implements AuthorityService {
         } else {
             return roleDb.get();
         }
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
-    public Role addPermissionToRole(String roleName, String permission) {
-        log.debug("Adding permission {} to role {}");
-
-        final Role roleDb = roleRepository.findOneByName(roleName).get();
-        roleDb.addPermission(permissionRepository.findOneByName(permission).get());
-        return roleRepository.save(roleDb);
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
-    public Role removePermissionFromRole(String roleName, String permission) {
-        log.debug("Adding permission {} to role {}");
-
-        final Role roleDb = roleRepository.findOneByName(roleName).get();
-        roleDb.removePermission(permissionRepository.findOneByName(permission).get());
-        return roleRepository.save(roleDb);
     }
 
     @Override

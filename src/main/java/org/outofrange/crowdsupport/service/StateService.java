@@ -5,7 +5,7 @@ import org.outofrange.crowdsupport.model.State;
 import java.util.List;
 import java.util.Optional;
 
-public interface StateService extends BaseService<State> {
+public interface StateService {
     Optional<State> load(String identifier);
 
     State load(long id);
@@ -14,5 +14,7 @@ public interface StateService extends BaseService<State> {
 
     List<State> searchStates(String query);
 
-    State saveOrRetrieveState(State state);
+    State save(State entity);
+
+    List<State> loadAll();
 }

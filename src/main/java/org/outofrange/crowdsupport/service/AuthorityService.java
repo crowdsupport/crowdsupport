@@ -10,13 +10,7 @@ import java.util.Set;
 public interface AuthorityService {
     Role setPermissionsForRole(String role, Collection<String> permissions);
 
-    User setRolesForUser(User user, Collection<Role> role);
-
     Role createRoleIfNeeded(String name);
-
-    Role addPermissionToRole(String roleName, String permission);
-
-    Role removePermissionFromRole(String roleName, String permission);
 
     void deleteRole(String roleName);
 

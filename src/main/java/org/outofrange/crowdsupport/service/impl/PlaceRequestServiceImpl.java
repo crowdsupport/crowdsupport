@@ -24,9 +24,6 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     private PlaceRequestRepository placeRequestRepository;
 
     @Inject
-    private TeamRepository teamRepository;
-
-    @Inject
     private CityService cityService;
 
     @Inject

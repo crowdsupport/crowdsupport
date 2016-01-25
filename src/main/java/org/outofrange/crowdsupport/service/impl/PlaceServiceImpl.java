@@ -57,29 +57,9 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<Place> loadActivePlaces(String identifier) {
-        log.trace("Loading active places for city with identifier {}", identifier);
-
-        return placeRepository.findByActiveTrueAndCityIdentifier(identifier);
-    }
-
-    @Override
     public void deletePlace(Place place) {
         log.debug("Deleting place {}", place);
         placeRepository.delete(place);
-    }
-
-    @Override
-    public void addUserToTeam(Place place, String username) {
-        log.debug("Adding user {} to team of place {}", username, place);
-
-        final Place placeDb = placeRepository.findOneByIdentifier(place.getIdentifier()).get();
-        final User userDb = userRepository.findOneByUsername(username).get();
-
-        placeDb.getTeam().getMembers().add(userDb);
-
-        // we don't need to save the whole place again
-        teamRepository.save(placeDb.getTeam());
     }
 
     @Override
@@ -106,19 +86,6 @@ public class PlaceServiceImpl implements PlaceService {
         log.debug("Loading place with id {}", id);
 
         return placeRepository.findOne(id);
-    }
-
-    @Override
-    public void removeUserFromTeam(Place place, String username) {
-        log.debug("Removing user {} from team of place {}", username, place);
-
-        final Place placeDb = placeRepository.findOneByIdentifier(place.getIdentifier()).get();
-        final User userDb = userRepository.findOneByUsername(username).get();
-
-        placeDb.getTeam().getMembers().remove(userDb);
-
-        // we don't need to save the whole place again
-        teamRepository.save(placeDb.getTeam());
     }
 
     @Override
