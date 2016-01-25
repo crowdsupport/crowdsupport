@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @ApiVersion("2")
 @RequestMapping(value = "/place")
-public class PlaceRestController extends TypeMappingController<PlaceDto> {
+public class PlaceRestController extends TypedMappingController<PlaceDto> {
     private static final Logger log = LoggerFactory.getLogger(PlaceRestController.class);
 
     private final PlaceService placeService;

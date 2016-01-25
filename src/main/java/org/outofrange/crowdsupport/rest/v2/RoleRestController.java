@@ -15,7 +15,7 @@ import java.util.Set;
 @RestController
 @ApiVersion("2")
 @RequestMapping(value = "/role")
-public class RoleRestController extends TypeMappingController<RoleDto> {
+public class RoleRestController extends TypedMappingController<RoleDto> {
     private static final Logger log = LoggerFactory.getLogger(RoleRestController.class);
 
     private final AuthorityService authorityService;

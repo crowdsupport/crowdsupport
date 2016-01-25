@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @ApiVersion("2")
 @RequestMapping(value = "/state")
-public class StateRestController extends TypeMappingController<StateDto> {
+public class StateRestController extends TypedMappingController<StateDto> {
     private static final Logger log = LoggerFactory.getLogger(StateRestController.class);
 
     private final StateService stateService;

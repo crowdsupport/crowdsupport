@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @ApiVersion("2")
 @RequestMapping(value = "/city")
-public class CityRestController extends TypeMappingController<CityDto> {
+public class CityRestController extends TypedMappingController<CityDto> {
     private static final Logger log = LoggerFactory.getLogger(CityRestController.class);
 
     private final CityService cityService;

@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @ApiVersion("2")
 @RequestMapping(value = "/user")
-public class UserRestController extends TypeMappingController<UserDto> {
+public class UserRestController extends TypedMappingController<UserDto> {
     private static final Logger log = LoggerFactory.getLogger(UserRestController.class);
 
     private final UserService userService;

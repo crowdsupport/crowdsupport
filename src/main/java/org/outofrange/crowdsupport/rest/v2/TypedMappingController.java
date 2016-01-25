@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public abstract class TypeMappingController<T> extends MappingController {
+public abstract class TypedMappingController<T> extends MappingController {
     private final Class<T> mappingClass;
 
-    public TypeMappingController(ModelMapper mapper, Class<T> mappingClass) {
+    public TypedMappingController(ModelMapper mapper, Class<T> mappingClass) {
         super(mapper);
         this.mappingClass = mappingClass;
     }
