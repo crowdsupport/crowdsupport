@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface CityService extends BaseService<City> {
     Optional<City> load(String identifier, String stateIdentifier);
 
+    City load(long id);
+
     List<City> searchCities(String query);
 
     City saveOrRetrieveCity(City city);

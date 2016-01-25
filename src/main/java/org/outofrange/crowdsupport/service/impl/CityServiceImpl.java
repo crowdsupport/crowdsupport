@@ -43,6 +43,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    public City load(long id) {
+        return cityRepository.findOne(id);
+    }
+
+    @Override
     public List<City> searchCities(String query) {
         return cityRepository.findAllByNameContainingIgnoreCase(query);
     }
