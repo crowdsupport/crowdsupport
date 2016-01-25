@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.rest.v2;
+package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.service.AuthorityService;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import java.util.Set;
 
 @RestController
-@ApiVersion("2")
+@ApiVersion("1")
 @RequestMapping(value = "/permission")
 public class PermissionRestController extends MappingController {
     private static final Logger log = LoggerFactory.getLogger(PermissionRestController.class);

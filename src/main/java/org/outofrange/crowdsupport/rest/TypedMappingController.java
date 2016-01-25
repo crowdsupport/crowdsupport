@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.rest.v2;
+package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
 
@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public abstract class TypedMappingController<T> extends MappingController {
+abstract class TypedMappingController<T> extends MappingController {
     private final Class<T> mappingClass;
 
     public TypedMappingController(ModelMapper mapper, Class<T> mappingClass) {

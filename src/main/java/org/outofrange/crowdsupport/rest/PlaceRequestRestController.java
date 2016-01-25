@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.rest.v2;
+package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.PlaceDto;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @RestController
-@ApiVersion("2")
+@ApiVersion("1")
 @RequestMapping(value = "/placeRequest")
 public class PlaceRequestRestController extends TypedMappingController<PlaceRequestDto> {
     private static final Logger log = LoggerFactory.getLogger(PlaceRequestRestController.class);

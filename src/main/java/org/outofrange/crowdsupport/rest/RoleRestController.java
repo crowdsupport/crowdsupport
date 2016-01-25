@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.rest.v2;
+package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.RoleDto;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@ApiVersion("2")
+@ApiVersion("1")
 @RequestMapping(value = "/role")
 public class RoleRestController extends TypedMappingController<RoleDto> {
     private static final Logger log = LoggerFactory.getLogger(RoleRestController.class);

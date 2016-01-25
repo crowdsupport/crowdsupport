@@ -14,7 +14,7 @@
             $httpProvider.interceptors.push('jwtInterceptor');
         })
         .config(function(RestangularProvider) {
-            RestangularProvider.setBaseUrl('/service/v2');
+            RestangularProvider.setBaseUrl('/service/v1');
             RestangularProvider.setRestangularFields({
                 selfLink: 'links[0].href'
             });

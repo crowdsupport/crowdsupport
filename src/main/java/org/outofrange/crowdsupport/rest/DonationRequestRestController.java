@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.rest.v2;
+package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.CommentDto;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 
 @RestController
-@ApiVersion("2")
+@ApiVersion("1")
 @RequestMapping(value = "/donationRequest")
 public class DonationRequestRestController extends MappingController {
     private static final Logger log = LoggerFactory.getLogger(DonationRequestRestController.class);

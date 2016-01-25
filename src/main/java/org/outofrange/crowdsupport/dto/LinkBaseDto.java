@@ -10,8 +10,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
@@ -22,9 +20,6 @@ public abstract class LinkBaseDto extends BaseDto {
 
     private final boolean autoSelfLink;
     private boolean selfLinkAdded = false;
-
-    @Inject
-    private ServletContext servletContext;
 
     public LinkBaseDto() {
         this(true);
@@ -52,15 +47,14 @@ public abstract class LinkBaseDto extends BaseDto {
     }
 
     protected String selfLink() {
-        return getWholeContextPath() + "/service/v2" + self();
+        return getWholeContextPath() + "/service/v1" + self();
     }
 
     protected abstract String self();
 
     private static HttpServletRequest getCurrentRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest servletRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
-        return servletRequest;
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
     private static String getWholeContextPath() {

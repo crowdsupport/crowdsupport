@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.rest.v2;
+package org.outofrange.crowdsupport.rest;
 
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.spring.ApiVersion;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 
 @RestController
-@ApiVersion("2")
+@ApiVersion("1")
 @RequestMapping(value = "/comment")
 public class CommentRestController {
     private static final Logger log = LoggerFactory.getLogger(CommentRestController.class);
