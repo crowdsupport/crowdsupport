@@ -3,7 +3,7 @@
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.admin', 'crowdsupport.widget.search',
             'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker', 'restangular'])
+            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate'])
         .controller('WelcomeController', function ($scope, $states) {
             $scope.states = $states;
         })
