@@ -123,6 +123,7 @@
         })
         .controller('PlaceController', function ($scope, $placeRest, Websocket, $rootScope, $uibModal) {
             $scope.place = $placeRest;
+            $scope.f = {open: true, enroute: false, done: false};
 
             var identifier = getUrlAfterSupport() + '/comments';
 
@@ -153,6 +154,40 @@
         })
         .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status) {
             $scope.donationRequests = $scope.$parent.place.donationRequests;
+
+            $scope.order = function (request) {
+                var o;
+                switch (request.ui.state) {
+                    case 'open':
+                        o = 0;
+                        break;
+                    case 'enroute':
+                        o = 1;
+                        break;
+                    case 'done':
+                        o = 2;
+                        break;
+                    default:
+                        o = -1;
+                        break;
+                }
+
+                return [o, request.createdDateTime];
+            };
+
+            $scope.filter = function (request) {
+                var f = $scope.$parent.f;
+                switch (request.ui.state) {
+                    case 'open':
+                        return f.open;
+                    case 'enroute':
+                        return f.enroute;
+                    case 'done':
+                        return f.done;
+                    default:
+                        return true;
+                }
+            };
 
             var identifier = getUrlAfterSupport() + '/comments';
 
@@ -212,6 +247,10 @@
                                 state = 'open';
                             }
                         }
+                    }
+
+                    if (!state) {
+                        state = 'open';
                     }
 
                     request.ui.state = state;
