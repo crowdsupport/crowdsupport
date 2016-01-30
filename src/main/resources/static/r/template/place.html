@@ -25,22 +25,22 @@
         </nav>
     </div>
 
-    <div class="row" id="donationrequests">
-        <div ng-repeat="donationRequest in place.donationRequests" class="box col-md-2 col-sm-4 col-xs-12">
-            <div ng-controller="DonationRequestCtrl as donationRequestCtrl" ng-init="donationRequestCtrl.init(donationRequest)">
-                <h3>{{donationRequest.title}}</h3>
+    <div class="row" id="donationrequests" ng-controller="DonationRequestsCtrl">
+        <div ng-repeat="req in donationRequests" class="box col-md-2 col-sm-4 col-xs-12">
+            <div>
+                <h3>{{req.title}}</h3>
 
-                <p>{{donationRequest.description}}</p>
+                <p>{{req.description}}</p>
 
-                <div>Posted: <span class="time-ago" title="{{donationRequest.createdDateTime}}"></span></div>
-                <div ng-show="donationRequest.validToDateTime">Until: {{donationRequest.validToDateTime}}</div>
-                <div ng-if="donationRequest.quantity > 0">
-                    Quantity: {{donationRequest.quantity}}
+                <div>Posted: <span class="time-ago" title="{{req.createdDateTime}}"></span></div>
+                <div ng-show="req.validToDateTime">Until: {{req.validToDateTime}}</div>
+                <div ng-if="req.quantity > 0">
+                    Quantity: {{req.quantity}}
                 </div>
 
                 <div>
-                    <div ng-show="donationRequest.comments">
-                        <div ng-repeat="comment in donationRequest.comments" class="box">
+                    <div ng-show="req.comments">
+                        <div ng-repeat="comment in req.comments" class="box">
                             <p><b>{{comment.author.username}}</b>: {{comment.text}}</p>
 
                             <p ng-if="comment.quantity > 0">Quantity: {{comment.quantity}}</p>
@@ -48,9 +48,9 @@
                     </div>
 
                     <div ng-show="$root.user">
-                        <form ng-submit="donationRequestCtrl.addComment()" name="commentForm">
-                            <input type="text" placeholder="New comment..." ng-model="comment"/>
-                            <button ng-disabled="comment.length === 0">Send</button>
+                        <form ng-submit="req.sendComment()" name="commentForm">
+                            <input type="text" placeholder="New comment..." ng-model="req.commentText"/>
+                            <button ng-disabled="req.commentText.length === 0">Send</button>
                         </form>
                     </div>
                 </div>

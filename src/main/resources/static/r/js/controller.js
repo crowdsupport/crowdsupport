@@ -13,36 +13,6 @@
         .controller('CityController', function ($scope, $cityRest) {
             $scope.city = $cityRest;
         })
-        .controller('PlaceController', function ($scope, $placeRest, Websocket, $rootScope, $uibModal) {
-            $scope.place = $placeRest;
-
-            var identifier = getUrlAfterSupport() + '/comments';
-
-            $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-                Websocket.unsubscribe(identifier);
-            });
-
-            $scope.inTeam = function () {
-                if (!$rootScope.user || !$rootScope.user.managedPlaces) {
-                    return false;
-                }
-
-                return $rootScope.user.managedPlaces.findIndex(function (p) {
-                        return p.identifier === $scope.place.identifier
-                            && p.city.identifier === $scope.place.city.identifier
-                            && p.city.state.identifier === $scope.place.city.state.identifier;
-                    }) >= 0;
-            };
-
-            $scope.addRequest = function () {
-                $uibModal.open({
-                    animation: true,
-                    templateUrl: '/r/template/addDonationRequest.html',
-                    controller: 'AddDonationRequestController',
-                    scope: $scope
-                });
-            }
-        })
         .controller('AddDonationRequestController', function ($scope, Restangular, Status, $uibModalInstance, $timeout) {
             $scope.request = {};
             $scope.neverExpires = true;
@@ -151,45 +121,73 @@
 
             $scope.logout = Auth.logout;
         })
-        .controller('DonationRequestCtrl', function ($scope, Websocket, Restangular, Status) {
-            var that = this;
-            var donationRequest = {};
-            var place = $scope.$parent.place;
-
-            $scope.comment = '';
-
-            this.init = function (donationRequest) {
-                that.donationRequest = donationRequest;
-            };
+        .controller('PlaceController', function ($scope, $placeRest, Websocket, $rootScope, $uibModal) {
+            $scope.place = $placeRest;
 
             var identifier = getUrlAfterSupport() + '/comments';
 
-            this.addComment = function () {
-                console.log('Comment for request ' + that.donationRequest.id + ': ' + $scope.comment);
+            $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+                Websocket.unsubscribe(identifier);
+            });
 
-                var commentDto = {
-                    'text': $scope.comment,
-                    'quantity': 0,
-                    'donationRequestId': that.donationRequest.id
-                };
+            $scope.inTeam = function () {
+                if (!$rootScope.user || !$rootScope.user.managedPlaces) {
+                    return false;
+                }
 
-                Restangular.one('donationRequest', that.donationRequest.id).post('comments', commentDto)
-                    .then(function () {
-                        Status.success('Successfully created new comment');
-                    });
-
-                $scope.comment = '';
+                return $rootScope.user.managedPlaces.findIndex(function (p) {
+                        return p.identifier === $scope.place.identifier
+                            && p.city.identifier === $scope.place.city.identifier
+                            && p.city.state.identifier === $scope.place.city.state.identifier;
+                    }) >= 0;
             };
 
+            $scope.addRequest = function () {
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: '/r/template/addDonationRequest.html',
+                    controller: 'AddDonationRequestController',
+                    scope: $scope
+                });
+            }
+        })
+        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status) {
+            $scope.donationRequests = $scope.$parent.place.donationRequests;
+
+            var identifier = getUrlAfterSupport() + '/comments';
+
+            var enhanceRequest = function (request) {
+                request.commentText = '';
+
+                request.sendComment = function () {
+                    console.log('Comment for request ' + request.id + ': ' + request.commentText);
+
+                    var commentDto = {
+                        'text': request.commentText,
+                        'quantity': 0,
+                        'donationRequestId': request.id
+                    };
+
+                    Restangular.one('donationRequest', request.id).post('comments', commentDto)
+                        .then(function () {
+                            Status.success('Successfully sent new comment');
+                        });
+
+                    request.commentText = '';
+                };
+
+                return request;
+            };
+
+            _.forEach($scope.donationRequests, enhanceRequest);
+
             Websocket.when(identifier).then(null, null, function (message) {
-                // TODO the donationRequests controller (the one which should only exist once per site) should register this,
-                // and forward the comments to the appropriate donationRequest controller, so not every single donationRequest
-                // listens to every single comment update
                 if (message.changeType == 'ADD' && message.entity == 'CommentDto') {
                     message = message.payload;
-                    if (that.donationRequest.id == message.donationRequestId) {
-                        that.donationRequest.comments.push(message);
-                    }
+
+                    _.find($scope.donationRequests, function(request) {
+                        return request.id === message.donationRequestId;
+                    }).comments.push(message);
                 }
             });
         })
