@@ -18,5 +18,10 @@
             RestangularProvider.setRestangularFields({
                 selfLink: 'links[0].href'
             });
+        })
+        .filter('posNum', function () {
+            return function (input) {
+                return input > 0 ? input : 0;
+            };
         });
 })();

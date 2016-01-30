@@ -157,37 +157,86 @@
             var identifier = getUrlAfterSupport() + '/comments';
 
             var enhanceRequest = function (request) {
-                request.commentText = '';
+                request.ui = {};
 
-                request.sendComment = function () {
-                    console.log('Comment for request ' + request.id + ': ' + request.commentText);
+                request.ui.commentText = '';
+
+                request.ui.sendComment = function () {
+                    console.log('Comment for request ' + request.id + ': ' + request.ui.commentText);
 
                     var commentDto = {
-                        'text': request.commentText,
-                        'quantity': 0,
+                        'text': request.ui.commentText,
                         'donationRequestId': request.id
                     };
+                    if (request.quantity) {
+                        commentDto.quantity = request.ui.commentQuantity;
+                    }
 
                     Restangular.one('donationRequest', request.id).post('comments', commentDto)
                         .then(function () {
                             Status.success('Successfully sent new comment');
                         });
 
-                    request.commentText = '';
+                    request.ui.commentText = '';
                 };
+
+                request.ui.refreshRequest = function () {
+                    var state;
+                    request.active = true;
+                    if (!request.active) {
+                        state = 'done';
+                    }
+
+                    if (request.quantity && request.comments) {
+                        var qConfirmed = 0;
+                        var qPromised = 0;
+
+                        _.forEach(request.comments, function (comment) {
+                            if (comment.confirmed) {
+                                qConfirmed += comment.quantity;
+                            } else {
+                                qPromised += comment.quantity;
+                            }
+                        });
+
+                        request.ui.confirmed = qConfirmed;
+                        request.ui.pConfirmed = Math.round(qConfirmed / request.quantity * 100);
+                        request.ui.promised = qPromised;
+                        request.ui.pPromised = Math.round(qPromised / request.quantity * 100);
+                        request.ui.quantityLeft = request.quantity - qConfirmed - qPromised;
+
+                        if (request.active) {
+                            if (request.ui.quantityLeft <= 0) {
+                                state = 'enroute';
+                            } else {
+                                state = 'open';
+                            }
+                        }
+                    }
+
+                    request.ui.state = state;
+                };
+                request.ui.refreshRequest();
+                request.tags = ['Food', 'Donation'];
 
                 return request;
             };
-
             _.forEach($scope.donationRequests, enhanceRequest);
 
-            Websocket.when(identifier).then(null, null, function (message) {
-                if (message.changeType == 'ADD' && message.entity == 'CommentDto') {
-                    message = message.payload;
 
-                    _.find($scope.donationRequests, function(request) {
-                        return request.id === message.donationRequestId;
-                    }).comments.push(message);
+            Websocket.when(identifier).then(null, null, function (message) {
+                if (message.entity == 'CommentDto') {
+                    if (message.changeType == 'ADD') {
+                        message = message.payload;
+
+                        _.find($scope.donationRequests, function (request) {
+                            return request.id === message.donationRequestId;
+                        }).comments.push(message);
+                    }
+
+                    _.forEach($scope.donationRequests, function (request) {
+                        request.ui.refreshRequest();
+                    });
                 }
             });
         })
