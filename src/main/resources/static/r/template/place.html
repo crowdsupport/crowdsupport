@@ -47,7 +47,7 @@
                     <div class="justified-and-inlined">
                         <div>Need</div>
                         <div uib-tooltip-template="'tooltip.html'">
-                            {{req.ui.quantityLeft | posNum}} {{req.unit}} <span
+                            {{req.ui.quantityLeft | posNum}} {{req.units}} <span
                                 ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             <div class="media-body">
                                 <b>{{comment.author.username}}</b>: {{comment.text}}
 
-                                <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}} {{req.unit}}</p>
+                                <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}} {{req.units}}</p>
                             </div>
                         </div>
                         <div ng-if="inTeam()" class="pull-right">
@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-                <div class="well" ng-show="$root.user && req.active">
+                <div class="well" ng-show="$root.user && !req.resolved">
                     <form ng-submit="req.ui.sendComment()" name="commentForm">
                         <div class="media">
                             <div class="media-left">

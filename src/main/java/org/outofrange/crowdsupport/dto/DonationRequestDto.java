@@ -21,7 +21,9 @@ public class DonationRequestDto extends LinkBaseDto {
 
     private List<CommentDto> comments;
 
-    private boolean active;
+    private boolean resolved;
+
+    private String units;
 
     public String getTitle() {
         return title;
@@ -63,12 +65,12 @@ public class DonationRequestDto extends LinkBaseDto {
         this.comments = comments;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isResolved() {
+        return resolved;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setResolved(boolean resolved) {
+        this.resolved = resolved;
     }
 
     public ZonedDateTime getCreatedDateTime() {
@@ -85,6 +87,14 @@ public class DonationRequestDto extends LinkBaseDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 
     @Override

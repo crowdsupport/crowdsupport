@@ -19,6 +19,9 @@ public class Comment extends BaseEntity {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "confirmed")
+    private boolean confirmed;
+
     public String getText() {
         return text;
     }
@@ -49,5 +52,13 @@ public class Comment extends BaseEntity {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 }

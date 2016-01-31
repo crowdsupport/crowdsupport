@@ -1,19 +1,13 @@
 package org.outofrange.crowdsupport.model;
 
-import org.ocpsoft.prettytime.PrettyTime;
-import org.outofrange.crowdsupport.util.DateConverter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Entity
 @Table(name = "DonationRequests")
 public class DonationRequest extends BaseEntity {
-    private static final PrettyTime PRETTY_TIME = new PrettyTime(Locale.ENGLISH);
-
     @ManyToOne
     @JoinColumn(name = "place")
     private Place place;
@@ -30,11 +24,14 @@ public class DonationRequest extends BaseEntity {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "units")
+    private String units;
+
     @OneToMany(mappedBy = "donationRequest", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Comment> comments = new ArrayList<>();
 
-    @Column(name = "active")
-    private boolean active;
+    @Column(name = "resolved")
+    private boolean resolved;
 
     public Place getPlace() {
         return place;
@@ -90,12 +87,12 @@ public class DonationRequest extends BaseEntity {
         comments.add(comment);
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isResolved() {
+        return resolved;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setResolved(boolean resolved) {
+        this.resolved = resolved;
     }
 
     public int getPromisedQuantity() {
@@ -119,11 +116,11 @@ public class DonationRequest extends BaseEntity {
         return (float)(getPromisedQuantity()) / getQuantity() * 100 - getConfirmedPercentage();
     }
 
-    public String getAge() {
-        return PRETTY_TIME.format(DateConverter.toDate(getCreatedDateTime().toLocalDateTime()));
+    public String getUnits() {
+        return units;
     }
 
-    public String getUntil() {
-        return PRETTY_TIME.format(DateConverter.toDate(LocalDateTime.now().plusHours(6)));
+    public void setUnits(String units) {
+        this.units = units;
     }
 }

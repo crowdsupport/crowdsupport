@@ -26,7 +26,7 @@
                 if (!neverExpires) {
                     r.validTo = $scope.date;
                 }
-                r.active = true;
+                r.resolved = false;
 
                 console.log(place);
                 place.post('donationRequests', r).then(function () {
@@ -217,8 +217,8 @@
 
                 request.ui.refreshRequest = function () {
                     var state;
-                    request.active = true;
-                    if (!request.active) {
+
+                    if (request.resolved) {
                         state = 'done';
                     }
 
@@ -240,7 +240,7 @@
                         request.ui.pPromised = Math.round(qPromised / request.quantity * 100);
                         request.ui.quantityLeft = request.quantity - qConfirmed - qPromised;
 
-                        if (request.active) {
+                        if (!request.resolved) {
                             if (request.ui.quantityLeft <= 0) {
                                 state = 'enroute';
                             } else {
