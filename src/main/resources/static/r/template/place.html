@@ -24,7 +24,7 @@
     <div class="row" id="donationrequests" ng-controller="DonationRequestsCtrl">
         <div ng-repeat="req in donationRequests | orderBy : order | filter : filter : true" ng-class="req.ui.state" class="request col-md-3 col-sm-3 col-xs-12 animate-repeat">
             <div class="panel panel-default panel-body">
-                <div class="age time-ago" title="{{req.createdDateTime}}"></div>
+                <time class="age time-ago" datetime="{{req.createdDateTime}}" uib-tooltip="{{req.createdDateTime | time}}" tooltip-append-to-body="true">{{req.createdDateTime | time}}</time>
 
                 <h3>{{req.title}}</h3>
                 <p>{{req.description}}</p>
