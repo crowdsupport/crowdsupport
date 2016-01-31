@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('crowdsupport.admin', ['crowdsupport.widget.search', 'restangular', 'crowdsupport.service.status'])
+        .module('crowdsupport.controller.admin', ['crowdsupport.widget.search', 'restangular', 'crowdsupport.service.status'])
         .controller('RequestedPlacesCtrl', function ($scope, $allRequests, Restangular, Status, $log) {
             $scope.allRequests = $allRequests;
 
