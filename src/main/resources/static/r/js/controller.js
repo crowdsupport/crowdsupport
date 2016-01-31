@@ -125,9 +125,9 @@
             $scope.place = $placeRest;
             $scope.f = {open: true, enroute: false, done: false};
 
-            var identifier = getUrlAfterSupport() + '/comments';
+            var identifier = getUrlAfterSupport();
 
-            $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            $scope.$on('$stateChangeStart', function () {
                 Websocket.unsubscribe(identifier);
             });
 

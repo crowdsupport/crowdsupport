@@ -6,6 +6,7 @@ import org.outofrange.crowdsupport.dto.PlaceDto;
 import org.outofrange.crowdsupport.dto.PlaceWithDonationRequestsDto;
 import org.outofrange.crowdsupport.dto.UserDto;
 import org.outofrange.crowdsupport.model.DonationRequest;
+import org.outofrange.crowdsupport.model.Team;
 import org.outofrange.crowdsupport.service.PlaceService;
 import org.outofrange.crowdsupport.spring.ApiVersion;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -49,7 +51,12 @@ public class PlaceRestController extends TypedMappingController<PlaceDto> {
     public List<UserDto> getTeamForPlace(@PathVariable Long placeId) {
         log.info("Querying team for place with id {}", placeId);
 
-        return mapToList(placeService.loadPlace(placeId).getTeam().getMembers(), UserDto.class);
+        Team team = placeService.loadPlace(placeId).getTeam();
+        if (team != null) {
+            return mapToList(team.getMembers(), UserDto.class);
+        } else {
+            return mapToList(Collections.emptyList(), UserDto.class);
+        }
     }
 
     @RequestMapping(value = "/{placeId}/team/{username}", method = RequestMethod.PUT)
