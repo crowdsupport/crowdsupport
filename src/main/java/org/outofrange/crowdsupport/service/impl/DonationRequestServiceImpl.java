@@ -1,9 +1,15 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.modelmapper.ModelMapper;
+import org.outofrange.crowdsupport.dto.ChangeDto;
+import org.outofrange.crowdsupport.dto.CommentDto;
+import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.model.DonationRequest;
+import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.DonationRequestService;
+import org.outofrange.crowdsupport.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +27,12 @@ public class DonationRequestServiceImpl implements DonationRequestService {
     @Inject
     private CommentService commentService;
 
+    @Inject
+    private WebSocketService webSocketService;
+
+    @Inject
+    private ModelMapper mapper;
+
     @Override
     public DonationRequest save(DonationRequest donationRequest) {
         return donationRequestRepository.save(donationRequest);
@@ -35,9 +47,12 @@ public class DonationRequestServiceImpl implements DonationRequestService {
     public void setDonationRequestResolved(long id, boolean resolved) {
         log.debug("Setting resolved for donation request {} to {}", id, resolved);
 
-        final DonationRequest donationRequest = donationRequestRepository.findOne(id);
+        DonationRequest donationRequest = donationRequestRepository.findOne(id);
         donationRequest.setResolved(resolved);
-        donationRequestRepository.save(donationRequest);
+        donationRequest = donationRequestRepository.save(donationRequest);
+
+        webSocketService.sendChangeToPlace(ChangeDto.refresh(mapper.map(donationRequest, DonationRequestDto.class)),
+                donationRequest.getPlace());
     }
 
     @Override
@@ -45,8 +60,11 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         log.debug("Deleting donation request with id {}", id);
 
         final DonationRequest donationRequest = donationRequestRepository.findOne(id);
+        final Place place = donationRequest.getPlace();
         donationRequest.getComments().forEach(c -> commentService.deleteComment(c.getId()));
 
         donationRequestRepository.delete(id);
+
+        webSocketService.sendChangeToPlace(ChangeDto.remove(id, DonationRequestDto.class), place);
     }
 }

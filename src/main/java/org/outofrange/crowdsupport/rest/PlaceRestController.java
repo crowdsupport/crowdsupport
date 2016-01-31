@@ -71,9 +71,9 @@ public class PlaceRestController extends TypedMappingController<PlaceDto> {
                                                                  @RequestBody DonationRequestDto donationRequestDto) {
         log.info("Adding donation request to place with id {}", placeId);
 
-        final DonationRequestDto createdDonationRequest = map(placeService.addDonationRequest(placeId, map(donationRequestDto, DonationRequest.class)),
-                DonationRequestDto.class);
+        final DonationRequest createdDonationRequest = placeService.addDonationRequest(placeId, map(donationRequestDto, DonationRequest.class));
+        final DonationRequestDto createdDonationRequestDto = map(createdDonationRequest, DonationRequestDto.class);
 
-        return ResponseEntity.created(createdDonationRequest.uri()).body(createdDonationRequest);
+        return ResponseEntity.created(createdDonationRequestDto.uri()).body(createdDonationRequestDto);
     }
 }

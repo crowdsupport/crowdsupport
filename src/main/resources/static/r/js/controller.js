@@ -189,7 +189,7 @@
                 }
             };
 
-            var identifier = getUrlAfterSupport() + '/comments';
+            var identifier = getUrlAfterSupport();
 
             var enhanceRequest = function (request) {
                 request.ui = {};
@@ -286,19 +286,78 @@
                 });
             };
 
+            var handleCommentChange = function (message) {
+                var r;
+
+                switch (message.changeType) {
+                    case 'ADD':
+                    case 'REFRESH':
+                        var comment = message.payload;
+
+                        r = _.find($scope.donationRequests, 'id', comment.donationRequestId);
+                        var comments = r.comments;
+                        var commentIndex = _.findIndex(comments, 'id', comment.id);
+
+                        if (commentIndex !== -1) {
+                            comments[commentIndex] = comment;
+                        } else {
+                            comments.push(comment);
+                        }
+
+                        break;
+                    case 'REMOVE':
+                        var id = message.id;
+                        var index = -1;
+
+                        r = _.find($scope.donationRequests, function (request) {
+                            var i = _.findIndex(request.comments, 'id', id);
+
+                            if (i !== -1) {
+                                index = i;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        });
+
+                        if (index !== -1) {
+                            r.comments.splice(index, 1);
+                        }
+
+                        break;
+                }
+
+                r.ui.refreshRequest();
+            };
+
+            var handleRequestChange = function (message) {
+                var rId = message.payload ? message.payload.id : message.id;
+                var index = _.findIndex($scope.donationRequests, 'id', rId);
+
+                switch (message.changeType) {
+                    case 'ADD':
+                    case 'REFRESH':
+                        if (index !== -1) {
+                            $scope.donationRequests[index] = enhanceRequest(message.payload);
+                        } else {
+                            $scope.donationRequests.push(enhanceRequest(message.payload));
+                        }
+
+                        break;
+                    case 'REMOVE':
+                        if (index !== -1) {
+                            $scope.donationRequests.splice(index, 1);
+                        }
+
+                        break;
+                }
+            };
+
             Websocket.when(identifier).then(null, null, function (message) {
-                if (message.entity == 'CommentDto') {
-                    if (message.changeType == 'ADD') {
-                        message = message.payload;
-
-                        _.find($scope.donationRequests, function (request) {
-                            return request.id === message.donationRequestId;
-                        }).comments.push(message);
-                    }
-
-                    _.forEach($scope.donationRequests, function (request) {
-                        request.ui.refreshRequest();
-                    });
+                if (message.entity === 'CommentDto') {
+                    handleCommentChange(message);
+                } else if (message.entity === 'DonationRequestDto') {
+                    handleRequestChange(message);
                 }
             });
         })

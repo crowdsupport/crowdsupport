@@ -5,17 +5,23 @@ package org.outofrange.crowdsupport.dto;
  */
 public class ChangeDto<T> extends BaseDto {
     public enum ChangeType {
-        ADD, UPDATE, DELETE
+        ADD, REFRESH, REMOVE
     }
 
     private final ChangeType changeType;
     private final String entity;
-    private final T payload;
+    private T payload;
 
     public ChangeDto(ChangeType changeType, T payload) {
         this.changeType = changeType;
         this.entity = payload != null ? payload.getClass().getSimpleName() : "null";
         this.payload = payload;
+    }
+
+    public ChangeDto(ChangeType changeType, Class<?> entityType, long id) {
+        this.changeType = changeType;
+        this.entity = entityType.getSimpleName();
+        setId(id);
     }
 
     public String getEntity() {
@@ -35,11 +41,11 @@ public class ChangeDto<T> extends BaseDto {
         return new ChangeDto<>(ChangeType.ADD, payload);
     }
 
-    public static <S> ChangeDto<S> update(S payload) {
-        return new ChangeDto<>(ChangeType.UPDATE, payload);
+    public static <S> ChangeDto<S> refresh(S payload) {
+        return new ChangeDto<>(ChangeType.REFRESH, payload);
     }
 
-    public static <S> ChangeDto<S> delete(S payload) {
-        return new ChangeDto<>(ChangeType.DELETE, payload);
+    public static <S> ChangeDto<S> remove(long id, Class<?> entityType) {
+        return new ChangeDto<>(ChangeType.REMOVE, entityType, id);
     }
 }

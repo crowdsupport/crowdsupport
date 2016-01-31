@@ -1,5 +1,6 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.ChangeDto;
 import org.outofrange.crowdsupport.dto.CommentDto;
 import org.outofrange.crowdsupport.model.Comment;
@@ -10,10 +11,9 @@ import org.outofrange.crowdsupport.persistence.CommentRepository;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.util.CsModelMapper;
+import org.outofrange.crowdsupport.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -30,13 +30,13 @@ public class CommentServiceImpl implements CommentService {
     private DonationRequestRepository donationRequestRepository;
 
     @Inject
-    private SimpMessagingTemplate template;
-
-    @Inject
     private UserService userService;
 
     @Inject
-    private CsModelMapper mapper;
+    private ModelMapper mapper;
+
+    @Inject
+    private WebSocketService webSocketService;
 
     @Override
     public Comment save(Comment comment) {
@@ -61,9 +61,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setDonationRequest(donationRequest);
         comment = commentRepository.save(comment);
 
-        final String topic = "/topic/" + place.getCity().getState().getIdentifier() + "/" +
-                place.getCity().getIdentifier() + "/" + place.getIdentifier() + "/comments";
-        template.convertAndSend(topic, ChangeDto.add(mapper.map(comment, CommentDto.class)));
+        webSocketService.sendChangeToPlace(ChangeDto.add(mapper.map(comment, CommentDto.class)), place);
 
         return comment;
     }
@@ -72,16 +70,24 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(long commentId) {
         log.debug("Deleting comment with id {}", commentId);
 
-        commentRepository.delete(commentId);
+        final Comment comment = commentRepository.findOne(commentId);
+        final Place place = comment.getDonationRequest().getPlace();
+
+        commentRepository.delete(comment);
+
+        webSocketService.sendChangeToPlace(ChangeDto.remove(commentId, CommentDto.class), place);
     }
 
     @Override
     public void setCommentConfirmed(long commentId, boolean confirmed) {
         log.debug("Setting confirmed of comment with id {} to {}", commentId, confirmed);
 
-        final Comment comment = commentRepository.findOne(commentId);
+        Comment comment = commentRepository.findOne(commentId);
+        final Place place = comment.getDonationRequest().getPlace();
+
         comment.setConfirmed(confirmed);
 
-        commentRepository.save(comment);
+        comment = commentRepository.save(comment);
+        webSocketService.sendChangeToPlace(ChangeDto.refresh(mapper.map(comment, CommentDto.class)), place);
     }
 }
