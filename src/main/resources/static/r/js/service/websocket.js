@@ -10,8 +10,11 @@
 
             var RECONNECT_TIMEOUT = 30000;
 
-            var client = new SockJS(SOCKET_URL);
-            var stomp = Stomp.over(client);
+            var stomp = Stomp.over(new SockJS(SOCKET_URL));
+
+            var started = false;
+            this.ready = false;
+
             stomp.onclose = function () {
                 $log.debug('Connection lost...');
 
@@ -20,12 +23,12 @@
                 });
                 topics = [];
 
+                started = false;
+                that.ready = false;
+
                 $timeout(that.connect, RECONNECT_TIMEOUT);
             };
             stomp.debug = $log.debug;
-
-            var started = false;
-            this.ready = false;
 
             var topics = [];
             var sendBuffer = [];
@@ -69,7 +72,6 @@
                     sending();
                 } else {
                     $log.debug('Websocket not ready yet... buffering message to ' + url);
-                    $log.debug(data);
                     sendBuffer.push(sending);
                 }
             };
@@ -85,7 +87,7 @@
                 if (t.length != 0) {
                     var topic = t[0];
                     topic.subscription.unsubscribe();
-                    topic.deferred.reject('Unsubscribed');
+                    topic.deferred.reject(true);
 
                     t = $.grep(topics, function (topic) {
                         return topic.address != url;
