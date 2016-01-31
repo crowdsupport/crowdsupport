@@ -22,7 +22,7 @@
     </div>
 
     <div class="row" id="donationrequests" ng-controller="DonationRequestsCtrl">
-        <div ng-repeat="req in donationRequests | orderBy : order | filter : filter : true" ng-class="req.ui.state"
+        <div ng-repeat="req in donationRequests | filter : filter : true | orderBy : order" ng-class="req.ui.state"
              class="request col-lg-3 col-md-4 col-sm-6 col-xs-12 animate-repeat">
             <div class="panel panel-default panel-body">
                 <div class="age">
