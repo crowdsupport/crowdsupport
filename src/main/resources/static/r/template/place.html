@@ -22,9 +22,23 @@
     </div>
 
     <div class="row" id="donationrequests" ng-controller="DonationRequestsCtrl">
-        <div ng-repeat="req in donationRequests | orderBy : order | filter : filter : true" ng-class="req.ui.state" class="request col-md-3 col-sm-3 col-xs-12 animate-repeat">
+        <div ng-repeat="req in donationRequests | orderBy : order | filter : filter : true" ng-class="req.ui.state"
+             class="request col-lg-3 col-md-4 col-sm-6 col-xs-12 animate-repeat">
             <div class="panel panel-default panel-body">
-                <time class="age time-ago" datetime="{{req.createdDateTime}}" uib-tooltip="{{req.createdDateTime | time}}" tooltip-append-to-body="true">{{req.createdDateTime | time}}</time>
+                <div class="age">
+                    <span ng-if="inTeam()">
+                        <button class="btn btn-sm" uib-tooltip="Delete request" tooltip-append-to-body="true"><span
+                                class="glyphicon glyphicon-remove"></span></button>
+                        <button class="btn btn-sm" uib-tooltip="Mark request as resolved" tooltip-append-to-body="true"><span
+                                class="glyphicon glyphicon-ok"></span></button>
+                        <br/>
+                    </span>
+                    <time class="time-ago" datetime="{{req.createdDateTime}}"
+                          uib-tooltip="{{req.createdDateTime | time}}" tooltip-append-to-body="true">
+                        {{req.createdDateTime | time}}
+                    </time>
+                </div>
+
 
                 <h3>{{req.title}}</h3>
                 <p>{{req.description}}</p>
@@ -33,7 +47,8 @@
                     <div class="justified-and-inlined">
                         <div>Need</div>
                         <div uib-tooltip-template="'tooltip.html'">
-                            {{req.ui.quantityLeft | posNum}} {{req.unit}} <span ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
+                            {{req.ui.quantityLeft | posNum}} {{req.unit}} <span
+                                ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
                         </div>
                     </div>
 
@@ -70,6 +85,12 @@
                                 <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}} {{req.unit}}</p>
                             </div>
                         </div>
+                        <div ng-if="inTeam()" class="pull-right">
+                            <button class="btn btn-xs" uib-tooltip="Delete comment" tooltip-append-to-body="true"><span
+                                    class="glyphicon glyphicon-remove"></span></button>
+                            <button class="btn btn-xs" uib-tooltip="Confirm donation" tooltip-append-to-body="true">
+                                <span class="glyphicon glyphicon-ok"></span></button>
+                        </div>
                     </div>
                 </div>
 
@@ -81,10 +102,14 @@
                             </div>
                             <div class="media-body">
                                 <b class="media-heading">{{$root.user.username}}</b>
-                                <textarea class="form-control" placeholder="New comment..." ng-model="req.ui.commentText"></textarea>
-                                <input class="form-control" type="number" placeholder="Qty" ng-model="req.ui.commentQuantity" ng-show="req.quantity"/>
+                                <textarea class="form-control" placeholder="New comment..."
+                                          ng-model="req.ui.commentText"></textarea>
+                                <input class="form-control" type="number" placeholder="Qty"
+                                       ng-model="req.ui.commentQuantity" ng-show="req.quantity"/>
 
-                                <button class="pull-right btn btn-default" ng-disabled="req.ui.commentText.length === 0">Send</button>
+                                <button class="pull-right btn btn-default"
+                                        ng-disabled="req.ui.commentText.length === 0">Send
+                                </button>
                             </div>
                         </div>
                     </form>

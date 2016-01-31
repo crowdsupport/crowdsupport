@@ -136,7 +136,7 @@
                     return false;
                 }
 
-                return $rootScope.user.managedPlaces.findIndex(function (p) {
+                return $rootScope.user.has(AuthStore.ROLE_ADMIN) || $rootScope.user.managedPlaces.findIndex(function (p) {
                         return p.identifier === $scope.place.identifier
                             && p.city.identifier === $scope.place.city.identifier
                             && p.city.state.identifier === $scope.place.city.state.identifier;
