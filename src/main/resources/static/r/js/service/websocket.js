@@ -13,10 +13,14 @@
             var client = new SockJS(SOCKET_URL);
             var stomp = Stomp.over(client);
             stomp.onclose = function () {
-                $timeout(function () {
-                    $log.debug('Connection lost...');
-                    that.connect();
-                }, RECONNECT_TIMEOUT);
+                $log.debug('Connection lost...');
+
+                topics.forEach(function(topic) {
+                    topic.deferred.reject(false);
+                });
+                topics = [];
+
+                $timeout(that.connect, RECONNECT_TIMEOUT);
             };
             stomp.debug = $log.debug;
 
@@ -147,11 +151,13 @@
             this.disconnect = function () {
                 that.ready = false;
                 $log.debug('Disconnecting Websocket...');
+
                 stomp.disconnect(function () {
                     started = false;
                     topics.forEach(function(topic) {
-                        topic.deferred.reject('Websocket disconnected');
+                        topic.deferred.reject(true);
                     });
+                    topics = [];
                     $log.debug('...Websocket disconnected');
                 });
             };
