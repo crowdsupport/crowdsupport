@@ -8,4 +8,8 @@ public interface DonationRequestService {
     DonationRequest save(DonationRequest entity);
 
     List<DonationRequest> loadAll();
+
+    void setDonationRequestResolved(long id, boolean resolved);
+
+    void deleteDonationRequest(long id);
 }

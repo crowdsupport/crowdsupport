@@ -25,6 +25,15 @@ public class CommentRestController {
         this.commentService = commentService;
     }
 
+    @RequestMapping(value = "/{commentId}/confirm", method = RequestMethod.POST)
+    public ResponseEntity<Void> confirmComment(@PathVariable Long commentId) {
+        log.info("Confirming comment with id {}", commentId);
+
+        commentService.setCommentConfirmed(commentId, true);
+
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(value = "/{commentId}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
         log.info("Deleting comment with id {}", commentId);

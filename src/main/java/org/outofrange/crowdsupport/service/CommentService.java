@@ -12,4 +12,6 @@ public interface CommentService {
     Comment save(Comment entity);
 
     List<Comment> loadAll();
+
+    void setCommentConfirmed(long commentId, boolean confirmed);
 }

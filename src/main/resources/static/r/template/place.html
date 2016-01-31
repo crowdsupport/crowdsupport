@@ -27,10 +27,14 @@
             <div class="panel panel-default panel-body">
                 <div class="age">
                     <span ng-if="inTeam()">
-                        <button class="btn btn-sm" uib-tooltip="Delete request" tooltip-append-to-body="true"><span
-                                class="glyphicon glyphicon-remove"></span></button>
-                        <button class="btn btn-sm" uib-tooltip="Mark request as resolved" tooltip-append-to-body="true"><span
-                                class="glyphicon glyphicon-ok"></span></button>
+                        <button class="btn btn-sm" uib-tooltip="Delete request" tooltip-append-to-body="true"
+                                ng-click="deleteRequest(req.id)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-sm" uib-tooltip="Mark request as resolved" tooltip-append-to-body="true"
+                                ng-click="resolveRequest(req.id)">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
                         <br/>
                     </span>
                     <time class="time-ago" datetime="{{req.createdDateTime}}"
@@ -82,14 +86,19 @@
                             <div class="media-body">
                                 <b>{{comment.author.username}}</b>: {{comment.text}}
 
-                                <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}} {{req.units}}</p>
+                                <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}}
+                                    {{req.units}}</p>
                             </div>
                         </div>
                         <div ng-if="inTeam()" class="pull-right">
-                            <button class="btn btn-xs" uib-tooltip="Delete comment" tooltip-append-to-body="true"><span
-                                    class="glyphicon glyphicon-remove"></span></button>
-                            <button class="btn btn-xs" uib-tooltip="Confirm donation" tooltip-append-to-body="true">
-                                <span class="glyphicon glyphicon-ok"></span></button>
+                            <button class="btn btn-xs" uib-tooltip="Delete comment" tooltip-append-to-body="true"
+                                    ng-click="deleteComment(comment.id)">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                            <button class="btn btn-xs" uib-tooltip="Confirm donation" tooltip-append-to-body="true"
+                                    ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
                         </div>
                     </div>
                 </div>

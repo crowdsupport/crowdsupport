@@ -74,4 +74,14 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.delete(commentId);
     }
+
+    @Override
+    public void setCommentConfirmed(long commentId, boolean confirmed) {
+        log.debug("Setting confirmed of comment with id {} to {}", commentId, confirmed);
+
+        final Comment comment = commentRepository.findOne(commentId);
+        comment.setConfirmed(confirmed);
+
+        commentRepository.save(comment);
+    }
 }

@@ -262,6 +262,29 @@
             };
             _.forEach($scope.donationRequests, enhanceRequest);
 
+            $scope.confirmComment = function (id) {
+                Restangular.one('comment', id).post('confirm').then(function () {
+                    Status.success('Successfully confirmed comment');
+                });
+            };
+
+            $scope.deleteComment = function (id) {
+                Restangular.one('comment', id).remove().then(function () {
+                    Status.success('Successfully deleted comment');
+                });
+            };
+
+            $scope.resolveRequest = function (id) {
+                Restangular.one('donationRequest', id).post('resolve').then(function () {
+                    Status.success('Successfully marked request as resolved');
+                });
+            };
+
+            $scope.deleteRequest = function (id) {
+                Restangular.one('donationRequest', id).remove().then(function () {
+                    Status.success('Successfully deleted request');
+                });
+            };
 
             Websocket.when(identifier).then(null, null, function (message) {
                 if (message.entity == 'CommentDto') {
