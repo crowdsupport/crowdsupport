@@ -17,7 +17,7 @@
                 var debugFunction = $delegate.debug;
 
                 $delegate.debug = function () {
-                    if (localStorage.getItem(KEY) !== 'false') {
+                    if (localStorage.getItem(KEY) === 'true') {
                         debugFunction.apply(undefined, arguments);
                     }
                 };
@@ -25,10 +25,17 @@
                 return $delegate;
             });
         })
+        .config(function ($compileProvider) {
+            $compileProvider.debugInfoEnabled(localStorage.getItem(KEY) === 'true');
+        })
         .service('ConfigService', function ($log) {
             this.debugEnabled = function (flag) {
-                $log.info('Setting debugEnabled to ' + flag);
-                localStorage.setItem(KEY, flag.toString());
+                if (arguments.length === 1) {
+                    $log.info('Setting debugEnabled to ' + flag);
+                    localStorage.setItem(KEY, flag.toString());
+                } else {
+                    return localStorage.getItem(KEY) === 'true';
+                }
             }
         });
 })();
@@ -55,6 +62,9 @@ var debug = {
     },
     user: function() {
         return debug.getAngular('$rootScope').user;
+    },
+    refresh: function(force) {
+        document.location.reload(force || false);
     }
 };
 window.onload = function () {
