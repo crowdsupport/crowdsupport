@@ -2,7 +2,6 @@ package org.outofrange.crowdsupport.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.ChangeDto;
-import org.outofrange.crowdsupport.dto.CommentDto;
 import org.outofrange.crowdsupport.dto.DonationRequestDto;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
@@ -13,11 +12,13 @@ import org.outofrange.crowdsupport.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class DonationRequestServiceImpl implements DonationRequestService {
     private static final Logger log = LoggerFactory.getLogger(DonationRequestServiceImpl.class);
 
@@ -34,6 +35,7 @@ public class DonationRequestServiceImpl implements DonationRequestService {
     private ModelMapper mapper;
 
     @Override
+    @Transactional(readOnly = false)
     public DonationRequest save(DonationRequest donationRequest) {
         return donationRequestRepository.save(donationRequest);
     }
@@ -44,6 +46,7 @@ public class DonationRequestServiceImpl implements DonationRequestService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void setDonationRequestResolved(long id, boolean resolved) {
         log.debug("Setting resolved for donation request {} to {}", id, resolved);
 
@@ -56,6 +59,7 @@ public class DonationRequestServiceImpl implements DonationRequestService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteDonationRequest(long id) {
         log.debug("Deleting donation request with id {}", id);
 

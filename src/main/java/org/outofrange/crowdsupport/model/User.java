@@ -26,7 +26,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled = true;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author")
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)

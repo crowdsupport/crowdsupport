@@ -6,11 +6,42 @@
             'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate'])
         .controller('AddDonationRequestController', function ($scope, Restangular, Status, $uibModalInstance, $timeout) {
             $scope.request = {};
+            $scope.request.tags = [];
             $scope.neverExpires = true;
             $scope.minDate = new Date();
             $scope.date = new Date();
 
             var place = $scope.$parent.place;
+
+            $scope.addTag = function (keyEvent) {
+                var input = $scope.inputTag;
+                if (typeof keyEvent === 'undefined' || keyEvent.which === 32) {
+                    if (isString(input)) {
+                        input = input.trim();
+                        if (input.length !== 0) {
+                            if (_.findIndex($scope.request.tags, 'name', input) === -1) {
+                                $scope.request.tags.push({name: input});
+                            }
+                        }
+                    } else {
+                        if (_.findIndex($scope.request.tags, 'name', input.name) === -1) {
+                            $scope.request.tags.push(input);
+                        }
+                    }
+
+                    $scope.inputTag = null;
+                    if (keyEvent) {
+                        keyEvent.preventDefault();
+                    }
+                }
+            };
+
+            $scope.removeTag = function (index) {
+                var removed = $scope.request.tags.splice(index, 1);
+                if (removed.length >= 1) {
+                    $scope.inputTag = removed[0];
+                }
+            };
 
             $scope.create = function () {
                 var r = $scope.request;
@@ -187,6 +218,7 @@
                         });
 
                     request.ui.commentText = '';
+                    request.ui.commentQuantity = '';
                 };
 
                 request.ui.refreshRequest = function () {
@@ -230,7 +262,6 @@
                     request.ui.state = state;
                 };
                 request.ui.refreshRequest();
-                request.tags = ['Food', 'Donation'];
 
                 return request;
             };

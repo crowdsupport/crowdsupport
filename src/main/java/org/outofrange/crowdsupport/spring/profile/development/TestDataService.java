@@ -145,14 +145,12 @@ public class TestDataService {
         waterComment2.setAuthor(user2);
         waterComment2.setText("I'll bring some bottles from my office.");
 
-        waterComment1 = commentService.save(waterComment1);
-        waterComment2 = commentService.save(waterComment2);
         water = donationRequestService.save(water);
+        waterComment1.setDonationRequest(water);
+        waterComment2.setDonationRequest(water);
+        commentService.save(waterComment1);
+        commentService.save(waterComment2);
 
-        water.addComment(waterComment1);
-        water.addComment(waterComment2);
-
-        water = donationRequestService.save(water);
 
         toothbrush.setTitle("Toothbrushes!");
         toothbrush.setDescription("We need new toothbrushes, a lot of them, all the time!");

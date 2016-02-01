@@ -1,4 +1,8 @@
 (function () {
+    var p = function(s, n, p) {
+        return _.padLeft(s, n || 2, p || '0')
+    };
+
     angular
         .module('timeAgo', [])
         .directive('timeAgo', function ($q) {
@@ -46,8 +50,8 @@
             return function (input) {
                 var d = new Date(input);
 
-                return d.getDate() + '.' + _.padLeft(d.getMonth() + 1, 2, '0') + '.' + d.getFullYear() + ' '
-                    + d.getHours() + ':' + d.getMinutes();
+                return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear() + ' '
+                    + p(d.getHours()) + ':' + p(d.getMinutes());
             }
         });
 })();

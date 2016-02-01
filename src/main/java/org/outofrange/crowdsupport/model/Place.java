@@ -20,7 +20,7 @@ public class Place extends BaseEntity {
     @Column(name = "imagepath")
     private String imagePath;
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "place")
     private List<DonationRequest> donationRequests = new ArrayList<>();
 
     @Column(name = "identifier")

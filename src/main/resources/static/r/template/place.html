@@ -68,8 +68,8 @@
                     </uib-progress>
                 </div>
 
-                <div class="tags">
-                    <span ng-repeat="tag in req.tags">{{tag}} <span ng-if="!$last">| </span></span>
+                <div class="tags" ng-if="req.tags">
+                    <span ng-repeat="tag in req.tags">{{tag.name}} <span ng-if="!$last">| </span></span>
                 </div>
 
                 <div class="justified-and-inlined" ng-if="req.validToDateTime">

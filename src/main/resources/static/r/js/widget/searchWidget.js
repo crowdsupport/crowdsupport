@@ -12,7 +12,9 @@
                         inputClass: '@',
                         inputId: '@',
                         loading: '=',
-                        noResults: '='
+                        noResults: '=',
+                        omitNoResults: '@',
+                        onKeypress: '='
                     },
                     controller: function ($scope, Restangular) {
                         $scope.query = function (query) {
@@ -25,7 +27,13 @@
 
                         $scope.onSelect = function ($item) {
                             $.extend($scope.updateOnSelect, $item);
-                        }
+                        };
+
+                        $scope.key = function(event) {
+                            if ($scope.onKeypress) {
+                                $scope.onKeypress(event);
+                            }
+                        };
                     },
                     templateUrl: templateUrl
                 };
@@ -51,5 +59,12 @@
             };
 
             return new SearchWidget('user', '/r/template/widget/userSearch/userSearch.html', format);
+        })
+        .directive('tagSearch', function(SearchWidget) {
+            var format = function (tag) {
+                return tag.name;
+            };
+
+            return new SearchWidget('tag', '/r/template/widget/tagSearch/tagSearch.html', format);
         });
 })();

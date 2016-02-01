@@ -27,8 +27,12 @@ public class DonationRequest extends BaseEntity {
     @Column(name = "units")
     private String units;
 
-    @OneToMany(mappedBy = "donationRequest", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "donationRequest")
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "RequestTags", joinColumns = {@JoinColumn(name = "donationRequest")}, inverseJoinColumns = {@JoinColumn(name = "tag")})
+    private List<Tag> tags = new ArrayList<>();
 
     @Column(name = "resolved")
     private boolean resolved;
@@ -95,32 +99,19 @@ public class DonationRequest extends BaseEntity {
         this.resolved = resolved;
     }
 
-    public int getPromisedQuantity() {
-        int promisedQuantity = 0;
-        for (Comment comment : comments) {
-            promisedQuantity += comment.getQuantity();
-        }
-
-        return promisedQuantity;
-    }
-
-    public int getConfirmedQuantity() {
-        return (int)(getPromisedQuantity() * 0.4);
-    }
-
-    public float getConfirmedPercentage() {
-        return (float)(getConfirmedQuantity()) / getQuantity() * 100;
-    }
-
-    public float getPromisedPercentage() {
-        return (float)(getPromisedQuantity()) / getQuantity() * 100 - getConfirmedPercentage();
-    }
-
     public String getUnits() {
         return units;
     }
 
     public void setUnits(String units) {
         this.units = units;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }

@@ -50,12 +50,21 @@
                     </div>
                 </div>
             </div>
-
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="tag">Tags</label>
+            <div class="col-sm-8">
+                <tag-search ng-model="inputTag" update-on-select="tag" input-class="form-control" input-id="tag"
+                            omit-no-results="true" on-keypress="addTag"></tag-search>
+                <div>
+                    <span ng-repeat="tag in request.tags">
+                        <a ng-click="removeTag($index)" uib-tooltip="Remove tag">{{tag.name}}</a><span ng-hide="$last"> | </span>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
-        {{request|json}}
-        {{date|json}}
         <button type="submit" class="btn">
             <span class="glyphicon glyphicon-ok"></span>
         </button>

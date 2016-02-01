@@ -36,6 +36,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        if (config.isDebugEnabled()) {
+            http.authorizeRequests().antMatchers("/h2-console/**").permitAll().and().
+                    headers().frameOptions().disable();
+        }
+
         http
                 .headers().cacheControl().disable().and()
 
@@ -68,11 +73,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // custom Token based authentication based on the header previously given to the client
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
-
-
-        if (config.isDebugEnabled()) {
-            http.headers().frameOptions().disable();
-        }
     }
 
     @Override
