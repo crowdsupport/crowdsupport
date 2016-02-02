@@ -15,6 +15,9 @@
                     resolve: {
                         $title: function () {
                             return 'Welcome';
+                        },
+                        $statistics: function(Restangular) {
+                            return Restangular.one('statistics').get();
                         }
                     }
                 })
