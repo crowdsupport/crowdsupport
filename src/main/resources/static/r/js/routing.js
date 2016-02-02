@@ -8,13 +8,23 @@
             $urlRouterProvider.otherwise('/');
 
             $stateProvider
-                .state('welcome', {
+                .state('dashboard', {
                     url: '/',
-                    templateUrl: '/r/template/welcome.html',
-                    controller: 'WelcomeController',
+                    templateUrl: '/r/template/dashboard.html',
+                    controller: 'DashboardController',
                     resolve: {
                         $title: function () {
                             return 'Welcome';
+                        }
+                    }
+                })
+                .state('states', {
+                    url: '/support',
+                    templateUrl: '/r/template/states.html',
+                    controller: 'StatesController',
+                    resolve: {
+                        $title: function () {
+                            return 'States';
                         },
                         $states: function (Restangular) {
                             return Restangular.all('state').getList();

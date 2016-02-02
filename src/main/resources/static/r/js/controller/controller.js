@@ -3,8 +3,23 @@
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.controller.admin', 'crowdsupport.controller.donationrequests', 'crowdsupport.widget.search',
             'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate'])
-        .controller('WelcomeController', function ($scope, $states) {
+            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate', 'chart.js'])
+        .controller('DashboardController', function ($scope) {
+            $scope.pieLabels = ['Open', 'Received'];
+            $scope.pieData = [200, 800];
+            $scope.pieColours = ['#e6e6e6', '#5cb85c'];
+            $scope.pieOptions = {
+                legendTemplate :
+                    '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=segments.length-1;i>=0;i--){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%> ... <%=segments[i].value%><%}%></li><%}%></ul>'
+            };
+
+            /*$scope.pieData = [
+                {label: 'Open', value: 200, color: '#e6e6e6'},
+                {label: 'Received', value: 800, color: '#5cb85c'}
+            ];
+            $scope.pieOptions = {thickness: 20};*/
+        })
+        .controller('StatesController', function ($scope, $states) {
             $scope.states = $states;
         })
         .controller('StateController', function ($scope, $stateRest) {

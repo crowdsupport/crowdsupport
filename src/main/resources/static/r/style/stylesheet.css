@@ -35,6 +35,14 @@ h1 {
     padding: 0px 10px;
 }
 
+.statistic-data > div {
+    font-size: 120%;
+}
+
+.statistic-data h3 {
+    margin-bottom: 25px;
+}
+
 .locationsearch {
     margin-top: 40px;
     margin-bottom: 35px;
