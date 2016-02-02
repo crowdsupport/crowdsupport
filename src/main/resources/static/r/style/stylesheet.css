@@ -35,8 +35,13 @@ h1 {
     padding: 0px 10px;
 }
 
+.statistic-data {
+    margin-bottom: 20px;
+}
+
 .statistic-data > div {
     font-size: 120%;
+    margin-top: 10px;
 }
 
 .statistic-data h3 {
