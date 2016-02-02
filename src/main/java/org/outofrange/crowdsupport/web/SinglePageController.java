@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.web;
 
+import org.outofrange.crowdsupport.event.EventBusHolder;
+import org.outofrange.crowdsupport.event.Events;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class SinglePageController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showApplication() {
+        EventBusHolder.post(Events.Client.indexRequested());
+
         return "index";
     }
 }

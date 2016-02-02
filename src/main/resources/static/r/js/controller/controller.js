@@ -4,7 +4,7 @@
             'crowdsupport.controller.admin', 'crowdsupport.controller.donationrequests', 'crowdsupport.widget.search',
             'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
             'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate', 'chart.js'])
-        .controller('DashboardController', function ($scope, $statistics) {
+        .controller('DashboardController', function ($scope, $statistics, Websocket) {
             $scope.states = $statistics.states;
             $scope.cities = $statistics.cities;
             $scope.places = $statistics.places;
@@ -20,6 +20,10 @@
             $scope.totalUsers = $statistics.totalUsers;
             $scope.donatedItems = $statistics.donatedItems;
             $scope.newVisitors = 0;
+
+            Websocket.when('indexRequested').then(null, null, function() {
+                $scope.newVisitors++;
+            })
         })
         .controller('StatesController', function ($scope, $states) {
             $scope.states = $states;
