@@ -126,15 +126,9 @@
                 });
             };
         })
-        .controller('PlaceController', function ($scope, $placeRest, Websocket, $rootScope, $uibModal) {
+        .controller('PlaceController', function ($scope, $placeRest, $rootScope, $uibModal) {
             $scope.place = $placeRest;
             $scope.f = {open: true, enroute: false, done: false};
-
-            var identifier = getUrlAfterSupport();
-
-            $scope.$on('$stateChangeStart', function () {
-                Websocket.unsubscribe(identifier);
-            });
 
             $scope.inTeam = function () {
                 if (!$rootScope.user || !$rootScope.user.managedPlaces) {
@@ -365,5 +359,6 @@
                     handleRequestChange(message);
                 }
             });
+            Websocket.unsubscribeAllOnStateChange($scope);
         })
 })();

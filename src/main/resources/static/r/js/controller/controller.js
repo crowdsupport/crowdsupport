@@ -21,9 +21,28 @@
             $scope.donatedItems = $statistics.donatedItems;
             $scope.newVisitors = 0;
 
-            Websocket.when('indexRequested').then(null, null, function() {
+            Websocket.when('indexRequested').then(null, null, function () {
                 $scope.newVisitors++;
-            })
+            });
+            Websocket.when('state').then(null, null, function () {
+                $scope.states++;
+            });
+            Websocket.when('city').then(null, null, function () {
+                $scope.cities++;
+            });
+            Websocket.when('place').then(null, null, function () {
+                $scope.places++;
+            });
+            Websocket.when('user').then(null, null, function () {
+                $scope.newVisitors++;
+            });
+            Websocket.when('requests/open').then(null, null, function () {
+                $scope.pieData[0]++;
+            });
+            Websocket.when('requests/closed').then(null, null, function () {
+                $scope.pieData[1]++;
+            });
+            Websocket.unsubscribeAllOnStateChange($scope);
         })
         .controller('StatesController', function ($scope, $states) {
             $scope.states = $states;

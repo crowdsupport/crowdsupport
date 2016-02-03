@@ -18,7 +18,7 @@
             stomp.onclose = function () {
                 $log.debug('Connection lost...');
 
-                topics.forEach(function(topic) {
+                topics.forEach(function (topic) {
                     topic.deferred.reject(false);
                 });
                 topics = [];
@@ -96,6 +96,21 @@
                 }
             };
 
+            this.unsubscribeAll = function () {
+                $log.debug("Unsubscribing from all topics");
+
+                if (started) {
+                    var addresses = _.pluck(topics, 'address');
+                    addresses.forEach(function (address) {
+                        unsubscribe(address);
+                    });
+                }
+            };
+
+            this.unsubscribeAllOnStateChange = function ($scope) {
+                $scope.$on('$stateChangeStart', unsubscribeAll);
+            };
+
             this.when = function (address) {
                 connectIfNeeded();
                 var url = TOPIC_PREFIX + address;
@@ -156,7 +171,7 @@
 
                 stomp.disconnect(function () {
                     started = false;
-                    topics.forEach(function(topic) {
+                    topics.forEach(function (topic) {
                         topic.deferred.reject(true);
                     });
                     topics = [];
