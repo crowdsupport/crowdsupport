@@ -9,6 +9,6 @@ public interface Event {
     }
 
     default void publish() {
-        EventBusHolder.post(this);
+        EventDispatcher.post(this);
     }
 }
