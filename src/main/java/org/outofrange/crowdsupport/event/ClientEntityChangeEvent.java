@@ -35,6 +35,13 @@ public class ClientEntityChangeEvent<T> extends NestedEvent implements ChangeEve
         this(changeType, payload, mainTopic, Arrays.asList(furtherTopics));
     }
 
+    public ClientEntityChangeEvent(ChangeType changeType, T payload, List<String> furtherTopics) {
+        this.changeType = changeType;
+        this.payload = payload;
+
+        this.topics.addAll(furtherTopics);
+    }
+
     public ClientEntityChangeEvent(ChangeType changeType, T payload, String mainTopic, List<String> furtherTopics) {
         this.changeType = changeType;
         this.payload = payload;

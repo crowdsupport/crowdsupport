@@ -64,7 +64,7 @@ public class WebSocketServiceImpl {
 
             log.debug("Mapped payload from {} to {}", payloadClass, dtoClass);
 
-            return new ClientEntityChangeEvent<>(event.getChangeType(), payloadDto, event.getTopics());
+            return new ClientEntityChangeEvent<>(event.getChangeType(), payloadDto,  event.getTopics());
         } catch (ClassNotFoundException | ClassCastException e) {
             throw new ServiceException("Couldn't automatically map payload " + payloadClass.getSimpleName() + " to DTO (guessed name: "
                     + classNameGuess + ")", e);
