@@ -24,23 +24,27 @@
             Websocket.when('indexRequested').then(null, null, function () {
                 $scope.newVisitors++;
             });
-            Websocket.when('state').then(null, null, function () {
-                $scope.states++;
+            Websocket.when('states/quantity').then(null, null, function (evt) {
+                $scope.states += evt.payload;
             });
-            Websocket.when('city').then(null, null, function () {
-                $scope.cities++;
+            Websocket.when('city/quantity').then(null, null, function (evt) {
+                $scope.cities += evt.payload;
             });
-            Websocket.when('place').then(null, null, function () {
-                $scope.places++;
+            Websocket.when('place/quantity').then(null, null, function (evt) {
+                $scope.places += evt.payload;
             });
-            Websocket.when('user').then(null, null, function () {
-                $scope.newVisitors++;
+            Websocket.when('user/quantity').then(null, null, function (evt) {
+                $scope.newVisitors += evt.payload;
             });
-            Websocket.when('requests/open').then(null, null, function () {
-                $scope.pieData[0]++;
+            Websocket.when('requests/open').then(null, null, function (evt) {
+                $scope.pieData[0] += evt.payload;
             });
-            Websocket.when('requests/closed').then(null, null, function () {
-                $scope.pieData[1]++;
+            Websocket.when('requests/closed').then(null, null, function (evt) {
+                $scope.pieData[1] += evt.payload;
+            });
+            Websocket.when('requests/confirmed').then(null, null, function (evt) {
+                $scope.pieData[1] += evt.payload;
+                $scope.pieData[0] -= evt.payload;
             });
             Websocket.unsubscribeAllOnStateChange($scope);
         })

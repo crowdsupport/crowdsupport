@@ -25,7 +25,7 @@ import java.util.List;
  * not like {@code mainTopic}
  * @param <T> the type of the payload
  */
-public class ClientEntityChangeEvent<T> extends NestedEvent implements ClientEvent {
+public class ClientEntityChangeEvent<T> extends NestedEvent implements ChangeEvent, ClientEvent {
     private final List<String> topics = new ArrayList<>();
 
     private final ChangeType changeType;
@@ -52,8 +52,10 @@ public class ClientEntityChangeEvent<T> extends NestedEvent implements ClientEve
             }
         }
 
-        if (getChangeType() == ChangeType.CREATE || getChangeType() == ChangeType.DELETE) {
-            addSubEvent(new EmptyClientEvent(mainTopic + "/" + getChangeType().name().toLowerCase()));
+        if (getChangeType() == ChangeType.CREATE) {
+            addEvent(new SimpleClientEvent(1, mainTopic + "/quantity"));
+        } else if (getChangeType() == ChangeType.DELETE) {
+            addEvent(new SimpleClientEvent(-1, mainTopic + "/quantity"));
         }
     }
 

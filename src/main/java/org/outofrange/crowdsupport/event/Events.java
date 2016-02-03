@@ -6,36 +6,34 @@ public class Events {
     private Events() { /* no instantiation */ }
 
     public static Event indexRequested() {
-        return new EmptyClientEvent("indexRequested");
+        return new SimpleClientEvent("indexRequested");
     }
 
     public static Event state(ChangeType type, State state) {
-        return new ClientEntityChangeEvent<>(type, state, "state");
+        return new ClientEntityChangeEvent<>(type, state, "states");
     }
 
     public static Event city(ChangeType type, City city) {
-        return new ClientEntityChangeEvent<>(type, city, "city");
+        return new ClientEntityChangeEvent<>(type, city, "cities");
     }
 
     public static Event place(ChangeType type, Place place) {
-        return new ClientEntityChangeEvent<>(type, place, "place");
+        return new ClientEntityChangeEvent<>(type, place, "places");
     }
 
     public static Event user(ChangeType type, User user) {
-        return new ClientEntityChangeEvent<>(type, user, "user");
+        return new ClientEntityChangeEvent<>(type, user, "users");
     }
 
     public static Event comment(ChangeType type, Comment comment) {
-        return new ClientEntityChangeEvent<>(type, comment,
-                "comment", buildPlaceTopic(comment.getDonationRequest().getPlace()));
+        return new CommentClientEvent(type, comment);
     }
 
     public static Event donationRequest(ChangeType type, DonationRequest donationRequest) {
-        return new ClientEntityChangeEvent<>(type, donationRequest,
-                "donationRequest", buildPlaceTopic(donationRequest.getPlace()));
+        return new DonationRequestClientEvent(type, donationRequest);
     }
 
-    private static String buildPlaceTopic(Place place) {
-        return place.getCity().getState().getIdentifier() + "/" + place.getCity().getIdentifier() + "/" + place.getIdentifier();
+    public static Event donationRequestConfirmed() {
+        return new SimpleClientEvent(1, "donationRequests/confirmed");
     }
 }

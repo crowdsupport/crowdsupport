@@ -45,7 +45,8 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         donationRequest.setResolved(resolved);
         donationRequest = donationRequestRepository.save(donationRequest);
 
-        Events.donationRequest(ChangeType.DELETE, donationRequest).publish();
+        Events.donationRequest(ChangeType.UPDATE, donationRequest).publish();
+        Events.donationRequestConfirmed().publish();
     }
 
     @Override

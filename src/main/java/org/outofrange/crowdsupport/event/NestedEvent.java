@@ -6,8 +6,9 @@ import java.util.List;
 public class NestedEvent implements Event {
     private final List<Event> subEvents = new ArrayList<>();
 
-    protected void addSubEvent(Event event) {
+    public NestedEvent addEvent(Event event) {
         subEvents.add(event);
+        return this;
     }
 
     @Override
