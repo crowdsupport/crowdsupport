@@ -36,16 +36,18 @@ public class WebSocketServiceImpl {
 
     @Subscribe
     public void clientEvent(ClientEvent event) {
+        final ClientEvent mappedEvent;
+        if (event instanceof ClientEntityChangeEvent) {
+            mappedEvent = mapPayloadToDto((ClientEntityChangeEvent) event);
+        } else {
+            mappedEvent = event;
+        }
+
         event.getTopics().forEach(t -> {
             final String topic = TOPIC_PREFIX + t;
-            log.debug("Sending event {} to topic: {}", event, topic);
-            template.convertAndSend(topic, event);
+            log.debug("Sending event {} to topic: {}", mappedEvent, topic);
+            template.convertAndSend(topic, mappedEvent);
         });
-    }
-
-    @Subscribe
-    public void clientEntityChangeEvent(ClientEntityChangeEvent event) {
-        clientEvent(mapPayloadToDto(event));
     }
 
     @SuppressWarnings("unchecked")

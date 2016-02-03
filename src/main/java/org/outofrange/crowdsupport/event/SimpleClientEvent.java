@@ -3,7 +3,7 @@ package org.outofrange.crowdsupport.event;
 import java.util.Arrays;
 import java.util.List;
 
-public class SimpleClientEvent implements ClientEvent {
+public class SimpleClientEvent implements ClientEvent, PayloadEvent<Object> {
     private final List<String> topics;
     private Object payload;
 
@@ -19,5 +19,10 @@ public class SimpleClientEvent implements ClientEvent {
     @Override
     public List<String> getTopics() {
         return topics;
+    }
+
+    @Override
+    public Object getPayload() {
+        return payload;
     }
 }

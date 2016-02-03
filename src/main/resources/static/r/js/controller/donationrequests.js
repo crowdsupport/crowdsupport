@@ -289,8 +289,8 @@
                 var r;
 
                 switch (message.changeType) {
-                    case 'ADD':
-                    case 'REFRESH':
+                    case 'CREATE':
+                    case 'UPDATE':
                         var comment = message.payload;
 
                         r = _.find($scope.donationRequests, 'id', comment.donationRequestId);
@@ -304,7 +304,7 @@
                         }
 
                         break;
-                    case 'REMOVE':
+                    case 'DELETE':
                         var id = message.id;
                         var index = -1;
 
@@ -334,8 +334,8 @@
                 var index = _.findIndex($scope.donationRequests, 'id', rId);
 
                 switch (message.changeType) {
-                    case 'ADD':
-                    case 'REFRESH':
+                    case 'CREATE':
+                    case 'UPDATE':
                         if (index !== -1) {
                             $scope.donationRequests[index] = enhanceRequest(message.payload);
                         } else {
@@ -343,7 +343,7 @@
                         }
 
                         break;
-                    case 'REMOVE':
+                    case 'DELETE':
                         if (index !== -1) {
                             $scope.donationRequests.splice(index, 1);
                         }
@@ -355,9 +355,9 @@
             var subReg = new Websocket.SubscriptionRegister();
             subReg.releaseAllOnStateChange($scope);
             Websocket.when(identifier, subReg).then(null, null, function (message) {
-                if (message.entity === 'CommentDto') {
+                if (message.payloadType === 'CommentDto') {
                     handleCommentChange(message);
-                } else if (message.entity === 'DonationRequestDto') {
+                } else if (message.payloadType === 'DonationRequestDto') {
                     handleRequestChange(message);
                 }
             });
