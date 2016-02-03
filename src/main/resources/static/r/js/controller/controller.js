@@ -20,32 +20,34 @@
             $scope.totalUsers = $statistics.totalUsers;
             $scope.newVisitors = 0;
 
-            Websocket.when('indexRequested').then(null, null, function () {
+            var subReg = new Websocket.SubscriptionRegister();
+            subReg.releaseAllOnStateChange($scope);
+
+            Websocket.when('indexRequested', subReg).then(null, null, function () {
                 $scope.newVisitors++;
             });
-            Websocket.when('states/quantity').then(null, null, function (evt) {
+            Websocket.when('states/quantity', subReg).then(null, null, function (evt) {
                 $scope.states += evt.payload;
             });
-            Websocket.when('city/quantity').then(null, null, function (evt) {
+            Websocket.when('city/quantity', subReg).then(null, null, function (evt) {
                 $scope.cities += evt.payload;
             });
-            Websocket.when('place/quantity').then(null, null, function (evt) {
+            Websocket.when('place/quantity', subReg).then(null, null, function (evt) {
                 $scope.places += evt.payload;
             });
-            Websocket.when('user/quantity').then(null, null, function (evt) {
+            Websocket.when('user/quantity', subReg).then(null, null, function (evt) {
                 $scope.newVisitors += evt.payload;
             });
-            Websocket.when('requests/open').then(null, null, function (evt) {
+            Websocket.when('requests/open', subReg).then(null, null, function (evt) {
                 $scope.pieData[0] += evt.payload;
             });
-            Websocket.when('requests/closed').then(null, null, function (evt) {
+            Websocket.when('requests/closed', subReg).then(null, null, function (evt) {
                 $scope.pieData[1] += evt.payload;
             });
-            Websocket.when('requests/confirmed').then(null, null, function (evt) {
+            Websocket.when('requests/confirmed', subReg).then(null, null, function (evt) {
                 $scope.pieData[1] += evt.payload;
                 $scope.pieData[0] -= evt.payload;
             });
-            Websocket.unsubscribeAllOnStateChange($scope);
         })
         .controller('StatesController', function ($scope, $states) {
             $scope.states = $states;

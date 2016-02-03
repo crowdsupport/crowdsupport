@@ -45,7 +45,8 @@
                         address: address,
                         subscription: null,
                         bufferedSubscription: null,
-                        deferred: $q.defer()
+                        deferred: $q.defer(),
+                        semaphore: 0
                     };
                     topics.push(newT);
 
@@ -57,6 +58,31 @@
                 if (!started) {
                     that.connect();
                 }
+            };
+
+            this.SubscriptionRegister = function() {
+                var addresses = [];
+                var register = this;
+
+                this.addSubscription = function (address) {
+                    if (addresses.indexOf(address) === -1) {
+                        addresses.push(address);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                };
+
+                this.releaseAll = function () {
+                    addresses.forEach(function (address) {
+                        that.release(address);
+                    });
+                    addresses = [];
+                };
+
+                this.releaseAllOnStateChange = function ($scope) {
+                    $scope.$on('$stateChangeStart', register.releaseAll);
+                };
             };
 
             this.send = function (broker, data) {
@@ -76,9 +102,9 @@
                 }
             };
 
-            this.unsubscribe = function (address) {
+            this.release = function (address) {
                 var url = TOPIC_PREFIX + address;
-                $log.debug('Unsubscribing from ' + url + '...');
+                $log.debug('Releasing ' + url + '...');
 
                 var t = $.grep(topics, function (topic) {
                     return topic.address == url;
@@ -86,32 +112,20 @@
 
                 if (t.length != 0) {
                     var topic = t[0];
-                    topic.subscription.unsubscribe();
-                    topic.deferred.reject(true);
+                    if (--topic.semaphore <= 0) {
+                        $log.debug('Last release for ' + url);
+                        topic.subscription.unsubscribe();
+                        topic.deferred.reject(true);
 
-                    t = $.grep(topics, function (topic) {
-                        return topic.address != url;
-                    });
-                    topics = t;
+                        t = $.grep(topics, function (topic) {
+                            return topic.address != url;
+                        });
+                        topics = t;
+                    }
                 }
             };
 
-            this.unsubscribeAll = function () {
-                $log.debug("Unsubscribing from all topics");
-
-                if (started) {
-                    var addresses = _.pluck(topics, 'address');
-                    addresses.forEach(function (address) {
-                        unsubscribe(address);
-                    });
-                }
-            };
-
-            this.unsubscribeAllOnStateChange = function ($scope) {
-                $scope.$on('$stateChangeStart', that.unsubscribeAll);
-            };
-
-            this.when = function (address) {
+            this.when = function (address, subscriptionRegister) {
                 connectIfNeeded();
                 var url = TOPIC_PREFIX + address;
                 var topic = getTopic(url);
@@ -136,6 +150,9 @@
                     $log.debug('Found existing subscription for ' + url);
                 }
 
+                if (subscriptionRegister && subscriptionRegister.addSubscription(address)) {
+                    topic.semaphore++;
+                }
                 return topic.deferred.promise;
             };
 

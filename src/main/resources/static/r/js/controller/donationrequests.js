@@ -352,13 +352,14 @@
                 }
             };
 
-            Websocket.when(identifier).then(null, null, function (message) {
+            var subReg = new Websocket.SubscriptionRegister();
+            subReg.releaseAllOnStateChange($scope);
+            Websocket.when(identifier, subReg).then(null, null, function (message) {
                 if (message.entity === 'CommentDto') {
                     handleCommentChange(message);
                 } else if (message.entity === 'DonationRequestDto') {
                     handleRequestChange(message);
                 }
             });
-            Websocket.unsubscribeAllOnStateChange($scope);
         })
 })();
