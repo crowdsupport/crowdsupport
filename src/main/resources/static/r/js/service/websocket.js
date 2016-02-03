@@ -108,7 +108,7 @@
             };
 
             this.unsubscribeAllOnStateChange = function ($scope) {
-                $scope.$on('$stateChangeStart', unsubscribeAll);
+                $scope.$on('$stateChangeStart', that.unsubscribeAll);
             };
 
             this.when = function (address) {
