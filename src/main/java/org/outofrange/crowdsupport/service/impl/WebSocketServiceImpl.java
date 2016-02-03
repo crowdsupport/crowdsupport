@@ -4,9 +4,9 @@ import com.google.common.eventbus.Subscribe;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.BaseDto;
 import org.outofrange.crowdsupport.dto.ChangeDto;
+import org.outofrange.crowdsupport.event.ClientEntityChangeEvent;
 import org.outofrange.crowdsupport.event.ClientEvent;
 import org.outofrange.crowdsupport.event.EventBusHolder;
-import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.service.WebSocketService;
 import org.outofrange.crowdsupport.util.ServiceException;
@@ -49,12 +49,12 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     @Subscribe
-    public void clientEntityChangeEvent(Events.ClientEntityChangeEvent event) {
+    public void clientEntityChangeEvent(ClientEntityChangeEvent event) {
         clientEvent(mapPayloadToDto(event));
     }
 
     @SuppressWarnings("unchecked")
-    private Events.ClientEntityChangeEvent<BaseDto> mapPayloadToDto(Events.ClientEntityChangeEvent event) {
+    private ClientEntityChangeEvent<BaseDto> mapPayloadToDto(ClientEntityChangeEvent event) {
         if (event.getPayload() instanceof BaseDto) {
             // we don't need to map already mapped dtos
             return event;
@@ -69,7 +69,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
             log.debug("Mapped payload from {} to {}", payloadClass, dtoClass);
 
-            return new Events.ClientEntityChangeEvent<>(event.getChangeType(), payloadDto, event.getTopic());
+            return new ClientEntityChangeEvent<>(event.getChangeType(), payloadDto, event.getTopic());
         } catch (ClassNotFoundException | ClassCastException e) {
             throw new ServiceException("Couldn't automatically map payload " + payloadClass.getSimpleName() + " to DTO (guessed name: "
                     + classNameGuess + ")", e);
