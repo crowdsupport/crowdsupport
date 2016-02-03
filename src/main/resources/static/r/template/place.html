@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="comments" ng-show="req.comments">
-                    <div ng-repeat="comment in req.comments" class="panel panel-default panel-body">
+                    <div ng-repeat="comment in req.comments" ng-class="{done: comment.confirmed}" class="comment panel panel-default panel-body">
                         <div class="media">
                             <div class="media-left">
                                 <div class="pic"></div>

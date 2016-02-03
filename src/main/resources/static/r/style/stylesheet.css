@@ -91,7 +91,7 @@ h1 {
     display: inline-block;
 }
 
-.justified-and-inlined  > :first-child {
+.justified-and-inlined > :first-child {
     width: 25%;
     font-weight: bold;
 }
@@ -124,18 +124,18 @@ h1 {
     border-color: #f0ad4e;
 }
 
-.request.done > .panel {
+.request.done > .panel, .comment.done.panel {
     border-color: #5cb85c;
 }
 
 .animate-repeat {
-    box-sizing:border-box;
+    box-sizing: border-box;
 }
 
 .animate-repeat.ng-move,
 .animate-repeat.ng-enter,
 .animate-repeat.ng-leave {
-    transition:all linear 0.5s;
+    transition: all linear 0.25s;
 }
 
 .animate-repeat.ng-leave.ng-leave-active,

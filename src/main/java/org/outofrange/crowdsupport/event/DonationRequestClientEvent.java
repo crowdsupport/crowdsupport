@@ -16,11 +16,5 @@ public class DonationRequestClientEvent extends ClientEntityChangeEvent<Donation
                 addEvent(new SimpleClientEvent(-1, "donationRequests/open"));
             }
         }
-
-        getTopics().add(buildPlaceTopic(donationRequest.getPlace()));
-    }
-
-    private static String buildPlaceTopic(Place place) {
-        return place.getCity().getState().getIdentifier() + "/" + place.getCity().getIdentifier() + "/" + place.getIdentifier();
     }
 }

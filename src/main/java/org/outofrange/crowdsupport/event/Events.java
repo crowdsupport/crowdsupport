@@ -26,14 +26,19 @@ public class Events {
     }
 
     public static Event comment(ChangeType type, Comment comment) {
-        return new CommentClientEvent(type, comment);
+        return new CommentClientEvent(type, comment, buildPlaceTopic(comment.getDonationRequest().getPlace()));
     }
 
     public static Event donationRequest(ChangeType type, DonationRequest donationRequest) {
-        return new DonationRequestClientEvent(type, donationRequest);
+        return new DonationRequestClientEvent(type, donationRequest, buildPlaceTopic(donationRequest.getPlace()));
     }
 
     public static Event donationRequestConfirmed() {
         return new SimpleClientEvent(1, "donationRequests/confirmed");
+    }
+
+    private static String buildPlaceTopic(Place place) {
+        return place.getCity().getState().getIdentifier() + "/" + place.getCity().getIdentifier()
+                + "/" + place.getIdentifier();
     }
 }
