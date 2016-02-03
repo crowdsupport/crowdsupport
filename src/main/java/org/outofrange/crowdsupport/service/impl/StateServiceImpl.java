@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.outofrange.crowdsupport.event.ChangeType;
+import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.StateRepository;
 import org.outofrange.crowdsupport.service.StateService;
@@ -44,9 +46,12 @@ public class StateServiceImpl implements StateService {
             throw new ServiceException("There is already a state saved with the identifier " + identifier);
         }
 
-        final State state = new State(name, identifier, imagePath);
+        State state = new State(name, identifier, imagePath);
+        state = save(state);
 
-        return save(state);
+        Events.stateChanged(ChangeType.ADD, state).publish();
+
+        return state;
     }
 
     @Override

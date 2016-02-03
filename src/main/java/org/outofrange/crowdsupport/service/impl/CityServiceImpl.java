@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.outofrange.crowdsupport.event.ChangeType;
+import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.CityRepository;
@@ -65,8 +67,8 @@ public class CityServiceImpl implements CityService {
             throw new ServiceException("Found no state with identifier " + stateIdentifier);
         }
 
-        final City newCity = new City(loadedState.get(), name, identifier, imagePath);
-
-        return cityRepository.save(newCity);
+        City newCity = cityRepository.save(new City(loadedState.get(), name, identifier, imagePath));
+        Events.cityChanged(ChangeType.ADD, newCity);
+        return newCity;
     }
 }

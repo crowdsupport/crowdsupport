@@ -113,7 +113,9 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        return userRepository.save(user);
+        final User updatedUser = userRepository.save(user);
+        Events.userChanged(ChangeType.REFRESH, updatedUser).publish();
+        return updatedUser;
     }
 
     @Override
@@ -172,5 +174,4 @@ public class UserServiceImpl implements UserService {
             return user;
         }
     }
-
 }

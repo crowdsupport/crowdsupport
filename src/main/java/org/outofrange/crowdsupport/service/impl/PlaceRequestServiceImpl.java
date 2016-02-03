@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.outofrange.crowdsupport.event.ChangeType;
+import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.model.Team;
@@ -88,7 +90,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
             throw new ServiceException("City in database differs from passed city!");
         }
 
-        final PlaceRequest placeRequestDb = placeRequestRepository.findOne(placeRequest.getId());
+        PlaceRequest placeRequestDb = placeRequestRepository.findOne(placeRequest.getId());
 
         placeRequestDb.getPlace().setCity(cityDb.get());
         placeRequestDb.getPlace().setActive(true);
@@ -99,7 +101,11 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
         // TODO notify user about accepting new place
 
-        return save(placeRequestDb);
+        placeRequestDb = save(placeRequestDb);
+
+        Events.placeChanged(ChangeType.ADD, placeRequestDb.getPlace());
+
+        return placeRequestDb;
     }
 
     @Override
