@@ -30,9 +30,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Inject
     private UserRepository userRepository;
 
-    @Inject
-    private CommentRepository commentRepository;
-
     @Override
     public StatisticsDto getStatistics() {
         log.debug("Querying data for statistics");
@@ -46,7 +43,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         dto.setClosedRequests(donationRequestRepository.countByResolved(true));
 
         dto.setTotalUsers(userRepository.count());
-        dto.setDonatedItems(commentRepository.sumQuantity());
 
         return dto;
     }

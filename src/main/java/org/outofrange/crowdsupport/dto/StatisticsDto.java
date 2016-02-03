@@ -9,7 +9,6 @@ public class StatisticsDto {
     private Long closedRequests;
 
     private Long totalUsers;
-    private Long donatedItems;
 
     public Long getStates() {
         return states;
@@ -57,13 +56,5 @@ public class StatisticsDto {
 
     public void setTotalUsers(Long totalUsers) {
         this.totalUsers = totalUsers;
-    }
-
-    public Long getDonatedItems() {
-        return donatedItems;
-    }
-
-    public void setDonatedItems(Long donatedItems) {
-        this.donatedItems = donatedItems;
     }
 }

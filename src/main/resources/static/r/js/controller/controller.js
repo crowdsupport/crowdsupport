@@ -18,7 +18,6 @@
             };
 
             $scope.totalUsers = $statistics.totalUsers;
-            $scope.donatedItems = $statistics.donatedItems;
             $scope.newVisitors = 0;
 
             Websocket.when('indexRequested').then(null, null, function () {
