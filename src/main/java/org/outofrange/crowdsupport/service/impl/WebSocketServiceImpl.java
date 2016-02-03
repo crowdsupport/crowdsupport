@@ -3,12 +3,9 @@ package org.outofrange.crowdsupport.service.impl;
 import com.google.common.eventbus.Subscribe;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.BaseDto;
-import org.outofrange.crowdsupport.dto.ChangeDto;
 import org.outofrange.crowdsupport.event.ClientEntityChangeEvent;
 import org.outofrange.crowdsupport.event.ClientEvent;
 import org.outofrange.crowdsupport.event.EventBusHolder;
-import org.outofrange.crowdsupport.model.Place;
-import org.outofrange.crowdsupport.service.WebSocketService;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 @Service
-public class WebSocketServiceImpl implements WebSocketService {
+public class WebSocketServiceImpl {
     private static final Logger log = LoggerFactory.getLogger(WebSocketServiceImpl.class);
 
     private static final String DTO_PACKAGE = "org.outofrange.crowdsupport.dto.";
@@ -33,12 +30,6 @@ public class WebSocketServiceImpl implements WebSocketService {
         this.mapper = mapper;
 
         EventBusHolder.register(this);
-    }
-
-    public void sendChangeToPlace(ChangeDto<?> change, Place place) {
-        final String topic = "/topic/" + place.getCity().getState().getIdentifier() + "/" +
-                place.getCity().getIdentifier() + "/" + place.getIdentifier();
-        template.convertAndSend(topic, change);
     }
 
     @Subscribe
