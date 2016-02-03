@@ -13,9 +13,7 @@ public class NestedEvent implements Event {
 
     @Override
     public void publish() {
-        List<Event> events = new ArrayList<>(subEvents.size() + 1);
-        events.add(this);
-        events.addAll(subEvents);
-        EventDispatcher.post(events);
+        Event.super.publish();
+        subEvents.forEach(Event::publish);
     }
 }

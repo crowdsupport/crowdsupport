@@ -43,7 +43,7 @@ public class WebSocketServiceImpl {
 
         event.getTopics().forEach(t -> {
             final String topic = TOPIC_PREFIX + t;
-            log.debug("Sending event {} to topic: {}", mappedEvent, topic);
+            log.debug("Sending event to: {} - Event: {}", topic, mappedEvent);
             template.convertAndSend(topic, mappedEvent);
         });
     }

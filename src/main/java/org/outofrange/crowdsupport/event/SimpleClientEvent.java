@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.event;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,5 +26,13 @@ public class SimpleClientEvent implements ClientEvent, PayloadEvent<Object> {
     @Override
     public Object getPayload() {
         return payload;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("payload", payload)
+                .append("topics", topics)
+                .toString();
     }
 }

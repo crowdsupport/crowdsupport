@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class LinkBaseDto extends BaseDto {
+    private static String cachedContextPath = null;
+
     private List<Link> links = new ArrayList<>();
 
     private final boolean autoSelfLink;
@@ -52,13 +54,17 @@ public abstract class LinkBaseDto extends BaseDto {
 
     protected abstract String self();
 
-    private static HttpServletRequest getCurrentRequest() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        return ((ServletRequestAttributes) requestAttributes).getRequest();
-    }
-
     private static String getWholeContextPath() {
-        HttpRequest httpRequest = new ServletServerHttpRequest(getCurrentRequest());
+        if (cachedContextPath != null) {
+            return cachedContextPath;
+        }
+
+        HttpServletRequest servletRequest = getCurrentRequest();
+        if (servletRequest == null) {
+            return "";
+        }
+
+        HttpRequest httpRequest = new ServletServerHttpRequest(servletRequest);
         UriComponents uriComponents = UriComponentsBuilder.fromHttpRequest(httpRequest).build();
         String scheme = uriComponents.getScheme();
         String host = uriComponents.getHost();
@@ -67,11 +73,16 @@ public abstract class LinkBaseDto extends BaseDto {
         final StringBuilder sb = new StringBuilder();
         sb.append(scheme).append("://").append(host);
 
-
         if (("http".equals(scheme) && port != 80) || ("https".equals(scheme) && port != 443)) {
             sb.append(":").append(port);
         }
 
-        return sb.append(Config.getContextPath()).toString();
+        cachedContextPath = sb.append(Config.getContextPath()).toString();
+        return cachedContextPath;
+    }
+
+    private static HttpServletRequest getCurrentRequest() {
+        RequestAttributes attr = RequestContextHolder.getRequestAttributes();
+        return attr == null ? null : ((ServletRequestAttributes) attr).getRequest();
     }
 }

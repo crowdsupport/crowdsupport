@@ -1,5 +1,6 @@
 package org.outofrange.crowdsupport.event;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.outofrange.crowdsupport.dto.BaseDto;
 import org.outofrange.crowdsupport.model.BaseEntity;
 
@@ -77,5 +78,14 @@ public class ClientEntityChangeEvent<T> extends NestedEvent implements ChangeEve
 
     public T getPayload() {
         return payload;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("changeType", changeType)
+                .append("payload", payload)
+                .append("topics", topics)
+                .toString();
     }
 }
