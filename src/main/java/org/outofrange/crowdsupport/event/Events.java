@@ -30,7 +30,7 @@ public class Events {
             return new ClientEntityChangeEvent<>(type, user, "user");
         }
 
-        public static ClientEntityChangeEvent<DonationRequest> userChanged(ChangeEvent.Type type, DonationRequest donationRequest) {
+        public static ClientEntityChangeEvent<DonationRequest> donationRequestChanged(ChangeEvent.Type type, DonationRequest donationRequest) {
             return new ClientEntityChangeEvent<>(type, donationRequest, "donationRequest");
         }
 
