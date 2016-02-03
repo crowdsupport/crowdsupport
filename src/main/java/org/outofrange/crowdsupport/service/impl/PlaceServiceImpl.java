@@ -117,7 +117,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         donationRequest = donationRequestRepository.save(donationRequest);
 
-        Events.donationRequestChanged(ChangeType.ADD, donationRequest).publish();
+        Events.donationRequest(ChangeType.ADD, donationRequest).publish();
 
         return donationRequest;
     }

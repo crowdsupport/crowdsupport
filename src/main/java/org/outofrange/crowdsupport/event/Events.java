@@ -9,28 +9,28 @@ public class Events {
         return new EmptyClientEvent("indexRequested");
     }
 
-    public static ClientEntityChangeEvent<State> stateChanged(ChangeType type, State state) {
+    public static ClientEntityChangeEvent<State> state(ChangeType type, State state) {
         return new ClientEntityChangeEvent<>(type, state, "state");
     }
 
-    public static ClientEntityChangeEvent<City> cityChanged(ChangeType type, City city) {
+    public static ClientEntityChangeEvent<City> city(ChangeType type, City city) {
         return new ClientEntityChangeEvent<>(type, city, "city");
     }
 
-    public static ClientEntityChangeEvent<Place> placeChanged(ChangeType type, Place place) {
+    public static ClientEntityChangeEvent<Place> place(ChangeType type, Place place) {
         return new ClientEntityChangeEvent<>(type, place, "place");
     }
 
-    public static ClientEntityChangeEvent<User> userChanged(ChangeType type, User user) {
+    public static ClientEntityChangeEvent<User> user(ChangeType type, User user) {
         return new ClientEntityChangeEvent<>(type, user, "user");
     }
 
-    public static ClientEntityChangeEvent<Comment> commentChanged(ChangeType type, Comment comment) {
+    public static ClientEntityChangeEvent<Comment> comment(ChangeType type, Comment comment) {
         return new ClientEntityChangeEvent<>(type, comment,
                 "comment", buildPlaceTopic(comment.getDonationRequest().getPlace()));
     }
 
-    public static ClientEntityChangeEvent<DonationRequest> donationRequestChanged(ChangeType type, DonationRequest donationRequest) {
+    public static ClientEntityChangeEvent<DonationRequest> donationRequest(ChangeType type, DonationRequest donationRequest) {
         return new ClientEntityChangeEvent<>(type, donationRequest,
                 "donationRequest", buildPlaceTopic(donationRequest.getPlace()));
     }

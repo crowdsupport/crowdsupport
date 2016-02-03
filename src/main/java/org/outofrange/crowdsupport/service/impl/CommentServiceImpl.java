@@ -50,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setDonationRequest(donationRequest);
         comment = commentRepository.save(comment);
 
-        Events.commentChanged(ChangeType.ADD, comment).publish();
+        Events.comment(ChangeType.ADD, comment).publish();
 
         return comment;
     }
@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
         final Comment comment = commentRepository.findOne(commentId);
         commentRepository.delete(comment);
 
-        Events.commentChanged(ChangeType.REMOVE, comment).publish();
+        Events.comment(ChangeType.REMOVE, comment).publish();
     }
 
     @Override
@@ -73,6 +73,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setConfirmed(confirmed);
         comment = commentRepository.save(comment);
 
-        Events.commentChanged(ChangeType.REFRESH, comment).publish();
+        Events.comment(ChangeType.REFRESH, comment).publish();
     }
 }

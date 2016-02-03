@@ -45,7 +45,7 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         donationRequest.setResolved(resolved);
         donationRequest = donationRequestRepository.save(donationRequest);
 
-        Events.donationRequestChanged(ChangeType.REMOVE, donationRequest).publish();
+        Events.donationRequest(ChangeType.REMOVE, donationRequest).publish();
     }
 
     @Override
@@ -58,6 +58,6 @@ public class DonationRequestServiceImpl implements DonationRequestService {
 
         donationRequestRepository.delete(id);
 
-        Events.donationRequestChanged(ChangeType.REMOVE, donationRequest).publish();
+        Events.donationRequest(ChangeType.REMOVE, donationRequest).publish();
     }
 }

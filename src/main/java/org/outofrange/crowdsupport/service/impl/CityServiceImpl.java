@@ -68,7 +68,7 @@ public class CityServiceImpl implements CityService {
         }
 
         City newCity = cityRepository.save(new City(loadedState.get(), name, identifier, imagePath));
-        Events.cityChanged(ChangeType.ADD, newCity);
+        Events.city(ChangeType.ADD, newCity).publish();
         return newCity;
     }
 }

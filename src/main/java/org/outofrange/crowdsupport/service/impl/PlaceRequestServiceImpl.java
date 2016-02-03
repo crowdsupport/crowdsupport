@@ -6,7 +6,6 @@ import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.model.Team;
 import org.outofrange.crowdsupport.persistence.PlaceRequestRepository;
-import org.outofrange.crowdsupport.persistence.TeamRepository;
 import org.outofrange.crowdsupport.service.*;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
@@ -103,7 +102,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
         placeRequestDb = save(placeRequestDb);
 
-        Events.placeChanged(ChangeType.ADD, placeRequestDb.getPlace());
+        Events.place(ChangeType.ADD, placeRequestDb.getPlace()).publish();
 
         return placeRequestDb;
     }
