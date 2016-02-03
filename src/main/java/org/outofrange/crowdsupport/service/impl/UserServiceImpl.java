@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.getRoles().add(authorityService.loadRole(RoleStore.USER));
 
-        Events.user(ChangeType.ADD, user).publish();
+        Events.user(ChangeType.CREATE, user).publish();
 
         return save(user);
     }
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
         }
 
         final User updatedUser = userRepository.save(user);
-        Events.user(ChangeType.REFRESH, updatedUser).publish();
+        Events.user(ChangeType.UPDATE, updatedUser).publish();
         return updatedUser;
     }
 

@@ -49,7 +49,7 @@ public class StateServiceImpl implements StateService {
         State state = new State(name, identifier, imagePath);
         state = save(state);
 
-        Events.state(ChangeType.ADD, state).publish();
+        Events.state(ChangeType.CREATE, state).publish();
 
         return state;
     }

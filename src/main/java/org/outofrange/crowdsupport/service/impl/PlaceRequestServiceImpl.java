@@ -102,7 +102,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
         placeRequestDb = save(placeRequestDb);
 
-        Events.place(ChangeType.ADD, placeRequestDb.getPlace()).publish();
+        Events.place(ChangeType.CREATE, placeRequestDb.getPlace()).publish();
 
         return placeRequestDb;
     }
