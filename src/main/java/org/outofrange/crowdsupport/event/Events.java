@@ -25,27 +25,17 @@ public class Events {
         return new ClientEntityChangeEvent<>(type, user, "user");
     }
 
+    public static ClientEntityChangeEvent<Comment> commentChanged(ChangeType type, Comment comment) {
+        return new ClientEntityChangeEvent<>(type, comment,
+                "comment", buildPlaceTopic(comment.getDonationRequest().getPlace()));
+    }
+
     public static ClientEntityChangeEvent<DonationRequest> donationRequestChanged(ChangeType type, DonationRequest donationRequest) {
-        return new ClientEntityChangeEvent<>(type, donationRequest, "donationRequest");
+        return new ClientEntityChangeEvent<>(type, donationRequest,
+                "donationRequest", buildPlaceTopic(donationRequest.getPlace()));
     }
 
-    public static PlaceClientEvents place(Place place) {
-        return new PlaceClientEvents(place);
-    }
-
-    public static class PlaceClientEvents {
-        private final Place place;
-
-        private PlaceClientEvents(Place place) {
-            this.place = place;
-        }
-
-        public PlaceEvent<Comment> commentChange(ChangeType changeType, Comment payload) {
-            return new PlaceEvent<>(changeType, payload, place);
-        }
-
-        public PlaceEvent<DonationRequest> donationRequestChange(ChangeType changeType, DonationRequest payload) {
-            return new PlaceEvent<>(changeType, payload, place);
-        }
+    private static String buildPlaceTopic(Place place) {
+        return place.getCity().getState().getIdentifier() + "/" + place.getCity().getIdentifier() + "/" + place.getIdentifier();
     }
 }

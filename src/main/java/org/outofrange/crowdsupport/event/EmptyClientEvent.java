@@ -1,14 +1,17 @@
 package org.outofrange.crowdsupport.event;
 
-public class EmptyClientEvent implements ClientEvent {
-    private final String topic;
+import java.util.Arrays;
+import java.util.List;
 
-    public EmptyClientEvent(String topic) {
-        this.topic = topic;
+public class EmptyClientEvent implements ClientEvent {
+    private final List<String> topics;
+
+    public EmptyClientEvent(String... topics) {
+        this.topics = Arrays.asList(topics);
     }
 
     @Override
-    public String getTopic() {
-        return topic;
+    public List<String> getTopics() {
+        return topics;
     }
 }

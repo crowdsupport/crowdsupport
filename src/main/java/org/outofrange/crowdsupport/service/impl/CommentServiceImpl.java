@@ -4,7 +4,6 @@ import org.outofrange.crowdsupport.event.ChangeType;
 import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.Comment;
 import org.outofrange.crowdsupport.model.DonationRequest;
-import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.CommentRepository;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
@@ -47,13 +46,11 @@ public class CommentServiceImpl implements CommentService {
         User user = userService.getCurrentUserUpdated().get();
 
         final DonationRequest donationRequest = donationRequestRepository.getOne(donationRequestId);
-        final Place place = donationRequest.getPlace();
-
         comment.setAuthor(user);
         comment.setDonationRequest(donationRequest);
         comment = commentRepository.save(comment);
 
-        Events.place(place).commentChange(ChangeType.ADD, comment).publish();
+        Events.commentChanged(ChangeType.ADD, comment).publish();
 
         return comment;
     }
@@ -63,11 +60,9 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Deleting comment with id {}", commentId);
 
         final Comment comment = commentRepository.findOne(commentId);
-        final Place place = comment.getDonationRequest().getPlace();
-
         commentRepository.delete(comment);
 
-        Events.place(place).commentChange(ChangeType.REMOVE, comment).publish();
+        Events.commentChanged(ChangeType.REMOVE, comment).publish();
     }
 
     @Override
@@ -75,12 +70,9 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Setting confirmed of comment with id {} to {}", commentId, confirmed);
 
         Comment comment = commentRepository.findOne(commentId);
-        final Place place = comment.getDonationRequest().getPlace();
-
         comment.setConfirmed(confirmed);
-
         comment = commentRepository.save(comment);
 
-        Events.place(place).commentChange(ChangeType.REFRESH, comment).publish();
+        Events.commentChanged(ChangeType.REFRESH, comment).publish();
     }
 }

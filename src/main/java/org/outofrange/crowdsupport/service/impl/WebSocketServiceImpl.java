@@ -13,6 +13,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class WebSocketServiceImpl {
@@ -34,8 +36,11 @@ public class WebSocketServiceImpl {
 
     @Subscribe
     public void clientEvent(ClientEvent event) {
-        log.debug("Sending event to clients: {}", event);
-        template.convertAndSend(TOPIC_PREFIX + event.getTopic(), event);
+        event.getTopics().forEach(t -> {
+            final String topic = TOPIC_PREFIX + t;
+            log.debug("Sending event {} to topic: {}", event, topic);
+            template.convertAndSend(topic, event);
+        });
     }
 
     @Subscribe
@@ -59,7 +64,7 @@ public class WebSocketServiceImpl {
 
             log.debug("Mapped payload from {} to {}", payloadClass, dtoClass);
 
-            return new ClientEntityChangeEvent<>(event.getChangeType(), payloadDto, event.getTopic());
+            return new ClientEntityChangeEvent<>(event.getChangeType(), payloadDto, event.getTopics());
         } catch (ClassNotFoundException | ClassCastException e) {
             throw new ServiceException("Couldn't automatically map payload " + payloadClass.getSimpleName() + " to DTO (guessed name: "
                     + classNameGuess + ")", e);

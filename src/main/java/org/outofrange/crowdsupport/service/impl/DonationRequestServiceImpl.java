@@ -3,7 +3,6 @@ package org.outofrange.crowdsupport.service.impl;
 import org.outofrange.crowdsupport.event.ChangeType;
 import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.DonationRequest;
-import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.DonationRequestService;
@@ -46,7 +45,7 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         donationRequest.setResolved(resolved);
         donationRequest = donationRequestRepository.save(donationRequest);
 
-        Events.place(donationRequest.getPlace()).donationRequestChange(ChangeType.REMOVE, donationRequest).publish();
+        Events.donationRequestChanged(ChangeType.REMOVE, donationRequest).publish();
     }
 
     @Override
@@ -55,11 +54,10 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         log.debug("Deleting donation request with id {}", id);
 
         final DonationRequest donationRequest = donationRequestRepository.findOne(id);
-        final Place place = donationRequest.getPlace();
         donationRequest.getComments().forEach(c -> commentService.deleteComment(c.getId()));
 
         donationRequestRepository.delete(id);
 
-        Events.place(place).donationRequestChange(ChangeType.REMOVE, donationRequest).publish();
+        Events.donationRequestChanged(ChangeType.REMOVE, donationRequest).publish();
     }
 }

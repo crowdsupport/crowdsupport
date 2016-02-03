@@ -1,15 +1,22 @@
 package org.outofrange.crowdsupport.event;
 
-public class ClientEntityChangeEvent<T> extends EntityChangeEvent<T> implements ClientEvent {
-    private final String topic;
+import java.util.Arrays;
+import java.util.List;
 
-    public ClientEntityChangeEvent(ChangeType changeType, T payload, String topic) {
+public class ClientEntityChangeEvent<T> extends EntityChangeEvent<T> implements ClientEvent {
+    private final List<String> topics;
+
+    public ClientEntityChangeEvent(ChangeType changeType, T payload, String... topics) {
+        this(changeType, payload, Arrays.asList(topics));
+    }
+
+    public ClientEntityChangeEvent(ChangeType changeType, T payload, List<String> topics) {
         super(changeType, payload);
-        this.topic = topic;
+        this.topics = topics;
     }
 
     @Override
-    public String getTopic() {
-        return topic;
+    public List<String> getTopics() {
+        return topics;
     }
 }
