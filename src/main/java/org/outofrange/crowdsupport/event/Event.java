@@ -7,4 +7,8 @@ public interface Event {
     default String name() {
         return getClass().getSimpleName();
     }
+
+    default void publish() {
+        EventBusHolder.post(this);
+    }
 }

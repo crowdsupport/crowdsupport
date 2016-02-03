@@ -1,8 +1,7 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.modelmapper.ModelMapper;
-import org.outofrange.crowdsupport.dto.ChangeDto;
-import org.outofrange.crowdsupport.dto.DonationRequestDto;
+import org.outofrange.crowdsupport.event.ChangeType;
+import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.User;
@@ -11,7 +10,6 @@ import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.outofrange.crowdsupport.persistence.TeamRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.service.PlaceService;
-import org.outofrange.crowdsupport.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,12 +33,6 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Inject
     private TeamRepository teamRepository;
-
-    @Inject
-    private WebSocketService webSocketService;
-
-    @Inject
-    private ModelMapper mapper;
 
     @Override
     public Place save(Place place) {
@@ -125,7 +117,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         donationRequest = donationRequestRepository.save(donationRequest);
 
-        webSocketService.sendChangeToPlace(ChangeDto.add(mapper.map(donationRequest, DonationRequestDto.class)), placeDb);
+        Events.place(placeDb).donationRequestChange(ChangeType.ADD, donationRequest).publish();
 
         return donationRequest;
     }

@@ -35,7 +35,6 @@ public class WebSocketServiceImpl implements WebSocketService {
         EventBusHolder.register(this);
     }
 
-    @Override
     public void sendChangeToPlace(ChangeDto<?> change, Place place) {
         final String topic = "/topic/" + place.getCity().getState().getIdentifier() + "/" +
                 place.getCity().getIdentifier() + "/" + place.getIdentifier();

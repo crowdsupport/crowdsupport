@@ -2,7 +2,6 @@ package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.event.ChangeType;
-import org.outofrange.crowdsupport.event.EventBusHolder;
 import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.getRoles().add(authorityService.loadRole(RoleStore.USER));
 
-        EventBusHolder.post(Events.Client.userChanged(ChangeType.ADD, user));
+        Events.userChanged(ChangeType.ADD, user).publish();
 
         return save(user);
     }

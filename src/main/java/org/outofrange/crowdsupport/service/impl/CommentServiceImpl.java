@@ -1,8 +1,7 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.modelmapper.ModelMapper;
-import org.outofrange.crowdsupport.dto.ChangeDto;
-import org.outofrange.crowdsupport.dto.CommentDto;
+import org.outofrange.crowdsupport.event.ChangeType;
+import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.Comment;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
@@ -11,7 +10,6 @@ import org.outofrange.crowdsupport.persistence.CommentRepository;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,12 +29,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Inject
     private UserService userService;
-
-    @Inject
-    private ModelMapper mapper;
-
-    @Inject
-    private WebSocketService webSocketService;
 
     @Override
     public Comment save(Comment comment) {
@@ -61,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setDonationRequest(donationRequest);
         comment = commentRepository.save(comment);
 
-        webSocketService.sendChangeToPlace(ChangeDto.add(mapper.map(comment, CommentDto.class)), place);
+        Events.place(place).commentChange(ChangeType.ADD, comment).publish();
 
         return comment;
     }
@@ -75,7 +67,7 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.delete(comment);
 
-        webSocketService.sendChangeToPlace(ChangeDto.remove(commentId, CommentDto.class), place);
+        Events.place(place).commentChange(ChangeType.REMOVE, comment).publish();
     }
 
     @Override
@@ -88,6 +80,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setConfirmed(confirmed);
 
         comment = commentRepository.save(comment);
-        webSocketService.sendChangeToPlace(ChangeDto.refresh(mapper.map(comment, CommentDto.class)), place);
+
+        Events.place(place).commentChange(ChangeType.REFRESH, comment).publish();
     }
 }

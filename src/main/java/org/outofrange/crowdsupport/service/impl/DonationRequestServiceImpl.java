@@ -1,14 +1,12 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.modelmapper.ModelMapper;
-import org.outofrange.crowdsupport.dto.ChangeDto;
-import org.outofrange.crowdsupport.dto.DonationRequestDto;
+import org.outofrange.crowdsupport.event.ChangeType;
+import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.DonationRequestService;
-import org.outofrange.crowdsupport.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,12 +25,6 @@ public class DonationRequestServiceImpl implements DonationRequestService {
 
     @Inject
     private CommentService commentService;
-
-    @Inject
-    private WebSocketService webSocketService;
-
-    @Inject
-    private ModelMapper mapper;
 
     @Override
     @Transactional(readOnly = false)
@@ -54,8 +46,7 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         donationRequest.setResolved(resolved);
         donationRequest = donationRequestRepository.save(donationRequest);
 
-        webSocketService.sendChangeToPlace(ChangeDto.refresh(mapper.map(donationRequest, DonationRequestDto.class)),
-                donationRequest.getPlace());
+        Events.place(donationRequest.getPlace()).donationRequestChange(ChangeType.REMOVE, donationRequest).publish();
     }
 
     @Override
@@ -69,6 +60,6 @@ public class DonationRequestServiceImpl implements DonationRequestService {
 
         donationRequestRepository.delete(id);
 
-        webSocketService.sendChangeToPlace(ChangeDto.remove(id, DonationRequestDto.class), place);
+        Events.place(place).donationRequestChange(ChangeType.REMOVE, donationRequest).publish();
     }
 }
