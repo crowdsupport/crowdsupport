@@ -1,5 +1,6 @@
 package org.outofrange.crowdsupport.model;
 
+import org.outofrange.crowdsupport.util.Validate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -37,8 +38,7 @@ public class User extends BaseEntity implements UserDetails {
 
     private boolean rehashPassword;
 
-    public User() {
-    }
+    protected User() { /* empty constructor for frameworks */ }
 
     public User(String username, String password) {
         setUsername(username);
@@ -65,6 +65,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void setUsername(String username) {
+        Validate.notNullOrEmpty(username);
+
         this.username = username;
     }
 
@@ -85,6 +87,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void setPassword(String password) {
+        Validate.notNullOrEmpty(password);
+
         this.password = password;
         rehashPassword = true;
     }
@@ -131,6 +135,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void setPasswordHash(String passwordHash) {
+        Validate.notNullOrEmpty(username);
+
         this.password = passwordHash;
         rehashPassword = false;
     }
