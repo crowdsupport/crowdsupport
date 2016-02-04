@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "USERS")
 public class User extends BaseEntity implements UserDetails {
     @Column(name = "username")
     private String username;
@@ -30,12 +30,13 @@ public class User extends BaseEntity implements UserDetails {
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "UserRoles", joinColumns = {@JoinColumn(name = "user")}, inverseJoinColumns = {@JoinColumn(name = "role")})
+    @JoinTable(name = "USERS_ROLES", joinColumns = {@JoinColumn(name = "user")}, inverseJoinColumns = {@JoinColumn(name = "role")})
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(mappedBy = "members")
     private List<Team> teams = new ArrayList<>();
 
+    @Transient
     private boolean rehashPassword;
 
     protected User() { /* empty constructor for frameworks */ }

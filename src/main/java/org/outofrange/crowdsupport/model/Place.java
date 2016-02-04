@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Venues")
+@Table(name = "PLACES")
 public class Place extends BaseEntity {
     @ManyToOne
-    @JoinTable(name = "city")
+    @JoinColumn(name = "city")
     private City city;
 
     @Column(name = "location")
@@ -30,7 +30,7 @@ public class Place extends BaseEntity {
     private boolean active;
 
     @OneToOne
-    @JoinColumn(name = "placeRequest")
+    @JoinColumn(name = "place_request")
     private PlaceRequest placeRequest;
 
     @OneToOne(cascade = CascadeType.PERSIST)

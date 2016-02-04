@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Cities")
+@Table(name = "CITIES")
 public class City extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "state")

@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Roles")
+@Table(name = "ROLES")
 public class Role extends BaseEntity implements GrantedAuthority {
     private static final String ROLE_PREFIX = "ROLE_";
 
@@ -19,11 +19,11 @@ public class Role extends BaseEntity implements GrantedAuthority {
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "RolePermissions", joinColumns = {@JoinColumn(name = "role")},
+    @JoinTable(name = "ROLES_PERMISSIONS", joinColumns = {@JoinColumn(name = "role")},
             inverseJoinColumns = {@JoinColumn(name = "permission")})
     private Set<Permission> permissions = new HashSet<>();
 
-    @Column(name = "systemrole")
+    @Column(name = "system_role")
     private boolean systemRole;
 
     protected Role() {

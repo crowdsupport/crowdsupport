@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Teams")
+@Table(name = "TEAMS")
 public class Team extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "place")
     private Place place;
 
     @ManyToMany
-    @JoinTable(name = "TeamsUsers",
+    @JoinTable(name = "TEAMS_USERS",
             joinColumns = {@JoinColumn(name = "team", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user", referencedColumnName = "id")})
     private List<User> members = new ArrayList<>();

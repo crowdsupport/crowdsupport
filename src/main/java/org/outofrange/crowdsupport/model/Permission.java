@@ -4,12 +4,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Permissions")
+@Table(name = "PERMISSIONS")
 public class Permission extends BaseEntity implements GrantedAuthority {
+    @Column(name = "name")
     private String name;
 
     public String getName() {

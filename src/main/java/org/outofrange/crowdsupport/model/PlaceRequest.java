@@ -3,14 +3,14 @@ package org.outofrange.crowdsupport.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "PlaceRequest")
+@Table(name = "PLACE_REQUESTS")
 public class PlaceRequest extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "place")
     private Place place;
 
     @ManyToOne
-    @JoinColumn(name = "requestingUser")
+    @JoinColumn(name = "requesting_user")
     private User requestingUser;
 
     @Column(name = "state")

@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Tags")
+@Table(name = "TAGS")
 public class Tag extends BaseEntity {
     @Column(name = "name")
     private String name;

@@ -1,5 +1,6 @@
 package org.outofrange.crowdsupport.spring;
 
+import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.spring.logging.RequestLoggingUtility;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -51,6 +52,11 @@ public class SpringConfiguration {
     @Bean
     public ServletListenerRegistrationBean<RequestLoggingUtility> loggingMdcListener() {
         return new ServletListenerRegistrationBean<>(requestLoggingUtility);
+    }
+
+    @Bean
+    public ModelMapper mapper() {
+        return new ModelMapper();
     }
 
     @Bean

@@ -30,14 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Inject
     private TokenAuthenticationService tokenAuthenticationService;
 
-    @Inject
-    public WebSecurityConfig(PasswordEncoder passwordEncoder, UserService userService, Config config,
-                             TokenAuthenticationService tokenAuthenticationService) {
+    public WebSecurityConfig() {
         super(true);
-        this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
-        this.config = config;
-        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
     @Override

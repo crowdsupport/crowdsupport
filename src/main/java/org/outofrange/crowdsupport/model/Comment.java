@@ -3,7 +3,7 @@ package org.outofrange.crowdsupport.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Comments")
+@Table(name = "COMMENTS")
 public class Comment extends BaseEntity {
     @Column(name = "text")
     private String text;
@@ -13,7 +13,7 @@ public class Comment extends BaseEntity {
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "donationrequest")
+    @JoinColumn(name = "donation_request")
     private DonationRequest donationRequest;
 
     @Column(name = "quantity")

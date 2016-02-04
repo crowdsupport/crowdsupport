@@ -1,12 +1,12 @@
 package org.outofrange.crowdsupport.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "DonationRequests")
+@Table(name = "DONATION_REQUESTS")
 public class DonationRequest extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "place")
@@ -18,8 +18,8 @@ public class DonationRequest extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "validTo")
-    private LocalDateTime validToDateTime;
+    @Column(name = "valid_to")
+    private ZonedDateTime validToDateTime;
 
     @Column(name = "quantity")
     private int quantity;
@@ -31,7 +31,7 @@ public class DonationRequest extends BaseEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "RequestTags", joinColumns = {@JoinColumn(name = "donationRequest")}, inverseJoinColumns = {@JoinColumn(name = "tag")})
+    @JoinTable(name = "DONATION_REQUESTS_TAGS", joinColumns = {@JoinColumn(name = "donation_request")}, inverseJoinColumns = {@JoinColumn(name = "tag")})
     private List<Tag> tags = new ArrayList<>();
 
     @Column(name = "resolved")
@@ -61,11 +61,11 @@ public class DonationRequest extends BaseEntity {
         this.description = description;
     }
 
-    public LocalDateTime getValidToDateTime() {
+    public ZonedDateTime getValidToDateTime() {
         return validToDateTime;
     }
 
-    public void setValidToDateTime(LocalDateTime validToDateTime) {
+    public void setValidToDateTime(ZonedDateTime validToDateTime) {
         this.validToDateTime = validToDateTime;
     }
 

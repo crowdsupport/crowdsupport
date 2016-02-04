@@ -15,12 +15,8 @@ import java.util.List;
 public class WebMvcConfig extends DelegatingWebMvcConfiguration {
     private static final int FOURTY_FIVE_DAYS = 60 * 60 * 24 * 45;
 
-    private final ObjectMapper objectMapper;
-
     @Inject
-    public WebMvcConfig(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+    private ObjectMapper objectMapper;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "States")
+@Table(name = "STATES")
 public class State extends BaseEntity {
     @Column(name = "name")
     private String name;

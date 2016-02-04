@@ -1,8 +1,21 @@
-spring:
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+crowdsupport:
+  version: @project.version@
+  token:
+    secret: 9SyECk96oDsTmXfogIieDI0cD/8FpnojlYSUJT5U9I/FGVmBz5oskmjOR8cbXTvoPjX+Pq/T/b1PqpHX0lYm0oCBjXWICA==
+  db:
+    type: h2
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password:
+flyway:
+  locations:
+    - db/migration/common
+    - db/migration/${crowdsupport.db.type}
+spring:
+  datasource:
+    url: ${crowdsupport.db.url}
+    username: ${crowdsupport.db.username}
+    password: ${crowdsupport.db.password}
   thymeleaf:
     mode: HTML5
   jackson:
@@ -12,15 +25,14 @@ spring:
       fail_on_unknown_properties: false
     serialization:
       write_dates_as_timestamps: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
 server:
   port: 80
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,application/javascript
-crowdsupport:
-  version: @project.version@
-  token:
-    secret: 9SyECk96oDsTmXfogIieDI0cD/8FpnojlYSUJT5U9I/FGVmBz5oskmjOR8cbXTvoPjX+Pq/T/b1PqpHX0lYm0oCBjXWICA==
 logging:
   level:
     org.outofrange.crowdsupport.spring.ApiVersionRequestMappingHandlerMapping: INFO
@@ -32,9 +44,9 @@ spring:
   thymeleaf:
     cache: false
   jpa:
-    show-sql: false # Could be useful, but is annoying most of the times
+    show-sql: true # Could be useful, but is annoying most of the times
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password:
   h2:
