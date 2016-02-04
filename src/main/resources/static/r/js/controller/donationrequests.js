@@ -305,7 +305,7 @@
 
                         break;
                     case 'DELETE':
-                        var id = message.id;
+                        var id = message.payload.id;
                         var index = -1;
 
                         r = _.find($scope.donationRequests, function (request) {
