@@ -5,8 +5,11 @@ import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.model.Team;
+import org.outofrange.crowdsupport.persistence.CityRepository;
 import org.outofrange.crowdsupport.persistence.PlaceRequestRepository;
-import org.outofrange.crowdsupport.service.*;
+import org.outofrange.crowdsupport.service.PlaceRequestService;
+import org.outofrange.crowdsupport.service.PlaceService;
+import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,17 +24,19 @@ import java.util.Optional;
 public class PlaceRequestServiceImpl implements PlaceRequestService {
     private static final Logger log = LoggerFactory.getLogger(PlaceRequestServiceImpl.class);
 
-    @Inject
-    private PlaceRequestRepository placeRequestRepository;
+    private final PlaceRequestRepository placeRequestRepository;
+    private final CityRepository cityRepository;
+    private final PlaceService placeService;
+    private final UserService userService;
 
     @Inject
-    private CityService cityService;
-
-    @Inject
-    private PlaceService placeService;
-
-    @Inject
-    private UserService userService;
+    public PlaceRequestServiceImpl(PlaceRequestRepository placeRequestRepository, CityRepository cityRepository,
+                                   PlaceService placeService, UserService userService) {
+        this.placeRequestRepository = placeRequestRepository;
+        this.cityRepository = cityRepository;
+        this.placeService = placeService;
+        this.userService = userService;
+    }
 
     @Override
     public PlaceRequest save(PlaceRequest entity) {
@@ -59,7 +64,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
         if (placeRequest.getPlace().getCity() != null) {
             final String cityIdentifier = placeRequest.getPlace().getCity().getIdentifier();
             final String stateIdentifier = placeRequest.getPlace().getCity().getState().getIdentifier();
-            final Optional<City> city = cityService.load(cityIdentifier, stateIdentifier);
+            final Optional<City> city = cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, cityIdentifier);
 
             if (city.isPresent()) {
                 log.trace("Found existing city attached to place request: {}", city.get());
@@ -80,8 +85,9 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     public PlaceRequest saveNewPlace(PlaceRequest placeRequest) {
         log.trace("Saving new place {}", placeRequest);
 
-        final Optional<City> cityDb = cityService.load(placeRequest.getPlace().getCity().getIdentifier(),
-                placeRequest.getPlace().getCity().getState().getIdentifier());
+        final Optional<City> cityDb = cityRepository.findOneByStateIdentifierAndIdentifier(
+                placeRequest.getPlace().getCity().getState().getIdentifier(),
+                placeRequest.getPlace().getCity().getIdentifier());
         if (!cityDb.isPresent()) {
             throw new ServiceException("Found no city with identifier " + placeRequest.getPlace().getCity().getIdentifier());
         }

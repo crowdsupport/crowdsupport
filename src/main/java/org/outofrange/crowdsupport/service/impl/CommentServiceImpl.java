@@ -20,14 +20,17 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private static final Logger log = LoggerFactory.getLogger(CommentServiceImpl.class);
 
-    @Inject
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final DonationRequestRepository donationRequestRepository;
+    private final UserService userService;
 
     @Inject
-    private DonationRequestRepository donationRequestRepository;
-
-    @Inject
-    private UserService userService;
+    public CommentServiceImpl(CommentRepository commentRepository, DonationRequestRepository donationRequestRepository,
+                              UserService userService) {
+        this.commentRepository = commentRepository;
+        this.donationRequestRepository = donationRequestRepository;
+        this.userService = userService;
+    }
 
     @Override
     public Comment save(Comment comment) {

@@ -19,8 +19,12 @@ import java.util.Optional;
 public class StateServiceImpl implements StateService {
     private static final Logger log = LoggerFactory.getLogger(StateServiceImpl.class);
 
+    private final StateRepository stateRepository;
+
     @Inject
-    private StateRepository stateRepository;
+    public StateServiceImpl(StateRepository stateRepository) {
+        this.stateRepository = stateRepository;
+    }
 
     @Override
     public State save(State state) {

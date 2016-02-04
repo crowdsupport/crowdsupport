@@ -22,17 +22,19 @@ import java.util.Optional;
 public class PlaceServiceImpl implements PlaceService {
     private static final Logger log = LoggerFactory.getLogger(PlaceServiceImpl.class);
 
-    @Inject
-    private PlaceRepository placeRepository;
+    private final PlaceRepository placeRepository;
+    private final DonationRequestRepository donationRequestRepository;
+    private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
 
     @Inject
-    private DonationRequestRepository donationRequestRepository;
-
-    @Inject
-    private UserRepository userRepository;
-
-    @Inject
-    private TeamRepository teamRepository;
+    public PlaceServiceImpl(PlaceRepository placeRepository, DonationRequestRepository donationRequestRepository,
+                            UserRepository userRepository, TeamRepository teamRepository) {
+        this.placeRepository = placeRepository;
+        this.donationRequestRepository = donationRequestRepository;
+        this.userRepository = userRepository;
+        this.teamRepository = teamRepository;
+    }
 
     @Override
     public Place save(Place place) {

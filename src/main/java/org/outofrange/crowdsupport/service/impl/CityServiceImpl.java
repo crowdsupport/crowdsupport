@@ -5,15 +5,14 @@ import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.CityRepository;
+import org.outofrange.crowdsupport.persistence.StateRepository;
 import org.outofrange.crowdsupport.service.CityService;
-import org.outofrange.crowdsupport.service.StateService;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +20,13 @@ import java.util.Optional;
 public class CityServiceImpl implements CityService {
     private static final Logger log = LoggerFactory.getLogger(CityServiceImpl.class);
 
-    @Inject
-    private CityRepository cityRepository;
+    private final CityRepository cityRepository;
+    private final StateRepository stateRepository;
 
-    @Inject
-    private StateService stateService;
+    public CityServiceImpl(CityRepository cityRepository, StateRepository stateRepository) {
+        this.cityRepository = cityRepository;
+        this.stateRepository = stateRepository;
+    }
 
     @Override
     public City save(City city) {
@@ -62,7 +63,7 @@ public class CityServiceImpl implements CityService {
                     " in a state with the identifier " + stateIdentifier);
         }
 
-        final Optional<State> loadedState = stateService.load(stateIdentifier);
+        final Optional<State> loadedState = stateRepository.findOneByIdentifier(stateIdentifier);
         if (!loadedState.isPresent()) {
             throw new ServiceException("Found no state with identifier " + stateIdentifier);
         }

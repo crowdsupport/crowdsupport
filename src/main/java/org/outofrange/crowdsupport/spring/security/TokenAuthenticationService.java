@@ -1,8 +1,8 @@
 package org.outofrange.crowdsupport.spring.security;
 
+import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.UserAuthDto;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.util.CsModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -20,15 +20,14 @@ public class TokenAuthenticationService {
 	private static final String AUTH_HEADER_NAME = "authorization";
 
 	private final TokenHandler tokenHandler;
-
-    @Inject
-    private CsModelMapper mapper;
-
-    @Inject
-    private UserService userService;
+    private final ModelMapper mapper;
+    private final UserService userService;
 
 	@Inject
-	public TokenAuthenticationService(@Value("${crowdsupport.token.secret}") String secret) {
+	public TokenAuthenticationService(@Value("${crowdsupport.token.secret}") String secret, ModelMapper mapper,
+                                      UserService userService) {
+        this.mapper = mapper;
+        this.userService = userService;
 		tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
 	}
 

@@ -1,7 +1,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <conversionRule conversionWord="rclr" converterClass="org.outofrange.crowdsupport.spring.logging.ColorFromRequestConverter" />
+    <conversionRule conversionWord="rclr" converterClass="org.outofrange.crowdsupport.spring.logging.RequestTimeFilter" />
     <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(-){faint} %clr(%-40.40logger{39}){cyan} [%rclr(%8X{requestId})] %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 

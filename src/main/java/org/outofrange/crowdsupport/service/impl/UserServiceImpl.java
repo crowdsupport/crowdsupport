@@ -6,7 +6,6 @@ import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
-import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.security.UserAuthentication;
 import org.outofrange.crowdsupport.util.RoleStore;
@@ -30,17 +29,16 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Inject
-    private PasswordEncoder passwordEncoder;
-
-    @Inject
-    private RoleRepository roleRepository;
-
-    @Inject
-    private AuthorityService authorityService;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     @Transactional(readOnly = false)
@@ -75,7 +73,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setImagePath(userDto.getImagePath());
         user.setEnabled(true);
-        user.getRoles().add(authorityService.loadRole(RoleStore.USER));
+        user.getRoles().add(roleRepository.findOneByName(RoleStore.USER).get());
 
         Events.user(ChangeType.CREATE, user).publish();
 

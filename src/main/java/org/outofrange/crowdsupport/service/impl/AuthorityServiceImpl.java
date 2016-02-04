@@ -22,11 +22,14 @@ import java.util.stream.Collectors;
 public class AuthorityServiceImpl implements AuthorityService {
     private static final Logger log = LoggerFactory.getLogger(AuthorityServiceImpl.class);
 
-    @Inject
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
     @Inject
-    private PermissionRepository permissionRepository;
+    public AuthorityServiceImpl(RoleRepository roleRepository, PermissionRepository permissionRepository) {
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
+    }
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")

@@ -19,11 +19,14 @@ import java.util.List;
 public class DonationRequestServiceImpl implements DonationRequestService {
     private static final Logger log = LoggerFactory.getLogger(DonationRequestServiceImpl.class);
 
-    @Inject
-    private DonationRequestRepository donationRequestRepository;
+    private final DonationRequestRepository donationRequestRepository;
+    private final CommentService commentService;
 
     @Inject
-    private CommentService commentService;
+    public DonationRequestServiceImpl(DonationRequestRepository donationRequestRepository, CommentService commentService) {
+        this.donationRequestRepository = donationRequestRepository;
+        this.commentService = commentService;
+    }
 
     @Override
     @Transactional(readOnly = false)

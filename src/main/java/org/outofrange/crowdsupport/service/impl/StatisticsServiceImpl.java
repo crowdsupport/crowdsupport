@@ -15,20 +15,22 @@ import javax.inject.Inject;
 public class StatisticsServiceImpl implements StatisticsService {
     private static final Logger log = LoggerFactory.getLogger(StatisticsServiceImpl.class);
 
-    @Inject
-    private StateRepository stateRepository;
+    private final StateRepository stateRepository;
+    private final CityRepository cityRepository;
+    private final PlaceRepository placeRepository;
+    private final DonationRequestRepository donationRequestRepository;
+    private final UserRepository userRepository;
 
     @Inject
-    private CityRepository cityRepository;
-
-    @Inject
-    private PlaceRepository placeRepository;
-
-    @Inject
-    private DonationRequestRepository donationRequestRepository;
-
-    @Inject
-    private UserRepository userRepository;
+    public StatisticsServiceImpl(StateRepository stateRepository, CityRepository cityRepository,
+                                 PlaceRepository placeRepository, DonationRequestRepository donationRequestRepository,
+                                 UserRepository userRepository) {
+        this.stateRepository = stateRepository;
+        this.cityRepository = cityRepository;
+        this.placeRepository = placeRepository;
+        this.donationRequestRepository = donationRequestRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public StatisticsDto getStatistics() {
