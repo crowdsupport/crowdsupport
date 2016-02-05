@@ -14,7 +14,5 @@ public interface StateService {
 
     List<State> searchStates(String query);
 
-    State save(State entity);
-
     List<State> loadAll();
 }

@@ -39,12 +39,6 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     }
 
     @Override
-    public PlaceRequest save(PlaceRequest entity) {
-        log.trace("Saving place request: {}", entity);
-        return placeRequestRepository.save(entity);
-    }
-
-    @Override
     public List<PlaceRequest> loadAll() {
         return placeRequestRepository.findAll();
     }
@@ -77,7 +71,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
         placeRequest.getPlace().setActive(false);
         placeRequest.setPlace(placeService.save(placeRequest.getPlace()));
 
-        return save(placeRequest);
+        return placeRequestRepository.save(placeRequest);
     }
 
     @Override
@@ -106,7 +100,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
         // TODO notify user about accepting new place
 
-        placeRequestDb = save(placeRequestDb);
+        placeRequestDb = placeRequestRepository.save(placeRequestDb);
 
         Events.place(ChangeType.CREATE, placeRequestDb.getPlace()).publish();
 

@@ -28,7 +28,5 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> getCurrentUserUpdated();
 
-    User save(User entity);
-
     List<User> loadAll();
 }

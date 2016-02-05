@@ -14,7 +14,5 @@ public interface CityService {
 
     City createCity(String name, String identifier, String imagePath, String stateIdentifier);
 
-    City save(City entity);
-
     List<City> loadAll();
 }

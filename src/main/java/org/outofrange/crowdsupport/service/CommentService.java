@@ -9,8 +9,6 @@ public interface CommentService {
 
     void deleteComment(long commentId);
 
-    Comment save(Comment entity);
-
     List<Comment> loadAll();
 
     void setCommentConfirmed(long commentId, boolean confirmed);

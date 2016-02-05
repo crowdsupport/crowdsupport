@@ -31,13 +31,6 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City save(City city) {
-        log.debug("Saving city {}", city);
-
-        return cityRepository.save(city);
-    }
-
-    @Override
     public List<City> loadAll() {
         return cityRepository.findAll();
     }
@@ -60,6 +53,7 @@ public class CityServiceImpl implements CityService {
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_CITIES)")
     public City createCity(String name, String identifier, String imagePath, String stateIdentifier) {
+        log.debug("Creating new city with identifier {}", identifier);
         if (cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, identifier).isPresent()) {
             throw new ServiceException("There is already a city with an identifier of " + identifier +
                     " in a state with the identifier " + stateIdentifier);

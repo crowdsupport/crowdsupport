@@ -27,13 +27,6 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public State save(State state) {
-        log.debug("Saving state {}", state);
-
-        return stateRepository.save(state);
-    }
-
-    @Override
     public Optional<State> load(String identifier) {
         return stateRepository.findOneByIdentifier(identifier);
     }
@@ -51,7 +44,7 @@ public class StateServiceImpl implements StateService {
         }
 
         State state = new State(name, identifier, imagePath);
-        state = save(state);
+        state = stateRepository.save(state);
 
         Events.state(ChangeType.CREATE, state).publish();
 

@@ -33,11 +33,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment save(Comment comment) {
-        return commentRepository.save(comment);
-    }
-
-    @Override
     public List<Comment> loadAll() {
         return commentRepository.findAll();
     }

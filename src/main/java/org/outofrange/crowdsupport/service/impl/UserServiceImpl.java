@@ -3,7 +3,6 @@ package org.outofrange.crowdsupport.service.impl;
 import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.event.ChangeType;
 import org.outofrange.crowdsupport.event.Events;
-import org.outofrange.crowdsupport.model.Role;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
@@ -21,8 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,18 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = false)
-    public User save(User user) {
-        log.debug("Saving user {}", user);
-
-        if (user.rehashPassword()) {
-            user.setPasswordHash(passwordEncoder.encode(user.getPassword()));
-        }
-
-        return userRepository.save(user);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
     @PreAuthorize("hasRole(@role.USER)")
     public User updateProfile(FullUserDto userDto) {
         final User self = getCurrentUserUpdated().get();
@@ -74,13 +59,14 @@ public class UserServiceImpl implements UserService {
         log.debug("Creating user: {}", userDto);
 
         User user = new User(userDto.getUsername(), userDto.getPassword());
+        user.setPasswordHash(passwordEncoder.encode(user.getPassword()));
         user.setEmail(userDto.getEmail());
         user.setImagePath(userDto.getImagePath());
         user.setEnabled(true);
         user.getRoles().add(roleRepository.findOneByName(RoleStore.USER).get());
 
 
-        user = save(user);
+        user = userRepository.save(user);
         Events.user(ChangeType.CREATE, user).publish();
 
         return user;

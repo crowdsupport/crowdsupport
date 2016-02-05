@@ -29,12 +29,6 @@ public class DonationRequestServiceImpl implements DonationRequestService {
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public DonationRequest save(DonationRequest donationRequest) {
-        return donationRequestRepository.save(donationRequest);
-    }
-
-    @Override
     public List<DonationRequest> loadAll() {
         return donationRequestRepository.findAll();
     }
