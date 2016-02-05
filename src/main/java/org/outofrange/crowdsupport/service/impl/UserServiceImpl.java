@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.service.impl;
 import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.event.ChangeType;
 import org.outofrange.crowdsupport.event.Events;
+import org.outofrange.crowdsupport.model.Role;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,18 +69,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public User createUser(FullUserDto userDto) {
         log.debug("Creating user: {}", userDto);
 
-        final User user = new User(userDto.getUsername(), userDto.getPassword());
+        User user = new User(userDto.getUsername(), userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setImagePath(userDto.getImagePath());
         user.setEnabled(true);
         user.getRoles().add(roleRepository.findOneByName(RoleStore.USER).get());
 
+
+        user = save(user);
         Events.user(ChangeType.CREATE, user).publish();
 
-        return save(user);
+        return user;
     }
 
     @Override
@@ -143,7 +149,12 @@ public class UserServiceImpl implements UserService {
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Loading user by username: {}", username);
 
-        return userRepository.findOneByUsername(username).get();
+        final Optional<User> user = userRepository.findOneByUsername(username);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UsernameNotFoundException("Couldn't find user with username " + username);
+        }
     }
 
     @Override
