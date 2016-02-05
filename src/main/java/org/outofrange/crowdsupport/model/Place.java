@@ -41,11 +41,15 @@ public class Place extends BaseEntity {
     }
 
     public Place(City city, String location, String name) {
+        this(city, location, name, name.toLowerCase().replaceAll("\\s+", ""));
+    }
+
+    public Place(City city, String location, String name, String identifier) {
         this.city = city;
         this.location = location;
         this.name = name;
 
-        this.identifier = name.toLowerCase().replaceAll("\\s+", "");
+        this.identifier = identifier;
     }
 
     public City getCity() {

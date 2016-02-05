@@ -1,4 +1,8 @@
+-- SCHEMA CREATION
+-- ===============
+
 -- Authority
+-- ---------
 CREATE TABLE ROLES (
   id          BIGINT IDENTITY,
   version     BIGINT       NOT NULL,
@@ -15,8 +19,8 @@ CREATE TABLE PERMISSIONS (
 );
 
 CREATE TABLE ROLES_PERMISSIONS (
-  role       BIGINT    NOT NULL,
-  permission BIGINT    NOT NULL,
+  role       BIGINT NOT NULL,
+  permission BIGINT NOT NULL,
   FOREIGN KEY (role) REFERENCES ROLES (id),
   FOREIGN KEY (permission) REFERENCES PERMISSIONS (id)
 );
@@ -33,20 +37,21 @@ CREATE TABLE USERS (
 );
 
 CREATE TABLE USERS_ROLES (
-  user    BIGINT    NOT NULL,
-  role    BIGINT    NOT NULL,
+  user BIGINT NOT NULL,
+  role BIGINT NOT NULL,
   FOREIGN KEY (user) REFERENCES USERS (id),
   FOREIGN KEY (role) REFERENCES ROLES (id)
 );
 
 -- Geography
+-- ---------
 CREATE TABLE STATES (
   id         BIGINT IDENTITY,
   version    BIGINT        NOT NULL,
   created    TIMESTAMP     NOT NULL,
   name       VARCHAR2(100) NOT NULL,
   identifier VARCHAR2(50)  NOT NULL,
-  imagepath  VARCHAR2(255) NOT NULL
+  imagepath  VARCHAR2(255)
 );
 
 CREATE TABLE CITIES (
@@ -55,7 +60,7 @@ CREATE TABLE CITIES (
   created    TIMESTAMP     NOT NULL,
   name       VARCHAR2(100) NOT NULL,
   identifier VARCHAR2(50)  NOT NULL,
-  imagepath  VARCHAR2(255) NOT NULL,
+  imagepath  VARCHAR2(255),
   state      BIGINT        NOT NULL,
   FOREIGN KEY (state) REFERENCES STATES (id)
 );
@@ -66,7 +71,7 @@ CREATE TABLE PLACES (
   created       TIMESTAMP      NOT NULL,
   name          VARCHAR2(100)  NOT NULL,
   identifier    VARCHAR2(50)   NOT NULL,
-  imagepath     VARCHAR2(255)  NOT NULL,
+  imagepath     VARCHAR2(255),
   city          BIGINT         NOT NULL,
   location      VARCHAR2(2000) NOT NULL,
   active        BOOL           NOT NULL,
@@ -78,7 +83,6 @@ CREATE TABLE PLACES (
 );
 
 CREATE TABLE PLACE_REQUESTS (
-  -- TODO: refactor into PLACES
   id              BIGINT IDENTITY,
   version         BIGINT    NOT NULL,
   created         TIMESTAMP NOT NULL,
@@ -92,8 +96,8 @@ CREATE TABLE PLACE_REQUESTS (
 ALTER TABLE PLACES ADD FOREIGN KEY (place_request) REFERENCES PLACE_REQUESTS (id);
 
 -- Donation Requests
+-- -----------------
 CREATE TABLE TEAMS (
-  -- TODO refactor into PLACES
   id      BIGINT IDENTITY,
   version BIGINT    NOT NULL,
   created TIMESTAMP NOT NULL,
@@ -102,8 +106,8 @@ CREATE TABLE TEAMS (
 ALTER TABLE PLACES ADD FOREIGN KEY (team) REFERENCES TEAMS (id);
 
 CREATE TABLE TEAMS_USERS (
-  team    BIGINT    NOT NULL,
-  user    BIGINT    NOT NULL,
+  team BIGINT NOT NULL,
+  user BIGINT NOT NULL,
   FOREIGN KEY (team) REFERENCES TEAMS (id),
   FOREIGN KEY (user) REFERENCES USERS (id)
 );
@@ -130,8 +134,8 @@ CREATE TABLE TAGS (
 );
 
 CREATE TABLE DONATION_REQUESTS_TAGS (
-  donation_request BIGINT    NOT NULL,
-  tag              BIGINT    NOT NULL,
+  donation_request BIGINT NOT NULL,
+  tag              BIGINT NOT NULL,
   FOREIGN KEY (donation_request) REFERENCES DONATION_REQUESTS (id),
   FOREIGN KEY (tag) REFERENCES TAGS (id)
 );
@@ -148,3 +152,84 @@ CREATE TABLE COMMENTS (
   FOREIGN KEY (donation_request) REFERENCES DONATION_REQUESTS (id),
   FOREIGN KEY (author) REFERENCES USERS (id)
 );
+
+-- INITIAL DATA
+-- ============
+
+-- Authority
+-- ---------
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'PROCESS_PLACE_REQUESTS');
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_ROLES');
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_USERS');
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_CITIES');
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_STATES');
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_PLACES');
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'QUERY_USERS');
+
+INSERT INTO ROLES (version, created, name, system_role) VALUES (0, sysdate, 'ROLE_ADMIN', TRUE);
+INSERT INTO ROLES (version, created, name, system_role) VALUES (0, sysdate, 'ROLE_USER', TRUE);
+
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'PROCESS_PLACE_REQUESTS')
+);
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'MANAGE_ROLES')
+);
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'MANAGE_USERS')
+);
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'MANAGE_CITIES')
+);
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'MANAGE_STATES')
+);
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'MANAGE_PLACES')
+);
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'QUERY_USERS')
+);
+
+-- Geography
+-- ---------
+INSERT INTO STATES (version, created, name, identifier, imagepath) VALUES (0, sysdate, 'United Kingdom', 'uk', NULL);
+INSERT INTO CITIES (version, created, name, identifier, imagepath, state)
+VALUES (0, sysdate, 'Preston', 'preston', NULL, (SELECT id
+                                                 FROM STATES
+                                                 WHERE identifier = 'uk'));

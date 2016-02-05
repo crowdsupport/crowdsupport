@@ -35,7 +35,7 @@ server:
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,application/javascript
 logging:
   level:
-    org.outofrange.crowdsupport.spring.ApiVersionRequestMappingHandlerMapping: INFO
+    org.outofrange.crowdsupport.spring.ApiVersionRequestMappingHandlerMapping: WARN
 
 ---
 
