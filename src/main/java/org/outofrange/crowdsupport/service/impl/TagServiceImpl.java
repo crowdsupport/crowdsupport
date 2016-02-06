@@ -2,6 +2,7 @@ package org.outofrange.crowdsupport.service.impl;
 
 import org.outofrange.crowdsupport.model.Tag;
 import org.outofrange.crowdsupport.persistence.TagRepository;
+import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class TagServiceImpl implements org.outofrange.crowdsupport.service.TagSe
     public Tag createTag(String name) {
         log.debug("Creating tag with name {}", name);
 
+        Validate.notNullOrEmpty(name);
+
         final Optional<Tag> existing = tagRepository.findOneByName(name);
         if (!existing.isPresent()) {
             return tagRepository.save(new Tag(name));
@@ -45,12 +48,16 @@ public class TagServiceImpl implements org.outofrange.crowdsupport.service.TagSe
     public List<Tag> searchForTagLike(String query) {
         log.debug("Searching for tag like {}", query);
 
+        Validate.notNull(query);
+
         return tagRepository.findAllByNameContainingIgnoreCase(query);
     }
 
     @Override
     public void deleteTag(String name) {
         log.debug("Delete tag with name {}", name);
+
+        Validate.notNullOrEmpty(name);
 
         final Optional<Tag> existing = tagRepository.findOneByName(name);
         if (existing.isPresent()) {

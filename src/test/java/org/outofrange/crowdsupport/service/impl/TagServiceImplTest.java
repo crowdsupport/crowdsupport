@@ -1,7 +1,13 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.outofrange.crowdsupport.model.Tag;
 import org.outofrange.crowdsupport.persistence.TagRepository;
+import org.outofrange.crowdsupport.util.ServiceException;
+
+import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -12,74 +18,101 @@ public class TagServiceImplTest {
 
     private TagServiceImpl tagService;
 
+    private final Tag tag = new Tag("tag");
+
+    @Before
     public void prepare() {
         tagRepository = mock(TagRepository.class);
 
         tagService = new TagServiceImpl(tagRepository);
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void creatingTagThrowsExceptionWhenNameNull() {
-        throw new AssertionError("Not yet implemented");
+        tagService.createTag(null);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void creatingTagThrowsExceptionWhenNameEmpty() {
-        throw new AssertionError("Not yet implemented");
+        tagService.createTag("");
     }
 
     @Test
     public void creatingTagWorks() {
-        throw new AssertionError("Not yet implemented");
+        when(tagRepository.findOneByName(tag.getName())).thenReturn(Optional.empty());
+
+        tagService.createTag(tag.getName());
+
+        verify(tagRepository).save(tag);
     }
 
     @Test
-    public void creatingTagThrowsExceptionWhenAlreadyThere() {
-        throw new AssertionError("Not yet implemented");
+    public void creatingTagAgainDoesNothing() {
+        when(tagRepository.findOneByName(tag.getName())).thenReturn(Optional.of(tag));
+
+        tagService.createTag(tag.getName());
+
+        verify(tagRepository, never()).save(tag);
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void deleteThrowsExceptionWhenNameIsNull() {
-        throw new AssertionError("Not yet implemented");
+        tagService.deleteTag(null);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void deleteThrowsExceptionWhenNameIsEmpty() {
-        throw new AssertionError("Not yet implemented");
+        tagService.deleteTag("");
     }
 
     @Test
-    public void deleteNonExistingTag() {
-        throw new AssertionError("Not yet implemented");
+    public void deleteNonExistingTagDoesNothing() {
+        when(tagRepository.findOneByName(tag.getName())).thenReturn(Optional.empty());
+
+        tagService.deleteTag(tag.getName());
+
+        verify(tagRepository, never()).delete(tag);
     }
 
     @Test
     public void deleteExistingTag() {
-        throw new AssertionError("Not yet implemented");
+        when(tagRepository.findOneByName(tag.getName())).thenReturn(Optional.of(tag));
+
+        tagService.deleteTag(tag.getName());
+
+        verify(tagRepository).delete(tag);
     }
 
     @Test
-    public void allTagsReturningsEmptyResult() {
-        throw new AssertionError("Not yet implemented");
+    public void allTagsReturningEmptyResult() {
+        when(tagRepository.findAll()).thenReturn(Collections.emptyList());
+
+        assertTrue(tagService.getAllTags().isEmpty());
     }
 
     @Test
     public void allTagsReturningMultipleResults() {
-        throw new AssertionError("Not yet implemented");
+        when(tagRepository.findAll()).thenReturn(Collections.singletonList(tag));
+
+        assertThat(1, is(equalTo(tagService.getAllTags().size())));
     }
 
     @Test(expected = NullPointerException.class)
     public void searchThrowsExceptionWhenNullPassed() {
-        throw new AssertionError("Not yet implemented");
+        tagService.searchForTagLike(null);
     }
 
     @Test
     public void searchReturnsNoResults() {
-        throw new AssertionError("Not yet implemented");
+        when(tagRepository.findAllByNameContainingIgnoreCase(tag.getName())).thenReturn(Collections.emptyList());
+
+        assertTrue(tagService.searchForTagLike(tag.getName()).isEmpty());
     }
 
     @Test
     public void searchReturnsMultipleResults() {
-        throw new AssertionError("Not yet implemented");
+        when(tagRepository.findAllByNameContainingIgnoreCase(tag.getName())).thenReturn(Collections.singletonList(tag));
+
+        assertThat(1, is(equalTo(tagService.searchForTagLike(tag.getName()).size())));
     }
 }
