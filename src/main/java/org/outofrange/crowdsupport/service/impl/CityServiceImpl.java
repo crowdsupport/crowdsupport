@@ -64,7 +64,10 @@ public class CityServiceImpl implements CityService {
             throw new ServiceException("Found no state with identifier " + stateIdentifier);
         }
 
-        City newCity = cityRepository.save(new City(loadedState.get(), name, identifier, imagePath));
+        City newCity = new City(loadedState.get(), name, identifier);
+        newCity.setImagePath(imagePath);
+        newCity = cityRepository.save(newCity);
+
         Events.city(ChangeType.CREATE, newCity).publish();
         return newCity;
     }

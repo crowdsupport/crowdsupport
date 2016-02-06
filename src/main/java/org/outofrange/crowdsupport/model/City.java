@@ -29,11 +29,10 @@ public class City extends BaseEntity {
 
     protected City() { /* empty constructor for frameworks */ }
 
-    public City(State state, String name, String identifier, String imagePath) {
+    public City(State state, String name, String identifier) {
         setState(state);
         setName(name);
         setIdentifier(identifier);
-        setImagePath(imagePath);
     }
 
     public State getState() {
@@ -41,7 +40,7 @@ public class City extends BaseEntity {
     }
 
     public void setState(State state) {
-        this.state = state;
+        this.state = Validate.notNull(state);
     }
 
     public String getName() {
@@ -49,7 +48,7 @@ public class City extends BaseEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Validate.notNullOrEmpty(name);
     }
 
     public String getImagePath() {
@@ -65,7 +64,7 @@ public class City extends BaseEntity {
     }
 
     public void setPlaces(List<Place> places) {
-        this.places = places;
+        this.places = Validate.notNull(places);
     }
 
     public String getIdentifier() {
