@@ -34,6 +34,10 @@ public class WebSocketServiceImpl {
 
     @Subscribe
     public void clientEvent(ClientEvent event) {
+        if (event == null) {
+            return;
+        }
+
         final ClientEvent mappedEvent;
         if (event instanceof ClientEntityChangeEvent) {
             mappedEvent = mapPayloadToDto((ClientEntityChangeEvent) event);
