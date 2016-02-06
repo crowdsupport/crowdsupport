@@ -11,7 +11,7 @@ public interface PlaceRequestService {
 
     PlaceRequest saveNewPlace(PlaceRequest placeRequest);
 
-    void declinePlaceRequest(Long requestId);
+    void declinePlaceRequest(long requestId);
 
     List<PlaceRequest> loadAll();
 }

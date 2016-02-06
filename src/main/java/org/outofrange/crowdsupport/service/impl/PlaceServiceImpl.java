@@ -61,9 +61,9 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void deletePlace(Place place) {
-        log.debug("Deleting place {}", place);
-        placeRepository.delete(place);
+    public void deletePlace(long id) {
+        log.debug("Deleting place {}", id);
+        placeRepository.delete(id);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place removeUserFromTeam(Long placeId, String username) {
+    public Place removeUserFromTeam(long placeId, String username) {
         log.debug("Removing user {} from team of place with id {}", username, placeId);
 
         final Place placeDb = placeRepository.findOne(placeId);
@@ -110,7 +110,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public DonationRequest addDonationRequest(Long placeId, DonationRequest donationRequest) {
+    public DonationRequest addDonationRequest(long placeId, DonationRequest donationRequest) {
         // TODO move to donation request service
         log.debug("Adding donation request {} to place {}", donationRequest, placeId);
 

@@ -109,7 +109,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_PLACES)")
-    public void declinePlaceRequest(Long placeRequestId) {
+    public void declinePlaceRequest(long placeRequestId) {
         log.debug("Declining place request with id {}", placeRequestId);
 
         final Optional<PlaceRequest> placeRequestDb = Optional.ofNullable(placeRequestRepository.findOne(placeRequestId));
@@ -121,13 +121,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
             throw new ServiceException("Place is already active!");
         }
 
-        deletePlaceRequest(placeRequestDb.get());
-        placeService.deletePlace(placeRequestDb.get().getPlace());
-    }
-
-    public void deletePlaceRequest(PlaceRequest placeRequest) {
-        log.debug("Deleting place request {}", placeRequest);
-
-        placeRequestRepository.delete(placeRequest);
+        placeRequestRepository.delete(placeRequestDb.get());
+        placeService.deletePlace(placeRequestDb.get().getPlace().getId());
     }
 }

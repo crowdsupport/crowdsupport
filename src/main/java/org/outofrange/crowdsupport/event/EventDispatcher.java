@@ -19,6 +19,13 @@ public class EventDispatcher {
     }
 
     /**
+     * @see EventBus#unregister
+     */
+    public static void unregister(Object object) {
+        INSTANCE.unregister(object);
+    }
+
+    /**
      * @see EventBus#post
      */
     public static void post(Object object) {
