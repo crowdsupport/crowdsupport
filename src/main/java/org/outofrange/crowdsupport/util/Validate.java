@@ -16,4 +16,15 @@ public class Validate {
 
         return string;
     }
+
+    public static String doesntMatch(String string, String pattern) {
+        notNullOrEmpty(string);
+        notNullOrEmpty(pattern);
+
+        if (string.matches(pattern)) {
+            throw new IllegalArgumentException(string + " must not match regular expression " + pattern);
+        }
+
+        return string;
+    }
 }

@@ -39,11 +39,14 @@ public class StateServiceImpl implements StateService {
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_STATES)")
     public State createState(String name, String identifier, String imagePath) {
+        log.debug("Creating new state");
+
         if (load(identifier).isPresent()) {
             throw new ServiceException("There is already a state saved with the identifier " + identifier);
         }
 
-        State state = new State(name, identifier, imagePath);
+        State state = new State(name, identifier);
+        state.setImagePath(imagePath);
         state = stateRepository.save(state);
 
         Events.state(ChangeType.CREATE, state).publish();
@@ -60,5 +63,4 @@ public class StateServiceImpl implements StateService {
     public List<State> searchStates(String query) {
         return stateRepository.findAllByNameContainingIgnoreCase(query);
     }
-
 }

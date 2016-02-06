@@ -2,6 +2,7 @@ package org.outofrange.crowdsupport.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.outofrange.crowdsupport.util.Validate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,19 +23,11 @@ public class State extends BaseEntity {
     @Column(name = "identifier")
     private String identifier;
 
-    public State() {
+    protected State() { /* empty constructor for frameworks */ }
 
-    }
-
-    public State(String name) {
-        this.name = name;
-        this.identifier = name.toLowerCase().replaceAll("\\s+", "");
-    }
-
-    public State(String name, String identifier, String imagePath) {
-        this.name = name;
-        this.identifier = identifier;
-        this.imagePath = imagePath;
+    public State(String name, String identifier) {
+        setName(name);
+        setIdentifier(identifier);
     }
 
     public String getName() {
@@ -66,7 +59,7 @@ public class State extends BaseEntity {
     }
 
     public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+        this.identifier = Validate.doesntMatch(identifier, ".*[^a-z].*");
     }
 
     @Override

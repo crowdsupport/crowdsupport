@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.model;
 
+import org.outofrange.crowdsupport.util.Validate;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +41,11 @@ public class Place extends BaseEntity {
 
     protected Place() { /* empty constructor for frameworks */ }
 
-    public Place(City city, String location, String name) {
-        this(city, location, name, name.toLowerCase().replaceAll("\\s+", ""));
-    }
-
     public Place(City city, String location, String name, String identifier) {
-        this.city = city;
-        this.location = location;
-        this.name = name;
-
-        this.identifier = identifier;
+        setCity(city);
+        setLocation(location);
+        setName(name);
+        setIdentifier(identifier);
     }
 
     public City getCity() {
@@ -96,7 +93,7 @@ public class Place extends BaseEntity {
     }
 
     public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+        this.identifier = Validate.doesntMatch(identifier, ".*[^a-z].*");
     }
 
     public boolean isActive() {
