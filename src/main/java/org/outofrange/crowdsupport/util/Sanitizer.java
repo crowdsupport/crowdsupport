@@ -1,7 +1,7 @@
 package org.outofrange.crowdsupport.util;
 
-public class AuthorityUtil {
-    private AuthorityUtil() { /* no instantiation */ }
+public class Sanitizer {
+    private Sanitizer() { /* no instantiation */ }
 
     public static String sanitizeAuthorityName(String name, String prefix) {
         String sanitizedName = Validate.notNullOrEmpty(name).toUpperCase();

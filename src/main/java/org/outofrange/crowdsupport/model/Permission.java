@@ -2,7 +2,7 @@ package org.outofrange.crowdsupport.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.outofrange.crowdsupport.util.AuthorityUtil;
+import org.outofrange.crowdsupport.util.Sanitizer;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ public class Permission extends BaseEntity implements GrantedAuthority {
     }
 
     public void setName(String name) {
-        this.name = AuthorityUtil.sanitizeAuthorityName(name);
+        this.name = Sanitizer.sanitizeAuthorityName(name);
     }
 
     @Override
