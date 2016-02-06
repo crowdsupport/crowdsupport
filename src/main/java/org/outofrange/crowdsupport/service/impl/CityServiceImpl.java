@@ -8,6 +8,7 @@ import org.outofrange.crowdsupport.persistence.CityRepository;
 import org.outofrange.crowdsupport.persistence.StateRepository;
 import org.outofrange.crowdsupport.service.CityService;
 import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +38,9 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public Optional<City> load(String identifier, String stateIdentifier) {
+        Validate.notNullOrEmpty(identifier);
+        Validate.notNullOrEmpty(stateIdentifier);
+
         return cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, identifier);
     }
 
@@ -47,6 +51,8 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<City> searchCities(String query) {
+        Validate.notNull(query);
+
         return cityRepository.findAllByNameContainingIgnoreCase(query);
     }
 
