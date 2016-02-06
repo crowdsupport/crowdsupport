@@ -2,6 +2,7 @@ package org.outofrange.crowdsupport.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.outofrange.crowdsupport.util.Validate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ public class Tag extends BaseEntity {
     protected Tag() { /* empty constructor for frameworks */ }
 
     public Tag(String name) {
-        this.name = name;
+        setName(name);
     }
 
     public String getName() {
@@ -24,7 +25,13 @@ public class Tag extends BaseEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        String sanitizedName = Validate.notNullOrEmpty(name).toLowerCase();
+
+        if (sanitizedName.matches(".*[^a-zöäü].*")) {
+            throw new IllegalArgumentException("Name must only contain lowercase letters, but was " + sanitizedName);
+        }
+
+        this.name = sanitizedName;
     }
 
     @Override
