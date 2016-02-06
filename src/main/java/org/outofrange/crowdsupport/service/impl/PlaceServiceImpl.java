@@ -10,6 +10,8 @@ import org.outofrange.crowdsupport.persistence.PlaceRepository;
 import org.outofrange.crowdsupport.persistence.TeamRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.service.PlaceService;
+import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,10 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Optional<Place> load(String stateIdentifier, String cityIdentifier, String placeIdentifier) {
+        Validate.notNullOrEmpty(stateIdentifier);
+        Validate.notNullOrEmpty(cityIdentifier);
+        Validate.notNullOrEmpty(placeIdentifier);
+
         final Optional<Place> place = placeRepository.findOneByIdentifier(placeIdentifier);
 
         if (place.isPresent() && cityIdentifier.equals(place.get().getCity().getIdentifier()) &&
@@ -70,7 +76,11 @@ public class PlaceServiceImpl implements PlaceService {
     public Place addUserToTeam(long placeId, String username) {
         log.debug("Adding user {} to team of place with id {}", username, placeId);
 
+        Validate.notNullOrEmpty(username);
+
         final Place placeDb = placeRepository.findOne(placeId);
+        checkNull(placeDb, "Couldn't find place with id " + placeId);
+
         final User userDb = userRepository.findOneByUsername(username).get();
 
         if (!placeDb.getTeam().getMembers().contains(userDb)) {
@@ -96,7 +106,11 @@ public class PlaceServiceImpl implements PlaceService {
     public Place removeUserFromTeam(long placeId, String username) {
         log.debug("Removing user {} from team of place with id {}", username, placeId);
 
+        Validate.notNullOrEmpty(username);
+
         final Place placeDb = placeRepository.findOne(placeId);
+        checkNull(placeDb, "Couldn't find place with id " + placeId);
+
         final User userDb = userRepository.findOneByUsername(username).get();
 
         if (placeDb.getTeam().getMembers().remove(userDb)) {
@@ -114,7 +128,11 @@ public class PlaceServiceImpl implements PlaceService {
         // TODO move to donation request service
         log.debug("Adding donation request {} to place {}", donationRequest, placeId);
 
+        Validate.notNull(donationRequest);
+
         final Place placeDb = placeRepository.findOne(placeId);
+        checkNull(placeDb, "Couldn't find place with id " + placeId);
+
         donationRequest.setPlace(placeDb);
 
         donationRequest = donationRequestRepository.save(donationRequest);
@@ -122,5 +140,11 @@ public class PlaceServiceImpl implements PlaceService {
         Events.donationRequest(ChangeType.CREATE, donationRequest).publish();
 
         return donationRequest;
+    }
+
+    private void checkNull(Object object, String message) {
+        if (object == null) {
+            throw new ServiceException(message);
+        }
     }
 }
