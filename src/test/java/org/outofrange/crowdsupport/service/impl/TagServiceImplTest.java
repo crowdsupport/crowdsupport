@@ -4,13 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.outofrange.crowdsupport.model.Tag;
 import org.outofrange.crowdsupport.persistence.TagRepository;
-import org.outofrange.crowdsupport.util.ServiceException;
 
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class TagServiceImplTest {
