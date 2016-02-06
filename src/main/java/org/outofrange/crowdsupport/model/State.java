@@ -35,7 +35,7 @@ public class State extends BaseEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Validate.notNullOrEmpty(name);
     }
 
     public String getImagePath() {
@@ -51,7 +51,7 @@ public class State extends BaseEntity {
     }
 
     public void setCities(List<City> cities) {
-        this.cities = cities;
+        this.cities = Validate.notNull(cities);
     }
 
     public String getIdentifier() {
@@ -71,8 +71,6 @@ public class State extends BaseEntity {
         State state = (State) o;
 
         return new EqualsBuilder()
-                .append(name, state.name)
-                .append(imagePath, state.imagePath)
                 .append(identifier, state.identifier)
                 .isEquals();
     }
@@ -81,8 +79,6 @@ public class State extends BaseEntity {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .appendSuper(super.hashCode())
-                .append(name)
-                .append(imagePath)
                 .append(identifier)
                 .toHashCode();
     }
