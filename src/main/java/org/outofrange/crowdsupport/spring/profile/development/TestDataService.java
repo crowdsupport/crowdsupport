@@ -72,7 +72,7 @@ public class TestDataService {
 
         final City preston = cityService.load("preston", "uk").get();
 
-        Place uclan = new Place(preston, "Foster Building", "University of Central Lancashire", "uclan");
+        Place uclan = new Place(preston, "University of Central Lancashire", "uclan", "Foster Building");
         uclan.setImagePath(placeHolder);
         uclan.setActive(true);
         uclan = placeRepository.save(uclan);

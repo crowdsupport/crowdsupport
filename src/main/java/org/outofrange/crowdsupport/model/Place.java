@@ -43,7 +43,7 @@ public class Place extends BaseEntity {
 
     protected Place() { /* empty constructor for frameworks */ }
 
-    public Place(City city, String location, String name, String identifier) {
+    public Place(City city, String name, String identifier, String location) {
         setCity(city);
         setLocation(location);
         setName(name);
