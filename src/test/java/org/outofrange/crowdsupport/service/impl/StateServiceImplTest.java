@@ -1,18 +1,27 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.StateRepository;
 import org.outofrange.crowdsupport.util.ServiceException;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
 public class StateServiceImplTest {
+    private final State state = new State("Name", "identifier");
+
     private StateRepository stateRepository;
 
     private StateServiceImpl stateService;
 
+    @Before
     public void prepare() {
         stateRepository = mock(StateRepository.class);
 
@@ -21,72 +30,99 @@ public class StateServiceImplTest {
 
     @Test
     public void creatingStateWithCorrectArguments() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findOneByIdentifier(state.getIdentifier())).thenReturn(Optional.empty());
+
+        stateService.createState(state.getName(), state.getIdentifier(), state.getImagePath());
+
+        verify(stateRepository).save(new State(state.getName(), state.getIdentifier()));
     }
 
-    @Test(expected = ServiceException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void creatingInvalidState() {
-        throw new AssertionError("Not yet implemented");
+        stateService.createState("name", "invalid identifier", "path");
     }
 
     @Test(expected = ServiceException.class)
     public void creatingAlreadyExistingState() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findOneByIdentifier(state.getIdentifier())).thenReturn(Optional.of(state));
+
+        stateService.createState("name", state.getIdentifier(), "path");
     }
 
     @Test
     public void loadWithUnknownId() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findOne(1L)).thenReturn(null);
+
+        assertNull(stateService.load(1));
     }
 
     @Test
     public void loadWithKnownId() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findOne(1L)).thenReturn(state);
+
+        assertNotNull(stateService.load(1));
     }
 
     @Test
     public void loadWithKnownIdentifier() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findOneByIdentifier(state.getIdentifier())).thenReturn(Optional.empty());
+
+        assertFalse(stateService.load(state.getIdentifier()).isPresent());
     }
 
     @Test
     public void loadWithIdentifierReturnsResult() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findOneByIdentifier(state.getIdentifier())).thenReturn(Optional.of(state));
+
+        assertEquals(state, stateService.load(state.getIdentifier()).get());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void loadWithIdentifierThrowsExceptionWhenEmptyPassed() {
-        throw new AssertionError("Not yet implemented");
+        stateService.load("");
     }
 
     @Test(expected = NullPointerException.class)
     public void loadWithIdentifierThrowsExceptionWhenNullPassed() {
-        throw new AssertionError("Not yet implemented");
+        stateService.load(null);
     }
 
     @Test
     public void loadAllReturnsNothing() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findAll()).thenReturn(Collections.emptyList());
+
+        assertTrue(stateService.loadAll().isEmpty());
     }
 
     @Test
     public void loadAllReturnsResults() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findAll()).thenReturn(Collections.singletonList(state));
+
+        final List<State> results = stateService.loadAll();
+
+        assertThat(1, is(equalTo(results.size())));
+        assertTrue(results.contains(state));
     }
 
     @Test
     public void searchStatesReturnsResults() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findAllByNameContainingIgnoreCase("query")).thenReturn(Collections.singletonList(state));
+
+        final List<State> results = stateService.searchStates("query");
+
+        assertThat(1, is(equalTo(results.size())));
+        assertTrue(results.contains(state));
     }
 
     @Test
     public void searchStatesReturnsNothing() {
-        throw new AssertionError("Not yet implemented");
+        when(stateRepository.findAllByNameContainingIgnoreCase("query")).thenReturn(Collections.emptyList());
+
+        assertTrue(stateService.searchStates("query").isEmpty());
     }
 
     @Test(expected = NullPointerException.class)
     public void searchStatesThrowsExceptionWhenNullPassed() {
-        throw new AssertionError("Not yet implemented");
+        stateService.searchStates(null);
     }
-
 }

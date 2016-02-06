@@ -17,6 +17,14 @@ public class Validate {
         return string;
     }
 
+    public static String notEmpty(String string) {
+        if (string != null && string.isEmpty()) {
+            throw new IllegalArgumentException("String " + string + " must not be empty!");
+        }
+
+        return string;
+    }
+
     public static String doesntMatch(String string, String pattern) {
         notNullOrEmpty(string);
         notNullOrEmpty(pattern);
