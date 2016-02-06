@@ -24,6 +24,14 @@ public class Comment extends BaseEntity {
     @Column(name = "confirmed")
     private boolean confirmed;
 
+    protected Comment() { /* empty constructor for frameworks */ }
+
+    public Comment(DonationRequest donationRequest, User author, String text) {
+        setDonationRequest(donationRequest);
+        setAuthor(author);
+        setText(text);
+    }
+
     public String getText() {
         return text;
     }

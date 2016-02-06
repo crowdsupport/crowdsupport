@@ -9,6 +9,8 @@ import org.outofrange.crowdsupport.persistence.CommentRepository;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,9 +43,15 @@ public class CommentServiceImpl implements CommentService {
     public Comment addComment(long donationRequestId, Comment comment) {
         log.debug("Comment for donation request with id {}: {}", donationRequestId, comment);
 
+        Validate.notNull(comment);
+
         User user = userService.getCurrentUserUpdated().get();
 
-        final DonationRequest donationRequest = donationRequestRepository.getOne(donationRequestId);
+        final DonationRequest donationRequest = donationRequestRepository.findOne(donationRequestId);
+        if (donationRequest == null) {
+            throw new ServiceException("Couldn't find donation request to add comment to");
+        }
+
         comment.setAuthor(user);
         comment.setDonationRequest(donationRequest);
         comment = commentRepository.save(comment);
@@ -58,9 +66,11 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Deleting comment with id {}", commentId);
 
         final Comment comment = commentRepository.findOne(commentId);
-        commentRepository.delete(comment);
+        if (comment != null) {
+            commentRepository.delete(comment);
 
-        Events.comment(ChangeType.DELETE, comment).publish();
+            Events.comment(ChangeType.DELETE, comment).publish();
+        }
     }
 
     @Override
@@ -68,6 +78,10 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Setting confirmed of comment with id {} to {}", commentId, confirmed);
 
         Comment comment = commentRepository.findOne(commentId);
+        if (comment == null) {
+            throw new ServiceException("Couldn't set confirmed to " + confirmed + ", comment wasn't found");
+        }
+
         comment.setConfirmed(confirmed);
         comment = commentRepository.save(comment);
 

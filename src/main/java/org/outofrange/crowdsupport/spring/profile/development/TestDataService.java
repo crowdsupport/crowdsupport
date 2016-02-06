@@ -77,10 +77,10 @@ public class TestDataService {
         uclan.setActive(true);
         uclan = placeRepository.save(uclan);
 
-        createRequests(uclan);
+        //createRequests(uclan);
     }
 
-    private void createRequests(Place place) {
+    /*private void createRequests(Place place) {
         User user1 = userRepository.findOneByUsername("admin").get();
         User user2 = userRepository.findOneByUsername("user").get();
 
@@ -129,5 +129,5 @@ public class TestDataService {
         donationRequest.setQuantity(10);
         donationRequest.setPlace(place);
         donationRequestRepository.save(donationRequest);
-    }
+    }*/
 }

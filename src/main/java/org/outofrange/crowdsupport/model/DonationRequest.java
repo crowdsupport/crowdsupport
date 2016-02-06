@@ -39,6 +39,15 @@ public class DonationRequest extends BaseEntity {
     @Column(name = "resolved")
     private boolean resolved;
 
+    protected DonationRequest() { /* empty constructor for frameworks */ }
+
+    public DonationRequest(Place place, String title, String description) {
+        setPlace(place);
+        setTitle(title);
+        setDescription(description);
+        setResolved(false);
+    }
+
     public Place getPlace() {
         return place;
     }
