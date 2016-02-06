@@ -45,15 +45,14 @@ public class CityTest {
     }
 
     @Test
-    public void onlyIdentifierMattersForEqual() {
-        final City c1 = new City(state, "City", "identifier");
-        final City c2 = new City(state, "City", "differentidentifier");
+    public void onlyIdentifierAndStateMattersForEqual() {
+        final City c = new City(state, "City", "identifier");
 
-        assertNotEquals(c1, c2);
+        assertNotEquals(c, new City(c.getState(), c.getName(), "different"));
+        assertNotEquals(c, new City(new State("Name", "id"), c.getName(), c.getIdentifier()));
 
-        c2.setIdentifier(c1.getIdentifier());
-
-        assertEquals(c1, c2);
+        assertEquals(c, new City(c.getState(), "Name", c.getIdentifier()));
+        assertEquals(c, new City(c.getState(), c.getName(), c.getIdentifier()));
     }
 
     @Test(expected = NullPointerException.class)

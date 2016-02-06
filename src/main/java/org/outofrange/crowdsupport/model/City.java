@@ -85,8 +85,6 @@ public class City extends BaseEntity {
 
         return new EqualsBuilder()
                 .append(state, city.state)
-                .append(name, city.name)
-                .append(imagePath, city.imagePath)
                 .append(identifier, city.identifier)
                 .isEquals();
     }
@@ -95,8 +93,6 @@ public class City extends BaseEntity {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(state)
-                .append(name)
-                .append(imagePath)
                 .append(identifier)
                 .toHashCode();
     }

@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.outofrange.crowdsupport.util.Validate;
 
 import javax.persistence.*;
@@ -53,7 +55,7 @@ public class Place extends BaseEntity {
     }
 
     public void setCity(City city) {
-        this.city = city;
+        this.city = Validate.notNull(city);
     }
 
     public String getLocation() {
@@ -61,7 +63,7 @@ public class Place extends BaseEntity {
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        this.location = Validate.notNullOrEmpty(location);
     }
 
     public String getName() {
@@ -69,7 +71,7 @@ public class Place extends BaseEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Validate.notNullOrEmpty(name);
     }
 
     public String getImagePath() {
@@ -85,7 +87,7 @@ public class Place extends BaseEntity {
     }
 
     public void setDonationRequests(List<DonationRequest> donationRequests) {
-        this.donationRequests = donationRequests;
+        this.donationRequests = Validate.notNull(donationRequests);
     }
 
     public String getIdentifier() {
@@ -118,5 +120,27 @@ public class Place extends BaseEntity {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Place place = (Place) o;
+
+        return new EqualsBuilder()
+                .append(city, place.city)
+                .append(identifier, place.identifier)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(city)
+                .append(identifier)
+                .toHashCode();
     }
 }
