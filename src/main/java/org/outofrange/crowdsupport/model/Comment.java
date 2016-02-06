@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.model;
 
+import org.outofrange.crowdsupport.util.Validate;
+
 import javax.persistence.*;
 
 @Entity
@@ -27,7 +29,7 @@ public class Comment extends BaseEntity {
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.text = Validate.notNullOrEmpty(text);
     }
 
     public User getAuthor() {
@@ -35,7 +37,7 @@ public class Comment extends BaseEntity {
     }
 
     public void setAuthor(User author) {
-        this.author = author;
+        this.author = Validate.notNull(author);
     }
 
     public DonationRequest getDonationRequest() {
@@ -43,7 +45,7 @@ public class Comment extends BaseEntity {
     }
 
     public void setDonationRequest(DonationRequest donationRequest) {
-        this.donationRequest = donationRequest;
+        this.donationRequest = Validate.notNull(donationRequest);
     }
 
     public int getQuantity() {

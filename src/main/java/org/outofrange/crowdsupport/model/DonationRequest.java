@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.model;
 
+import org.outofrange.crowdsupport.util.Validate;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class DonationRequest extends BaseEntity {
     }
 
     public void setPlace(Place place) {
-        this.place = place;
+        this.place = Validate.notNull(place);
     }
 
     public String getTitle() {
@@ -50,7 +52,7 @@ public class DonationRequest extends BaseEntity {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = Validate.notNullOrEmpty(title);
     }
 
     public String getDescription() {
@@ -58,7 +60,7 @@ public class DonationRequest extends BaseEntity {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = Validate.notNullOrEmpty(description);
     }
 
     public ZonedDateTime getValidToDateTime() {
@@ -112,6 +114,6 @@ public class DonationRequest extends BaseEntity {
     }
 
     public void setTags(List<Tag> tags) {
-        this.tags = tags;
+        this.tags = Validate.notNull(tags);
     }
 }
