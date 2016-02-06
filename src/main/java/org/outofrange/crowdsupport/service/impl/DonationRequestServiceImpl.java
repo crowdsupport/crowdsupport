@@ -6,6 +6,7 @@ import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.DonationRequestService;
+import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,10 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         log.debug("Setting resolved for donation request {} to {}", id, resolved);
 
         DonationRequest donationRequest = donationRequestRepository.findOne(id);
+        if (donationRequest == null) {
+            throw new ServiceException("Couldn't find donation request to set resolved to");
+        }
+
         donationRequest.setResolved(resolved);
         donationRequest = donationRequestRepository.save(donationRequest);
 
@@ -52,10 +57,12 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         log.debug("Deleting donation request with id {}", id);
 
         final DonationRequest donationRequest = donationRequestRepository.findOne(id);
-        donationRequest.getComments().forEach(c -> commentService.deleteComment(c.getId()));
+        if (donationRequest != null) {
+            donationRequest.getComments().forEach(c -> commentService.deleteComment(c.getId()));
 
-        donationRequestRepository.delete(id);
+            donationRequestRepository.delete(donationRequest);
 
-        Events.donationRequest(ChangeType.DELETE, donationRequest).publish();
+            Events.donationRequest(ChangeType.DELETE, donationRequest).publish();
+        }
     }
 }
