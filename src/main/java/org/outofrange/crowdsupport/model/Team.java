@@ -17,9 +17,7 @@ public class Team extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "user", referencedColumnName = "id")})
     private List<User> members = new ArrayList<>();
 
-    protected Team() {
-        // framework constructor
-    }
+    protected Team() { /* empty constructor for frameworks */ }
 
     public Team(Place place) {
         setPlace(place);

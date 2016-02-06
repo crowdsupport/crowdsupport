@@ -2,6 +2,8 @@ package org.outofrange.crowdsupport.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.outofrange.crowdsupport.util.AuthorityUtil;
+import org.outofrange.crowdsupport.util.Validate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -43,11 +45,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
     }
 
     public void setName(String name) {
-        final String sanitizedName = name.toUpperCase().replaceAll("\\s+", "_");
-        if (!sanitizedName.startsWith(ROLE_PREFIX)) {
-            throw new IllegalArgumentException("Role name has to start with " + ROLE_PREFIX);
-        }
-        this.name = sanitizedName;
+        this.name = AuthorityUtil.sanitizeAuthorityName(name, ROLE_PREFIX);
     }
 
     public Set<Permission> getPermissions() {
@@ -65,14 +63,6 @@ public class Role extends BaseEntity implements GrantedAuthority {
         this.permissions = permissionSet;
     }
 
-    public void addPermission(Permission permission) {
-        permissions.add(permission);
-    }
-
-    public void removePermission(Permission permission) {
-        permissions.remove(permission);
-    }
-
     @Override
     public String getAuthority() {
         return getName();
@@ -88,7 +78,6 @@ public class Role extends BaseEntity implements GrantedAuthority {
 
         return new EqualsBuilder()
                 .append(name, role.name)
-                .append(permissions, role.permissions)
                 .isEquals();
     }
 
@@ -96,7 +85,6 @@ public class Role extends BaseEntity implements GrantedAuthority {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(name)
-                .append(permissions)
                 .toHashCode();
     }
 

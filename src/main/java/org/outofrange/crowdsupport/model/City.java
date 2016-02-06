@@ -26,8 +26,7 @@ public class City extends BaseEntity {
     @Column(name = "identifier")
     private String identifier;
 
-    public City() {
-    }
+    protected City() { /* empty constructor for frameworks */ }
 
     public City(State state, String name) {
         this.state = state;

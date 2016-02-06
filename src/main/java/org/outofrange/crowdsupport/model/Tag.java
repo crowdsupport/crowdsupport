@@ -13,9 +13,7 @@ public class Tag extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    protected Tag() {
-        // framework constructor
-    }
+    protected Tag() { /* empty constructor for frameworks */ }
 
     public Tag(String name) {
         this.name = name;

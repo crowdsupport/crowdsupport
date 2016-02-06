@@ -37,8 +37,7 @@ public class Place extends BaseEntity {
     @JoinColumn(name = "team")
     private Team team;
 
-    public Place() {
-    }
+    protected Place() { /* empty constructor for frameworks */ }
 
     public Place(City city, String location, String name) {
         this(city, location, name, name.toLowerCase().replaceAll("\\s+", ""));

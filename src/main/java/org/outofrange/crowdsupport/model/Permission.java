@@ -2,6 +2,7 @@ package org.outofrange.crowdsupport.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.outofrange.crowdsupport.util.AuthorityUtil;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
@@ -14,25 +15,23 @@ public class Permission extends BaseEntity implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
+    protected Permission() { /* empty constructor for frameworks */ }
+
+    public Permission(String name) {
+        setName(name);
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name.toUpperCase().replaceAll("\\s+", "_");
+        this.name = AuthorityUtil.sanitizeAuthorityName(name);
     }
 
     @Override
     public String getAuthority() {
         return getName();
-    }
-
-    protected Permission() {
-        // framework constructor
-    }
-
-    public Permission(String permission) {
-        setName(permission);
     }
 
     @Override
