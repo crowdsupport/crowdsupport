@@ -10,6 +10,7 @@ import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.security.UserAuthentication;
 import org.outofrange.crowdsupport.util.RoleStore;
 import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
+    // it's easier to test this way...
+    private CurrentUserProvider currentUserProvider = new CurrentUserProvider();
+
     @Inject
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
@@ -40,11 +44,21 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
     }
 
+    protected void setCurrentUserProvider(CurrentUserProvider currentUserProvider) {
+        this.currentUserProvider = currentUserProvider;
+    }
+
     @Override
     @Transactional(readOnly = false)
     @PreAuthorize("hasRole(@role.USER)")
     public User updateProfile(FullUserDto userDto) {
-        final User self = getCurrentUserUpdated().get();
+        final Optional<User> optionalUser = getCurrentUserUpdated();
+
+        if (!optionalUser.isPresent()) {
+            throw new ServiceException("No current user to update");
+        }
+
+        final User self = optionalUser.get();
 
         if (userDto.getUsername() != null && !self.getUsername().equals(userDto.getUsername())) {
             throw new ServiceException("Updating different user is not allowed!");
@@ -63,8 +77,12 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setImagePath(userDto.getImagePath());
         user.setEnabled(true);
-        user.getRoles().add(roleRepository.findOneByName(RoleStore.USER).get());
 
+        if (userRepository.findOneByUsername(userDto.getUsername()).isPresent()) {
+            throw new ServiceException("Found already existing user with username " + userDto.getUsername());
+        }
+
+        user.getRoles().add(roleRepository.findOneByName(RoleStore.USER).get());
 
         user = userRepository.save(user);
         Events.user(ChangeType.CREATE, user).publish();
@@ -76,12 +94,26 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = false)
     @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     public User updateAll(long userId, FullUserDto userDto) {
+        Validate.notNull(userDto);
+
         final User user = userRepository.findOne(userId);
+
+        if (user == null) {
+            throw new ServiceException("Couldn't find user with id " + user);
+        }
+
+        final Optional<User> existingUser = userRepository.findOneByUsername(userDto.getUsername());
+        if (userId != existingUser.get().getId()) {
+            throw new ServiceException("Can't set username (already used!");
+        }
 
         return updateUser(user, userDto, true);
     }
 
     private User updateUser(User user, FullUserDto userDto, boolean all) {
+        Validate.notNull(user);
+        Validate.notNull(userDto);
+
         if (userDto.getEmail() != null) {
             user.setEmail(userDto.getEmail());
         }
@@ -120,6 +152,8 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     public List<User> queryUsers(String like) {
         log.debug("Searching users for {}", like);
+
+        Validate.notNull(like);
         
         return userRepository.findAllByUsernameContainingIgnoreCase(like);
     }
@@ -135,6 +169,8 @@ public class UserServiceImpl implements UserService {
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Loading user by username: {}", username);
 
+        Validate.notNullOrEmpty(username);
+
         final Optional<User> user = userRepository.findOneByUsername(username);
         if (user.isPresent()) {
             return user.get();
@@ -147,26 +183,23 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getCurrentUser() {
         log.debug("Reading current user from security context...");
 
-        final Object userAuth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (userAuth instanceof UserAuthentication) {
-            final UserAuthentication u = (UserAuthentication) userAuth;
-            log.debug("Found user: {}", u.getDetails());
-            return Optional.of(u.getDetails());
-        } else {
-            log.debug("Found no user");
-            return Optional.empty();
-        }
+        return currentUserProvider.getCurrentUser();
     }
 
     @Override
     public Optional<User> getCurrentUserUpdated() {
-        final Optional<User> user = getCurrentUser();
+        final Optional<User> currentUser = getCurrentUser();
 
-        if (user.isPresent()) {
-            return Optional.of(loadUserByUsername(user.get().getUsername()));
+        if (currentUser.isPresent()) {
+            final Optional<User> loadedUser = userRepository.findOneByUsername(currentUser.get().getUsername());
+
+            if (!loadedUser.isPresent()) {
+                throw new ServiceException("Can't find user anymore: " + currentUser.get().getUsername());
+            }
+
+            return loadedUser;
         } else {
-            return user;
+            return currentUser;
         }
     }
 }
