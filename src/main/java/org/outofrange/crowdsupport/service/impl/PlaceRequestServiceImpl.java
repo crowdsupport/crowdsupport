@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.service.impl;
 import org.outofrange.crowdsupport.event.ChangeType;
 import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.City;
+import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.model.PlaceRequest;
 import org.outofrange.crowdsupport.model.Team;
 import org.outofrange.crowdsupport.persistence.CityRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -77,6 +79,8 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_PLACES)")
     public PlaceRequest saveNewPlace(PlaceRequest placeRequest) {
+        // TODO refactor...
+
         log.trace("Saving new place {}", placeRequest);
 
         final Optional<City> cityDb = cityRepository.findOneByStateIdentifierAndIdentifier(
@@ -90,6 +94,18 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
         }
 
         PlaceRequest placeRequestDb = placeRequestRepository.findOne(placeRequest.getId());
+        if (placeRequestDb == null) {
+            throw new ServiceException("Couldn't find place request with id " + placeRequest.getId());
+        }
+
+        final Optional<Place> place = placeService.load(placeRequest.getPlace().getCity().getState().getIdentifier(),
+                placeRequest.getPlace().getCity().getIdentifier(),
+                placeRequest.getPlace().getIdentifier());
+        if (place.isPresent()) {
+            if (!Objects.equals(place.get().getId(), placeRequestDb.getPlace().getId())) {
+                throw new ServiceException("Already found an existing place with same identifier");
+            }
+        }
 
         placeRequestDb.getPlace().setCity(cityDb.get());
         placeRequestDb.getPlace().setActive(true);

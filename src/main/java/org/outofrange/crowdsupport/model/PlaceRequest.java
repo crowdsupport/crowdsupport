@@ -19,8 +19,11 @@ public class PlaceRequest extends BaseEntity {
     @Column(name = "city")
     private String city;
 
-    public PlaceRequest() {
+    protected PlaceRequest() { /* empty constructor for frameworks */ }
 
+    public PlaceRequest(Place place, User requestingUser) {
+        setPlace(place);
+        setRequestingUser(requestingUser);
     }
 
     public User getRequestingUser() {
