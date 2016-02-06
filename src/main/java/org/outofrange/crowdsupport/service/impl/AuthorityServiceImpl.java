@@ -36,10 +36,21 @@ public class AuthorityServiceImpl implements AuthorityService {
     public Role setPermissionsForRole(String role, Collection<String> permissions) {
         log.debug("Setting permissions for role {}: {}", role, permissions);
 
-        final Role roleDb = roleRepository.findOneByName(role).get();
+        final Optional<Role> optionalRole = roleRepository.findOneByName(role);
+        if (!optionalRole.isPresent()) {
+            throw new ServiceException("Couldn't find role with name " + role);
+        }
+
+        final Role roleDb =  optionalRole.get();
 
         roleDb.setPermissions(permissions.stream()
-                .map(p -> permissionRepository.findOneByName(p).get()).collect(Collectors.toSet()));
+                .map(p -> {
+                    final Optional<Permission> optionalPermission = permissionRepository.findOneByName(p);
+                    if (!optionalPermission.isPresent()) {
+                        throw new ServiceException("Couldn't find permission with name " + p);
+                    }
+                    return optionalPermission.get();
+                }).collect(Collectors.toSet()));
 
         return roleRepository.save(roleDb);
     }
