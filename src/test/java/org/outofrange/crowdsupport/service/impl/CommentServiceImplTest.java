@@ -43,7 +43,6 @@ public class CommentServiceImplTest {
         comment = new Comment(donationRequest, user, "Text");
 
         when(userService.getCurrentUserUpdated()).thenReturn(Optional.of(user));
-        when(commentRepository.save(comment)).thenReturn(comment);
     }
 
     @Test(expected = ServiceException.class)
@@ -60,6 +59,7 @@ public class CommentServiceImplTest {
 
     @Test
     public void addingCommentToDonationRequest() {
+        when(commentRepository.save(comment)).thenReturn(comment);
         when(donationRequestRepository.findOne(1L)).thenReturn(donationRequest);
 
         commentService.addComment(1, comment);
@@ -117,6 +117,7 @@ public class CommentServiceImplTest {
     }
 
     private void testConfirmed(boolean confirmed) {
+        when(commentRepository.save(comment)).thenReturn(comment);
         when(commentRepository.findOne(1L)).thenReturn(comment);
 
         commentService.setCommentConfirmed(1, confirmed);
