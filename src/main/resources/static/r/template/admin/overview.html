@@ -1,40 +1,50 @@
-<div class="container">
-    <a auth="PROCESS_PLACE_REQUESTS" href="/admin/requestedPlaces">
-        <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
-            <div class="panel-heading">
-                <h3 class="panel-title">Requested Places</h3>
+<div class="container adminoverview">
+    <div class="col-md-4 col-sm-3 col-xs-12">
+        <a auth="PROCESS_PLACE_REQUESTS" href="/admin/requestedPlaces">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Requested Places</h3>
+                </div>
+                <div class="panel-body">
+                    Manage all new place requests
+                </div>
             </div>
-            <div class="panel-body">
-                Add new places that users have requested!
+        </a>
+    </div>
+    <div class="col-md-4 col-sm-3 col-xs-12">
+        <a auth="MANAGE_USERS" href="/admin/userManagement">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">User Management</h3>
+                </div>
+                <div class="panel-body">
+                    Here you can manage all your users: create new admins, delete users, ...
+                </div>
             </div>
-        </div>
-    </a>
-    <a auth="MANAGE_USERS" href="/admin/userManagement">
-        <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
-            <div class="panel-heading">
-                <h3 class="panel-title">User Management</h3>
+        </a>
+    </div>
+    <div class="col-md-4 col-sm-3 col-xs-12">
+        <a auth="MANAGE_ROLES" href="/admin/roleManagement">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Role Management</h3>
+                </div>
+                <div class="panel-body">
+                    Add new roles and assign permissions
+                </div>
             </div>
-            <div class="panel-body">
-                Here you can manage all your users: create new admins, delete users, ...
+        </a>
+    </div>
+    <div class="col-md-4 col-sm-3 col-xs-12">
+        <a href="/admin/settings">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Settings</h3>
+                </div>
+                <div class="panel-body">
+                    Change application settings
+                </div>
             </div>
-        </div>
-    </a>
-    <a auth="MANAGE_ROLES" href="/admin/roleManagement">
-        <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
-            <div class="panel-heading">
-                <h3 class="panel-title">Role Management</h3>
-            </div>
-            <div class="panel-body">
-                Add new roles and assign permissions
-            </div>
-        </div>
-    </a>
-    <div class="panel panel-default col-md-4 col-sm-3 col-xs-12">
-        <div class="panel-heading">
-            <h3 class="panel-title">Settings</h3>
-        </div>
-        <div class="panel-body">
-            Change application settings
-        </div>
+        </a>
     </div>
 </div>

@@ -1,5 +1,9 @@
 <div class="container">
-    <div class="row"><h3>Pending place requests</h3></div>
+    <div class="row"><h1>Pending place requests</h1></div>
+
+    <div ng-hide="allRequests" class="row">
+        <h3>Currently no pending place requests</h3>
+    </div>
 
     <div class="panel panel-default" ng-repeat="request in allRequests">
         <div class="panel-body" ng-init="initRequest(request)">

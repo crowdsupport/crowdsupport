@@ -131,7 +131,7 @@
             $scope.addRole = function () {
                 $uibModal.open({
                     animation: true,
-                    templateUrl: '/r/template/admin/roleCreateModal.html',
+                    templateUrl: 'roleCreateModal.html',
                     controller: 'RoleCreateController'
                 }).result.then(function () {
                     return Restangular.all('role').getList();

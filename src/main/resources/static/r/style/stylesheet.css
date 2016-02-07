@@ -342,3 +342,7 @@ input.ng-touched.ng-invalid, textarea.ng-touched.ng-invalid {
     outline: none;
     box-shadow: 0 0 8px red;
 }
+
+.adminoverview .panel {
+    height: 125px;
+}
