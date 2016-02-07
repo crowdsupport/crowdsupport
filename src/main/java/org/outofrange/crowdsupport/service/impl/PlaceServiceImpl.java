@@ -15,12 +15,14 @@ import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class PlaceServiceImpl implements PlaceService {
     private static final Logger log = LoggerFactory.getLogger(PlaceServiceImpl.class);
 
@@ -39,6 +41,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Place save(Place place) {
         log.debug("Saving place {}", place);
 
@@ -67,12 +70,14 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deletePlace(long id) {
         log.debug("Deleting place {}", id);
         placeRepository.delete(id);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Place addUserToTeam(long placeId, String username) {
         log.debug("Adding user {} to team of place with id {}", username, placeId);
 
@@ -103,6 +108,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Place removeUserFromTeam(long placeId, String username) {
         log.debug("Removing user {} from team of place with id {}", username, placeId);
 
@@ -124,6 +130,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public DonationRequest addDonationRequest(long placeId, DonationRequest donationRequest) {
         // TODO move to donation request service
         log.debug("Adding donation request {} to place {}", donationRequest, placeId);

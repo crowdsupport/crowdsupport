@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class AuthorityServiceImpl implements AuthorityService {
     private static final Logger log = LoggerFactory.getLogger(AuthorityServiceImpl.class);
 
@@ -33,6 +35,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
+    @Transactional(readOnly = false)
     public Role setPermissionsForRole(String role, Collection<String> permissions) {
         log.debug("Setting permissions for role {}: {}", role, permissions);
 
@@ -57,6 +60,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
+    @Transactional(readOnly = false)
     public Role createRoleIfNeeded(String roleName) {
         log.debug("Creating role {}", roleName);
 
@@ -70,6 +74,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_ROLES)")
+    @Transactional(readOnly = false)
     public void deleteRole(String roleName) {
         log.debug("Deleting role {}", roleName);
 

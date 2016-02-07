@@ -11,12 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class StateServiceImpl implements StateService {
     private static final Logger log = LoggerFactory.getLogger(StateServiceImpl.class);
 
@@ -41,6 +43,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_STATES)")
+    @Transactional(readOnly = false)
     public State createState(String name, String identifier, String imagePath) {
         log.debug("Creating new state");
 

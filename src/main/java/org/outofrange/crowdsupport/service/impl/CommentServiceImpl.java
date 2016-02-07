@@ -14,11 +14,13 @@ import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
     private static final Logger log = LoggerFactory.getLogger(CommentServiceImpl.class);
 
@@ -40,6 +42,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Comment addComment(long donationRequestId, Comment comment) {
         log.debug("Comment for donation request with id {}: {}", donationRequestId, comment);
 
@@ -62,6 +65,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteComment(long commentId) {
         log.debug("Deleting comment with id {}", commentId);
 
@@ -74,6 +78,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void setCommentConfirmed(long commentId, boolean confirmed) {
         log.debug("Setting confirmed of comment with id {} to {}", commentId, confirmed);
 

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class PlaceRequestServiceImpl implements PlaceRequestService {
     private static final Logger log = LoggerFactory.getLogger(PlaceRequestServiceImpl.class);
 
@@ -52,6 +54,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
     @Override
     @PreAuthorize("hasRole(@role.USER)")
+    @Transactional(readOnly = false)
     public PlaceRequest requestNewPlace(PlaceRequest placeRequest) {
         log.trace("Requesting new place: {}", placeRequest);
 
@@ -78,6 +81,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_PLACES)")
+    @Transactional(readOnly = false)
     public PlaceRequest saveNewPlace(PlaceRequest placeRequest) {
         // TODO refactor...
 
@@ -125,6 +129,7 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_PLACES)")
+    @Transactional(readOnly = false)
     public void declinePlaceRequest(long placeRequestId) {
         log.debug("Declining place request with id {}", placeRequestId);
 

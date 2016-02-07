@@ -6,12 +6,14 @@ import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class TagServiceImpl implements org.outofrange.crowdsupport.service.TagService {
     private static final Logger log = LoggerFactory.getLogger(TagServiceImpl.class);
 
@@ -23,6 +25,7 @@ public class TagServiceImpl implements org.outofrange.crowdsupport.service.TagSe
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Tag createTag(String name) {
         log.debug("Creating tag with name {}", name);
 
@@ -54,6 +57,7 @@ public class TagServiceImpl implements org.outofrange.crowdsupport.service.TagSe
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteTag(String name) {
         log.debug("Delete tag with name {}", name);
 

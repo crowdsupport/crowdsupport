@@ -13,12 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class CityServiceImpl implements CityService {
     private static final Logger log = LoggerFactory.getLogger(CityServiceImpl.class);
 
@@ -58,6 +60,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     @PreAuthorize("hasAuthority(@perm.MANAGE_CITIES)")
+    @Transactional(readOnly = false)
     public City createCity(String name, String identifier, String imagePath, String stateIdentifier) {
         log.debug("Creating new city with identifier {}", identifier);
         if (cityRepository.findOneByStateIdentifierAndIdentifier(stateIdentifier, identifier).isPresent()) {
