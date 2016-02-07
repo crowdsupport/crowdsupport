@@ -54,6 +54,10 @@ public class WebSocketServiceImpl {
 
     @SuppressWarnings("unchecked")
     private ClientEntityChangeEvent<BaseDto> mapPayloadToDto(ClientEntityChangeEvent event) {
+        if (event.getPayload() == null) {
+            return new ClientEntityChangeEvent<>(event.getChangeType(), null, event.getTopics());
+        }
+
         if (event.getPayload() instanceof BaseDto) {
             // we don't need to map already mapped dtos
             return event;
@@ -68,7 +72,7 @@ public class WebSocketServiceImpl {
 
             log.debug("Mapped payload from {} to {}", payloadClass, dtoClass);
 
-            return new ClientEntityChangeEvent<>(event.getChangeType(), payloadDto,  event.getTopics());
+            return new ClientEntityChangeEvent<>(event.getChangeType(), payloadDto, event.getTopics());
         } catch (ClassNotFoundException | ClassCastException e) {
             throw new ServiceException("Couldn't automatically map payload " + payloadClass.getSimpleName() + " to DTO (guessed name: "
                     + classNameGuess + ")", e);
