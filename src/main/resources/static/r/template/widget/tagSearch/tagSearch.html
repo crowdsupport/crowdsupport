@@ -1,9 +1,13 @@
 <input type="text" ng-model="ngModel" class="{{inputClass}}" id="{{inputId}}"
        uib-typeahead="tag for tag in query($viewValue)" typeahead-loading="loading"
-       typeahead-no-results="noResults" typeahead-template-url="/r/template/widget/tagSearch/tagSearchResult.html"
+       typeahead-no-results="noResults" typeahead-template-url="tagSearchResult.html"
        typeahead-input-formatter="formatInput($model)" placeholder="Type to search"
        typeahead-on-select="onSelect($item)" autocomplete="off" ng-keypress="key($event)"/>
 <i ng-show="loading" class="glyphicon glyphicon-refresh"></i>
 <div ng-show="!omitNoResults && noResults">
     <i class="glyphicon glyphicon-remove"></i> <span ng-transclude></span>
 </div>
+
+<script type="text/ng-template" id="tagSearchResult.html">
+    <a><span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span></a>
+</script>

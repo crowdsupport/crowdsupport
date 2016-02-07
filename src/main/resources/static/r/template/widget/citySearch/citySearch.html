@@ -1,9 +1,13 @@
 <input type="text" ng-model="ngModel" class="{{inputClass}}" id="{{inputId}}"
        uib-typeahead="city for city in query($viewValue)" typeahead-loading="loadingCities"
-       typeahead-no-results="noCitiesFound" typeahead-template-url="/r/template/widget/citySearch/citySearchResult.html"
+       typeahead-no-results="noCitiesFound" typeahead-template-url="citySearchResult.html"
        typeahead-input-formatter="formatInput($model)" placeholder="Type to search"
-       typeahead-on-select="onSelect($item)" autocomplete="off"/>
+       typeahead-on-select="onSelect($item)" autocomplete="off" maxlength="100"/>
 <i ng-show="loadingCities" class="glyphicon glyphicon-refresh"></i>
 <div ng-show="noCitiesFound">
     <i class="glyphicon glyphicon-remove"></i> <span ng-transclude></span>
 </div>
+
+<script type="text/ng-template" id="citySearchResult.html">
+    <a><span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span> ({{match.model.state.name}})</a>
+</script>
