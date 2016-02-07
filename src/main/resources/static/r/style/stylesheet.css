@@ -1,9 +1,21 @@
 .navbar {
-    background-image: linear-gradient(to bottom, #337AB7 0, #337AB7 100%);
+    background-image: linear-gradient(to bottom, #337AB7 85%, #FFF 100%);
+    border-style: none;
+    padding-bottom: 5px;
+}
+
+.navbar.navbar-fixed-bottom {
+    background-image: linear-gradient(to top, #337AB7 85%, #FFF 100%);
+    border-style: none;
+    padding-top: 5px;
 }
 
 .inline {
     display: inline;
+}
+
+span.tag {
+    border-bottom: 1px dotted;
 }
 
 .pic {

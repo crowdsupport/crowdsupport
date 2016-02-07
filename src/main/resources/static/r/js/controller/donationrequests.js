@@ -130,6 +130,14 @@
             $scope.place = $placeRest;
             $scope.f = {open: true, enroute: false, done: false};
 
+            $scope.tagfilter = '';
+            $scope.addTagToSearch = function(tag) {
+                if ($scope.tagfilter.length !== 0 && $scope.tagfilter.slice(-1) !== ' ') {
+                    tag = ' ' + tag;
+                }
+                $scope.tagfilter += tag;
+            };
+
             $scope.inTeam = function () {
                 if (!$rootScope.user || !$rootScope.user.managedPlaces) {
                     return false;
@@ -176,16 +184,41 @@
 
             $scope.filter = function (request) {
                 var f = $scope.$parent.f;
+                var tagfilter = $scope.$parent.tagfilter;
+
+                var show = false;
+
+                // apply state filter
                 switch (request.ui.state) {
                     case 'open':
-                        return f.open;
+                        show |= f.open;
+                        break;
                     case 'enroute':
-                        return f.enroute;
+                        show |= f.enroute;
+                        break;
                     case 'done':
-                        return f.done;
+                        show |= f.done;
+                        break;
                     default:
-                        return true;
+                       show = true;
                 }
+
+                // apply tag filter
+                if (show && tagfilter && request.tags) {
+                    var tags = _.words(tagfilter);
+                    tags.forEach(function (fTag) {
+                        var filterMatches = false;
+                        var regex = new RegExp('.*' + fTag + '.*', 'i');
+
+                        request.tags.forEach(function (rTag) {
+                            filterMatches |= regex.test(rTag.name);
+                        });
+
+                        show &= filterMatches;
+                    });
+                }
+
+                return show;
             };
 
             var identifier = getUrlAfterSupport();

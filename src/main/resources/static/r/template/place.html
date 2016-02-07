@@ -7,7 +7,7 @@
 
             <div class="navbar-right options form-inline">
                 <div class="inline">
-                    <input type="text" placeholder="Search for tags" class="form-control" />
+                    <input type="text" placeholder="Search for tags" class="form-control" ng-model="tagfilter" />
                 </div>
 
                 <div class="btn-group filtertoggle">
@@ -73,7 +73,10 @@
                 </div>
 
                 <div class="tags" ng-if="req.tags">
-                    <span ng-repeat="tag in req.tags">{{tag.name}} <span ng-if="!$last">| </span></span>
+                    Tags:
+                    <span ng-repeat="tag in req.tags">
+                        <span class="tag" ng-click="addTagToSearch(tag.name)">{{tag.name}}</span> <span ng-if="!$last">| </span>
+                    </span>
                 </div>
 
                 <div class="justified-and-inlined" ng-if="req.validToDateTime">
