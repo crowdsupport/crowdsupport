@@ -145,7 +145,7 @@
             $scope.addRequest = function () {
                 $uibModal.open({
                     animation: true,
-                    templateUrl: '/r/template/addDonationRequest.html',
+                    templateUrl: 'addRequest.html',
                     controller: 'AddDonationRequestController',
                     scope: $scope
                 });
