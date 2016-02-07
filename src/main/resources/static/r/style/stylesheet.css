@@ -2,6 +2,10 @@
     background-image: linear-gradient(to bottom, #337AB7 0, #337AB7 100%);
 }
 
+.inline {
+    display: inline;
+}
+
 .pic {
     width: 32px;
     height: 32px;

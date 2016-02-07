@@ -5,7 +5,11 @@
                 ({{place.city.name}})
             </p>
 
-            <div class="navbar-right options">
+            <div class="navbar-right options form-inline">
+                <div class="inline">
+                    <input type="text" placeholder="Search for tags" class="form-control" />
+                </div>
+
                 <div class="btn-group filtertoggle">
                     <label class="btn btn-default" ng-model="f.open" uib-btn-checkbox>Donations needed</label>
                     <label class="btn btn-warning" ng-model="f.enroute" uib-btn-checkbox>Enough en route</label>
