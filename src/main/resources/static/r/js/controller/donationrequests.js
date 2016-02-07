@@ -49,8 +49,8 @@
                     r.validTo = $scope.date;
                 }
                 r.resolved = false;
+                $scope.addTag();
 
-                console.log(place);
                 place.post('donationRequests', r).then(function () {
                     Status.success("Successfully created new donation request");
 
