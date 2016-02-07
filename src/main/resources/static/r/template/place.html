@@ -72,7 +72,7 @@
                     </uib-progress>
                 </div>
 
-                <div class="tags" ng-if="req.tags">
+                <div class="tags" ng-if="req.tags && req.tags.length > 0">
                     Tags:
                     <span ng-repeat="tag in req.tags">
                         <span class="tag" ng-click="addTagToSearch(tag.name)">{{tag.name}}</span> <span ng-if="!$last">| </span>
