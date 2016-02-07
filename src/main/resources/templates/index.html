@@ -130,9 +130,9 @@
                     </div>
                 </div>
                 <div class="btn-group" id="login" role="group" ng-hide="$root.auth">
-                    <form>
-                        <input type="text" class="username" placeholder="Username..." ng-model="username"/>
-                        <input type="password" class="password" placeholder="Password..." ng-model="password"/>
+                    <form class="form-inline inline">
+                        <input type="text" class="username form-control" placeholder="Username..." ng-model="username"/>
+                        <input type="password" class="password form-control" placeholder="Password..." ng-model="password"/>
                         <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
                         <a th:href="@{/register}" class="btn btn-default">Register</a>
                     </form>
