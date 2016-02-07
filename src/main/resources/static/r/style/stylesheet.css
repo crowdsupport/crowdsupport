@@ -332,3 +332,13 @@ div.current-member {
 .statusbar .message.old {
     animation: fadeout 0.5s forwards;
 }
+
+input.ng-touched.ng-valid, textarea.ng-touched.ng-valid {
+    border-color: #5cb85c;
+}
+
+input.ng-touched.ng-invalid, textarea.ng-touched.ng-invalid {
+    border-color: red;
+    outline: none;
+    box-shadow: 0 0 8px red;
+}
