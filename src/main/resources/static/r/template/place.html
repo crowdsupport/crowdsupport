@@ -125,8 +125,8 @@
                                           ng-model="req.ui.commentText"></textarea>
                                         <div class="form-inline">
                                             <div class="input-group" ng-show="req.quantity">
-                                                <input class="form-control" type="number" placeholder="Qty" min="0"
-                                                       max="9999"
+                                                <input class="form-control" type="number" min="0" max="9999"
+                                                       placeholder="{{req.ui.quantityLeft | posNum}}"
                                                        ng-model="req.ui.commentQuantity"/>
                                                 <div class="input-group-addon">{{req.units}}</div>
                                             </div>
@@ -142,7 +142,10 @@
                     </div>
 
                     <div uib-tooltip="Toggle comments" tooltip-append-to-body="true" class="commentcorner"
-                         ng-click="toggleComments(req)"></div>
+                         ng-click="toggleComments(req)">
+                        <div ng-hide="req.ui.showComments">&gt;</div>
+                        <div ng-show="req.ui.showComments">&lt;</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -157,7 +160,7 @@
 </script>
 
 <script type="text/ng-template" id="addRequest.html">
-    <form ng-submit="create()" class="form-horizontal">
+    <form ng-submit="create()" class="ng-cloak form-horizontal">
         <div class="modal-header">
             <h3 class="modal-title">Add new request</h3>
         </div>

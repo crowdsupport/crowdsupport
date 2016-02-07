@@ -15,7 +15,7 @@
 
             $scope.addTag = function (keyEvent) {
                 var input = $scope.inputTag;
-                if (typeof keyEvent === 'undefined' || keyEvent.which === 32) {
+                if (typeof input !== 'undefined' && (typeof keyEvent === 'undefined' || keyEvent.which === 32)) {
                     if (isString(input)) {
                         input = input.trim();
                         if (input.length !== 0) {

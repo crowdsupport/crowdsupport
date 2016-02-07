@@ -22,6 +22,13 @@
     border-color: transparent transparent lightsteelblue transparent;
 }
 
+.commentcorner > div {
+    position: absolute;
+    left: -15px;
+    bottom: -50px;
+    font-size: large;
+}
+
 .commentsection {
 
 }
@@ -118,6 +125,10 @@ h1 {
 
 .request .quantity {
     margin-top: 30px;
+}
+
+.request p {
+    text-align: justify;
 }
 
 .request h3 {
