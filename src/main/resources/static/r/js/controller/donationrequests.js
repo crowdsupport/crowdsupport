@@ -228,6 +228,8 @@
 
                 request.ui.commentText = '';
 
+                request.ui.showComments = false;
+
                 request.ui.sendComment = function () {
                     console.log('Comment for request ' + request.id + ': ' + request.ui.commentText);
 
@@ -293,6 +295,10 @@
                 return request;
             };
             _.forEach($scope.donationRequests, enhanceRequest);
+
+            $scope.toggleComments = function (request) {
+                request.ui.showComments = !request.ui.showComments;
+            };
 
             $scope.confirmComment = function (id) {
                 Restangular.one('comment', id).post('confirm').then(function () {

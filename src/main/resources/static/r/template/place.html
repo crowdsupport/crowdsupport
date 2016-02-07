@@ -7,7 +7,7 @@
 
             <div class="navbar-right options form-inline">
                 <div class="inline">
-                    <input type="text" placeholder="Search for tags" class="form-control" ng-model="tagfilter" />
+                    <input type="text" placeholder="Search for tags" class="form-control" ng-model="tagfilter"/>
                 </div>
 
                 <div class="btn-group filtertoggle">
@@ -27,9 +27,10 @@
 
     <div class="row" id="donationrequests" ng-controller="DonationRequestsCtrl">
         <div ng-repeat="req in donationRequests | filter : filter : true | orderBy : order" ng-class="req.ui.state"
-             class="request col-lg-3 col-md-4 col-sm-6 col-xs-12 animate-repeat">
-            <div class="panel panel-default panel-body">
-                <div class="age">
+             class="animate-repeat">
+            <div class="request col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="panel panel-default panel-body">
+                    <div class="age">
                     <span ng-if="inTeam()">
                         <button class="btn btn-sm" uib-tooltip="Delete request" tooltip-append-to-body="true"
                                 ng-click="deleteRequest(req.id)">
@@ -41,94 +42,107 @@
                         </button>
                         <br/>
                     </span>
-                    <time class="time-ago" datetime="{{req.createdDateTime}}"
-                          uib-tooltip="{{req.createdDateTime | time}}" tooltip-append-to-body="true">
-                        {{req.createdDateTime | time}}
-                    </time>
-                </div>
-
-
-                <h3>{{req.title}}</h3>
-                <p>{{req.description}}</p>
-
-                <div ng-if="req.quantity">
-                    <div class="justified-and-inlined">
-                        <div>Need</div>
-                        <div uib-tooltip-template="'tooltip.html'">
-                            {{req.ui.quantityLeft | posNum}} {{req.units}} <span
-                                ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
-                        </div>
+                        <time class="time-ago" datetime="{{req.createdDateTime}}"
+                              uib-tooltip="{{req.createdDateTime | time}}" tooltip-append-to-body="true">
+                            {{req.createdDateTime | time}}
+                        </time>
                     </div>
 
-                    <uib-progress>
-                        <uib-bar value="req.ui.pConfirmed" type="success" class="progress-striped"
-                                 uib-tooltip="Confirmed">
-                            <span ng-hide="req.ui.pConfirmed < 20">{{req.ui.confirmed}}</span>
-                        </uib-bar>
-                        <uib-bar value="req.ui.pPromised" type="warning" class="progress-striped"
-                                 uib-tooltip="En route">
-                            <span ng-hide="req.ui.pPromised < 20">{{req.ui.promised}}</span>
-                        </uib-bar>
-                    </uib-progress>
-                </div>
+                    <h3>{{req.title}}</h3>
+                    <div ng-hide="req.ui.showComments">
+                        <p>{{req.description}}</p>
 
-                <div class="tags" ng-if="req.tags && req.tags.length > 0">
-                    Tags:
+                        <div class="quantity" ng-if="req.quantity">
+                            <div class="justified-and-inlined">
+                                <div>Need</div>
+                                <div uib-tooltip-template="'tooltip.html'">
+                                    {{req.ui.quantityLeft | posNum}} {{req.units}} <span
+                                        ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
+                                </div>
+                            </div>
+
+                            <uib-progress>
+                                <uib-bar value="req.ui.pConfirmed" type="success" class="progress-striped"
+                                         uib-tooltip="Confirmed">
+                                    <span ng-hide="req.ui.pConfirmed < 20">{{req.ui.confirmed}}</span>
+                                </uib-bar>
+                                <uib-bar value="req.ui.pPromised" type="warning" class="progress-striped"
+                                         uib-tooltip="En route">
+                                    <span ng-hide="req.ui.pPromised < 20">{{req.ui.promised}}</span>
+                                </uib-bar>
+                            </uib-progress>
+                        </div>
+
+                        <div class="tags" ng-if="req.tags && req.tags.length > 0">
+                            Tags:
                     <span ng-repeat="tag in req.tags">
-                        <span class="tag" ng-click="addTagToSearch(tag.name)">{{tag.name}}</span> <span ng-if="!$last">| </span>
+                        <span class="tag" ng-click="addTagToSearch(tag.name)">{{tag.name}}</span> <span
+                            ng-if="!$last">| </span>
                     </span>
-                </div>
-
-                <div class="justified-and-inlined" ng-if="req.validToDateTime">
-                    <div>Expires</div>
-                    <div>{{req.validToDateTime}}</div>
-                </div>
-
-                <div class="comments" ng-show="req.comments">
-                    <div ng-repeat="comment in req.comments" ng-class="{done: comment.confirmed}" class="comment panel panel-default panel-body">
-                        <div class="media">
-                            <div class="media-left">
-                                <div class="pic"></div>
-                            </div>
-                            <div class="media-body">
-                                <b>{{comment.author.username}}</b>: {{comment.text}}
-
-                                <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}}
-                                    {{req.units}}</p>
-                            </div>
                         </div>
-                        <div ng-if="inTeam()" class="pull-right">
-                            <button class="btn btn-xs" uib-tooltip="Delete comment" tooltip-append-to-body="true"
-                                    ng-click="deleteComment(comment.id)">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                            <button class="btn btn-xs" uib-tooltip="Confirm donation" tooltip-append-to-body="true"
-                                    ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </button>
+
+                        <div class="justified-and-inlined" ng-if="req.validToDateTime">
+                            <div>Expires</div>
+                            <div>{{req.validToDateTime}}</div>
                         </div>
                     </div>
-                </div>
+                    <div ng-show="req.ui.showComments">
+                        <div class="comments" ng-show="req.comments">
+                            <div ng-repeat="comment in req.comments" ng-class="{done: comment.confirmed}"
+                                 class="comment panel panel-default panel-body">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="pic"></div>
+                                    </div>
+                                    <div class="media-body">
+                                        <b>{{comment.author.username}}</b>: {{comment.text}}
 
-                <div class="well" ng-show="$root.user && !req.resolved">
-                    <form ng-submit="req.ui.sendComment()" name="commentForm">
-                        <div class="media">
-                            <div class="media-left">
-                                <div class="pic"></div>
-                            </div>
-                            <div class="media-body">
-                                <b class="media-heading">{{$root.user.username}}</b>
-                                <textarea class="form-control" placeholder="New comment..."
-                                          ng-model="req.ui.commentText"></textarea>
-                                <input class="form-control" type="number" placeholder="Qty"
-                                       ng-model="req.ui.commentQuantity" ng-show="req.quantity"/>
-
-                                <button class="pull-right btn btn-default"
-                                        ng-disabled="req.ui.commentText.length === 0">Send
-                                </button>
+                                        <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}}
+                                            {{req.units}}</p>
+                                    </div>
+                                </div>
+                                <div ng-if="inTeam()" class="pull-right">
+                                    <button class="btn btn-xs" uib-tooltip="Delete comment" tooltip-append-to-body="true"
+                                            ng-click="deleteComment(comment.id)">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                    <button class="btn btn-xs" uib-tooltip="Confirm donation" tooltip-append-to-body="true"
+                                            ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </form>
+
+                        <div class="well" ng-show="$root.user && !req.resolved">
+                            <form ng-submit="req.ui.sendComment()" name="commentForm">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="pic"></div>
+                                    </div>
+                                    <div class="media-body">
+                                <textarea class="form-control" placeholder="New comment..." rows="2"
+                                          ng-model="req.ui.commentText"></textarea>
+                                        <div class="form-inline">
+                                            <div class="input-group" ng-show="req.quantity">
+                                                <input class="form-control" type="number" placeholder="Qty" min="0"
+                                                       max="9999"
+                                                       ng-model="req.ui.commentQuantity"/>
+                                                <div class="input-group-addon">{{req.units}}</div>
+                                            </div>
+
+                                            <button class="pull-right btn btn-default"
+                                                    ng-disabled="req.ui.commentText.length === 0">Send
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div uib-tooltip="Toggle comments" tooltip-append-to-body="true" class="commentcorner"
+                         ng-click="toggleComments(req)"></div>
                 </div>
             </div>
         </div>
@@ -171,7 +185,8 @@
                     <div ng-hide="neverExpires">
                         <div class="input-group">
                             <input type="text" class="form-control" datetime-picker="dd.MM.yyyy HH:mm" ng-model="date"
-                                   min-date="minDate" close-text="Close" is-open="opened" timepicker-options="timeOptions"
+                                   min-date="minDate" close-text="Close" is-open="opened"
+                                   timepicker-options="timeOptions"
                                    ng-required="!neverExpires"/>
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="opened = true"><i
