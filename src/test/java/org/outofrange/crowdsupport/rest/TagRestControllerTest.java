@@ -3,12 +3,10 @@ package org.outofrange.crowdsupport.rest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.outofrange.crowdsupport.CrowdsupportApplication;
 import org.outofrange.crowdsupport.model.Tag;
 import org.outofrange.crowdsupport.persistence.TagRepository;
 import org.outofrange.crowdsupport.util.TestUser;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
@@ -40,12 +38,10 @@ public class TagRestControllerTest extends RestIntegrationTest {
         assertEquals(2, tags.size());
         assertTrue(tags.contains(tag1));
         assertTrue(tags.contains(tag2));
-
-        resetDatabase();
     }
 
     @Test
-    public void createTag() {
+    public void createTagDuplicate() {
         createUser(TestUser.USER);
 
         rest.put(tagBase() + "/newtag", as(TestUser.USER));
@@ -54,13 +50,29 @@ public class TagRestControllerTest extends RestIntegrationTest {
         assertEquals(1, tags.size());
         assertTrue(tags.contains(new Tag("newtag")));
 
+
         rest.put(tagBase() + "/newtag", as(TestUser.USER));
         tags = getList(tagBase(), Tag.class);
 
         assertEquals(1, tags.size());
         assertTrue(tags.contains(new Tag("newtag")));
+    }
 
-        resetDatabase();
+    @Test
+    public void createAndDeleteTag() {
+        createUser(TestUser.ADMIN);
+
+        rest.put(tagBase() + "/newtag", as(TestUser.ADMIN));
+        List<Tag> tags = getList(tagBase(), Tag.class);
+
+        assertEquals(1, tags.size());
+        assertTrue(tags.contains(new Tag("newtag")));
+
+
+        rest.exchange(tagBase() + "/newtag", HttpMethod.DELETE, as(TestUser.ADMIN), Object.class);
+        tags = getList(tagBase(), Tag.class);
+
+        assertEquals(0, tags.size());
     }
 
     private String tagBase() {

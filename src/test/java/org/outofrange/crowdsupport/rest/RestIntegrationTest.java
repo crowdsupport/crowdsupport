@@ -1,8 +1,8 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.flywaydb.core.Flyway;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.CrowdsupportApplication;
 import org.outofrange.crowdsupport.service.UserService;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -70,7 +69,8 @@ public class RestIntegrationTest {
         rest = new TestRestTemplate();
     }
 
-    protected void resetDatabase() {
+    @After
+    public void resetDatabase() {
         flyway.clean();
         flyway.migrate();
     }
