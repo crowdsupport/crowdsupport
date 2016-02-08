@@ -28,6 +28,8 @@ public final class TokenHandler {
 	private static final String SEPARATOR = ".";
 	private static final String SEPARATOR_SPLITTER = "\\.";
 
+    private ObjectMapper mapper = new ObjectMapper();
+
 	private final Mac hmac;
 
 	public TokenHandler(byte[] secretKey) {
@@ -72,7 +74,7 @@ public final class TokenHandler {
 
 	private UserAuthDto fromJSON(final byte[] userBytes) {
 		try {
-			return new ObjectMapper().readValue(new ByteArrayInputStream(userBytes), UserAuthDto.class);
+			return mapper.readValue(new ByteArrayInputStream(userBytes), UserAuthDto.class);
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
@@ -80,7 +82,7 @@ public final class TokenHandler {
 
 	private byte[] toJSON(Object object) {
 		try {
-			return new ObjectMapper().writeValueAsBytes(object);
+			return mapper.writeValueAsBytes(object);
 		} catch (JsonProcessingException e) {
 			throw new IllegalStateException(e);
 		}

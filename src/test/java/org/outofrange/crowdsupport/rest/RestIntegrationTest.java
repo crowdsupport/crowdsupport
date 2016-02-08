@@ -1,23 +1,27 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.flywaydb.core.Flyway;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.CrowdsupportApplication;
+import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.util.TestUser;
+import org.outofrange.crowdsupport.util.TokenStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.ArrayList;
+import javax.xml.bind.DatatypeConverter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = CrowdsupportApplication.class)
 @WebIntegrationTest
 public class RestIntegrationTest {
@@ -31,6 +35,19 @@ public class RestIntegrationTest {
 
     @Value("${local.server.port}")
     private int port;
+
+    @Value("${crowdsupport.token.secret}")
+    private String secret;
+
+    @Inject
+    private UserService userService;
+
+    private TokenStore tokenStore;
+
+    @PostConstruct
+    public void init() {
+        tokenStore = new TokenStore(DatatypeConverter.parseBase64Binary(this.secret));
+    }
 
     protected String base(String url) {
         return "http://localhost:" + port + "/service/v1" + url;
@@ -53,9 +70,19 @@ public class RestIntegrationTest {
         rest = new TestRestTemplate();
     }
 
-    @After
-    public void cleanDatabase() {
+    protected void resetDatabase() {
         flyway.clean();
         flyway.migrate();
+    }
+
+    protected HttpEntity<Void> as(TestUser user) {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + tokenStore.getTokenForUser(user));
+
+        return new HttpEntity<>(headers);
+    }
+
+    protected void createUser(TestUser user) {
+        userService.createUser(user.getFullUserDto());
     }
 }

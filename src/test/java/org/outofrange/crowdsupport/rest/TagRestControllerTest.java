@@ -2,9 +2,14 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.junit.Test;
-import org.outofrange.crowdsupport.dto.TagDto;
+import org.junit.runner.RunWith;
+import org.outofrange.crowdsupport.CrowdsupportApplication;
 import org.outofrange.crowdsupport.model.Tag;
 import org.outofrange.crowdsupport.persistence.TagRepository;
+import org.outofrange.crowdsupport.util.TestUser;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -12,14 +17,14 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
 public class TagRestControllerTest extends RestIntegrationTest {
     @Inject
     private TagRepository tagRepository;
 
     @Test
     public void getAllTagsWithNoTags() {
-        final List<Tag> tags = getList(base(), Tag.class);
+        final List<Tag> tags = getList(tagBase(), Tag.class);
         assertEquals(0, tags.size());
     }
 
@@ -30,29 +35,35 @@ public class TagRestControllerTest extends RestIntegrationTest {
         tagRepository.save(tag1);
         tagRepository.save(tag2);
 
-        final List<Tag> tags = getList(base(), Tag.class);
+        final List<Tag> tags = getList(tagBase(), Tag.class);
 
         assertEquals(2, tags.size());
         assertTrue(tags.contains(tag1));
         assertTrue(tags.contains(tag2));
+
+        resetDatabase();
     }
 
+    @Test
     public void createTag() {
-        // TODO use exchange and build something for auth
-        rest.put(base() + "/tag/newtag", null);
-        List<Tag> tags = getList(base(), Tag.class);
+        createUser(TestUser.USER);
+
+        rest.put(tagBase() + "/newtag", as(TestUser.USER));
+        List<Tag> tags = getList(tagBase(), Tag.class);
 
         assertEquals(1, tags.size());
         assertTrue(tags.contains(new Tag("newtag")));
 
-        rest.put(base() + "/tag/newtag", null);
-        tags = getList(base(), Tag.class);
+        rest.put(tagBase() + "/newtag", as(TestUser.USER));
+        tags = getList(tagBase(), Tag.class);
 
         assertEquals(1, tags.size());
         assertTrue(tags.contains(new Tag("newtag")));
+
+        resetDatabase();
     }
 
-    private String base() {
+    private String tagBase() {
         return base("/tag");
     }
 }
