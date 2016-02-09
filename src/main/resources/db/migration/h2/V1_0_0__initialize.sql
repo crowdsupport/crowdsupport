@@ -236,10 +236,24 @@ INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
    WHERE name = 'QUERY_USERS')
 );
 
--- Geography
--- ---------
-INSERT INTO STATES (version, created, name, identifier, imagepath) VALUES (0, sysdate, 'United Kingdom', 'uk', NULL);
-INSERT INTO CITIES (version, created, name, identifier, imagepath, state)
-VALUES (0, sysdate, 'Preston', 'preston', NULL, (SELECT id
-                                                 FROM STATES
-                                                 WHERE identifier = 'uk'));
+-- Default admin user, password: adminadmin (change as soon as possible!)
+-- ----------------------------------------------------------------------
+INSERT INTO USERS (version, created, username, password, enabled, email, imagepath) VALUES (
+  0, sysdate, 'admin', '$2a$10$f45dG7EISyMIlkF0wlcAXOYDizsR21758EEuGJWAAh.kVQS1vyFoq', TRUE, NULL, '/r/image/placeholder.jpg'
+);
+INSERT INTO USERS_ROLES (user, role) VALUES (
+  (SELECT id
+   FROM USERS
+   WHERE username = 'admin'),
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN')
+);
+INSERT INTO USERS_ROLES (user, role) VALUES (
+  (SELECT id
+   FROM USERS
+   WHERE username = 'admin'),
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_USER')
+);

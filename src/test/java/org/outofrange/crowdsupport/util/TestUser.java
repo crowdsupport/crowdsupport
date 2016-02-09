@@ -8,18 +8,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public enum TestUser {
-    ADMIN("admin", "admin", RoleStore.ADMIN, RoleStore.USER),
-    USER("user", "user", RoleStore.USER);
+    ADMIN("testadmin", "admin", RoleStore.ADMIN, RoleStore.USER),
+    USER("testuser", "user", RoleStore.USER);
 
-    private final String username;
-    private final String password;
     private final UserAuthDto userAuthDto;
     private final FullUserDto fullUserDto;
 
     TestUser(String username, String password, String... roles) {
-        this.username = username;
-        this.password = password;
-
         userAuthDto = new UserAuthDto();
         userAuthDto.setUsername(username);
         userAuthDto.setPassword(password);

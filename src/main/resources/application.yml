@@ -53,6 +53,11 @@ spring:
   jackson:
     serialization:
       indent_output: true
+flyway:
+  locations:
+    - db/migration/common
+    - db/migration/${crowdsupport.db.type}
+    - db/migration/dev/${crowdsupport.db.type}
 server:
   port: 8080
 logging:

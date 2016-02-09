@@ -7,14 +7,12 @@ import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.spring.security.UserAuthentication;
 import org.outofrange.crowdsupport.util.RoleStore;
 import org.outofrange.crowdsupport.util.ServiceException;
 import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -99,7 +97,7 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.findOne(userId);
 
         if (user == null) {
-            throw new ServiceException("Couldn't find user with id " + user);
+            throw new ServiceException("Couldn't find user with id " + userId);
         }
 
         final Optional<User> existingUser = userRepository.findOneByUsername(userDto.getUsername());
@@ -123,7 +121,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (userDto.getPassword() != null && !"".equals(userDto.getPassword())) {
-            user.setPassword(userDto.getPassword());
+            user.setPasswordHash(passwordEncoder.encode(userDto.getPassword()));
         }
 
         if (all) {
