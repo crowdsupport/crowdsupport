@@ -1,11 +1,11 @@
 .navbar {
-    background-image: linear-gradient(to bottom, #337AB7 85%, #FFF 100%);
+    background-image: linear-gradient(to bottom, #337AB7 85%, rgba(255,255,255,0) 100%);
     border-style: none;
     padding-bottom: 5px;
 }
 
 .navbar.navbar-fixed-bottom {
-    background-image: linear-gradient(to top, #337AB7 85%, #FFF 100%);
+    background-image: linear-gradient(to top, #337AB7 85%, rgba(255,255,255,0) 100%);
     border-style: none;
     padding-top: 5px;
 }
