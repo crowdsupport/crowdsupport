@@ -2,8 +2,10 @@ package org.outofrange.crowdsupport.spring.security;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.UserAuthDto;
+import org.outofrange.crowdsupport.service.ConfigurationService;
 import org.outofrange.crowdsupport.service.UserService;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -16,31 +18,56 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenAuthenticationService {
+    private static final Logger log = LoggerFactory.getLogger(TokenAuthenticationService.class);
 
 	private static final String AUTH_HEADER_NAME = "authorization";
 
-	private final TokenHandler tokenHandler;
     private final ModelMapper mapper;
     private final UserService userService;
 
+    private ConfigurationService configurationService;
+    private TokenHandler tokenHandler;
+    private String secretCache = null;
+
 	@Inject
-	public TokenAuthenticationService(@Value("${crowdsupport.token.secret}") String secret, ModelMapper mapper,
+	public TokenAuthenticationService(ConfigurationService configurationService, ModelMapper mapper,
                                       UserService userService) {
+        this.configurationService = configurationService;
+
         this.mapper = mapper;
         this.userService = userService;
-		tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
 	}
+
+    private TokenHandler getTokenHandler() {
+        if (tokenHandler == null) {
+            log.info("Creating new token handler");
+
+            secretCache = configurationService.getProperty(ConfigurationService.HMAC_TOKEN_SECRET);
+            tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secretCache));
+        } else {
+            final String secretFromConfiguration = configurationService.getProperty(ConfigurationService.HMAC_TOKEN_SECRET);
+
+            if (!secretCache.equals(secretFromConfiguration)) {
+                log.info("Token change detected, creating new token handler");
+
+                secretCache = secretFromConfiguration;
+                tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secretCache));
+            }
+        }
+
+        return tokenHandler;
+    }
 
 	public void addAuthentication(HttpServletResponse response, UserAuthentication authentication) {
 		final UserAuthDto user = mapper.map(authentication.getDetails(), UserAuthDto.class);
 		user.setExp(LocalDateTime.now().plusDays(7).toEpochSecond(ZoneOffset.UTC));
-		response.addHeader(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user));
+		response.addHeader(AUTH_HEADER_NAME, getTokenHandler().createTokenForUser(user));
 	}
 
 	public Authentication getAuthentication(HttpServletRequest request) {
 		final String token = request.getHeader(AUTH_HEADER_NAME);
 		if (token != null) {
-			final UserAuthDto user = tokenHandler.parseUserFromToken(token);
+			final UserAuthDto user = getTokenHandler().parseUserFromToken(token);
 			if (user != null) {
 				return new UserAuthentication(userService.loadUserByUsername(user.getUsername()));
 			}

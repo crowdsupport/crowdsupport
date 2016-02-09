@@ -153,6 +153,16 @@ CREATE TABLE COMMENTS (
   FOREIGN KEY (author) REFERENCES USERS (id)
 );
 
+-- Properties
+-- ----------
+CREATE TABLE PROPERTIES (
+  id      BIGINT IDENTITY,
+  version BIGINT    NOT NULL,
+  created TIMESTAMP NOT NULL,
+  key     VARCHAR2(100),
+  value   VARCHAR2(1000)
+);
+
 -- INITIAL DATA
 -- ============
 
