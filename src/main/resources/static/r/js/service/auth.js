@@ -66,7 +66,7 @@
                 $rootScope.user = retrieveUser();
                 isAuthorizedForStatePromise($state.current).then(function (authorized) {
                     if (!authorized) {
-                        $state.go('welcome');
+                        $state.go('dashboard');
                         Status.info("You no longer have permission to see this page!");
                     }
                 });
@@ -80,7 +80,7 @@
 
                 isAuthorizedForStatePromise($state.current).then(function (authorized) {
                     if (!authorized) {
-                        $state.go('welcome');
+                        $state.go('dashboard');
                     }
                 });
             };
@@ -90,7 +90,7 @@
                     if (!authorized) {
                         evt.preventDefault();
                         $rootScope.$emit('$stateChangeError');
-                        $state.go('welcome');
+                        $state.go('dashboard');
                     }
                 });
             });

@@ -173,6 +173,23 @@
                         authorities: [AuthStore.ROLE_ADMIN, AuthStore.PROCESS_PLACE_REQUESTS]
                     }
                 })
+                .state('admin.settings', {
+                    url: '/settings',
+                    views: {
+                        '@': {
+                            templateUrl: '/r/template/admin/settings.html',
+                            controller: 'SettingsController as ctrl'
+                        }
+                    },
+                    resolve: {
+                        $title: function() {
+                            return 'Configuration'
+                        }
+                    },
+                    data: {
+                        authorities: [AuthStore.ROLE_ADMIN, AuthStore.CONFIGURE_APPLICATION]
+                    }
+                })
                 .state('admin.users', {
                     url: '/userManagement',
                     views: {

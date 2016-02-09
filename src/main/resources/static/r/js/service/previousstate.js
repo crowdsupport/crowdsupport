@@ -26,7 +26,7 @@
                     if (!$previousState.get().state.abstract) {
                         return $previousState.go();
                     } else {
-                        return $state.go('welcome');
+                        return $state.go('dashboard');
                     }
                 },
                 get: function (memoName) {

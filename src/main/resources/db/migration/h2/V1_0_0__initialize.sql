@@ -175,6 +175,8 @@ INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_CIT
 INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_STATES');
 INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'MANAGE_PLACES');
 INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'QUERY_USERS');
+INSERT INTO PERMISSIONS (version, created, name) VALUES (0, sysdate, 'CONFIGURE_APPLICATION');
+
 
 INSERT INTO ROLES (version, created, name, system_role) VALUES (0, sysdate, 'ROLE_ADMIN', TRUE);
 INSERT INTO ROLES (version, created, name, system_role) VALUES (0, sysdate, 'ROLE_USER', TRUE);
@@ -234,6 +236,14 @@ INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
   (SELECT id
    FROM PERMISSIONS
    WHERE name = 'QUERY_USERS')
+);
+INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
+  (SELECT id
+   FROM ROLES
+   WHERE name = 'ROLE_ADMIN'),
+  (SELECT id
+   FROM PERMISSIONS
+   WHERE name = 'CONFIGURE_APPLICATION')
 );
 
 -- Default admin user, password: adminadmin (change as soon as possible!)

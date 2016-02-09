@@ -170,5 +170,13 @@
                     $uibModalInstance.close(response);
                 });
             };
+        })
+        .controller('SettingsController', function ($scope, Restangular, Status, Auth) {
+            $scope.refreshToken = function () {
+                Restangular.one('setting', 'refreshApplicationSecret').post().then(function () {
+                    Auth.logout();
+                    Status.success('Refreshed application token - you have to login again!');
+                });
+            };
         });
 })();

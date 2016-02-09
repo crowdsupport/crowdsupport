@@ -11,4 +11,5 @@ public class PermissionStore {
     public static final String MANAGE_STATES = "MANAGE_STATES";
     public static final String MANAGE_PLACES = "MANAGE_PLACES";
     public static final String QUERY_USERS = "QUERY_USERS";
+    public static final String CONFIGURE_APPLICATION = "CONFIGURE_APPLICATION";
 }

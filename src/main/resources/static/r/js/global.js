@@ -82,6 +82,7 @@ var containsAll = function (haystack, needles) {
 };
 
 var AuthStore = {
+    CONFIGURE_APPLICATION: 'CONFIGURE_APPLICATION',
     PROCESS_PLACE_REQUESTS: 'PROCESS_PLACE_REQUESTS',
     MANAGE_ROLES: 'MANAGE_ROLES',
     MANAGE_USERS: 'MANAGE_USERS',
