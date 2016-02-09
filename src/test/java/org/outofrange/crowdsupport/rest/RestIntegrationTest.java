@@ -1,10 +1,10 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.flywaydb.core.Flyway;
-import org.junit.After;
 import org.junit.Before;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.CrowdsupportApplication;
+import org.outofrange.crowdsupport.service.ConfigurationService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.util.TestUser;
 import org.outofrange.crowdsupport.util.TokenStore;
@@ -35,8 +35,8 @@ public class RestIntegrationTest {
     @Value("${local.server.port}")
     private int port;
 
-    @Value("${crowdsupport.token.secret}")
-    private String secret;
+    @Inject
+    private ConfigurationService configurationService;
 
     @Inject
     private UserService userService;
@@ -45,16 +45,12 @@ public class RestIntegrationTest {
 
     @PostConstruct
     public void init() {
-        tokenStore = new TokenStore(DatatypeConverter.parseBase64Binary(this.secret));
+        tokenStore = new TokenStore(DatatypeConverter.parseBase64Binary(
+                configurationService.getProperty(ConfigurationService.HMAC_TOKEN_SECRET)));
     }
 
     protected String base(String url) {
         return "http://localhost:" + port + "/service/v1" + url;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T> List<T> getList(String url) {
-        return rest.getForObject(url, List.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -67,10 +63,7 @@ public class RestIntegrationTest {
     @Before
     public void setUp() {
         rest = new TestRestTemplate();
-    }
 
-    @After
-    public void resetDatabase() {
         flyway.clean();
         flyway.migrate();
     }
