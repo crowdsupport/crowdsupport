@@ -20,6 +20,7 @@ public class WebMvcConfig extends DelegatingWebMvcConfiguration {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/").setCachePeriod(FOURTY_FIVE_DAYS);
         registry.addResourceHandler("/r/**").addResourceLocations("classpath:/static/r/").setCachePeriod(FOURTY_FIVE_DAYS);
     }
 
