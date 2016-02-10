@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('crowdsupport', ['crowdsupport.routing', 'angular-jwt'])
+        .module('crowdsupport', ['crowdsupport.routing', 'angular-jwt', 'ngMaterial'])
         .config(function Config($httpProvider, jwtInterceptorProvider) {
             jwtInterceptorProvider.tokenGetter = function(config) {
                 // Skip authentication for any requests ending in .html
@@ -19,9 +19,24 @@
                 selfLink: 'links[0].href'
             });
         })
+        .config(function($mdThemingProvider) {
+            $mdThemingProvider.theme('default')
+                .primaryPalette('blue-grey')
+                .accentPalette('light-blue')
+                .backgroundPalette('grey', {
+                    'default': '50'
+                });
+        })
         .filter('posNum', function () {
             return function (input) {
                 return input > 0 ? input : 0;
+            };
+        })
+        .controller('MainController', function($scope, $mdSidenav, $mdMedia) {
+            $scope.$mdMedia = $mdMedia;
+
+            $scope.toggleNav = function () {
+                $mdSidenav('sidebar').toggle();
             };
         });
 })();

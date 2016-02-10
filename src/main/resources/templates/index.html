@@ -13,131 +13,138 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>-->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.css"/>
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-    <th:block th:if="${@config.isDebugEnabled()}">
-        <link rel="stylesheet" th:href="@{/r/style/stylesheet.css}"/>
-    </th:block>
-    <th:block th:unless="${@config.isDebugEnabled()}">
-        <link rel="stylesheet" th:href="@{'/r/min/all-' + ${@config.getVersion()} + '.css'}"/>
-    </th:block>
+    <link th:if="${@config.isDebugEnabled()}" rel="stylesheet" th:href="@{/r/style/stylesheet.css}"/>
+    <link th:unless="${@config.isDebugEnabled()}" rel="stylesheet"
+          th:href="@{'/r/min/all-' + ${@config.getVersion()} + '.css'}"/>
 
-    <!-- third party libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
-
-    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.min.js"></script>-->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-    <script src="//cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
-    <script type="text/javascript"
-            src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.3.1/restangular.min.js"></script>
-
-
-    <th:block th:if="${@config.isDebugEnabled()}">
-        <script th:src="@{/r/js/thirdparty/angular-ui-router-title.js}"></script>
-        <script th:src="@{/r/js/thirdparty/angular-ui-datetimepicker.js}"></script>
-        <script th:src="@{/r/js/global.js}"></script>
-        <script th:src="@{/r/js/service/config.js}"></script>
-        <script th:src="@{/r/js/service/websocket.js}"></script>
-        <script th:src="@{/r/js/service/previousstate.js}"></script>
-        <script th:src="@{/r/js/service/rest.js}"></script>
-        <script th:src="@{/r/js/service/auth.js}"></script>
-        <script th:src="@{/r/js/service/statusbar.js}"></script>
-        <script th:src="@{/r/js/widget/timeago.js}"></script>
-        <script th:src="@{/r/js/widget/searchWidget.js}"></script>
-        <script th:src="@{/r/js/controller/admin.js}"></script>
-        <script th:src="@{/r/js/controller/controller.js}"></script>
-        <script th:src="@{/r/js/controller/donationrequests.js}"></script>
-        <script th:src="@{/r/js/routing.js}"></script>
-        <script th:src="@{/r/js/app.js}"></script>
-    </th:block>
-    <th:block th:unless="${@config.isDebugEnabled()}">
-        <script th:src="@{'/r/min/all-' + ${@config.getVersion()} + '.js'}"></script>
-    </th:block>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
 
     <title ng-bind="($title || 'Home') + ' - Crowdsupport'">Crowdsupport</title>
 </head>
-<body>
-<nav th:fragment="navbar" class="navbar">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <div class="navbar-left">
-                <a class="navbar-brand" th:href="@{/}">C<span class="hide-xs">rowd</span>s<span
-                        class="hide-xs">upport</span></a>
-                <div class="navbar-text ng-cloak">
-                    <span ng-repeat="crumb in $breadcrumbs" ng-class="{ 'active' : $last }">
+<body class="ng-cloak" ng-controller="MainController">
+
+<div flex layout="row" class="mainrow">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2 sidebar" md-component-id="sidebar"
+                md-is-locked-open="$mdMedia('gt-sm')">
+        <md-toolbar>
+            <h1 class="md-toolbar-tools">Crowdsupport</h1>
+        </md-toolbar>
+
+        <md-list>
+            <div ng-controller="UserController" class="">
+                <md-list-item ng-show="$root.auth">
+                    <ul>
+                        <li>
+                            <div>Logged in as <b>{{$root.user.username}}</b></div>
+                        </li>
+                        <li auth="ROLE_ADMIN">
+                            <md-button th:href="@{/admin}">Admin panel</md-button>
+                        </li>
+                        <li>
+                            <md-button th:href="@{/profile}">Profile</md-button>
+                        </li>
+                        <li>
+                            <md-button th:href="@{/request/newPlace}">Request a new place
+                            </md-button>
+                        </li>
+                        <li>
+                            <md-button ng-click="logout()">Logout</md-button>
+                        </li>
+                    </ul>
+                </md-list-item>
+
+                <md-list-item class="login" ng-hide="$root.auth">
+                    <md-content layout-padding>
+                        <form layout="row" ng-submit="login()">
+                            <md-input-container>
+                                <label>Username</label>
+                                <input ng-model="username">
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Password</label>
+                                <input type="password" ng-model="password">
+                            </md-input-container>
+
+                            <md-button aria-label="Login" type="submit" class="md-primary md-icon-button"><i
+                                    class="fa fa-sign-in"></i></md-button>
+                            <md-button aria-label="Register" class="md-icon-button" th:href="@{/register}"><i class="fa fa-user-plus"></i>
+                            </md-button>
+                        </form>
+                    </md-content>
+                </md-list-item>
+                <div ui-view="sidebar"></div>
+            </div>
+        </md-list>
+    </md-sidenav>
+
+    <md-content flex id="main" layout-padding>
+        <md-button class="md-fab" aria-label="Show navigation" ng-click="toggleNav()" ng-hide="$mdMedia('gt-sm')">
+            <i class="fa fa-bars"></i>
+        </md-button>
+        <main ui-view="">
+        </main>
+    </md-content>
+</div>
+
+
+<!--
+<span ng-repeat="crumb in $breadcrumbs" ng-class="{ 'active' : $last }">
                         <span ng-if="!$last"><a href="{{crumb.url}}" class="navbar-link">{{crumb.title}}</a> > </span>
                         <span ng-if="$last">{{crumb.title}}</span>
                     </span>
-                </div>
-            </div>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse ng-cloak">
-            <div ng-controller="UserController" class="navbar-right navbar-userarea">
-                <div ng-show="$root.auth">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            <span>{{$root.user.username}}</span> <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li auth="ROLE_ADMIN"><a th:href="@{/admin}" class="btn btn-default">Admin panel</a></li>
-                            <li><a th:href="@{/profile}" class="btn btn-default">Profile</a></li>
-                            <li><a th:href="@{/request/newPlace}" class="btn btn-default">Request a new place</a></li>
-                            <li><a href="" class="btn btn-default" ng-click="logout()">Logout</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="btn-group" id="login" role="group" ng-hide="$root.auth">
-                    <form class="form-inline">
-                        <input type="text" class="inline username form-control" placeholder="Username..."
-                               ng-model="username"/>
-                        <input type="password" class="inline password form-control" placeholder="Password..."
-                               ng-model="password"/>
-                        <button type="submit" class="btn btn-default" ng-click="login()"><span
-                                class="glyphicon glyphicon-log-in"></span></button>
-                        <a th:href="@{/register}" class="btn btn-default"><span
-                                class="glyphicon glyphicon-pencil"></span></a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+-->
+
+<!-- third party libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
 
 
-<main ui-view="">
-</main>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.js"></script>
 
-<div class="navbar navbar-fixed-bottom">
-    <div class="navbar-text statusbar">
-    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script src="//cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
+<script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.3.1/restangular.min.js"></script>
+
+<div th:if="${@config.isDebugEnabled()}">
+    <script th:src="@{/r/js/thirdparty/angular-ui-router-title.js}"></script>
+    <script th:src="@{/r/js/thirdparty/angular-ui-datetimepicker.js}"></script>
+    <script th:src="@{/r/js/global.js}"></script>
+    <script th:src="@{/r/js/service/config.js}"></script>
+    <script th:src="@{/r/js/service/websocket.js}"></script>
+    <script th:src="@{/r/js/service/previousstate.js}"></script>
+    <script th:src="@{/r/js/service/rest.js}"></script>
+    <script th:src="@{/r/js/service/auth.js}"></script>
+    <script th:src="@{/r/js/service/statusbar.js}"></script>
+    <script th:src="@{/r/js/widget/timeago.js}"></script>
+    <script th:src="@{/r/js/widget/searchWidget.js}"></script>
+    <script th:src="@{/r/js/controller/admin.js}"></script>
+    <script th:src="@{/r/js/controller/controller.js}"></script>
+    <script th:src="@{/r/js/controller/donationrequests.js}"></script>
+    <script th:src="@{/r/js/routing.js}"></script>
+    <script th:src="@{/r/js/app.js}"></script>
+</div>
+<div th:unless="${@config.isDebugEnabled()}">
+    <script th:src="@{'/r/min/all-' + ${@config.getVersion()} + '.js'}"></script>
 </div>
 
 </body>
