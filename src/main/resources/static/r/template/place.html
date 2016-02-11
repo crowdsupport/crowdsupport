@@ -1,55 +1,27 @@
-<div class="container-fluid place">
-    <div class="row">
-        <nav class="navbar">
-            <p class="navbar-text">{{place.name}} @ {{place.location}}
-                ({{place.city.name}})
-            </p>
-
-            <div class="navbar-right options form-inline">
-                <div class="inline">
-                    <input type="text" placeholder="Search for tags" class="form-control" ng-model="tagfilter"/>
-                </div>
-
-                <div class="btn-group filtertoggle">
-                    <label class="btn btn-default" ng-model="f.open" uib-btn-checkbox>Donations needed</label>
-                    <label class="btn btn-warning" ng-model="f.enroute" uib-btn-checkbox>Enough en route</label>
-                    <label class="btn btn-success" ng-model="f.done" uib-btn-checkbox>Done</label>
-                </div>
-                <span class="orga" ng-if="inTeam()">
-                    <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/manage"><span
-                            uib-tooltip="Manage place" class="btn glyphicon glyphicon-wrench"></span></a>
-                    <a href="" ng-click="addRequest()"><span uib-tooltip="Add request" tooltip-append-to-body="true"
-                                                             class="btn glyphicon glyphicon-plus"></span></a>
-                </span>
-            </div>
-        </nav>
+<div layout="column">
+    <div>
+        <p>{{place.name}} @ {{place.location}}
+            ({{place.city.name}})
+        </p>
     </div>
 
-    <div class="row" id="donationrequests" ng-controller="DonationRequestsCtrl">
-        <div ng-repeat="req in donationRequests | filter : filter : true | orderBy : order" ng-class="req.ui.state"
-             class="animate-repeat">
-            <div class="request col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <div class="panel panel-default panel-body">
-                    <div class="age">
-                    <span ng-if="inTeam()">
-                        <button class="btn btn-sm" uib-tooltip="Delete request" tooltip-append-to-body="true"
-                                ng-click="deleteRequest(req.id)">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                        <button class="btn btn-sm" uib-tooltip="Mark request as resolved" tooltip-append-to-body="true"
-                                ng-click="resolveRequest(req.id)">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </button>
-                        <br/>
-                    </span>
+    <div ng-controller="DonationRequestsCtrl">
+        <md-grid-list md-cols-xs="1" md-cols-sm="2" md-cols-gt-sm="3" md-gutter="1em">
+            <md-grid-tile ng-repeat="req in donationRequests | filter : filter : true | orderBy : order"
+                          md-rowspan="{{req.ui.rows}}"
+                          class="animate-repeat">
+                <md-card>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{req.title}}</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-content>
                         <time class="time-ago" datetime="{{req.createdDateTime}}"
                               uib-tooltip="{{req.createdDateTime | time}}" tooltip-append-to-body="true">
                             {{req.createdDateTime | time}}
                         </time>
-                    </div>
 
-                    <h3>{{req.title}}</h3>
-                    <div ng-hide="req.ui.showComments">
                         <p>{{req.description}}</p>
 
                         <div class="quantity" ng-if="req.quantity">
@@ -59,6 +31,11 @@
                                     {{req.ui.quantityLeft | posNum}} {{req.units}} <span
                                         ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
                                 </div>
+                            </div>
+
+                            <div class="justified-and-inlined" ng-if="req.validToDateTime">
+                                <div>Expires</div>
+                                <div>{{req.validToDateTime}}</div>
                             </div>
 
                             <uib-progress>
@@ -75,18 +52,13 @@
 
                         <div class="tags" ng-if="req.tags && req.tags.length > 0">
                             Tags:
-                    <span ng-repeat="tag in req.tags">
-                        <span class="tag" ng-click="addTagToSearch(tag.name)">{{tag.name}}</span> <span
-                            ng-if="!$last">| </span>
-                    </span>
+                        <span ng-repeat="tag in req.tags">
+                            <span class="tag" ng-click="addTagToSearch(tag.name)">{{tag.name}}</span> <span
+                                ng-if="!$last">| </span>
+                        </span>
                         </div>
 
-                        <div class="justified-and-inlined" ng-if="req.validToDateTime">
-                            <div>Expires</div>
-                            <div>{{req.validToDateTime}}</div>
-                        </div>
-                    </div>
-                    <div ng-show="req.ui.showComments">
+
                         <div class="comments" ng-show="req.comments">
                             <div ng-repeat="comment in req.comments" ng-class="{done: comment.confirmed}"
                                  class="comment panel panel-default panel-body">
@@ -141,17 +113,41 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
 
-                    <div uib-tooltip="Toggle comments" tooltip-append-to-body="true" class="commentcorner"
-                         ng-click="toggleComments(req)">
-                        <div ng-hide="req.ui.showComments">&gt;</div>
-                        <div ng-show="req.ui.showComments">&lt;</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center" ng-if="inTeam()">
+                        <md-button ng-click="deleteRequest(req.id)">
+                            <md-icon md-font-set="fa" md-font-icon="fa-trash-o"></md-icon>
+                        </md-button>
+                        <md-button ng-click="resolveRequest(req.id)">
+                            <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+            </md-grid-tile>
+        </md-grid-list>
     </div>
+
+    <md-fab-speed-dial md-open="speedDial.isOpen" ng-if="inTeam()" md-direction="up"
+                       class="md-fling md-fab-bottom-right md-hover-full"
+                       ng-mouseenter="speedDial.isOpen=true" ng-mouseleave="speedDial.isOpen=false">
+        <md-fab-trigger>
+            <md-button class="md-fab md-warn">
+                <md-icon md-font-set="fa" md-font-icon="fa-wrench"></md-icon>
+            </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+            <md-button class="md-fab md-mini">
+                <md-tooltip md-direction="left" md-visible="speedDial.tooltipVisible">Add new request</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-plus"></md-icon>
+            </md-button>
+            <md-button class="md-fab md-mini">
+                <md-tooltip md-direction="left" md-visible="speedDial.tooltipVisible">Manage place</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-cogs"></md-icon>
+            </md-button>
+        </md-fab-actions>
+    </md-fab-speed-dial>
 </div>
 
 <script type="text/ng-template" id="tooltip.html">
@@ -211,7 +207,8 @@
                         </div>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" placeholder="Liters, bottles, people..."
-                                   ng-model="request.units" ng-disabled="!request.quantity" ng-required="request.quantity" maxlength="15"/>
+                                   ng-model="request.units" ng-disabled="!request.quantity"
+                                   ng-required="request.quantity" maxlength="15"/>
                         </div>
                     </div>
                 </div>

@@ -73,6 +73,10 @@
                         '@': {
                             templateUrl: '/r/template/place.html',
                             controller: 'PlaceController as placeCtrl'
+                        },
+                        'sidebar@': {
+                            templateUrl: '/r/template/placeFilterMenu.html',
+                            controller: 'PlaceFilterController as placeFilterController'
                         }
                     },
                     resolve: {

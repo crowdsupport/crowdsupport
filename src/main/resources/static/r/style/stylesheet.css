@@ -65,3 +65,11 @@ h1 {
     width: 300px;
 }
 /* END DASHBOARD */
+
+
+
+/* PLACE */
+.place__tag-filter {
+    margin-bottom: 20px;
+}
+/* END PLACE */

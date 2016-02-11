@@ -126,9 +126,8 @@
                 });
             };
         })
-        .controller('PlaceController', function ($scope, $placeRest, $rootScope, $uibModal) {
-            $scope.place = $placeRest;
-            $scope.f = {open: true, enroute: false, done: false};
+        .controller('PlaceFilterController', function($scope) {
+            $scope.statusfilter = {open: true, enroute: false, done: false};
 
             $scope.tagfilter = '';
             $scope.addTagToSearch = function(tag) {
@@ -137,6 +136,22 @@
                 }
                 $scope.tagfilter += tag;
             };
+        })
+        .controller('PlaceController', function ($scope, $placeRest, $rootScope, $uibModal, $timeout) {
+            $scope.place = $placeRest;
+
+            $scope.speedDial = {
+                isOpen: false
+            };
+            $scope.$watch('speedDial.isOpen', function(isOpen) {
+                if (isOpen) {
+                    $timeout(function() {
+                        $scope.speedDial.tooltipVisible = $scope.speedDial.isOpen;
+                    }, 600);
+                } else {
+                    $scope.speedDial.tooltipVisible = $scope.speedDial.isOpen;
+                }
+            });
 
             $scope.inTeam = function () {
                 if (!$rootScope.user || !$rootScope.user.managedPlaces) {
