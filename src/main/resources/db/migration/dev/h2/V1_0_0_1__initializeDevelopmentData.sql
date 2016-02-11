@@ -69,3 +69,19 @@ INSERT INTO TEAMS_USERS (team, user) VALUES (
     WHERE username = 'user'
   )
 );
+
+-- Sample Request
+-- --------------
+INSERT INTO DONATION_REQUESTS (version, created, place, title, description, valid_to, quantity, units, resolved) VALUES (
+  0, sysdate, (SELECT id FROM PLACES WHERE identifier = 'uclan'), 'Water', 'We need some water!', null, 50, 'Bottles', false
+);
+
+INSERT INTO TAGS (version, created, name) VALUES (0, sysdate, 'drinks');
+
+INSERT INTO DONATION_REQUESTS_TAGS (donation_request, tag) VALUES (
+  1, (SELECT id FROM TAGS WHERE name = 'drinks')
+);
+
+INSERT INTO COMMENTS (version, created, donation_request, text, author, confirmed, quantity) VALUES (
+  0, sysdate, 1, 'I can bring some!', (SELECT id FROM USERS WHERE username = 'admin'), false, 10
+);
