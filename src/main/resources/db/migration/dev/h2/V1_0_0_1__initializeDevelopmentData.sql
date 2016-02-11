@@ -73,7 +73,27 @@ INSERT INTO TEAMS_USERS (team, user) VALUES (
 -- Sample Request
 -- --------------
 INSERT INTO DONATION_REQUESTS (version, created, place, title, description, valid_to, quantity, units, resolved) VALUES (
-  0, sysdate, (SELECT id FROM PLACES WHERE identifier = 'uclan'), 'Water', 'We need some water!', null, 50, 'Bottles', false
+  0, sysdate, (SELECT id FROM PLACES WHERE identifier = 'uclan'),
+  'This is a long title', 'We need this and that so we can do this and That. It would be great if you could bring us something! But please don''t heistate to contact us, and we need it immediatley. Every day, even in the morning e need this and that so we can do this and That. It would be great if you could bring us something! But please don''t heistate to contact us, and we need it immediatley. Every day, even in the morning',
+  null, 50, 'Strong humans!!', false
+);
+
+INSERT INTO DONATION_REQUESTS (version, created, place, title, description, valid_to, quantity, units, resolved) VALUES (
+  0, sysdate, (SELECT id FROM PLACES WHERE identifier = 'uclan'),
+  'This is a long title', 'We need this and that so we can do this and That. It would be great if you could bring us something! But please don''t heistate to contact us, and we need it immediatley. Every day, even in the morning e need this and that so we can do this and That. It would be great if you could bring us something! But please don''t heistate to contact us, and we need it immediatley. Every day, even in the morning',
+  DATEADD('DAY', 1, CURRENT_DATE), 50, 'Strong humans!!', false
+);
+
+INSERT INTO DONATION_REQUESTS (version, created, place, title, description, valid_to, quantity, units, resolved) VALUES (
+  0, sysdate, (SELECT id FROM PLACES WHERE identifier = 'uclan'),
+  'This is a long title', 'We need this and that so we can do this and That. It would be great if you could bring us something! But please don''t heistate to contact us, and we need it immediatley. Every day, even in the morning e need this and that so we can do this and That. It would be great if you could bring us something! But please don''t heistate to contact us, and we need it immediatley. Every day, even in the morning',
+  null, 50, 'Strong humans!!', false
+);
+
+INSERT INTO DONATION_REQUESTS (version, created, place, title, description, valid_to, quantity, units, resolved) VALUES (
+  0, sysdate, (SELECT id FROM PLACES WHERE identifier = 'uclan'),
+  'Normal title', 'We need something.',
+  null, 20, 'Bottles', false
 );
 
 INSERT INTO TAGS (version, created, name) VALUES (0, sysdate, 'drinks');
@@ -83,5 +103,5 @@ INSERT INTO DONATION_REQUESTS_TAGS (donation_request, tag) VALUES (
 );
 
 INSERT INTO COMMENTS (version, created, donation_request, text, author, confirmed, quantity) VALUES (
-  0, sysdate, 1, 'I can bring some!', (SELECT id FROM USERS WHERE username = 'admin'), false, 10
+  0, sysdate, 1, 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut l', (SELECT id FROM USERS WHERE username = 'admin'), false, 10
 );

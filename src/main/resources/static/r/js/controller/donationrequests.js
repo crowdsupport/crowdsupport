@@ -330,7 +330,25 @@
             $scope.toggleComments = function (request) {
                 request.ui.showComments = !request.ui.showComments;
 
-                request.ui.rows = request.ui.showComments ? 2 : 1;
+                if (request.ui.showComments) {
+                    request.ui.rows = 2;
+
+                    var commentInput = $('.comment__text');
+                    if (commentInput) {
+                        _.delay(function () {
+                            commentInput[0].scrollIntoView();
+                        }, 100);
+                    }
+                } else {
+                    request.ui.rows = 1;
+
+                    var request = $('.donation-request');
+                    if (request) {
+                        _.delay(function () {
+                            request[0].scrollIntoView();
+                        }, 100);
+                    }
+                }
             };
 
             $scope.addTagToFilter = function (tag) {

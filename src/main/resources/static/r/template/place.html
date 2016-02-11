@@ -6,11 +6,11 @@
     </section>
 
     <section flex layout="column" ng-controller="DonationRequestsCtrl">
-        <md-grid-list flex md-cols-xs="1" md-cols-sm="2" md-cols-gt-sm="3" md-gutter="1em" md-row-height="300px">
+        <md-grid-list flex md-cols-xs="1" md-cols-sm="2" md-cols-md="2" md-cols-gt-md="3" md-gutter="1em" md-row-height="500px">
             <md-grid-tile ng-repeat="req in donationRequests | filter : filter : true | orderBy : order"
                           md-rowspan="{{req.ui.rows}}" class="animate-repeat donation-request" ng-class="req.ui.state">
                 <md-card flex>
-                    <md-card-title>
+                    <md-card-title flex="none">
                         <md-card-title-text>
                             <span class="md-headline">{{req.title}}</span>
                             <span class="md-subhead donation-request__age">
@@ -21,8 +21,8 @@
                             </span>
                         </md-card-title-text>
                     </md-card-title>
-                    <md-card-content layout="column">
-                        <p>{{req.description}}</p>
+                    <md-card-content flex layout="column" layout-align="space-between">
+                        <div class="donation-request__description">{{req.description}}</div>
 
                         <div layout="column" ng-if="req.quantity">
                             <div layout>
@@ -39,79 +39,89 @@
 
                         <div layout ng-if="req.validToDateTime">
                             <div flex="20">Expires</div>
-                            <div flex>{{req.validToDateTime}}</div>
+                            <div flex>{{req.validToDateTime | time}}</div>
                         </div>
 
-                        <md-chips ng-if="req.tags && req.tags.length > 0" ng-model="req.tags" readonly="true">
-                            <md-chip-template><span ng-click="addTagToFilter($chip)">{{$chip.name}}</span></md-chip-template>
-                        </md-chips>
-
-                        <div ng-show="req.ui.showComments">
-                            <div class="comments" ng-show="req.comments">
-                                <div ng-repeat="comment in req.comments" ng-class="{done: comment.confirmed}"
-                                     class="comment panel panel-default panel-body">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <div class="pic"></div>
-                                        </div>
-                                        <div class="media-body">
-                                            <b>{{comment.author.username}}</b>: {{comment.text}}
-
-                                            <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}}
-                                                {{req.units}}</p>
-                                        </div>
-                                    </div>
-                                    <div ng-if="inTeam()" class="pull-right">
-                                        <button class="btn btn-xs" uib-tooltip="Delete comment"
-                                                tooltip-append-to-body="true"
-                                                ng-click="deleteComment(comment.id)">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </button>
-                                        <button class="btn btn-xs" uib-tooltip="Confirm donation"
-                                                tooltip-append-to-body="true"
-                                                ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
-                                            <span class="glyphicon glyphicon-ok"></span>
-                                        </button>
-                                    </div>
+                        <div ng-show="req.ui.showComments" layout="column">
+                            <div ng-show="req.comments" class="comments">
+                                <div ng-repeat="comment in req.comments" class="comment" ng-class="{done: comment.confirmed}">
+                                    <md-card>
+                                        <md-card-header>
+                                            <md-card-avatar>
+                                                <img class="md-user-avatar" ng-src="{{comment.author.imagePath}}"/>
+                                            </md-card-avatar>
+                                            <md-card-header-text>
+                                                <span class="md-title">{{comment.author.username}}</span>
+                                                <span class="md-subhead" ng-if="comment.quantity > 0">{{comment.quantity}} {{req.units}}</span>
+                                            </md-card-header-text>
+                                        </md-card-header>
+                                        <md-card-content>
+                                            {{comment.text}}
+                                        </md-card-content>
+                                        <md-card-actions layout="row" layout-align="end center" ng-if="inTeam()">
+                                            <md-button ng-click="deleteComment(comment.id)">
+                                                <md-tooltip md-direction="top">Delete comment</md-tooltip>
+                                                <md-icon md-font-set="fa" md-font-icon="fa-trash"></md-icon>
+                                            </md-button>
+                                            <md-button ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
+                                                <md-tooltip md-direction="top">Donation received</md-tooltip>
+                                                <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                                            </md-button>
+                                        </md-card-actions>
+                                    </md-card>
                                 </div>
                             </div>
 
-                            <div class="well" ng-show="$root.user && !req.resolved">
-                                <form ng-submit="req.ui.sendComment()" name="commentForm">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <div class="pic"></div>
-                                        </div>
-                                        <div class="media-body">
-                                        <textarea class="form-control" placeholder="New comment..." rows="2"
-                                                  ng-model="req.ui.commentText" maxlength="100"></textarea>
-                                            <div class="form-inline">
-                                                <div class="input-group" ng-show="req.quantity">
-                                                    <input class="form-control" type="number" min="0" max="9999"
-                                                           placeholder="{{req.ui.quantityLeft | posNum}}"
-                                                           ng-model="req.ui.commentQuantity"/>
-                                                    <div class="input-group-addon">{{req.units}}</div>
-                                                </div>
-
-                                                <button class="pull-right btn btn-default"
-                                                        ng-disabled="req.ui.commentText.length === 0">Send
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div ng-show="$root.user && !req.resolved">
+                                <form ng-submit="req.ui.sendComment()" class="comment">
+                                    <md-card>
+                                        <md-card-header>
+                                            <md-card-avatar>
+                                                <img class="md-user-avatar" ng-src="{{$root.user.imagePath}}"/>
+                                            </md-card-avatar>
+                                            <md-card-header-text>
+                                                <span class="md-title">{{$root.user.username}}</span>
+                                            </md-card-header-text>
+                                        </md-card-header>
+                                        <md-card-content>
+                                            <md-input-container class="comment__text">
+                                                <label>Comment</label>
+                                                <textarea ng-model="req.ui.commentText" rows="2" md-maxlength="100"></textarea>
+                                            </md-input-container>
+                                        </md-card-content>
+                                        <md-card-actions layout="row" layout-align="end center">
+                                            <md-input-container flex class="comment__quantity">
+                                                <label>Quantity ({{req.units}})</label>
+                                                <input placeholder="{{req.ui.quantityLeft | posNum}}" ng-model="req.ui.commentQuantity"
+                                                       type="number" rows="2" min="0" max="9999"/>
+                                            </md-input-container>
+                                            <md-button class="md-fab md-mini md-primary" ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
+                                                <md-tooltip md-direction="top">Send comment</md-tooltip>
+                                                <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                                            </md-button>
+                                        </md-card-actions>
+                                    </md-card>
                                 </form>
                             </div>
                         </div>
+
+                        <md-chips ng-if="req.tags && req.tags.length > 0" ng-model="req.tags" readonly="true">
+                            <md-chip-template><span ng-click="addTagToFilter($chip)">{{$chip.name}}</span>
+                            </md-chip-template>
+                        </md-chips>
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">
                         <md-button ng-click="toggleComments(req)">
+                            <md-tooltip md-direction="top">Show comments</md-tooltip>
                             <md-icon md-font-set="fa" md-font-icon="fa-comments"></md-icon>
                         </md-button>
                         <div layout="row" ng-if="inTeam()">
                             <md-button ng-click="deleteRequest(req.id)">
+                                <md-tooltip md-direction="top">Delete request</md-tooltip>
                                 <md-icon md-font-set="fa" md-font-icon="fa-trash-o"></md-icon>
                             </md-button>
                             <md-button ng-click="resolveRequest(req.id)">
+                                <md-tooltip md-direction="top">Mark request as resolved</md-tooltip>
                                 <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
                             </md-button>
                         </div>

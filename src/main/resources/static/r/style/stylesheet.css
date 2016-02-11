@@ -92,19 +92,59 @@ h1 {
     height: 100%;
 }
 
-.donation-request.open md-card {
+.donation-request.open > figure > md-card {
     box-shadow: 2px 2px 8px 1px #81D4FA;
 }
 
-.donation-request.enroute md-card {
+.donation-request.enroute > figure > md-card {
     box-shadow: 2px 2px 8px 1px #039BE5;
 }
 
-.donation-request.done md-card {
+.donation-request.done > figure > md-card {
     box-shadow: 2px 2px 8px 1px #01579B;
+}
+
+.donation-request__description {
+    max-height: 200px;
+    overflow-y: scroll;
 }
 
 .place__speed-dial {
     position: fixed !important;
+    right: 5px !important;
+    bottom: 5px !important;
+}
+
+.comments {
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
+.comment md-card-header {
+    padding-bottom: 0;
+}
+
+.comment md-card-content {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.comment md-card-actions {
+    margin-top: 0;
+}
+
+.comment md-input-container {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.comment .comment__text {
+    margin-top: 10px;
+}
+
+.comment__quantity label {
+    width: 100%;
 }
 /* END PLACE */
