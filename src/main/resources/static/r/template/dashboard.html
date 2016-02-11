@@ -1,33 +1,34 @@
-<div class="container">
-    <div class="row">
-        <h1>Crowdsupport</h1>
-        <p class="text-center">allows you to quickly see where your help is needed!</p>
-    </div>
+<div layout="column" class="main-container">
+    <p md-whiteframe="1" layout-padding>Crowdsupport allows you to quickly see where your help is needed!</p>
 
-    <div class="row">
-        <input type="text" class="form-control placesearch text-center im-centered" placeholder="Type to search for places"/>
-        <div class="text-center">
-            or<br/>
+    <div layout="column" layout-padding class="dashboard__search" md-whiteframe="1">
+        <md-input-container>
+            <label>Search for places</label>
+            <input>
+        </md-input-container>
+        <div>or</div>
+        <div>
             <a href="/support">browse through all states</a>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-4 col-xs-12 text-center statistic-data">
+    <div layout-gt-xs="row" layout-padding layout-xs="column" md-whiteframe="1">
+        <div flex-gt-xs="33">
             <h3>Geography</h3>
 
             <div><strong>{{states}}</strong> states</div>
             <div><strong>{{cities}}</strong> cities</div>
             <div><strong>{{places}}</strong> places</div>
         </div>
-        <div class="col-sm-4 col-xs-12 text-center statistic-data">
+
+        <div flex-gt-xs="33">
             <h3>Requests</h3>
 
             <canvas id="doughnut" class="chart chart-doughnut" chart-data="pieData" chart-labels="pieLabels"
                     chart-legend="true" chart-colours="pieColours" chart-options="pieOptions">
             </canvas>
         </div>
-        <div class="col-sm-4 col-xs-12 text-center statistic-data">
+        <div flex-gt-xs>
             <h3>Users</h3>
 
             <div><strong>{{totalUsers}}</strong> users</div>
@@ -35,18 +36,21 @@
         </div>
     </div>
 
-    <div class="row center-block" ng-if="$root.user.managedPlaces.length > 0">
+    <div layout="column" layout-padding md-whiteframe="1">
+        <!-- TODO test and style -->
         <h2>Your teams</h2>
-        <!-- TODO: replace with template -->
-        <div ng-repeat="place in $root.user.managedPlaces" class="result box col-md-2 col-sm-6 col-xs-6">
-            <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}">
-                <img ng-src="{{place.imagePath}}" class="center-block"/>
 
-                <div class="text">
-                    {{place.name}}
-                    ({{place.location}})
-                </div>
-            </a>
+        <div layout layout-padding md-whiteframe="1">
+            <div ng-repeat="place in $root.user.managedPlaces">
+                <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}">
+                    <img ng-src="{{place.imagePath}}" class="center-block"/>
+
+                    <div class="text">
+                        {{place.name}}
+                        ({{place.location}})
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>

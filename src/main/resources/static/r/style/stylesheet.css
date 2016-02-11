@@ -7,7 +7,16 @@ h1 {
     font-family: 'PT Sans', sans-serif;
 }
 
-.mainrow {
+.main-container {
+    text-align: center;
+}
+
+.main-container > * {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.full-height {
     height: 100%;
 }
 /* END GENERAL */
@@ -15,6 +24,16 @@ h1 {
 
 
 /* SIDEBAR */
+.sidebar-toggle-fab {
+    top: 5px;
+    left: 5px;
+    max-height: 56px;
+}
+
+.content-toolbar {
+    max-height: 48px; /* otherwise sidebar fab would stretch it */
+}
+
 .login md-input-container {
     margin-top: 0;
     margin-bottom: 0;
@@ -35,3 +54,14 @@ h1 {
     text-align: center;
 }
 /* END SIDEBAR */
+
+
+
+/* DASHBOARD */
+.dashboard__search md-input-container {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    width: 300px;
+}
+/* END DASHBOARD */

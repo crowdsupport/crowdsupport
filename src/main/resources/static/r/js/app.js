@@ -19,13 +19,15 @@
                 selfLink: 'links[0].href'
             });
         })
-        .config(function($mdThemingProvider) {
+        .config(function($mdThemingProvider, $mdIconProvider) {
             $mdThemingProvider.theme('default')
                 .primaryPalette('blue-grey')
                 .accentPalette('light-blue')
                 .backgroundPalette('grey', {
                     'default': '50'
                 });
+
+            $mdIconProvider.fontSet('fa', 'fa');
         })
         .filter('posNum', function () {
             return function (input) {

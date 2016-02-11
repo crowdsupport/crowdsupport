@@ -26,14 +26,14 @@
 </head>
 <body class="ng-cloak" ng-controller="MainController">
 
-<div flex layout="row" class="mainrow">
+<div layout="row" class="full-height">
     <md-sidenav class="md-sidenav-left md-whiteframe-z2 sidebar" md-component-id="sidebar"
                 md-is-locked-open="$mdMedia('gt-sm')">
         <md-toolbar>
-            <h1 class="md-toolbar-tools">Crowdsupport</h1>
+            <h1 class="md-toolbar-tools"><a href="/">Crowdsupport</a></h1>
         </md-toolbar>
 
-        <md-list>
+        <md-list flex>
             <div ng-controller="UserController" class="">
                 <md-list-item ng-show="$root.auth">
                     <ul>
@@ -70,7 +70,8 @@
 
                             <md-button aria-label="Login" type="submit" class="md-primary md-icon-button"><i
                                     class="fa fa-sign-in"></i></md-button>
-                            <md-button aria-label="Register" class="md-icon-button" th:href="@{/register}"><i class="fa fa-user-plus"></i>
+                            <md-button aria-label="Register" class="md-icon-button" th:href="@{/register}"><i
+                                    class="fa fa-user-plus"></i>
                             </md-button>
                         </form>
                     </md-content>
@@ -80,21 +81,25 @@
         </md-list>
     </md-sidenav>
 
-    <md-content flex id="main" layout-padding>
-        <md-button class="md-fab" aria-label="Show navigation" ng-click="toggleNav()" ng-hide="$mdMedia('gt-sm')">
-            <i class="fa fa-bars"></i>
-        </md-button>
-        <main ui-view="">
-        </main>
-    </md-content>
+    <div layout="column" flex>
+        <md-toolbar layout class="content-toolbar">
+            <md-button flex="none" class="md-toolbar-tools md-fab sidebar-toggle-fab" aria-label="Show navigation" ng-click="toggleNav()" ng-hide="$mdMedia('gt-sm')">
+                <md-icon md-font-set="fa" md-font-icon="fa-bars"></md-icon>
+            </md-button>
+            <div class="md-toolbar-tools">
+                <span ng-repeat="crumb in $breadcrumbs" ng-class="{ 'active' : $last }">
+                        <span ng-if="!$last" hide-xs><a href="{{crumb.url}}">{{crumb.title}}</a> > </span>
+                        <span ng-if="$last">{{crumb.title}}</span>
+                    </span>
+            </div>
+        </md-toolbar>
+        <md-content flex id="main" layout-padding ui-view=""></md-content>
+    </div>
 </div>
 
 
 <!--
-<span ng-repeat="crumb in $breadcrumbs" ng-class="{ 'active' : $last }">
-                        <span ng-if="!$last"><a href="{{crumb.url}}" class="navbar-link">{{crumb.title}}</a> > </span>
-                        <span ng-if="$last">{{crumb.title}}</span>
-                    </span>
+
 -->
 
 <!-- third party libraries -->
