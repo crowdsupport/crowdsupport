@@ -14,9 +14,8 @@
                         <md-card-title-text>
                             <span class="md-headline">{{req.title}}</span>
                             <span class="md-subhead donation-request__age">
-                                <time class="time-ago" datetime="{{req.createdDateTime}}"
-                                      uib-tooltip="{{req.createdDateTime | time}}"
-                                      tooltip-append-to-body="true">
+                                <time class="time-ago" datetime="{{req.createdDateTime}}">
+                                    <md-tooltip md-direction="top">{{req.createdDateTime | time}}</md-tooltip>
                                     {{req.createdDateTime | time}}
                                 </time>
                             </span>

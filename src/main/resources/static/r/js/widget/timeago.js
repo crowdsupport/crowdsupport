@@ -10,7 +10,6 @@
                 restrict: 'C',
                 scope: {
                     title: '@',
-                    uibTooltip: '@',
                     datetime: '@'
                 },
                 link: function (scope, element, attrs) {
@@ -18,7 +17,7 @@
                     parsedDate.promise.then(function () {
                         jQuery(element).timeago();
 
-                        if ($(element).attr('uib-tooltip')) {
+                        if ($(element).has('md-tooltip')) {
                             element[0].removeAttribute('title');
                         }
                     });
@@ -28,14 +27,6 @@
                         a = 'title'
                     } else if (scope.datetime) {
                         a = 'datetime';
-                    } else if (scope.uibTooltip) {
-                        a = 'uibTooltip';
-
-                        if (element[0].nodeName === 'TIME') {
-                            attrs.$set('datetime', scope.uibTooltip);
-                        } else {
-                            attrs.$set('title', scope.uibTooltip);
-                        }
                     }
 
                     if (a) {
