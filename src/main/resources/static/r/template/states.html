@@ -1,17 +1,24 @@
-<div class="container">
-    <div class="row">
-        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search states"/>
-    </div>
+<div layout="column" class="main-container">
+    <md-input-container>
+        <label>Filter</label>
+        <input>
+    </md-input-container>
 
-    <div class="row center-block">
-        <div ng-repeat="state in states" class="result box col-md-2 col-sm-6 col-xs-6">
-            <a href="/support/{{state.identifier}}">
-                <img ng-src="{{state.imagePath}}" class="center-block"/>
-
-                <div class="text">
-                    <span>{{state.name}}</span>
-                </div>
-            </a>
-        </div>
+    <div layout layout-padding layout-align="space-around center" layout-wrap>
+        <md-card flex-xs="80" flex-sm="50" flex-gt-sm="33" ng-repeat="state in states">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">{{state.name}}</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <div class="md-media-sm card-media">
+                        <img ng-src="{{state.imagePath}}"/>
+                    </div>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button href="/support/{{state.identifier}}">Cities</md-button>
+            </md-card-actions>
+        </md-card>
     </div>
 </div>
