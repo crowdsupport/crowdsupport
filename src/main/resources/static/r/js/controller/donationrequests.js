@@ -126,7 +126,14 @@
                 });
             };
         })
-        .controller('PlaceFilterController', function($scope) {
+        .controller('PlaceFilterController', function($scope, $rootScope) {
+            $scope.$watchCollection('statusfilter', function (newFilter) {
+                $rootScope.$broadcast('statusFilterChange', newFilter);
+            });
+            $scope.$watch('tagfilter', function (newFilter) {
+                $rootScope.$broadcast('tagFilterChange', newFilter);
+            });
+
             $scope.statusfilter = {open: true, enroute: false, done: false};
 
             $scope.tagfilter = '';
@@ -174,8 +181,18 @@
                 });
             }
         })
-        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status) {
+        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $log) {
             $scope.donationRequests = $scope.$parent.place.donationRequests;
+
+            var statusfilter = {};
+            var tagfilter = '';
+
+            $scope.$on('statusFilterChange', function (event, newFilter) {
+                statusfilter = newFilter;
+            });
+            $scope.$on('tagFilterChange', function (event, newFilter) {
+                tagfilter = newFilter;
+            });
 
             $scope.order = function (request) {
                 var o;
@@ -198,21 +215,18 @@
             };
 
             $scope.filter = function (request) {
-                var f = $scope.$parent.f;
-                var tagfilter = $scope.$parent.tagfilter;
-
                 var show = false;
 
                 // apply state filter
                 switch (request.ui.state) {
                     case 'open':
-                        show |= f.open;
+                        show |= statusfilter.open;
                         break;
                     case 'enroute':
-                        show |= f.enroute;
+                        show |= statusfilter.enroute;
                         break;
                     case 'done':
-                        show |= f.done;
+                        show |= statusfilter.done;
                         break;
                     default:
                        show = true;
@@ -244,6 +258,8 @@
                 request.ui.commentText = '';
 
                 request.ui.showComments = false;
+
+                request.ui.rows = 1;
 
                 request.ui.sendComment = function () {
                     console.log('Comment for request ' + request.id + ': ' + request.ui.commentText);
