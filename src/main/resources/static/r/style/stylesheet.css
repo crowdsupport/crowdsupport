@@ -72,4 +72,39 @@ h1 {
 .place__tag-filter {
     margin-bottom: 20px;
 }
+
+.donation-request__age {
+    padding-top: 0 !important;
+    font-size: xx-small !important;
+}
+
+.donation-request md-progress-linear .md-bar2 {
+    /* bar for done quantity */
+    background-color: #01579B !important;
+}
+
+.donation-request md-progress-linear .md-bar1 {
+    /* bar for promised quantity */
+    background-color: #039BE5 !important;
+}
+
+.donation-request md-card {
+    height: 100%;
+}
+
+.donation-request.open md-card {
+    box-shadow: 2px 2px 8px 1px #81D4FA;
+}
+
+.donation-request.enroute md-card {
+    box-shadow: 2px 2px 8px 1px #039BE5;
+}
+
+.donation-request.done md-card {
+    box-shadow: 2px 2px 8px 1px #01579B;
+}
+
+.place__speed-dial {
+    position: fixed !important;
+}
 /* END PLACE */

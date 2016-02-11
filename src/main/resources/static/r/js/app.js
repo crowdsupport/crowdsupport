@@ -22,7 +22,11 @@
         .config(function($mdThemingProvider, $mdIconProvider) {
             $mdThemingProvider.theme('default')
                 .primaryPalette('blue-grey')
-                .accentPalette('light-blue')
+                .accentPalette('light-blue', {
+                    'hue-1': '200',
+                    'hue-2': '600',
+                    'hue-3': '900'
+                })
                 .backgroundPalette('grey', {
                     'default': '50'
                 });

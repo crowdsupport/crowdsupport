@@ -137,12 +137,15 @@
             $scope.statusfilter = {open: true, enroute: false, done: false};
 
             $scope.tagfilter = '';
-            $scope.addTagToSearch = function(tag) {
+
+            $scope.$on('addTagToFilterEvent', function (evt, tag) {
+                tag = tag.name;
+
                 if ($scope.tagfilter.length !== 0 && $scope.tagfilter.slice(-1) !== ' ') {
                     tag = ' ' + tag;
                 }
                 $scope.tagfilter += tag;
-            };
+            });
         })
         .controller('PlaceController', function ($scope, $placeRest, $rootScope, $uibModal, $timeout) {
             $scope.place = $placeRest;
@@ -154,7 +157,7 @@
                 if (isOpen) {
                     $timeout(function() {
                         $scope.speedDial.tooltipVisible = $scope.speedDial.isOpen;
-                    }, 600);
+                    }, 1000);
                 } else {
                     $scope.speedDial.tooltipVisible = $scope.speedDial.isOpen;
                 }
@@ -181,7 +184,7 @@
                 });
             }
         })
-        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $log) {
+        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $rootScope) {
             $scope.donationRequests = $scope.$parent.place.donationRequests;
 
             var statusfilter = {};
@@ -254,11 +257,8 @@
 
             var enhanceRequest = function (request) {
                 request.ui = {};
-
                 request.ui.commentText = '';
-
                 request.ui.showComments = false;
-
                 request.ui.rows = 1;
 
                 request.ui.sendComment = function () {
@@ -329,6 +329,12 @@
 
             $scope.toggleComments = function (request) {
                 request.ui.showComments = !request.ui.showComments;
+
+                request.ui.rows = request.ui.showComments ? 2 : 1;
+            };
+
+            $scope.addTagToFilter = function (tag) {
+                $rootScope.$broadcast('addTagToFilterEvent', tag);
             };
 
             $scope.confirmComment = function (id) {
