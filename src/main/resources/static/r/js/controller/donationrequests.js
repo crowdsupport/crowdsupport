@@ -161,7 +161,6 @@
             };
 
             $scope.addRequest = function () {
-                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
                 $mdDialog.show({
                     controller: 'AddDonationRequestController',
                     templateUrl: 'addRequest.html',

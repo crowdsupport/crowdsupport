@@ -1,51 +1,56 @@
-<div class="container form-horizontal">
-    <div class="row">
-        <h1>Role Management</h1>
-    </div>
+<div flex layout="column" layout-padding>
+    <div layout layout-align="space-between start">
+        <md-input-container flex>
+            <label>Role</label>
+            <md-select ng-model="selectedRole" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-value="role" ng-repeat="role in allRoles | orderBy:'name'">{{ role.name }}</md-option>
+            </md-select>
+        </md-input-container>
 
-    <div class="row">
-        <div class="form-group">
-            <select class="form-control" ng-options="aRole as aRole.name for aRole in allRoles"
-                    ng-model="selectedRole"></select>
-            <div class="pull-right">
-                <button class="btn btn-default" ng-click="addRole()">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-                <button class="btn btn-default" ng-click="removeSelectedRole()" ng-disabled="selectedRole.systemRole">
-                    <span class="glyphicon glyphicon-minus"></span>
-                </button>
-            </div>
+        <div layout flex="none">
+            <md-button id="role-management__add-role" ng-click="addRole()">
+                <md-tooltip md-direction="top">Create new role</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-plus"></md-icon>
+            </md-button>
+            <md-button ng-click="removeSelectedRole()" ng-disabled="selectedRole.systemRole">
+                <md-tooltip md-direction="top">Remove role</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-trash"></md-icon>
+            </md-button>
         </div>
     </div>
-    <hr/>
-    <div class="row">
-        <select multiple="multiple" class="form-control" ng-model="selectedRole.permissions"
-                ng-options="aPerm as aPerm for aPerm in allPermissions | orderBy">
-            <option value="">(no permissions)</option>
-        </select>
-        <div class="pull-right">
-            <button class="btn btn-default" ng-click="assignPermissions()">
-                <span class="glyphicon glyphicon-ok"></span>
-            </button>
-        </div>
+    <div layout ng-show="selectedRole">
+        <md-input-container flex>
+            <label>Permissions</label>
+            <md-select ng-model="selectedRole.permissions" multiple>
+                <md-option ng-value="permission" ng-repeat="permission in allPermissions | orderBy">{{ permission }}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-button flex="none" ng-click="assignPermissions()">
+            <md-tooltip md-direction="top">Assign permissions</md-tooltip>
+            <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+        </md-button>
     </div>
 </div>
 
+
 <script type="text/ng-template" id="roleCreateModal.html">
-    <div class="panel panel-default ng-cloak">
-        <div class="panel-heading">
-            <h3>Create a new role</h3>
-        </div>
-        <div class="panel-body">
-            <form ng-submit="create()">
-                <div class="form-group form-inline">
-                    <input class="form-control" type="text" required="required" placeholder="New role name..."
-                           ng-model="roleName"/>
-                    <button class="btn btn-default">
-                        <span class="glyphicon glyphicon-ok"></span>
-                    </button>
-                </div>
+    <md-dialog aria-label="Create new role-dialog" class="ng-cloak">
+        <md-dialog-content layout="column">
+            <md-toolbar>
+                <div class="md-toolbar-tools">Create a new role</div>
+            </md-toolbar>
+
+            <form layout layout-padding ng-submit="create()">
+                <md-input-container>
+                    <label>Role name</label>
+                    <input required="required" ng-model="roleName"/>
+                </md-input-container>
+                <md-button flex="none" ng-click="assignPermissions()">
+                    <md-tooltip md-direction="top">Assign permissions</md-tooltip>
+                    <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                </md-button>
             </form>
-        </div>
-    </div>
+        </md-dialog-content>
+    </md-dialog>
 </script>

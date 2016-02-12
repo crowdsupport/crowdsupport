@@ -29,12 +29,19 @@ md-select-menu.md-default-theme md-option[selected]:focus, md-select-menu md-opt
 md-select-menu.md-default-theme md-option[selected], md-select-menu md-option[selected] {
     color: #039BE5;
 }
+/* END GENERAL */
 
+
+
+/* BUG FIXES */
+/* for input fields, so chrome can play with them... */
 .dontfeedthechrome {
-    /* for input fields, so chrome can play with them... */
     display: none;
 }
-/* END GENERAL */
+
+/* this fixes a bug with many selected items */
+.md-select-value *:first-child { flex: 1 1 auto; }
+/* END BUG FIXES */
 
 
 

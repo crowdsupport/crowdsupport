@@ -120,18 +120,23 @@
                 });
             };
         })
-        .controller('RoleManagementController', function ($roles, $permissions, $scope, $log, Restangular, Status, Auth, $uibModal) {
+        .controller('RoleManagementController', function ($roles, $permissions, $scope, $log, Restangular, Status, Auth, $mdDialog) {
             $scope.allRoles = $roles;
             $scope.allPermissions = $permissions;
 
             $scope.selectedRole = $scope.allRoles[0];
 
             $scope.addRole = function () {
-                $uibModal.open({
-                    animation: true,
+                $mdDialog.show({
+                    controller: 'RoleCreateController',
                     templateUrl: 'roleCreateModal.html',
-                    controller: 'RoleCreateController'
-                }).result.then(function () {
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    fullscreen: true,
+                    openFrom: 'role-management__add-role',
+                    closeTo: 'role-management__add-role'
+                }).then(function () {
                     return Restangular.all('role').getList();
                 }).then(function (roles) {
                     $scope.allRoles = roles;
@@ -161,11 +166,11 @@
                 });
             };
         })
-        .controller('RoleCreateController', function ($scope, Restangular, Status, $uibModalInstance) {
+        .controller('RoleCreateController', function ($scope, Restangular, Status, $mdDialog) {
             $scope.create = function () {
                 Restangular.one('role', $scope.roleName).put().then(function (response) {
                     Status.success('Successfully created role ' + $scope.roleName);
-                    $uibModalInstance.close(response);
+                    $mdDialog.hide(response);
                 });
             };
         })
