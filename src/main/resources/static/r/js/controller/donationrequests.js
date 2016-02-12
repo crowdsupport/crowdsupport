@@ -69,51 +69,40 @@
             $scope.place = $placeRest;
             $scope.members = $members;
 
-            var place = $scope.place;
-
-            $scope.setActiveTab = function (initial) {
-                var activeClass = 'active';
-
-                var hash = window.location.hash;
-                var tabId;
-
-                if (hash) {
-                    tabId = hash.substr(1);
-                } else {
-                    hash = '#' + initial;
-                    tabId = initial;
-                }
-
-                var liElement = $('.place-tabs li:has(a[href=' + hash + '])');
-                if (liElement.length === 1) {
-                    liElement.addClass(activeClass);
-                    $('.tab-content #' + tabId).addClass(activeClass);
-                } else {
-                    $('.place-tabs li:has(a[href=#' + initial + '])').addClass(activeClass);
-                    $('.tab-content #' + initial).addClass(activeClass);
-                }
+            var alreadyMember = function (user) {
+                return 'undefined' !== typeof _.find($scope.members, function (member) {
+                        return member.username === user.username;
+                    });
             };
 
-            $scope.isSearchValid = function () {
-                if (typeof $scope.search !== 'object') {
-                    return false;
-                }
-
-                return $scope.members.findIndex(function (m) {
-                        return m.username === $scope.search.username;
-                    }) === -1;
-            };
-
-            $scope.addMember = function () {
-                place.one('team', $scope.search.username).put().then(function () {
-                    Status.success('Successfully added ' + $scope.search.username + ' to team');
-
-                    $scope.members.push($scope.search);
+            $scope.query = function (query) {
+                return Restangular.all('user').getList({query: query}).then(function (users) {
+                    return _.filter(users, function (user) {
+                        return !alreadyMember(user);
+                    });
                 });
             };
 
+            $scope.addMember = function (user, clear, $event) {
+                $scope.place.one('team', user.username).put().then(function () {
+                    Status.success('Successfully added ' + user.username + ' to team');
+
+                    if (!alreadyMember(user)) {
+                        $scope.members.push(user);
+                    }
+                });
+
+                if (clear) {
+                    $scope.searchText = '';
+                }
+
+                if ($event) {
+                    $event.stopPropagation();
+                }
+            };
+
             $scope.removeMember = function (username) {
-                place.one('team', username).remove().then(function () {
+                $scope.place.one('team', username).remove().then(function () {
                     Status.success('Successfully deleted ' + username + ' from team');
 
                     $scope.members = $.grep($scope.members, function (e) {
