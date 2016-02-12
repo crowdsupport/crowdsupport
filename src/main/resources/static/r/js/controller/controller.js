@@ -76,7 +76,7 @@
             $scope.logout = Auth.logout;
         })
         .controller('PlaceRequestCtrl', function ($scope, Restangular, $previousState, Status) {
-            $scope.city = {};
+            $scope.city = null;
             $scope.name = '';
             $scope.identifier = '';
             $scope.location = '';
@@ -93,6 +93,10 @@
 
             $scope.searchCity = function () {
                 $scope.addCity = false;
+            };
+
+            $scope.queryCity = function (query) {
+                return Restangular.all('city').getList({query: query});
             };
 
             this.submit = function () {

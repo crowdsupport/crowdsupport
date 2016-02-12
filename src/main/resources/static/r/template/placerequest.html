@@ -1,42 +1,51 @@
-<div class="container">
-    <div class="row">
-        <h1>Request a new place</h1>
-    </div>
+<div flex layout-padding>
+    <form layout="column" ng-submit="ctrl.submit()">
+        <md-input-container>
+            <label>Place name</label>
+            <input autofocus="true" required="required" ng-model="name" md-maxlength="100"/>
+        </md-input-container>
 
-    <div class="row">
-        <form  ng-submit="ctrl.submit()">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="What's the name of your place?"
-                       autofocus="true" required="required" ng-model="name" maxlength="100"/>
-            </div>
-            <div class="form-group">
-                <label for="identifier">Identifier</label>
-                <input type="text" class="form-control" id="identifier" name="identifier" placeholder="Unique identifier"
-                       required="required" ng-model="identifier" maxlength="50" uib-tooltip="The identifier will be used in the URL"/>
-            </div>
+        <md-input-container>
+            <label>Unique identifier</label>
+            <input required="required" ng-model="identifier" md-maxlength="50"/>
+        </md-input-container>
 
-            <div class="form-group" ng-hide="addCity">
-                <!-- We don't want no AutoFill! See: https://code.google.com/p/chromium/issues/detail?id=468153#c106 -->
-                <label for="c">Ci<span style="display: none">This is a workaround for Chrome's stupid AutoFill feature</span>ty</label>
-                <city-search ng-model="city" input-class="form-control" input-id="c">
-                    No city found - <a href="" ng-click="addCityInfo()">manually enter information for a new one!</a>
-                </city-search>
-            </div>
-            <div class="form-group" ng-show="addCity">
-                <label for="ctyname">Ci<span style="display: none">This is a workaround for Chrome's stupid AutoFill feature</span>ty name</label>
-                <input type="text" class="form-control" id="ctyname" name="ctyname" placeholder="City name" ng-model="cityname"/>
-                <label for="statename">State name</label>
-                <input type="text" class="form-control" id="statename" name="statename" placeholder="State name" ng-model="statename"/>
-                <a href="" ng-click="searchCity()">...back to search</a>
-            </div>
+        <md-autocomplete md-search-text="citySearch" md-selected-item="city" md-item-text="city.name"
+                         md-items="city in queryCity(citySearch)" md-min-length="2" md-delay="100"
+                         md-floating-label="City" ng-hide="addCity">
+            <md-item-template>
+                <span md-highlight-text="citySearch">{{city.name}} ({{city.state.name}})</span>
+            </md-item-template>
+            <md-not-found>
+                No city found - <a href="" ng-click="addCityInfo()">don't worry, that's fine!</a>
+            </md-not-found>
+        </md-autocomplete>
 
-            <div class="form-group">
-                <label for="location">Location</label>
-                <input type="text" class="form-control" id="location" name="location" required="required" ng-model="location"
-                       placeholder="Where is your place? (eg. 'Corporation Street', 'Train Station', ...)"/>
-            </div>
-            <input type="submit" class="btn btn-default" value="Request new place"/>
-        </form>
-    </div>
+        <div ng-show="addCity" layout>
+            <md-input-container flex>
+                <label>City name</label>
+                <input ng-model="cityname"/>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>State name</label>
+                <input ng-model="statename"/>
+            </md-input-container>
+
+            <md-button flex="none" ng-click="searchCity()">
+                <md-tooltip md-direction="top">Back to city search</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-search"></md-icon>
+            </md-button>
+        </div>
+
+        <md-input-container>
+            <label>Location of your place</label>
+            <input required="required" ng-model="location"/>
+        </md-input-container>
+
+        <md-button type="submit">
+            <md-tooltip md-direction="top">Request new place</md-tooltip>
+            <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+        </md-button>
+    </form>
 </div>

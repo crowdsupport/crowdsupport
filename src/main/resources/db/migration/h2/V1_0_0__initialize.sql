@@ -72,7 +72,7 @@ CREATE TABLE PLACES (
   name          VARCHAR2(100)  NOT NULL,
   identifier    VARCHAR2(50)   NOT NULL,
   imagepath     VARCHAR2(255),
-  city          BIGINT         NOT NULL,
+  city          BIGINT,
   location      VARCHAR2(2000) NOT NULL,
   active        BOOL           NOT NULL,
   team          BIGINT,
