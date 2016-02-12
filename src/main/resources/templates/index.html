@@ -88,7 +88,7 @@
             </md-button>
             <div class="md-toolbar-tools">
                 <span ng-repeat="crumb in $breadcrumbs" ng-class="{ 'active' : $last }">
-                        <span ng-if="!$last" hide-xs><a href="{{crumb.url}}">{{crumb.title}}</a> > </span>
+                        <span ng-if="!$last" hide-xs><a href="{{crumb.url}}">{{crumb.title}}</a> <md-icon md-font-set="fa" md-font-icon="fa-caret-right"></md-icon>&nbsp;</span>
                         <span ng-if="$last">{{crumb.title}}</span>
                     </span>
             </div>
@@ -96,11 +96,6 @@
         <md-content flex id="main" layout="column" layout-padding ui-view=""></md-content>
     </div>
 </div>
-
-
-<!--
-
--->
 
 <!-- third party libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>

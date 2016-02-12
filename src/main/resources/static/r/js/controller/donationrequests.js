@@ -3,15 +3,16 @@
         .module('crowdsupport.controller.donationrequests', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
             'crowdsupport.widget.search',
             'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate'])
-        .controller('AddDonationRequestController', function ($scope, Restangular, Status, $uibModalInstance, $timeout) {
+            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate', 'ngMaterial'])
+        .controller('AddDonationRequestController', function ($scope, place, Restangular, Status, $mdDialog, $log) {
             $scope.request = {};
             $scope.request.tags = [];
-            $scope.neverExpires = true;
-            $scope.minDate = new Date();
+            $scope.expires = false;
+            $scope.minDate = new Date().toISOString();
             $scope.date = new Date();
-
-            var place = $scope.$parent.place;
+            $scope.date.setSeconds(0);
+            $scope.date.setMilliseconds(0);
+            $scope.date.addDays(1);
 
             $scope.addTag = function (keyEvent) {
                 var input = $scope.inputTag;
@@ -43,30 +44,25 @@
                 }
             };
 
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
             $scope.create = function () {
                 var r = $scope.request;
-                if (!neverExpires) {
-                    r.validTo = $scope.date;
+                if ($scope.expires) {
+                    r.validToDateTime = $scope.date;
                 }
                 r.resolved = false;
                 $scope.addTag();
 
+                $log.debug("Saving donation request");
+                $log.debug(r);
                 place.post('donationRequests', r).then(function () {
                     Status.success("Successfully created new donation request");
 
-                    $uibModalInstance.close($scope.request);
+                    $mdDialog.hide($scope.request);
                 });
-            };
-
-            $scope.openDatePicker = function () {
-                $timeout(function () {
-                    $scope.opened = true;
-                });
-            };
-
-            $scope.timeOptions = {
-                readonlyInput: false,
-                showMeridian: false
             };
         })
         .controller('PlaceManagementController', function ($scope, $placeRest, $members, Restangular, Status) {
@@ -126,7 +122,7 @@
                 });
             };
         })
-        .controller('PlaceFilterController', function($scope, $rootScope) {
+        .controller('PlaceFilterController', function ($scope, $rootScope) {
             $scope.$watchCollection('statusfilter', function (newFilter) {
                 $rootScope.$broadcast('statusFilterChange', newFilter);
             });
@@ -147,15 +143,15 @@
                 $scope.tagfilter += tag;
             });
         })
-        .controller('PlaceController', function ($scope, $placeRest, $rootScope, $uibModal, $timeout) {
+        .controller('PlaceController', function ($scope, $placeRest, $rootScope, $mdDialog, $timeout, $mdMedia) {
             $scope.place = $placeRest;
 
             $scope.speedDial = {
                 isOpen: false
             };
-            $scope.$watch('speedDial.isOpen', function(isOpen) {
+            $scope.$watch('speedDial.isOpen', function (isOpen) {
                 if (isOpen) {
-                    $timeout(function() {
+                    $timeout(function () {
                         $scope.speedDial.tooltipVisible = $scope.speedDial.isOpen;
                     }, 1000);
                 } else {
@@ -176,13 +172,19 @@
             };
 
             $scope.addRequest = function () {
-                $uibModal.open({
-                    animation: true,
-                    templateUrl: 'addRequest.html',
+                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
+                $mdDialog.show({
                     controller: 'AddDonationRequestController',
-                    scope: $scope
+                    templateUrl: 'addRequest.html',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    fullscreen: true,
+                    openFrom: '#place__speeddial',
+                    closeTo: '#place__speeddial',
+                    locals: {place: $placeRest}
                 });
-            }
+            };
         })
         .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $rootScope) {
             $scope.donationRequests = $scope.$parent.place.donationRequests;
@@ -232,7 +234,7 @@
                         show |= statusfilter.done;
                         break;
                     default:
-                       show = true;
+                        show = true;
                 }
 
                 // apply tag filter
@@ -332,22 +334,8 @@
 
                 if (request.ui.showComments) {
                     request.ui.rows = 2;
-
-                    var commentInput = $('.comment__text');
-                    if (commentInput) {
-                        _.delay(function () {
-                            commentInput[0].scrollIntoView();
-                        }, 100);
-                    }
                 } else {
                     request.ui.rows = 1;
-
-                    var request = $('.donation-request');
-                    if (request) {
-                        _.delay(function () {
-                            request[0].scrollIntoView();
-                        }, 100);
-                    }
                 }
             };
 
@@ -455,5 +443,5 @@
                     handleRequestChange(message);
                 }
             });
-        })
+        });
 })();
