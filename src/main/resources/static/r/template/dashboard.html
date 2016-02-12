@@ -1,4 +1,4 @@
-<div layout="column" class="main-container">
+<div layout-padding flex class="main-container">
     <p md-whiteframe="1" layout-padding>Crowdsupport allows you to quickly see where your help is needed!</p>
 
     <div layout="column" layout-padding class="dashboard__search" md-whiteframe="1">
@@ -37,11 +37,10 @@
     </div>
 
     <div layout="column" layout-padding md-whiteframe="1" ng-if="$root.user.managedPlaces.length > 0">
-        <!-- TODO test and style -->
         <h2>Your teams</h2>
 
-        <div layout layout-padding md-whiteframe="1">
-            <div ng-repeat="place in $root.user.managedPlaces">
+        <div layout>
+            <div ng-repeat="place in $root.user.managedPlaces" layout-padding md-whiteframe="1">
                 <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}">
                     <img ng-src="{{place.imagePath}}" class="center-block"/>
 

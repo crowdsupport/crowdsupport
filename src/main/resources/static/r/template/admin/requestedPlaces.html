@@ -1,9 +1,7 @@
 <div layout-padding>
-    <h3 ng-hide="allRequests">Currently no pending place requests</h3>
+    <h3 ng-show="allRequests.length === 0">Currently no pending place requests</h3>
 
     <md-card ng-repeat="request in allRequests">
-        {{request.ui | json}}<br>
-        {{request.place}}
         <md-card-content ng-init="initRequest(request)">
             <div layout>
                 <md-input-container>
