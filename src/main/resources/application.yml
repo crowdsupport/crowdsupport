@@ -15,7 +15,7 @@ spring:
     username: ${crowdsupport.db.username}
     password: ${crowdsupport.db.password}
   thymeleaf:
-    mode: HTML5
+    mode: LEGACYHTML5
   jackson:
     mapper:
       use_getters_as_setters: false

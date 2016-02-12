@@ -65,9 +65,9 @@ var debug = {
     },
     refresh: function(force) {
         document.location.reload(force || false);
+    },
+    config: function () {
+        return debug.getAngular('ConfigService');
     }
-};
-window.onload = function () {
-    debug.config = debug.getAngular('ConfigService');
 };
 

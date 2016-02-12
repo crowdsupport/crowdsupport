@@ -1,5 +1,12 @@
 var SERVICE_PREFIX = '/service/v1/';
 
+Date.prototype.addDays = function(days)
+{
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+};
+
 var nullOrEmpty = function (obj) {
     return obj === null || obj === undefined || Object.keys(obj).length === 0;
 };

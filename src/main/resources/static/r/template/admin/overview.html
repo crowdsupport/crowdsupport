@@ -1,50 +1,69 @@
-<div class="container adminoverview">
-    <div auth="PROCESS_PLACE_REQUESTS" class="col-md-4 col-sm-3 col-xs-12">
-        <a href="/admin/requestedPlaces">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Requested Places</h3>
-                </div>
-                <div class="panel-body">
-                    Manage all new place requests
-                </div>
-            </div>
-        </a>
-    </div>
-    <div auth="MANAGE_USERS" class="col-md-4 col-sm-3 col-xs-12">
-        <a href="/admin/userManagement">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">User Management</h3>
-                </div>
-                <div class="panel-body">
-                    Here you can manage all your users: create new admins, delete users, ...
-                </div>
-            </div>
-        </a>
-    </div>
-    <div auth="MANAGE_ROLES" class="col-md-4 col-sm-3 col-xs-12">
-        <a href="/admin/roleManagement">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Role Management</h3>
-                </div>
-                <div class="panel-body">
-                    Add new roles and assign permissions
-                </div>
-            </div>
-        </a>
-    </div>
-    <div auth="CONFIGURE_APPLICATION" class="col-md-4 col-sm-3 col-xs-12">
-        <a href="/admin/settings">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Settings</h3>
-                </div>
-                <div class="panel-body">
-                    Change application settings
-                </div>
-            </div>
-        </a>
-    </div>
+<div flex layout layout-wrap layout-align="space-around center">
+    <md-card auth="PROCESS_PLACE_REQUESTS" flex-xs="80" flex-sm="50" flex-gt-sm="33">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Requested Places</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            Accept or decline new place requests
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button href="/admin/requestedPlaces">
+                <md-tooltip md-direction="top">Go to place management</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-arrow-right"></md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
+
+    <md-card auth="MANAGE_USERS" flex-xs="80" flex-sm="50" flex-gt-sm="33">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">User Management</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            Here you can manage all your users: create new admins, delete users, ...
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button href="/admin/userManagement">
+                <md-tooltip md-direction="top">Go to user management</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-arrow-right"></md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
+
+    <md-card auth="MANAGE_ROLES" flex-xs="80" flex-sm="50" flex-gt-sm="33">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Role Management</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            Add new roles and assign permissions
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button href="/admin/roleManagement">
+                <md-tooltip md-direction="top">Go to role management</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-arrow-right"></md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
+
+    <md-card auth="CONFIGURE_APPLICATION" flex-xs="80" flex-sm="50" flex-gt-sm="33">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Settings</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            Change application settings
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button href="/admin/settings">
+                <md-tooltip md-direction="top">Go to settings</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-arrow-right"></md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
 </div>

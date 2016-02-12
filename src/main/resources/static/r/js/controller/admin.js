@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('crowdsupport.controller.admin', ['crowdsupport.widget.search', 'restangular', 'crowdsupport.service.status'])
+        .module('crowdsupport.controller.admin', ['restangular', 'crowdsupport.service.status'])
         .controller('RequestedPlacesCtrl', function ($scope, $allRequests, Restangular, Status, $log) {
             $scope.allRequests = $allRequests;
 
@@ -30,6 +30,14 @@
                     Status.success('Request successfully declined');
                     $scope.removeRequest(index);
                 });
+            };
+
+            $scope.queryCity = function (query) {
+                return Restangular.all('city').getList({query: query});
+            };
+
+            $scope.queryState = function (query) {
+                return Restangular.all('state').getList({query: query});
             };
 
             $scope.createState = function (request) {
@@ -77,16 +85,17 @@
                     city: request.place.city,
                     state: request.place.city.state,
                     setCitySearch: function (citySearch) {
-                        if (citySearch == false) {
+                        if (!citySearch) {
                             request.place.city = {
-                                state: request.place.city.state,
+                                state: '',
                                 name: request.ui.city
                             };
                         }
+
                         request.ui.citySearch = citySearch;
                     },
                     setStateSearch: function (stateSearch) {
-                        if (stateSearch == false) {
+                        if (!stateSearch) {
                             request.place.city.state = {
                                 name: request.ui.state
                             };
@@ -98,21 +107,19 @@
         })
         .controller('UserManagementController', function ($scope, $log, $allRoles, Restangular, Status, Auth, $rootScope) {
             $scope.allRoles = $allRoles;
-            $scope.editUser = {};
 
-            $scope.isSearchValid = function () {
-                return typeof $scope.search === 'object';
+            $scope.query = function (query) {
+                return Restangular.all('user').getList({query: query});
             };
 
             $scope.save = function () {
-                console.log($scope.editUser);
-                $scope.editUser.patch($scope.editUser).then(function (response) {
+                $scope.edit.patch($scope.edit).then(function (response) {
                     Status.success('Successfully edited user');
 
                     // edited your own user?
-                    if ($scope.search.username == $rootScope.user.username) {
+                    if ($scope.edit.id == $rootScope.user.id) {
                         // kept username the same?
-                        if ($scope.search.username == response.username) {
+                        if ($scope.edit.username == response.username) {
                             Auth.updateUser();
                         } else {
                             Auth.logout();
@@ -122,18 +129,23 @@
                 });
             };
         })
-        .controller('RoleManagementController', function ($roles, $permissions, $scope, $log, Restangular, Status, Auth, $uibModal) {
+        .controller('RoleManagementController', function ($roles, $permissions, $scope, $log, Restangular, Status, Auth, $mdDialog) {
             $scope.allRoles = $roles;
             $scope.allPermissions = $permissions;
 
             $scope.selectedRole = $scope.allRoles[0];
 
             $scope.addRole = function () {
-                $uibModal.open({
-                    animation: true,
+                $mdDialog.show({
+                    controller: 'RoleCreateController',
                     templateUrl: 'roleCreateModal.html',
-                    controller: 'RoleCreateController'
-                }).result.then(function () {
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    fullscreen: true,
+                    openFrom: 'role-management__add-role',
+                    closeTo: 'role-management__add-role'
+                }).then(function () {
                     return Restangular.all('role').getList();
                 }).then(function (roles) {
                     $scope.allRoles = roles;
@@ -163,11 +175,11 @@
                 });
             };
         })
-        .controller('RoleCreateController', function ($scope, Restangular, Status, $uibModalInstance) {
+        .controller('RoleCreateController', function ($scope, Restangular, Status, $mdDialog) {
             $scope.create = function () {
                 Restangular.one('role', $scope.roleName).put().then(function (response) {
                     Status.success('Successfully created role ' + $scope.roleName);
-                    $uibModalInstance.close(response);
+                    $mdDialog.hide(response);
                 });
             };
         })

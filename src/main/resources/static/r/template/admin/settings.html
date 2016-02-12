@@ -1,22 +1,19 @@
-<div class="container">
-    <div class="row">
-        <h1>Configure Crowdsupport</h1>
-    </div>
-
-    <h3 class="text-center">Actions</h3>
-    <div class="row">
-        <div class="col-md-4 col-sm-3 col-xs-12">
-            <a ng-click="refreshToken() ">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Refresh application token</h3>
-                    </div>
-                    <div class="panel-body">
-                        This will refresh the secret token used for building authentication tokens. Afterwards,
-                        everybody will have to sign in again!
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
+<div flex layout="column" layout-padding>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Refresh application token</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            This will refresh the secret token used for building authentication tokens. Afterwards,
+            everybody will have to sign in again!
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-click="refreshToken()">
+                <md-tooltip md-direction="top">Refresh token</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
 </div>

@@ -1,238 +1,229 @@
-<div class="container-fluid place">
-    <div class="row">
-        <nav class="navbar">
-            <p class="navbar-text">{{place.name}} @ {{place.location}}
-                ({{place.city.name}})
-            </p>
+<div flex layout-padding>
+    <section>
+        <p>{{place.name}} @ {{place.location}}
+            ({{place.city.name}})
+        </p>
+    </section>
 
-            <div class="navbar-right options form-inline">
-                <div class="inline">
-                    <input type="text" placeholder="Search for tags" class="form-control" ng-model="tagfilter"/>
-                </div>
+    <section flex layout="column" ng-controller="DonationRequestsCtrl">
+        <md-grid-list flex md-cols-xs="1" md-cols-sm="2" md-cols-md="2" md-cols-gt-md="3" md-gutter="1em"
+                      md-row-height="500px">
+            <md-grid-tile ng-repeat="req in donationRequests | filter : filter : true | orderBy : order"
+                          md-rowspan="{{req.ui.rows}}" class="animate-repeat donation-request" ng-class="req.ui.state">
+                <md-card flex class="ng-cloak">
+                    <md-card-title flex="none">
+                        <md-card-title-text>
+                            <span class="md-headline">{{req.title}}</span>
+                            <span class="md-subhead donation-request__age">
+                                <time class="time-ago" datetime="{{req.createdDateTime}}">
+                                    <md-tooltip md-direction="top">{{req.createdDateTime | time}}</md-tooltip>
+                                    {{req.createdDateTime | time}}
+                                </time>
+                            </span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-content flex layout="column" layout-align="space-between">
+                        <div class="donation-request__description">{{req.description}}</div>
 
-                <div class="btn-group filtertoggle">
-                    <label class="btn btn-default" ng-model="f.open" uib-btn-checkbox>Donations needed</label>
-                    <label class="btn btn-warning" ng-model="f.enroute" uib-btn-checkbox>Enough en route</label>
-                    <label class="btn btn-success" ng-model="f.done" uib-btn-checkbox>Done</label>
-                </div>
-                <span class="orga" ng-if="inTeam()">
-                    <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/manage"><span
-                            uib-tooltip="Manage place" class="btn glyphicon glyphicon-wrench"></span></a>
-                    <a href="" ng-click="addRequest()"><span uib-tooltip="Add request" tooltip-append-to-body="true"
-                                                             class="btn glyphicon glyphicon-plus"></span></a>
-                </span>
-            </div>
-        </nav>
-    </div>
-
-    <div class="row" id="donationrequests" ng-controller="DonationRequestsCtrl">
-        <div ng-repeat="req in donationRequests | filter : filter : true | orderBy : order" ng-class="req.ui.state"
-             class="animate-repeat">
-            <div class="request col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <div class="panel panel-default panel-body">
-                    <div class="age">
-                    <span ng-if="inTeam()">
-                        <button class="btn btn-sm" uib-tooltip="Delete request" tooltip-append-to-body="true"
-                                ng-click="deleteRequest(req.id)">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                        <button class="btn btn-sm" uib-tooltip="Mark request as resolved" tooltip-append-to-body="true"
-                                ng-click="resolveRequest(req.id)">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </button>
-                        <br/>
-                    </span>
-                        <time class="time-ago" datetime="{{req.createdDateTime}}"
-                              uib-tooltip="{{req.createdDateTime | time}}" tooltip-append-to-body="true">
-                            {{req.createdDateTime | time}}
-                        </time>
-                    </div>
-
-                    <h3>{{req.title}}</h3>
-                    <div ng-hide="req.ui.showComments">
-                        <p>{{req.description}}</p>
-
-                        <div class="quantity" ng-if="req.quantity">
-                            <div class="justified-and-inlined">
-                                <div>Need</div>
-                                <div uib-tooltip-template="'tooltip.html'">
+                        <div layout="column" ng-if="req.quantity">
+                            <div layout>
+                                <div flex="20">Need</div>
+                                <div flex> <!-- uib-tooltip-template="'tooltip.html'" -->
                                     {{req.ui.quantityLeft | posNum}} {{req.units}} <span
-                                        ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
+                                            ng-show="req.ui.quantityLeft != req.quantity">(of {{req.quantity}})</span>
                                 </div>
                             </div>
 
-                            <uib-progress>
-                                <uib-bar value="req.ui.pConfirmed" type="success" class="progress-striped"
-                                         uib-tooltip="Confirmed">
-                                    <span ng-hide="req.ui.pConfirmed < 20">{{req.ui.confirmed}}</span>
-                                </uib-bar>
-                                <uib-bar value="req.ui.pPromised" type="warning" class="progress-striped"
-                                         uib-tooltip="En route">
-                                    <span ng-hide="req.ui.pPromised < 20">{{req.ui.promised}}</span>
-                                </uib-bar>
-                            </uib-progress>
+                            <md-progress-linear class="md-accent" md-mode="buffer" value="{{req.ui.pConfirmed}}"
+                                                md-buffer-value="{{req.ui.pConfirmed + req.ui.pPromised}}"></md-progress-linear>
                         </div>
 
-                        <div class="tags" ng-if="req.tags && req.tags.length > 0">
-                            Tags:
-                    <span ng-repeat="tag in req.tags">
-                        <span class="tag" ng-click="addTagToSearch(tag.name)">{{tag.name}}</span> <span
-                            ng-if="!$last">| </span>
-                    </span>
+                        <div layout ng-if="req.validToDateTime">
+                            <div flex="20">Expires</div>
+                            <div flex>{{req.validToDateTime | time}}</div>
                         </div>
 
-                        <div class="justified-and-inlined" ng-if="req.validToDateTime">
-                            <div>Expires</div>
-                            <div>{{req.validToDateTime}}</div>
-                        </div>
-                    </div>
-                    <div ng-show="req.ui.showComments">
-                        <div class="comments" ng-show="req.comments">
-                            <div ng-repeat="comment in req.comments" ng-class="{done: comment.confirmed}"
-                                 class="comment panel panel-default panel-body">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="pic"></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <b>{{comment.author.username}}</b>: {{comment.text}}
-
-                                        <p class="pull-right" ng-if="comment.quantity > 0">{{comment.quantity}}
-                                            {{req.units}}</p>
-                                    </div>
+                        <div ng-show="req.ui.showComments" layout="column">
+                            <div ng-show="req.comments" class="comments">
+                                <div ng-repeat="comment in req.comments" class="comment"
+                                     ng-class="{done: comment.confirmed}">
+                                    <md-card>
+                                        <md-card-header>
+                                            <md-card-avatar>
+                                                <img class="md-user-avatar" ng-src="{{comment.author.imagePath}}"/>
+                                            </md-card-avatar>
+                                            <md-card-header-text>
+                                                <span class="md-title">{{comment.author.username}}</span>
+                                                <span class="md-subhead" ng-if="comment.quantity > 0">{{comment.quantity}} {{req.units}}</span>
+                                            </md-card-header-text>
+                                        </md-card-header>
+                                        <md-card-content>
+                                            {{comment.text}}
+                                        </md-card-content>
+                                        <md-card-actions layout="row" layout-align="end center" ng-if="inTeam()">
+                                            <md-button ng-click="deleteComment(comment.id)">
+                                                <md-tooltip md-direction="top">Delete comment</md-tooltip>
+                                                <md-icon md-font-set="fa" md-font-icon="fa-trash"></md-icon>
+                                            </md-button>
+                                            <md-button ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
+                                                <md-tooltip md-direction="top">Donation received</md-tooltip>
+                                                <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                                            </md-button>
+                                        </md-card-actions>
+                                    </md-card>
                                 </div>
-                                <div ng-if="inTeam()" class="pull-right">
-                                    <button class="btn btn-xs" uib-tooltip="Delete comment"
-                                            tooltip-append-to-body="true"
-                                            ng-click="deleteComment(comment.id)">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </button>
-                                    <button class="btn btn-xs" uib-tooltip="Confirm donation"
-                                            tooltip-append-to-body="true"
-                                            ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                    </button>
-                                </div>
+                            </div>
+
+                            <div ng-show="$root.user && !req.resolved">
+                                <form ng-submit="req.ui.sendComment()" class="comment">
+                                    <md-card>
+                                        <md-card-header>
+                                            <md-card-avatar>
+                                                <img class="md-user-avatar" ng-src="{{$root.user.imagePath}}"/>
+                                            </md-card-avatar>
+                                            <md-card-header-text>
+                                                <span class="md-title">{{$root.user.username}}</span>
+                                            </md-card-header-text>
+                                        </md-card-header>
+                                        <md-card-content>
+                                            <md-input-container class="comment__text">
+                                                <label>Comment</label>
+                                                <textarea ng-model="req.ui.commentText" rows="2"
+                                                          md-maxlength="100"></textarea>
+                                            </md-input-container>
+                                        </md-card-content>
+                                        <md-card-actions layout="row" layout-align="end center">
+                                            <md-input-container flex class="comment__quantity">
+                                                <label>Quantity ({{req.units}})</label>
+                                                <input placeholder="{{req.ui.quantityLeft | posNum}}"
+                                                       ng-model="req.ui.commentQuantity"
+                                                       type="number" rows="2" min="0" max="9999"/>
+                                            </md-input-container>
+                                            <md-button class="md-fab md-mini md-primary"
+                                                       ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
+                                                <md-tooltip md-direction="top">Send comment</md-tooltip>
+                                                <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                                            </md-button>
+                                        </md-card-actions>
+                                    </md-card>
+                                </form>
                             </div>
                         </div>
 
-                        <div class="well" ng-show="$root.user && !req.resolved">
-                            <form ng-submit="req.ui.sendComment()" name="commentForm">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="pic"></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <textarea class="form-control" placeholder="New comment..." rows="2"
-                                                  ng-model="req.ui.commentText" maxlength="100"></textarea>
-                                        <div class="form-inline">
-                                            <div class="input-group" ng-show="req.quantity">
-                                                <input class="form-control" type="number" min="0" max="9999"
-                                                       placeholder="{{req.ui.quantityLeft | posNum}}"
-                                                       ng-model="req.ui.commentQuantity"/>
-                                                <div class="input-group-addon">{{req.units}}</div>
-                                            </div>
-
-                                            <button class="pull-right btn btn-default"
-                                                    ng-disabled="req.ui.commentText.length === 0">Send
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                        <md-chips ng-if="req.tags && req.tags.length > 0" ng-model="req.tags" readonly="true">
+                            <md-chip-template><span ng-click="addTagToFilter($chip)">{{$chip.name}}</span>
+                            </md-chip-template>
+                        </md-chips>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button ng-click="toggleComments(req)"
+                                   ng-if="req.ui.showComments || ($root.user && !req.resolved)">
+                            <md-tooltip md-direction="top">Toggle comments</md-tooltip>
+                            <md-icon md-font-set="fa" md-font-icon="fa-comments"></md-icon>
+                        </md-button>
+                        <div layout="row" ng-if="inTeam()">
+                            <md-button ng-click="deleteRequest(req.id)">
+                                <md-tooltip md-direction="top">Delete request</md-tooltip>
+                                <md-icon md-font-set="fa" md-font-icon="fa-trash-o"></md-icon>
+                            </md-button>
+                            <md-button ng-click="resolveRequest(req.id)">
+                                <md-tooltip md-direction="top">Mark request as resolved</md-tooltip>
+                                <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                            </md-button>
                         </div>
-                    </div>
+                    </md-card-actions>
+                </md-card>
+            </md-grid-tile>
+        </md-grid-list>
+    </section>
 
-                    <div uib-tooltip="Toggle comments" tooltip-append-to-body="true" class="commentcorner"
-                         ng-click="toggleComments(req)">
-                        <div ng-hide="req.ui.showComments">&gt;</div>
-                        <div ng-show="req.ui.showComments">&lt;</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <md-fab-speed-dial md-open="speedDial.isOpen" ng-if="inTeam()" md-direction="up"
+                       class="md-scale md-fab-bottom-right md-hover-full place__speed-dial"
+                       ng-mouseenter="speedDial.isOpen=true" ng-mouseleave="speedDial.isOpen=false">
+        <md-fab-trigger id="place__speeddial">
+            <md-button class="md-fab md-warn">
+                <md-icon md-font-set="fa" md-font-icon="fa-wrench"></md-icon>
+            </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+            <md-button class="md-fab md-mini md-primary" ng-click="addRequest()">
+                <md-tooltip md-direction="left" md-visible="speedDial.tooltipVisible">Add new request</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-plus"></md-icon>
+            </md-button>
+            <md-button href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/manage" class="md-fab md-mini md-primary">
+                <md-tooltip md-direction="left" md-visible="speedDial.tooltipVisible">Manage place</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-cogs"></md-icon>
+            </md-button>
+        </md-fab-actions>
+    </md-fab-speed-dial>
 </div>
 
-<script type="text/ng-template" id="tooltip.html">
-    <span>
-        Confirmed: {{req.ui.confirmed}}<br/>
-        En route: {{req.ui.promised}}
-    </span>
-</script>
-
 <script type="text/ng-template" id="addRequest.html">
-    <form ng-submit="create()" class="ng-cloak form-horizontal">
-        <div class="modal-header">
-            <h3 class="modal-title">Add new request</h3>
-        </div>
-        <div class="modal-body">
-            <div class="form-group row">
-                <label class="control-label col-sm-2" for="title">Title</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="title" placeholder="Title" ng-model="request.title"
-                           required="required" maxlength="20"/>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="control-label col-sm-2" for="description">Description</label>
-                <div class="col-sm-8">
-                <textarea type="text" class="form-control" id="description" placeholder="Description"
-                          ng-model="request.description" required="required" maxlength="400" cols="4"/>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="control-label col-sm-2" for="validto">Valid to</label>
-                <div class="col-sm-8" id="validto">
-                    <input type="checkbox" class="" ng-model="neverExpires" id="neverExpires"/>
-                    <label for="neverExpires" class="control-label">Never expires</label>
+    <md-dialog aria-label="Create new request-dialog" class="ng-cloak">
+        <form ng-submit="create()">
+            <md-dialog-content layout="column">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">Create new request</div>
+                </md-toolbar>
 
-                    <div ng-hide="neverExpires">
-                        <div class="input-group">
-                            <input type="text" class="form-control" datetime-picker="dd.MM.yyyy HH:mm" ng-model="date"
-                                   min-date="minDate" close-text="Close" is-open="opened"
-                                   timepicker-options="timeOptions"
-                                   ng-required="!neverExpires"/>
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="opened = true"><i
-                                            class="glyphicon glyphicon-calendar"></i></button>
-                                </span>
-                        </div>
+                <div layout="column" layout-padding>
+                    <md-input-container>
+                        <label>Title</label>
+                        <input md-autofocus ng-model="request.title" md-maxlength="20" required>
+                    </md-input-container>
+
+                    <md-input-container>
+                        <label>Description</label>
+                        <textarea ng-model="request.description" md-maxlength="400" cols="4" required></textarea>
+                    </md-input-container>
+
+                    <div layout="row">
+                        <md-checkbox ng-model="expires" aria-label="Expires">
+                            <span ng-hide="expires">Expires</span>
+                        </md-checkbox>
+                        <md-input-container ng-show="expires">
+                            <label>Expires</label>
+                            <input type="datetime-local" ng-model="date" ng-required="expires" min="{{minDate}}">
+                        </md-input-container>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="quantity">Quantity</label>
-                <div class="col-sm-8">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control" id="quantity"
-                                   ng-model="request.quantity"/>
-                        </div>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="Liters, bottles, people..."
-                                   ng-model="request.units" ng-disabled="!request.quantity" ng-required="request.quantity" maxlength="15"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="tag">Tags</label>
-                <div class="col-sm-8">
-                    <tag-search ng-model="inputTag" update-on-select="tag" input-class="form-control" input-id="tag"
-                                omit-no-results="true" on-keypress="addTag"></tag-search>
+
                     <div>
-                    <span ng-repeat="tag in request.tags">
-                        <a ng-click="removeTag($index)" uib-tooltip="Remove tag">{{tag.name}}</a><span ng-hide="$last"> | </span>
-                    </span>
+                        <div layout="row">
+                            <md-input-container>
+                                <label>Quantity</label>
+                                <input ng-model="request.quantity" type="number" min="0" max="9999"/>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Units</label>
+                                <input placeholder="Liters, bottles, people..."
+                                       ng-model="request.units" ng-disabled="!request.quantity"
+                                       ng-required="request.quantity" md-maxlength="15"/>
+                            </md-input-container>
+                        </div>
+                    </div>
+
+                    <md-input-container>
+                        <label>Tags</label>
+                        <input ng-model="inputTag" on-keypress="addTag"/>
+                    </md-input-container>
+                    <div>
+                        <span ng-repeat="tag in request.tags">
+                            <a ng-click="removeTag($index)" uib-tooltip="Remove tag">{{tag.name}}</a><span
+                                ng-hide="$last"> | </span>
+                        </span>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn">
-                <span class="glyphicon glyphicon-ok"></span>
-            </button>
-        </div>
-    </form>
+            </md-dialog-content>
+            <md-dialog-actions flex="none">
+                <md-button class="md-fab" ng-click="cancel()">
+                    <md-tooltip md-direction="up">Cancel</md-tooltip>
+                    <md-icon md-font-set="fa" md-font-icon="fa-times"></md-icon>
+                </md-button>
+                <md-button type="submit" class="md-fab">
+                    <md-tooltip md-direction="up">Create</md-tooltip>
+                    <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
 </script>

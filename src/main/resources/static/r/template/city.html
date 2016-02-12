@@ -1,21 +1,25 @@
-<div class="container">
-    <div class="row">
-        <h1>These places in {{city.name}} need your support!</h1>
-    </div>
-    <div class="row">
-        <input type="text" class="form-control locationsearch im-centered" placeholder="Type to search for a place"/>
-    </div>
+<div layout-padding flex>
+    <md-input-container>
+        <label>Filter</label>
+        <input>
+    </md-input-container>
 
-    <div class="row center-block">
-        <div ng-repeat="place in city.places" class="result box col-md-2 col-sm-6 col-xs-6">
-            <a href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}">
-                <img src="{{place.imagePath}}" class="center-block"/>
-
-                <div class="text">
-                    {{place.name}}
-                    ({{place.location}})
-                </div>
-            </a>
-        </div>
+    <div layout layout-padding layout-align="space-around center" layout-wrap>
+        <md-card flex-xs="80" flex-sm="50" flex-gt-sm="33" ng-repeat="place in city.places">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">{{place.name}}</span>
+                    <span class="md-subhead">{{place.location}}</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <div class="md-media-sm card-media">
+                        <img ng-src="{{place.imagePath}}"/>
+                    </div>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}">Requests</md-button>
+            </md-card-actions>
+        </md-card>
     </div>
 </div>

@@ -1,9 +1,9 @@
 (function () {
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
-            'crowdsupport.controller.admin', 'crowdsupport.controller.donationrequests', 'crowdsupport.widget.search',
-            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate', 'chart.js'])
+            'crowdsupport.controller.admin', 'crowdsupport.controller.donationrequests',
+            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate',
+            'restangular', 'ngAnimate', 'chart.js'])
         .controller('DashboardController', function ($scope, $statistics, Websocket) {
             $scope.states = $statistics.states;
             $scope.cities = $statistics.cities;
@@ -13,8 +13,7 @@
             $scope.pieData = [$statistics.openRequests, $statistics.closedRequests];
             $scope.pieColours = ['#e6e6e6', '#5cb85c'];
             $scope.pieOptions = {
-                legendTemplate :
-                    '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=segments.length-1;i>=0;i--){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%> ... <%=segments[i].value%><%}%></li><%}%></ul>'
+                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=segments.length-1;i>=0;i--){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%> ... <%=segments[i].value%><%}%></li><%}%></ul>'
             };
 
             $scope.totalUsers = $statistics.totalUsers;
@@ -76,7 +75,7 @@
             $scope.logout = Auth.logout;
         })
         .controller('PlaceRequestCtrl', function ($scope, Restangular, $previousState, Status) {
-            $scope.city = {};
+            $scope.city = null;
             $scope.name = '';
             $scope.identifier = '';
             $scope.location = '';
@@ -93,6 +92,10 @@
 
             $scope.searchCity = function () {
                 $scope.addCity = false;
+            };
+
+            $scope.queryCity = function (query) {
+                return Restangular.all('city').getList({query: query});
             };
 
             this.submit = function () {
@@ -127,7 +130,7 @@
             $scope.submit = function () {
                 $log.debug('Submitting profile data');
                 Restangular.one('user', 'current').patch($scope.user).then(function () {
-                    Status.success('Successfully updated new user');
+                    Status.success('Successfully updated user');
                     Auth.updateUser();
                 });
             };
@@ -137,10 +140,6 @@
 
             $scope.register = function () {
                 Restangular.all('user').post($scope.user).then(function () {
-                    var e = angular.element('#login .password');
-                    e.scope().username = $scope.user.username;
-                    e.focus();
-
                     $previousState.backOrHome();
 
                     Status.success('Successfully registered new user');

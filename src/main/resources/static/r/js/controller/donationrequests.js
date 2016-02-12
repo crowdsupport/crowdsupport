@@ -1,17 +1,17 @@
 (function () {
     angular
         .module('crowdsupport.controller.donationrequests', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
-            'crowdsupport.widget.search',
-            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate'])
-        .controller('AddDonationRequestController', function ($scope, Restangular, Status, $uibModalInstance, $timeout) {
+            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate',
+            'restangular', 'ngAnimate', 'ngMaterial'])
+        .controller('AddDonationRequestController', function ($scope, place, Restangular, Status, $mdDialog, $log) {
             $scope.request = {};
             $scope.request.tags = [];
-            $scope.neverExpires = true;
-            $scope.minDate = new Date();
+            $scope.expires = false;
+            $scope.minDate = new Date().toISOString();
             $scope.date = new Date();
-
-            var place = $scope.$parent.place;
+            $scope.date.setSeconds(0);
+            $scope.date.setMilliseconds(0);
+            $scope.date.addDays(1);
 
             $scope.addTag = function (keyEvent) {
                 var input = $scope.inputTag;
@@ -43,81 +43,65 @@
                 }
             };
 
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
             $scope.create = function () {
                 var r = $scope.request;
-                if (!neverExpires) {
-                    r.validTo = $scope.date;
+                if ($scope.expires) {
+                    r.validToDateTime = $scope.date;
                 }
                 r.resolved = false;
                 $scope.addTag();
 
+                $log.debug("Saving donation request");
+                $log.debug(r);
                 place.post('donationRequests', r).then(function () {
                     Status.success("Successfully created new donation request");
 
-                    $uibModalInstance.close($scope.request);
+                    $mdDialog.hide($scope.request);
                 });
-            };
-
-            $scope.openDatePicker = function () {
-                $timeout(function () {
-                    $scope.opened = true;
-                });
-            };
-
-            $scope.timeOptions = {
-                readonlyInput: false,
-                showMeridian: false
             };
         })
         .controller('PlaceManagementController', function ($scope, $placeRest, $members, Restangular, Status) {
             $scope.place = $placeRest;
             $scope.members = $members;
 
-            var place = $scope.place;
-
-            $scope.setActiveTab = function (initial) {
-                var activeClass = 'active';
-
-                var hash = window.location.hash;
-                var tabId;
-
-                if (hash) {
-                    tabId = hash.substr(1);
-                } else {
-                    hash = '#' + initial;
-                    tabId = initial;
-                }
-
-                var liElement = $('.place-tabs li:has(a[href=' + hash + '])');
-                if (liElement.length === 1) {
-                    liElement.addClass(activeClass);
-                    $('.tab-content #' + tabId).addClass(activeClass);
-                } else {
-                    $('.place-tabs li:has(a[href=#' + initial + '])').addClass(activeClass);
-                    $('.tab-content #' + initial).addClass(activeClass);
-                }
+            var alreadyMember = function (user) {
+                return 'undefined' !== typeof _.find($scope.members, function (member) {
+                        return member.username === user.username;
+                    });
             };
 
-            $scope.isSearchValid = function () {
-                if (typeof $scope.search !== 'object') {
-                    return false;
-                }
-
-                return $scope.members.findIndex(function (m) {
-                        return m.username === $scope.search.username;
-                    }) === -1;
-            };
-
-            $scope.addMember = function () {
-                place.one('team', $scope.search.username).put().then(function () {
-                    Status.success('Successfully added ' + $scope.search.username + ' to team');
-
-                    $scope.members.push($scope.search);
+            $scope.query = function (query) {
+                return Restangular.all('user').getList({query: query}).then(function (users) {
+                    return _.filter(users, function (user) {
+                        return !alreadyMember(user);
+                    });
                 });
             };
 
+            $scope.addMember = function (user, clear, $event) {
+                $scope.place.one('team', user.username).put().then(function () {
+                    Status.success('Successfully added ' + user.username + ' to team');
+
+                    if (!alreadyMember(user)) {
+                        $scope.members.push(user);
+                    }
+                });
+
+                if (clear) {
+                    $scope.searchText = '';
+                }
+
+                if ($event) {
+                    $event.stopPropagation();
+                }
+            };
+
             $scope.removeMember = function (username) {
-                place.one('team', username).remove().then(function () {
+                $scope.place.one('team', username).remove().then(function () {
                     Status.success('Successfully deleted ' + username + ' from team');
 
                     $scope.members = $.grep($scope.members, function (e) {
@@ -126,17 +110,42 @@
                 });
             };
         })
-        .controller('PlaceController', function ($scope, $placeRest, $rootScope, $uibModal) {
-            $scope.place = $placeRest;
-            $scope.f = {open: true, enroute: false, done: false};
+        .controller('PlaceFilterController', function ($scope, $rootScope) {
+            $scope.$watchCollection('statusfilter', function (newFilter) {
+                $rootScope.$broadcast('statusFilterChange', newFilter);
+            });
+            $scope.$watch('tagfilter', function (newFilter) {
+                $rootScope.$broadcast('tagFilterChange', newFilter);
+            });
+
+            $scope.statusfilter = {open: true, enroute: false, done: false};
 
             $scope.tagfilter = '';
-            $scope.addTagToSearch = function(tag) {
+
+            $scope.$on('addTagToFilterEvent', function (evt, tag) {
+                tag = tag.name;
+
                 if ($scope.tagfilter.length !== 0 && $scope.tagfilter.slice(-1) !== ' ') {
                     tag = ' ' + tag;
                 }
                 $scope.tagfilter += tag;
+            });
+        })
+        .controller('PlaceController', function ($scope, $placeRest, $rootScope, $mdDialog, $timeout, $mdMedia) {
+            $scope.place = $placeRest;
+
+            $scope.speedDial = {
+                isOpen: false
             };
+            $scope.$watch('speedDial.isOpen', function (isOpen) {
+                if (isOpen) {
+                    $timeout(function () {
+                        $scope.speedDial.tooltipVisible = $scope.speedDial.isOpen;
+                    }, 1000);
+                } else {
+                    $scope.speedDial.tooltipVisible = $scope.speedDial.isOpen;
+                }
+            });
 
             $scope.inTeam = function () {
                 if (!$rootScope.user || !$rootScope.user.managedPlaces) {
@@ -151,16 +160,31 @@
             };
 
             $scope.addRequest = function () {
-                $uibModal.open({
-                    animation: true,
-                    templateUrl: 'addRequest.html',
+                $mdDialog.show({
                     controller: 'AddDonationRequestController',
-                    scope: $scope
+                    templateUrl: 'addRequest.html',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    fullscreen: true,
+                    openFrom: '#place__speeddial',
+                    closeTo: '#place__speeddial',
+                    locals: {place: $placeRest}
                 });
-            }
+            };
         })
-        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status) {
+        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $rootScope) {
             $scope.donationRequests = $scope.$parent.place.donationRequests;
+
+            var statusfilter = {open: true, enroute: false, done: false};
+            var tagfilter = '';
+
+            $scope.$on('statusFilterChange', function (event, newFilter) {
+                statusfilter = newFilter;
+            });
+            $scope.$on('tagFilterChange', function (event, newFilter) {
+                tagfilter = newFilter;
+            });
 
             $scope.order = function (request) {
                 var o;
@@ -183,24 +207,21 @@
             };
 
             $scope.filter = function (request) {
-                var f = $scope.$parent.f;
-                var tagfilter = $scope.$parent.tagfilter;
-
                 var show = false;
 
                 // apply state filter
                 switch (request.ui.state) {
                     case 'open':
-                        show |= f.open;
+                        show |= statusfilter.open;
                         break;
                     case 'enroute':
-                        show |= f.enroute;
+                        show |= statusfilter.enroute;
                         break;
                     case 'done':
-                        show |= f.done;
+                        show |= statusfilter.done;
                         break;
                     default:
-                       show = true;
+                        show = true;
                 }
 
                 // apply tag filter
@@ -225,10 +246,9 @@
 
             var enhanceRequest = function (request) {
                 request.ui = {};
-
                 request.ui.commentText = '';
-
                 request.ui.showComments = false;
+                request.ui.rows = 1;
 
                 request.ui.sendComment = function () {
                     console.log('Comment for request ' + request.id + ': ' + request.ui.commentText);
@@ -298,6 +318,16 @@
 
             $scope.toggleComments = function (request) {
                 request.ui.showComments = !request.ui.showComments;
+
+                if (request.ui.showComments) {
+                    request.ui.rows = 2;
+                } else {
+                    request.ui.rows = 1;
+                }
+            };
+
+            $scope.addTagToFilter = function (tag) {
+                $rootScope.$broadcast('addTagToFilterEvent', tag);
             };
 
             $scope.confirmComment = function (id) {
@@ -400,5 +430,5 @@
                     handleRequestChange(message);
                 }
             });
-        })
+        });
 })();

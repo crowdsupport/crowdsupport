@@ -1,0 +1,29 @@
+<md-divider/>
+<md-list-item>
+    <ul>
+        <li>
+            <h3>Filter requests</h3>
+        </li>
+        <li class="place__tag-filter">
+            <md-input-container>
+                <label>Tags</label>
+                <input ng-model="tagfilter">
+            </md-input-container>
+        </li>
+        <li>
+            <md-switch class="md-accent md-hue-1" ng-model="statusfilter.open" aria-label="Open">
+                Open
+            </md-switch>
+        </li>
+        <li>
+            <md-switch class="md-accent md-hue-2" ng-model="statusfilter.enroute" aria-label="Enough en route">
+                Enough en route
+            </md-switch>
+        </li>
+        <li>
+            <md-switch class="md-accent md-hue-3" ng-model="statusfilter.done" aria-label="Done">
+                Done
+            </md-switch>
+        </li>
+    </ul>
+</md-list-item>
