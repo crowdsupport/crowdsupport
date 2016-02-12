@@ -1,9 +1,8 @@
 (function () {
     angular
         .module('crowdsupport.controller.donationrequests', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
-            'crowdsupport.widget.search',
-            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate', 'ngMaterial'])
+            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate',
+            'restangular', 'ngAnimate', 'ngMaterial'])
         .controller('AddDonationRequestController', function ($scope, place, Restangular, Status, $mdDialog, $log) {
             $scope.request = {};
             $scope.request.tags = [];

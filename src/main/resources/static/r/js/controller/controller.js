@@ -1,9 +1,9 @@
 (function () {
     angular
         .module('crowdsupport.controller', ['timeAgo', 'crowdsupport.service.websocket', 'crowdsupport.service.config',
-            'crowdsupport.controller.admin', 'crowdsupport.controller.donationrequests', 'crowdsupport.widget.search',
-            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate', 'ui.bootstrap',
-            'ui.bootstrap.datetimepicker', 'restangular', 'ngAnimate', 'chart.js'])
+            'crowdsupport.controller.admin', 'crowdsupport.controller.donationrequests',
+            'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate',
+            'restangular', 'ngAnimate', 'chart.js'])
         .controller('DashboardController', function ($scope, $statistics, Websocket) {
             $scope.states = $statistics.states;
             $scope.cities = $statistics.cities;
