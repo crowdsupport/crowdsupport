@@ -1,29 +1,29 @@
 (function() {
     angular
         .module('crowdsupport.service.status', [])
-        .service('Status', function($q, $log) {
+        .service('Status', function($q, $log, $mdToast) {
             var defaultTemplate = function(status) {
-                var glyph;
-                var glyphify = function(sign) {
-                    return '<span class="glyphicon glyphicon-' + sign + '" aria-hidden="true"></span> ';
+                var icon;
+                var iconify = function(sign) {
+                    return '<md-icon flex="none" md-font-set="fa" md-font-icon="fa-' + sign + '"></md-icon>&nbsp;';
                 };
 
                 switch (status.type) {
                     case 'SUCCESS':
-                        glyph = glyphify('ok-sign');
+                        icon = iconify('check');
                         break;
                     case 'INFO':
-                        glyph = glyphify('info-sign');
+                        icon = iconify('info');
                         break;
                     case 'ERROR':
-                        glyph = glyphify('remove-sign');
+                        icon = iconify('times');
                         break;
                     default:
-                        glyph = '';
+                        icon = '';
                         break;
                 }
 
-                return '<div class="message">' + glyph + status.message + '</div>';
+                return icon + '<span flex>' + status.message + '</span>';
             };
 
             var pastStatus = [];
@@ -54,22 +54,13 @@
                 this.currentStatus = newStatus;
                 deferred.notify(newStatus);
             };
-        })
-        .directive('statusbar', function() {
-            return {
-                restrict: 'C',
-                controller: function(Status) {
-                    var addStatus = function(newStatus) {
-                        $('.statusbar .message').last().addClass('old');
-                        $('.statusbar').append(newStatus.defaultHtml);
-                    };
 
-                    Status.statusPromise.then(null, null, addStatus);
-
-                    if (!nullOrEmpty(Status.currentStatus)) {
-                        addStatus(Status.currentStatus);
-                    }
-                }
-            }
+            // default listener
+            this.statusPromise.then(null, null, function(newStatus) {
+                $mdToast.show({
+                    template: '<md-toast layout>' + newStatus.defaultHtml + '</md-toast>',
+                    position: 'bottom'
+                });
+            });
         });
 })();

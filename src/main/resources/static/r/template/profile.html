@@ -1,22 +1,24 @@
-<div class="container">
-    <div class="row">
-        <form ng-submit="submit()">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="true"
-                       required="true" ng-model="user.username" ng-disabled="!('ROLE_ADMIN' | auth)"/>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password" pattern="|.{4,}"
-                       placeholder="Want to change your password?"
-                       title="Password has to have at least four characters" ng-model="user.password"/>
-            </div>
-            <div class="form-group">
-                <label for="email">E-Mail (optional)</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com" ng-model="user.email"/>
-            </div>
-            <button type="submit" class="btn btn-default">Save</button>
-        </form>
-    </div>
+<div flex layout-padding>
+    <form ng-submit="submit()" layout="column">
+        <md-input-container>
+            <label>Username</label>
+            <input type="text" autofocus="true"
+                   required="true" ng-model="user.username" ng-disabled="!('ROLE_ADMIN' | auth)"/>
+        </md-input-container>
+
+        <md-input-container>
+            <label>Password</label>
+            <input type="password" pattern="|.{4,}" ng-model="user.password"/>
+        </md-input-container>
+
+        <md-input-container>
+            <label>E-Mail</label>
+            <input type="email" ng-model="user.email"/>
+        </md-input-container>
+
+        <md-button type="submit">
+            <md-tooltip md-direction="top">Change details</md-tooltip>
+            <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+        </md-button>
+    </form>
 </div>

@@ -127,7 +127,7 @@
             $scope.submit = function () {
                 $log.debug('Submitting profile data');
                 Restangular.one('user', 'current').patch($scope.user).then(function () {
-                    Status.success('Successfully updated new user');
+                    Status.success('Successfully updated user');
                     Auth.updateUser();
                 });
             };

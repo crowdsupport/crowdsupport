@@ -19,6 +19,11 @@ h1 {
 .full-height {
     height: 100%;
 }
+
+.md-toast-content .fa {
+    color: #FFF;
+    margin-right: 10px;
+}
 /* END GENERAL */
 
 
