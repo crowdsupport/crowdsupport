@@ -98,7 +98,8 @@
                         '@': {
                             templateUrl: '/r/template/placeManagement.html',
                             controller: 'PlaceManagementController as placeManagementCtrl'
-                        }
+                        },
+                        'sidebar@': {}
                     },
                     resolve: {
                         $members: function ($placeRest) {

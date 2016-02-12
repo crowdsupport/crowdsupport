@@ -178,7 +178,7 @@
         .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $rootScope) {
             $scope.donationRequests = $scope.$parent.place.donationRequests;
 
-            var statusfilter = {};
+            var statusfilter = {open: true, enroute: false, done: false};
             var tagfilter = '';
 
             $scope.$on('statusFilterChange', function (event, newFilter) {
