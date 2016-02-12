@@ -32,6 +32,14 @@
                 });
             };
 
+            $scope.queryCity = function (query) {
+                return Restangular.all('city').getList({query: query});
+            };
+
+            $scope.queryState = function (query) {
+                return Restangular.all('state').getList({query: query});
+            };
+
             $scope.createState = function (request) {
                 Restangular.all('state').post(request.place.city.state).then(function (response) {
                     $log.debug('State successfully created');
