@@ -24,6 +24,16 @@ h1 {
     color: #FFF;
     margin-right: 10px;
 }
+
+md-select-menu.md-default-theme md-option[selected]:focus, md-select-menu md-option[selected]:focus,
+md-select-menu.md-default-theme md-option[selected], md-select-menu md-option[selected] {
+    color: #039BE5;
+}
+
+.dontfeedthechrome {
+    /* for input fields, so chrome can play with them... */
+    display: none;
+}
 /* END GENERAL */
 
 

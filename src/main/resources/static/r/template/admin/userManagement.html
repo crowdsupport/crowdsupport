@@ -1,59 +1,41 @@
-<div class="container">
-    <div class="row">
-        <h1>User Management</h1>
+<div flex layout="column" layout-padding>
+    <md-autocomplete md-search-text="searchText" md-selected-item="edit" md-items="user in query(searchText)"
+                     md-item-text="user.username" md-min-length="2" md-delay="100" md-floating-label="User search">
+        <md-item-template>
+            <span md-highlight-text="searchText">{{user.username}}</span>
+        </md-item-template>
+    </md-autocomplete>
+
+    <div flex layout="column" ng-show="edit">
+        <!-- oh god, why chrome, why? /o\ -->
+        <input type="text" class="dontfeedthechrome">
+        <input type="password" class="dontfeedthechrome">
+
+        <md-input-container>
+            <label>Username</label>
+            <input autocomplete="off" autofocus="true" required="true" ng-model="edit.username"/>
+        </md-input-container>
+
+        <md-input-container>
+            <label>Password</label>
+            <input type="password" pattern="|.{4,}" ng-model="edit.password"/>
+        </md-input-container>
+
+        <md-input-container>
+            <label>E-Mail</label>
+            <input type="email" ng-model="edit.email"/>
+        </md-input-container>
+
+        <md-input-container>
+            <label>Roles</label>
+            <md-select ng-model="edit.roles" multiple>
+                <md-option ng-value="role.name" ng-repeat="role in allRoles | orderBy:'name'">{{ role.name }}</md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-button ng-click="save()">
+            <md-tooltip md-direction="top">Change details</md-tooltip>
+            <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+        </md-button>
     </div>
-
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="username" class="col-sm-1 control-label">Search</label>
-            <div class="col-sm-10">
-                <user-search ng-model="search" update-on-select="editUser" input-class="form-control" input-id="user"
-                             loading="loading" no-results="noResults">
-                    Couldn't find a user!
-                </user-search>
-            </div>
-        </div>
-
-        <div ng-show="isSearchValid()">
-            <div class="form-group">
-                <label for="username" class="col-sm-1 control-label">Username</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="username" name="username"
-                           placeholder="Username"
-                           autofocus="true"
-                           required="true" ng-model="editUser.username"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password" class="col-sm-1 control-label">Password</label>
-                <div class="col-sm-10">
-                    <input type="password" class="form-control" id="password" name="password" pattern="|.{4,}"
-                           placeholder="Want to change your password?"
-                           title="Password has to have at least four characters" ng-model="editUser.password"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="email" class="col-sm-1 control-label">E-Mail (optional)</label>
-                <div class="col-sm-10">
-                    <input type="email" class="form-control" id="email" name="email"
-                           placeholder="your@email.com"
-                           ng-model="editUser.email"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-1 control-label" for="roles">Roles</label>
-                <div class="col-sm-9">
-                    <select class="form-control" multiple="multiple" id="roles" ng-model="editUser.roles"
-                            ng-options="aRole.name as aRole.name for aRole in allRoles | orderBy:'name'"></select>
-                </div>
-                <div class="col-sm-1">
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-default" ng-click="save()">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 </div>

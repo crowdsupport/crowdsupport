@@ -98,21 +98,19 @@
         })
         .controller('UserManagementController', function ($scope, $log, $allRoles, Restangular, Status, Auth, $rootScope) {
             $scope.allRoles = $allRoles;
-            $scope.editUser = {};
 
-            $scope.isSearchValid = function () {
-                return typeof $scope.search === 'object';
+            $scope.query = function (query) {
+                return Restangular.all('user').getList({query: query});
             };
 
             $scope.save = function () {
-                console.log($scope.editUser);
-                $scope.editUser.patch($scope.editUser).then(function (response) {
+                $scope.edit.patch($scope.edit).then(function (response) {
                     Status.success('Successfully edited user');
 
                     // edited your own user?
-                    if ($scope.search.username == $rootScope.user.username) {
+                    if ($scope.edit.id == $rootScope.user.id) {
                         // kept username the same?
-                        if ($scope.search.username == response.username) {
+                        if ($scope.edit.username == response.username) {
                             Auth.updateUser();
                         } else {
                             Auth.logout();
