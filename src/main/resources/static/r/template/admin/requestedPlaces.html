@@ -2,6 +2,8 @@
     <h3 ng-hide="allRequests">Currently no pending place requests</h3>
 
     <md-card ng-repeat="request in allRequests">
+        {{request.ui | json}}<br>
+        {{request.place}}
         <md-card-content ng-init="initRequest(request)">
             <div layout>
                 <md-input-container>
@@ -15,16 +17,25 @@
                 </md-input-container>
             </div>
 
-            <md-autocomplete md-search-text="request.ui.citySearchText" md-selected-item="request.place.city" md-item-text="city.name"
-                             md-items="city in queryCity(request.ui.citySearchText)" md-min-length="2" md-delay="100"
-                             md-floating-label="City" ng-show="request.ui.citySearch">
-                <md-item-template>
-                    <span md-highlight-text="request.ui.citySearchText">{{city.name}} ({{city.state.name}})</span>
-                </md-item-template>
-                <md-not-found>
-                    No city found - <a href="" ng-click="request.ui.setCitySearch(false)">change to manual input</a>
-                </md-not-found>
-            </md-autocomplete>
+            <div layout>
+                <md-autocomplete flex md-search-text="request.ui.city" md-selected-item="request.place.city"
+                                 md-item-text="city.name"
+                                 md-items="city in queryCity(request.ui.city)" md-min-length="2"
+                                 md-delay="100"
+                                 md-floating-label="City" ng-show="request.ui.citySearch">
+                    <md-item-template>
+                        <span md-highlight-text="request.ui.city">{{city.name}} ({{city.state.name}})</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No city found - <a href="" ng-click="request.ui.setCitySearch(false)">Change to manual input</a>
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-button flex="none" ng-click="request.ui.setCitySearch(false)" ng-hide="request.place.city">
+                    <md-tooltip md-direction="top">Manual input</md-tooltip>
+                    <md-icon md-font-set="fa" md-font-icon="fa-pencil"></md-icon>
+                </md-button>
+            </div>
 
             <div layout="column" ng-hide="request.ui.citySearch">
                 <div layout>
@@ -49,26 +60,26 @@
                     </md-button>
                 </div>
 
-<!--                <md-autocomplete md-search-text="se" md-selected-item="s" md-item-text="qs.name" md-items="qs in queryState(se)">
-                    <md-item-template>
-                        <span md-highlight-text="se">{{qs.name}}</span>
-                    </md-item-template>
-                    <md-not-found>
-                        Not found
-                    </md-not-found>
-                </md-autocomplete>-->
+                <div layout>
+                    <md-autocomplete flex md-search-text="request.ui.state" md-selected-item="request.place.city.state"
+                                     md-delay="100"
+                                     md-item-text="state.name" md-items="state in queryState(request.ui.state)"
+                                     md-min-length="2"
+                                     md-floating-label="State" ng-show="request.ui.stateSearch">
+                        <md-item-template>
+                            <span md-highlight-text="request.ui.state">{{state.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No state found - <a href="" ng-click="request.ui.setStateSearch(false)">change to manual
+                            input</a>
+                        </md-not-found>
+                    </md-autocomplete>
 
-                <md-autocomplete md-search-text="stateSearch" md-selected-item="request.place.city.state" md-delay="100"
-                                 md-item-text="state.name" md-items="state in queryState(stateSearch)" md-min-length="2"
-                                 md-floating-label="State" ng-show="request.ui.stateSearch">
-                    <md-item-template>
-                        <span md-highlight-text="stateSearch">{{state.name}}</span>
-                    </md-item-template>
-                    <md-not-found>
-                        No state found - <a href="" ng-click="request.ui.setStateSearch(false)">change to manual
-                        input</a>
-                    </md-not-found>
-                </md-autocomplete>
+                    <md-button flex="none" ng-click="request.ui.setStateSearch(false)" ng-hide="request.place.city.state">
+                        <md-tooltip md-direction="top">Manual input</md-tooltip>
+                        <md-icon md-font-set="fa" md-font-icon="fa-pencil"></md-icon>
+                    </md-button>
+                </div>
 
                 <div layout ng-hide="request.ui.stateSearch">
                     <md-button flex="none" ng-click="request.ui.setStateSearch(true)">

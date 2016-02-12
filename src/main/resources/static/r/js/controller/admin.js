@@ -85,16 +85,17 @@
                     city: request.place.city,
                     state: request.place.city.state,
                     setCitySearch: function (citySearch) {
-                        if (citySearch == false) {
+                        if (!citySearch) {
                             request.place.city = {
-                                state: request.place.city.state,
+                                state: '',
                                 name: request.ui.city
                             };
                         }
+
                         request.ui.citySearch = citySearch;
                     },
                     setStateSearch: function (stateSearch) {
-                        if (stateSearch == false) {
+                        if (!stateSearch) {
                             request.place.city.state = {
                                 name: request.ui.state
                             };

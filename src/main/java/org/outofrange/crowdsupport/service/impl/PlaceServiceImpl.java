@@ -61,7 +61,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         final Optional<Place> place = placeRepository.findOneByIdentifier(placeIdentifier);
 
-        if (place.isPresent() && cityIdentifier.equals(place.get().getCity().getIdentifier()) &&
+        if (place.isPresent() && place.get().getCity() != null && cityIdentifier.equals(place.get().getCity().getIdentifier()) &&
                 stateIdentifier.equals(place.get().getCity().getState().getIdentifier())) {
             return place;
         } else {
