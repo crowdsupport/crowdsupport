@@ -13,8 +13,7 @@
             $scope.pieData = [$statistics.openRequests, $statistics.closedRequests];
             $scope.pieColours = ['#e6e6e6', '#5cb85c'];
             $scope.pieOptions = {
-                legendTemplate :
-                    '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=segments.length-1;i>=0;i--){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%> ... <%=segments[i].value%><%}%></li><%}%></ul>'
+                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=segments.length-1;i>=0;i--){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%> ... <%=segments[i].value%><%}%></li><%}%></ul>'
             };
 
             $scope.totalUsers = $statistics.totalUsers;
@@ -141,10 +140,6 @@
 
             $scope.register = function () {
                 Restangular.all('user').post($scope.user).then(function () {
-                    var e = angular.element('#login .password');
-                    e.scope().username = $scope.user.username;
-                    e.focus();
-
                     $previousState.backOrHome();
 
                     Status.success('Successfully registered new user');
