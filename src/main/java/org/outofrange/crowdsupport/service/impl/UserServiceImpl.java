@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void disableUser(long userId) {
         log.debug("Disabling user with id {}", userId);
 
@@ -91,8 +92,8 @@ public class UserServiceImpl implements UserService {
         user.setImagePath(userDto.getImagePath());
         user.setEnabled(true);
 
-        if (userRepository.findOneByUsername(userDto.getUsername()).isPresent()) {
-            throw new ServiceException("Found already existing user with username " + userDto.getUsername());
+        if (userRepository.findOneByUsernameAndEnabledTrue(userDto.getUsername()).isPresent()) {
+            throw new ServiceException("Found already existing, enabled user with username " + userDto.getUsername());
         }
 
         user.getRoles().add(roleRepository.findOneByName(RoleStore.USER).get());
@@ -115,7 +116,7 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Couldn't find user with id " + userId);
         }
 
-        final Optional<User> existingUser = userRepository.findOneByUsername(userDto.getUsername());
+        final Optional<User> existingUser = userRepository.findOneByUsernameAndEnabledTrue(userDto.getUsername());
         if (userId != existingUser.get().getId()) {
             throw new ServiceException("Can't set username (already used!");
         }
@@ -184,7 +185,7 @@ public class UserServiceImpl implements UserService {
 
         Validate.notNullOrEmpty(username);
 
-        final Optional<User> user = userRepository.findOneByUsername(username);
+        final Optional<User> user = userRepository.findOneByUsernameAndEnabledTrue(username);
         if (user.isPresent()) {
             return user.get();
         } else {
@@ -204,7 +205,7 @@ public class UserServiceImpl implements UserService {
         final Optional<User> currentUser = getCurrentUser();
 
         if (currentUser.isPresent()) {
-            final Optional<User> loadedUser = userRepository.findOneByUsername(currentUser.get().getUsername());
+            final Optional<User> loadedUser = userRepository.findOneByUsernameAndEnabledTrue(currentUser.get().getUsername());
 
             if (!loadedUser.isPresent()) {
                 throw new ServiceException("Can't find user anymore: " + currentUser.get().getUsername());

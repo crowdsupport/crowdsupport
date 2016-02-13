@@ -2,7 +2,7 @@ package org.outofrange.crowdsupport.automation.keyword.ui;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.outofrange.crowdsupport.automation.keyword.Waiter;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,18 +18,18 @@ public class SidePanelKeywords extends KeywordBase {
         return driver().findElement(LOGGEDIN_USER_TEXT).isDisplayed();
     }
 
-    public void login(String username, String password) {
+    public Waiter login(String username, String password) {
         driver().findElement(LOGIN_INPUT).sendKeys(username);
         driver().findElement(PASSWORD_INPUT).sendKeys(password);
         driver().findElement(LOGIN_BUTTON).click();
 
-        new WebDriverWait(driver(), 5).until(ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
+        return new Waiter(driver(), ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
     }
 
-    public void logout() {
+    public Waiter logout() {
         driver().findElement(LOGOUT_BUTTON).click();
 
-        new WebDriverWait(driver(), 5).until(ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON));
+        return new Waiter(driver(), ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON));
     }
 
     public String getLoggedInUsername() {

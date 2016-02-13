@@ -21,6 +21,6 @@ public class UiKeywordProvider implements Cleanable {
 
     @Override
     public void cleanUp() {
-        driverHandler.stop();
+        driverHandler.resetOnNextUse();
     }
 }

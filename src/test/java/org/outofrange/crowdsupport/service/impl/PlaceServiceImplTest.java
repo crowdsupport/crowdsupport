@@ -118,7 +118,7 @@ public class PlaceServiceImplTest {
     public void addingUserToTeamTheyAreAlreadyInDoesNothing() {
         place.getTeam().getMembers().add(user);
         when(placeRepository.findOne(1L)).thenReturn(place);
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         placeService.addUserToTeam(1, user.getUsername());
 
@@ -128,7 +128,7 @@ public class PlaceServiceImplTest {
     @Test
     public void addingUserToExistingTeamWorks() {
         when(placeRepository.findOne(1L)).thenReturn(place);
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         final Place updatedPlace = placeService.addUserToTeam(1, user.getUsername());
 
@@ -140,7 +140,7 @@ public class PlaceServiceImplTest {
     @Test(expected = ServiceException.class)
     public void addingUserToUnknownPlaceThrowsException() {
         when(placeRepository.findOne(1L)).thenReturn(null);
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         placeService.addUserToTeam(1, user.getUsername());
     }
@@ -158,7 +158,7 @@ public class PlaceServiceImplTest {
     @Test
     public void removingUserFromTeamTheyAreNotInDoesNothing() {
         when(placeRepository.findOne(1L)).thenReturn(place);
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         placeService.removeUserFromTeam(1, user.getUsername());
 
@@ -169,7 +169,7 @@ public class PlaceServiceImplTest {
     public void removingUserWorks() {
         place.getTeam().getMembers().add(user);
         when(placeRepository.findOne(1L)).thenReturn(place);
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         final Place updatedPlace = placeService.removeUserFromTeam(1, user.getUsername());
 
@@ -180,7 +180,7 @@ public class PlaceServiceImplTest {
     @Test(expected = ServiceException.class)
     public void removingUserFromUnknownPlaceThrowsException() {
         when(placeRepository.findOne(1L)).thenReturn(null);
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         placeService.removeUserFromTeam(1, user.getUsername());
     }
