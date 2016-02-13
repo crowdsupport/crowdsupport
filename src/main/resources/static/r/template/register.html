@@ -2,20 +2,20 @@
     <form layout="column" ng-submit="register()">
         <md-input-container>
             <label>Username</label>
-            <input autofocus required ng-model="user.username"/>
+            <input autofocus required ng-model="user.username" id="register__username-input"/>
         </md-input-container>
 
         <md-input-container>
             <label>Password</label>
-            <input type="password" pattern=".{4,}" required="true" ng-model="user.password"/>
+            <input type="password" pattern=".{4,}" required="true" ng-model="user.password" id="register__password-input"/>
         </md-input-container>
 
         <md-input-container>
             <label>E-Mail (optional)</label>
-            <input type="email" ng-model="user.email"/>
+            <input type="email" ng-model="user.email" id="register__email-input"/>
         </md-input-container>
 
-        <md-button type="submit">
+        <md-button type="submit" id="register__register-button">
             <md-tooltip md-direction="top">Register</md-tooltip>
             <md-icon md-font-set="fa" md-font-icon="fa-user-plus"></md-icon>
         </md-button>

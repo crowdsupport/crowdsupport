@@ -41,8 +41,8 @@ public class WebDriverWrapper {
         return find(by).getText();
     }
 
-    public Waiter waiter(Function<WebDriver, WebElement> predicate) {
-        return new Waiter(driver(), predicate);
+    public <T> Waiter waiter(Function<WebDriver, T> predicate) {
+        return Waiter.create(driver(), predicate);
     }
 
     public boolean isDisplayed(By by) {

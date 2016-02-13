@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.automation.scenarios;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.outofrange.crowdsupport.automation.keyword.ui.ProfileKeywords;
+import org.outofrange.crowdsupport.automation.keyword.ui.RegisterKeywords;
 import org.outofrange.crowdsupport.automation.keyword.ui.SidePanelKeywords;
 import org.outofrange.crowdsupport.model.User;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -49,7 +50,7 @@ public class UserUiTest extends UiTest {
         final SidePanelKeywords sidePanel = keywords().ui().sidePanel();
         sidePanel.login(user.getUsername(), user.getPassword()).doWait();
 
-        final ProfileKeywords profileKeywords = sidePanel.clickProfile();
+        final ProfileKeywords profileKeywords = sidePanel.gotoProfile();
 
         assertFalse(profileKeywords.isUsernameInputEnabled());
 
@@ -73,7 +74,7 @@ public class UserUiTest extends UiTest {
         final SidePanelKeywords sidePanel = keywords().ui().sidePanel();
         sidePanel.login(user.getUsername(), user.getPassword()).doWait();
 
-        final ProfileKeywords profileKeywords = sidePanel.clickProfile();
+        final ProfileKeywords profileKeywords = sidePanel.gotoProfile();
 
         assertTrue(profileKeywords.isUsernameInputEnabled());
 
@@ -99,6 +100,30 @@ public class UserUiTest extends UiTest {
         assertTrue(sidePanel.isLoggedOut());
     }
 
+    @Test
+    public void registerUser() {
+        final String username = "username";
+        final String password = "password";
+
+        final SidePanelKeywords sidePanel = keywords().ui().sidePanel();
+        final RegisterKeywords registration = sidePanel.gotoRegister();
+
+        registration.enterDetails(username, password, null);
+        registration.clickRegister();
+
+        assertTrue(sidePanel.isLoggedOut());
+        sidePanel.login(username, password).doWait();
+        assertTrue(sidePanel.isLoggedIn());
+        sidePanel.logout();
+        assertTrue(sidePanel.isLoggedOut());
+
+        sidePanel.gotoRegister();
+        registration.enterDetails(username, password, null);
+        registration.clickRegister();
+
+        // TODO check toast
+    }
+
     private void loginAsSomebody(boolean admin) {
         final User user = data().user().createUser(admin);
 
@@ -107,7 +132,7 @@ public class UserUiTest extends UiTest {
 
         assertEquals(user.getUsername(), sidePanel.getLoggedInUsername());
 
-        sidePanel.logout().doWait();
+        sidePanel.logout();
 
         assertTrue(sidePanel.isLoggedOut());
     }

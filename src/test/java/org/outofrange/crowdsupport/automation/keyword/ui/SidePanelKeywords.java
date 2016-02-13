@@ -33,19 +33,23 @@ public class SidePanelKeywords extends KeywordBase {
         return web().waiter(ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
     }
 
-    public Waiter logout() {
+    public void logout() {
         web().click(LOGOUT_BUTTON);
-
-        return web().waiter(ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON));
     }
 
     public String getLoggedInUsername() {
         return web().getText(LOGGEDIN_USER_TEXT);
     }
 
-    public ProfileKeywords clickProfile() {
+    public ProfileKeywords gotoProfile() {
         web().click(PROFILE_BUTTON);
 
         return getKeywords(ProfileKeywords.class);
+    }
+
+    public RegisterKeywords gotoRegister() {
+        web().click(REGISTER_BUTTON);
+
+        return getKeywords(RegisterKeywords.class);
     }
 }

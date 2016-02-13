@@ -14,12 +14,14 @@ public class ProfileKeywords extends KeywordBase {
         return web().isEnabled(USERNAME_INPUT);
     }
 
-    public void changeDetails(String username, String password, String email) {
+    public ProfileKeywords changeDetails(String username, String password, String email) {
         web().setText(USERNAME_INPUT, username);
         web().setText(PASSWORD_INPUT, password);
         web().setText(EMAIL_INPUT, email);
 
         web().click(SAVE_BUTTON);
+
+        return this;
     }
 
     public String getUsername() {
