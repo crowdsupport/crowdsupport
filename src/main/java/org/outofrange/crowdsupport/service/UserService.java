@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface UserService extends UserDetailsService {
     User updateProfile(FullUserDto userDto);
 
+    void disableUser(long userId);
+
     User createUser(FullUserDto userDto);
 
     User updateAll(long userId, FullUserDto userDto);

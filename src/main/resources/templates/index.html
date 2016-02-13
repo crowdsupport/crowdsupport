@@ -34,7 +34,7 @@
                 <md-list-item ng-show="$root.auth">
                     <ul>
                         <li>
-                            <div>Logged in as <b>{{$root.user.username}}</b></div>
+                            <div>Logged in as <b id="sidepanel__loggedin-name">{{$root.user.username}}</b></div>
                         </li>
                         <li auth="ROLE_ADMIN">
                             <md-button th:href="@{/admin}">Admin panel</md-button>
@@ -47,7 +47,7 @@
                             </md-button>
                         </li>
                         <li>
-                            <md-button ng-click="logout()">Logout</md-button>
+                            <md-button ng-click="logout()" id="sidepanel__logout-button">Logout</md-button>
                         </li>
                     </ul>
                 </md-list-item>
@@ -57,17 +57,17 @@
                         <form layout="row" ng-submit="login()">
                             <md-input-container>
                                 <label>Username</label>
-                                <input ng-model="username">
+                                <input ng-model="username" id="sidepanel__login-input">
                             </md-input-container>
                             <md-input-container>
                                 <label>Password</label>
-                                <input type="password" ng-model="password">
+                                <input type="password" ng-model="password" id="sidepanel__password-input">
                             </md-input-container>
 
-                            <md-button aria-label="Login" type="submit" class="md-primary md-icon-button"><i
-                                    class="fa fa-sign-in"></i></md-button>
-                            <md-button aria-label="Register" class="md-icon-button" th:href="@{/register}"><i
-                                    class="fa fa-user-plus"></i>
+                            <md-button aria-label="Login" type="submit" class="md-primary md-icon-button"
+                                       id="sidepanel__login-button"><i class="fa fa-sign-in"></i></md-button>
+                            <md-button aria-label="Register" class="md-icon-button" th:href="@{/register}"
+                                       id="sidepanel__register-button"><i class="fa fa-user-plus"></i>
                             </md-button>
                         </form>
                     </md-content>
@@ -79,12 +79,14 @@
 
     <div layout="column" flex>
         <md-toolbar layout class="content-toolbar">
-            <md-button flex="none" class="md-toolbar-tools md-fab sidebar-toggle-fab" aria-label="Show navigation" ng-click="toggleNav()" ng-hide="$mdMedia('gt-sm')">
+            <md-button flex="none" class="md-toolbar-tools md-fab sidebar-toggle-fab" aria-label="Show navigation"
+                       ng-click="toggleNav()" ng-hide="$mdMedia('gt-sm')">
                 <md-icon md-font-set="fa" md-font-icon="fa-bars"></md-icon>
             </md-button>
             <div class="md-toolbar-tools">
                 <span ng-repeat="crumb in $breadcrumbs" ng-class="{ 'active' : $last }">
-                        <span ng-if="!$last" hide-xs><a href="{{crumb.url}}">{{crumb.title}}</a> <md-icon md-font-set="fa" md-font-icon="fa-caret-right"></md-icon>&nbsp;</span>
+                        <span ng-if="!$last" hide-xs><a href="{{crumb.url}}">{{crumb.title}}</a> <md-icon
+                                md-font-set="fa" md-font-icon="fa-caret-right"></md-icon>&nbsp;</span>
                         <span ng-if="$last">{{crumb.title}}</span>
                     </span>
             </div>

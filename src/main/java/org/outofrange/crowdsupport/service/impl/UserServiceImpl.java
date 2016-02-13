@@ -66,6 +66,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void disableUser(long userId) {
+        log.debug("Disabling user with id {}", userId);
+
+        final User user = userRepository.findOne(userId);
+
+        if (user != null) {
+            user.setEnabled(false);
+
+            userRepository.save(user);
+        } else {
+            throw new ServiceException("Found no user with id " + userId);
+        }
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User createUser(FullUserDto userDto) {
         log.debug("Creating user: {}", userDto);
