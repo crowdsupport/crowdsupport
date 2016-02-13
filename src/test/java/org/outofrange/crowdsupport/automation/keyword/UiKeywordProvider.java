@@ -1,7 +1,7 @@
 package org.outofrange.crowdsupport.automation.keyword;
 
 import org.outofrange.crowdsupport.automation.Cleanable;
-import org.outofrange.crowdsupport.automation.keyword.ui.DriverHandler;
+import org.outofrange.crowdsupport.automation.keyword.ui.core.DriverHandler;
 import org.outofrange.crowdsupport.automation.keyword.ui.SidePanelKeywords;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +21,6 @@ public class UiKeywordProvider implements Cleanable {
 
     @Override
     public void cleanUp() {
-        driverHandler.resetOnNextUse();
+        driverHandler.reset();
     }
 }

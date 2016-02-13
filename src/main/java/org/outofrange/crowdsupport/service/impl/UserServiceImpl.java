@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.service.impl;
 import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.event.ChangeType;
 import org.outofrange.crowdsupport.event.Events;
+import org.outofrange.crowdsupport.model.Role;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
@@ -57,12 +58,17 @@ public class UserServiceImpl implements UserService {
         }
 
         final User self = optionalUser.get();
+        boolean updateAll = false;
 
         if (userDto.getUsername() != null && !self.getUsername().equals(userDto.getUsername())) {
-            throw new ServiceException("Updating different user is not allowed!");
+            if (!self.isAdmin()) {
+                throw new ServiceException("Updating different user is not allowed!");
+            } else {
+                updateAll = true;
+            }
         }
 
-        return updateUser(self, userDto, false);
+        return updateUser(self, userDto, updateAll);
     }
 
     @Override
@@ -73,11 +79,36 @@ public class UserServiceImpl implements UserService {
         final User user = userRepository.findOne(userId);
 
         if (user != null) {
-            user.setEnabled(false);
+            if (user.isEnabled()) {
+                user.setEnabled(false);
 
-            userRepository.save(user);
+                userRepository.save(user);
+            } else {
+                log.debug("User is disabled already, doing nothing");
+            }
         } else {
             throw new ServiceException("Found no user with id " + userId);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    @PreAuthorize("hasAuthority(@role.ADMIN)")
+    public User makeAdmin(long userId) {
+        final User user = userRepository.findOne(userId);
+
+        if (user != null) {
+            final Role adminRole = roleRepository.findOneByName(RoleStore.ADMIN).get();
+
+            if (!user.getRoles().contains(adminRole)) {
+                user.getRoles().add(adminRole);
+
+                userRepository.save(user);
+            }
+
+            return user;
+        } else {
+            throw new ServiceException("Couldn't find user with id " + userId);
         }
     }
 
@@ -118,7 +149,7 @@ public class UserServiceImpl implements UserService {
 
         final Optional<User> existingUser = userRepository.findOneByUsernameAndEnabledTrue(userDto.getUsername());
         if (userId != existingUser.get().getId()) {
-            throw new ServiceException("Can't set username (already used!");
+            throw new ServiceException("Can't set username (already used!)");
         }
 
         return updateUser(user, userDto, true);
@@ -141,7 +172,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (all) {
-            if (userDto.getImagePath() != null) {
+            if (userDto.getUsername() != null) {
                 user.setUsername(userDto.getUsername());
             }
             if (userDto.getRoles() != null) {

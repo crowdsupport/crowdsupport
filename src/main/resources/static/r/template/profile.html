@@ -5,21 +5,21 @@
     <form ng-submit="submit()" layout="column">
         <md-input-container>
             <label>Username</label>
-            <input type="text" autofocus="true"
-                   required="true" ng-model="user.username" ng-disabled="!('ROLE_ADMIN' | auth)"/>
+            <input type="text" autofocus id="profile__username-input"
+                   required ng-model="user.username" ng-disabled="!('ROLE_ADMIN' | auth)"/>
         </md-input-container>
 
         <md-input-container>
             <label>Password</label>
-            <input type="password" pattern="|.{4,}" ng-model="user.password"/>
+            <input type="password" pattern="|.{4,}" ng-model="user.password" id="profile__password-input"/>
         </md-input-container>
 
         <md-input-container>
             <label>E-Mail</label>
-            <input type="email" ng-model="user.email"/>
+            <input type="email" ng-model="user.email" id="profile__email-input"/>
         </md-input-container>
 
-        <md-button type="submit">
+        <md-button type="submit" id="profile__save-button">
             <md-tooltip md-direction="top">Change details</md-tooltip>
             <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
         </md-button>

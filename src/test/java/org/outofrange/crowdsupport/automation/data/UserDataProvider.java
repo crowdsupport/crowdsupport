@@ -4,6 +4,7 @@ import org.outofrange.crowdsupport.automation.ActionStack;
 import org.outofrange.crowdsupport.automation.Cleanable;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.service.UserService;
+import org.outofrange.crowdsupport.util.Authorized;
 import org.outofrange.crowdsupport.util.TestUser;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,19 @@ public class UserDataProvider implements Cleanable {
         // we want our raw password so we can login
         created.setPassword(user.getFullUserDto().getPassword());
 
+        if (admin) {
+            // we have to set roles as an explicit update call
+            Authorized.asAdmin().run(() ->  userService.makeAdmin(created.getId()));
+        }
+
         undoActions.addAction(() -> userService.disableUser(created.getId()));
+
+        return created;
+    }
+
+    public User createDisabledUser() {
+        final User created = userService.createUser(TestUser.USER.getFullUserDto());
+        userService.disableUser(created.getId());
 
         return created;
     }

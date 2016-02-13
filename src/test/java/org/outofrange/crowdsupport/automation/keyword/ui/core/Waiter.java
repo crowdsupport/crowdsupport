@@ -1,11 +1,9 @@
-package org.outofrange.crowdsupport.automation.keyword;
+package org.outofrange.crowdsupport.automation.keyword.ui.core;
 
 import com.google.common.base.Function;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,7 @@ public class Waiter {
     private final WebDriver webDriver;
     private final Function<WebDriver, WebElement> predicate;
 
-    public Waiter(WebDriver webDriver, Function<WebDriver, WebElement> predicate) {
+    protected Waiter(WebDriver webDriver, Function<WebDriver, WebElement> predicate) {
         this.webDriver = webDriver;
         this.predicate = predicate;
     }

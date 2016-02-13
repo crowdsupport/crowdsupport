@@ -2,7 +2,7 @@ package org.outofrange.crowdsupport.automation.keyword.ui;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.outofrange.crowdsupport.automation.keyword.Waiter;
+import org.outofrange.crowdsupport.automation.keyword.ui.core.Waiter;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,27 +12,40 @@ public class SidePanelKeywords extends KeywordBase {
     private static final By LOGIN_BUTTON = By.id("sidepanel__login-button");
     private static final By LOGOUT_BUTTON = By.id("sidepanel__logout-button");
     private static final By REGISTER_BUTTON = By.id("sidepanel__register-button");
+    private static final By PROFILE_BUTTON = By.id("sidepanel__profile-button");
+
     private static final By LOGGEDIN_USER_TEXT = By.id("sidepanel__loggedin-name");
 
     public boolean isLoggedIn() {
-        return driver().findElement(LOGGEDIN_USER_TEXT).isDisplayed();
+        return web().isDisplayed(LOGGEDIN_USER_TEXT);
+    }
+
+    public boolean isLoggedOut() {
+        return web().isDisplayed(LOGIN_BUTTON);
     }
 
     public Waiter login(String username, String password) {
-        driver().findElement(LOGIN_INPUT).sendKeys(username);
-        driver().findElement(PASSWORD_INPUT).sendKeys(password);
-        driver().findElement(LOGIN_BUTTON).click();
+        web().setText(LOGIN_INPUT, username);
+        web().setText(PASSWORD_INPUT, password);
 
-        return new Waiter(driver(), ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
+        web().click(LOGIN_BUTTON);
+
+        return web().waiter(ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
     }
 
     public Waiter logout() {
-        driver().findElement(LOGOUT_BUTTON).click();
+        web().click(LOGOUT_BUTTON);
 
-        return new Waiter(driver(), ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON));
+        return web().waiter(ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON));
     }
 
     public String getLoggedInUsername() {
-        return driver().findElement(LOGGEDIN_USER_TEXT).getText();
+        return web().getText(LOGGEDIN_USER_TEXT);
+    }
+
+    public ProfileKeywords clickProfile() {
+        web().click(PROFILE_BUTTON);
+
+        return getKeywords(ProfileKeywords.class);
     }
 }

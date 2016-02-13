@@ -37,13 +37,13 @@
                             <div>Logged in as <b id="sidepanel__loggedin-name">{{$root.user.username}}</b></div>
                         </li>
                         <li auth="ROLE_ADMIN">
-                            <md-button th:href="@{/admin}">Admin panel</md-button>
+                            <md-button id="sidepanel__admin-button" th:href="@{/admin}">Admin panel</md-button>
                         </li>
                         <li>
-                            <md-button th:href="@{/profile}">Profile</md-button>
+                            <md-button id="sidepanel__profile-button" th:href="@{/profile}">Profile</md-button>
                         </li>
                         <li>
-                            <md-button th:href="@{/request/newPlace}">Request a new place
+                            <md-button id="sidepanel__request-place-button" th:href="@{/request/newPlace}">Request a new place
                             </md-button>
                         </li>
                         <li>
