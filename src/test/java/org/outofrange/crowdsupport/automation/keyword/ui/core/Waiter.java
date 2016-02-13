@@ -24,8 +24,8 @@ public class Waiter<R> {
         return new Waiter<>(webDriver, predicate);
     }
 
-    public void doWait() {
-        doWait(WAIT_DEFAULT);
+    public R doWait() {
+        return doWait(WAIT_DEFAULT);
     }
 
     public R doWait(int seconds) {

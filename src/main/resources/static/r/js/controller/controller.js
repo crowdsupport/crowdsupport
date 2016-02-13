@@ -57,15 +57,16 @@
         .controller('CityController', function ($scope, $cityRest) {
             $scope.city = $cityRest;
         })
-        .controller('UserController', function ($scope, $rootScope, Auth, Status) {
+        .controller('UserController', function ($scope, $rootScope, Auth, Status, $log) {
             $scope.username = '';
             $scope.password = '';
 
             $scope.login = function () {
-                Auth.login($scope.username, $scope.password).then(function (response) {
+                Auth.login($scope.username, $scope.password).then(function () {
                     $scope.username = '';
                     Status.success('Successfully logged in');
                 }, function (response) {
+                    $log.debug(response);
                     Status.error('Could not log in - are your credentials correct?');
                 });
 
@@ -130,12 +131,15 @@
             $scope.submit = function () {
                 $log.debug('Submitting profile data');
                 Restangular.one('user', 'current').patch($scope.user).then(function () {
-                    Status.success('Successfully updated user');
+                    Status.success('Successfully updated profile');
                     Auth.updateUser();
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not update user profile');
                 });
             };
         })
-        .controller('RegistrationController', function ($scope, Auth, Restangular, Status, $previousState) {
+        .controller('RegistrationController', function ($scope, Auth, Restangular, Status, $previousState, $log) {
             $scope.user = {};
 
             $scope.register = function () {
@@ -143,6 +147,9 @@
                     $previousState.backOrHome();
 
                     Status.success('Successfully registered new user');
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not register new user');
                 });
             };
         });

@@ -23,7 +23,7 @@
                         break;
                 }
 
-                return icon + '<span flex>' + status.message + '</span>';
+                return icon + '<span flex class="status-message">' + status.message + '</span>';
             };
 
             var pastStatus = [];

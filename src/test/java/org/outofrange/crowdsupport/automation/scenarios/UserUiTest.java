@@ -121,7 +121,7 @@ public class UserUiTest extends UiTest {
         registration.enterDetails(username, password, null);
         registration.clickRegister();
 
-        // TODO check toast
+        assertTrue(keywords().ui().status().isMessageDisplayed("Could not register"));
     }
 
     private void loginAsSomebody(boolean admin) {

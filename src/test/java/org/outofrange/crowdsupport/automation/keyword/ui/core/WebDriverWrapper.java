@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class WebDriverWrapper {
@@ -25,6 +27,10 @@ public class WebDriverWrapper {
         return driver().findElement(by);
     }
 
+    private List<WebElement> findAll(By by) {
+        return driver().findElements(by);
+    }
+
     public void setText(By by, String text) {
         if (text != null) {
             final WebElement element = find(by);
@@ -39,6 +45,10 @@ public class WebDriverWrapper {
 
     public String getText(By by) {
         return find(by).getText();
+    }
+
+    public List<String> getTextFromAll(By by) {
+        return findAll(by).stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
     public <T> Waiter waiter(Function<WebDriver, T> predicate) {
