@@ -48,6 +48,9 @@
                     request.ui.setStateSearch(true);
 
                     Status.success('Successfully created new state');
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not create new state');
                 });
             };
 
@@ -60,6 +63,9 @@
                         request.ui.setCitySearch(true);
 
                         Status.success('Successfully created new city');
+                    }, function (response) {
+                        $log.debug(response);
+                        Status.error('Could not create new city');
                     });
                 }
             };
@@ -126,6 +132,9 @@
                             Status.info('You\'ve changed your username to ' + response.username + ', please relogin')
                         }
                     }
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not change user details');
                 });
             };
         })
@@ -167,27 +176,34 @@
             };
 
             $scope.assignPermissions = function () {
-                console.log($scope.selectedRole);
-                Restangular.one('role', $scope.selectedRole.name)
                 Restangular.one('role', $scope.selectedRole.name).customPUT($scope.selectedRole.permissions, 'permissions').then(function () {
                     Status.success('Successfully changed permissions');
                     Auth.updateUser();
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not assign permissions');
                 });
             };
         })
-        .controller('RoleCreateController', function ($scope, Restangular, Status, $mdDialog) {
+        .controller('RoleCreateController', function ($scope, Restangular, Status, $mdDialog, $log) {
             $scope.create = function () {
                 Restangular.one('role', $scope.roleName).put().then(function (response) {
                     Status.success('Successfully created role ' + $scope.roleName);
                     $mdDialog.hide(response);
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not createnew role');
                 });
             };
         })
-        .controller('SettingsController', function ($scope, Restangular, Status, Auth) {
+        .controller('SettingsController', function ($scope, Restangular, Status, Auth, $log) {
             $scope.refreshToken = function () {
                 Restangular.one('setting', 'refreshApplicationSecret').post().then(function () {
                     Auth.logout();
                     Status.success('Refreshed application token - you have to login again!');
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not refresh token');
                 });
             };
         });

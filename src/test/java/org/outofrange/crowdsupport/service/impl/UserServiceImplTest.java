@@ -59,7 +59,7 @@ public class UserServiceImplTest {
     @Test
     public void creatingUserWorks() {
         when(roleRepository.findOneByName(RoleStore.USER)).thenReturn(Optional.of(new Role(RoleStore.USER)));
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
         when(passwordEncoder.encode(anyString())).thenReturn("hashed");
 
@@ -74,7 +74,7 @@ public class UserServiceImplTest {
 
     @Test(expected = ServiceException.class)
     public void creatingUserWithExistingUsernameThrowsException() {
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         userService.createUser(userDto);
     }
@@ -101,7 +101,7 @@ public class UserServiceImplTest {
     @Test(expected = ServiceException.class)
     public void getCurrentUserUpdatedWhenUserLoggedInButWasDeletedInDb() {
         when(currentUserProvider.getCurrentUser()).thenReturn(Optional.of(user));
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.empty());
 
         userService.getCurrentUserUpdated();
     }
@@ -112,7 +112,7 @@ public class UserServiceImplTest {
         updatedUser.setEmail("some@mail.com");
 
         when(currentUserProvider.getCurrentUser()).thenReturn(Optional.of(user));
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(updatedUser));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(updatedUser));
 
         assertThat(updatedUser.getEmail(), is(equalTo(userService.getCurrentUserUpdated().get().getEmail())));
     }
@@ -156,14 +156,14 @@ public class UserServiceImplTest {
 
     @Test
     public void loadUserByNameReturnsUserWhenFound() {
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
 
         assertNotNull(userService.loadUserByUsername(user.getUsername()));
     }
 
     @Test(expected = UsernameNotFoundException.class)
     public void loadUserByNameThrowsExceptionWhenUserNotFound() {
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.empty());
 
         userService.loadUserByUsername(user.getUsername());
     }
@@ -202,7 +202,7 @@ public class UserServiceImplTest {
     public void updateAllWorks() {
         Reflection.setField(user, "id", 1L);
 
-        when(userRepository.findOneByUsername(userDto.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(userDto.getUsername())).thenReturn(Optional.of(user));
         when(userRepository.findOne(1L)).thenReturn(user);
 
         userService.updateAll(1, userDto);
@@ -225,7 +225,7 @@ public class UserServiceImplTest {
         final User existingUser = new User("existing", "password");
         Reflection.setField(existingUser, "id", 1L);
 
-        when(userRepository.findOneByUsername("existing")).thenReturn(Optional.of(existingUser));
+        when(userRepository.findOneByUsernameAndEnabledTrue("existing")).thenReturn(Optional.of(existingUser));
         when(userRepository.findOne(2L)).thenReturn(user);
 
         userDto.setUsername(existingUser.getUsername());
@@ -235,7 +235,7 @@ public class UserServiceImplTest {
 
     @Test
     public void updateProfileWithCurrentUserWorks() {
-        when(userRepository.findOneByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
         when(currentUserProvider.getCurrentUser()).thenReturn(Optional.of(user));
 
         userService.updateProfile(userDto);

@@ -173,7 +173,7 @@
                 });
             };
         })
-        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $rootScope) {
+        .controller('DonationRequestsCtrl', function ($scope, Websocket, Restangular, Status, $rootScope, $log) {
             $scope.donationRequests = $scope.$parent.place.donationRequests;
 
             var statusfilter = {open: true, enroute: false, done: false};
@@ -251,7 +251,7 @@
                 request.ui.rows = 1;
 
                 request.ui.sendComment = function () {
-                    console.log('Comment for request ' + request.id + ': ' + request.ui.commentText);
+                    $log.log('Comment for request ' + request.id + ': ' + request.ui.commentText);
 
                     var commentDto = {
                         'text': request.ui.commentText,
@@ -264,6 +264,9 @@
                     Restangular.one('donationRequest', request.id).post('comments', commentDto)
                         .then(function () {
                             Status.success('Successfully sent new comment');
+                        }, function (response) {
+                            $log.debug(response);
+                            Status.error('Could not send your comment!');
                         });
 
                     request.ui.commentText = '';
@@ -333,24 +336,36 @@
             $scope.confirmComment = function (id) {
                 Restangular.one('comment', id).post('confirm').then(function () {
                     Status.success('Successfully confirmed comment');
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not confirm comment');
                 });
             };
 
             $scope.deleteComment = function (id) {
                 Restangular.one('comment', id).remove().then(function () {
                     Status.success('Successfully deleted comment');
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not delete comment');
                 });
             };
 
             $scope.resolveRequest = function (id) {
                 Restangular.one('donationRequest', id).post('resolve').then(function () {
                     Status.success('Successfully marked request as resolved');
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not mark request as resolved');
                 });
             };
 
             $scope.deleteRequest = function (id) {
                 Restangular.one('donationRequest', id).remove().then(function () {
                     Status.success('Successfully deleted request');
+                }, function (response) {
+                    $log.debug(response);
+                    Status.error('Could not delete request');
                 });
             };
 

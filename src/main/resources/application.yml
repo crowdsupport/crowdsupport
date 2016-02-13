@@ -63,3 +63,11 @@ server:
 logging:
   level:
     org.outofrange.crowdsupport: TRACE
+
+---
+
+spring:
+  profiles: debug
+logging:
+  level:
+    org.outofrange.crowdsupport: TRACE

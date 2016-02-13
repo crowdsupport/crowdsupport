@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.service.impl;
 import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.event.ChangeType;
 import org.outofrange.crowdsupport.event.Events;
+import org.outofrange.crowdsupport.model.Role;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
@@ -57,12 +58,58 @@ public class UserServiceImpl implements UserService {
         }
 
         final User self = optionalUser.get();
+        boolean updateAll = false;
 
         if (userDto.getUsername() != null && !self.getUsername().equals(userDto.getUsername())) {
-            throw new ServiceException("Updating different user is not allowed!");
+            if (!self.isAdmin()) {
+                throw new ServiceException("Updating different user is not allowed!");
+            } else {
+                updateAll = true;
+            }
         }
 
-        return updateUser(self, userDto, false);
+        return updateUser(self, userDto, updateAll);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void disableUser(long userId) {
+        log.debug("Disabling user with id {}", userId);
+
+        final User user = userRepository.findOne(userId);
+
+        if (user != null) {
+            if (user.isEnabled()) {
+                user.setEnabled(false);
+
+                userRepository.save(user);
+            } else {
+                log.debug("User is disabled already, doing nothing");
+            }
+        } else {
+            throw new ServiceException("Found no user with id " + userId);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    @PreAuthorize("hasAuthority(@role.ADMIN)")
+    public User makeAdmin(long userId) {
+        final User user = userRepository.findOne(userId);
+
+        if (user != null) {
+            final Role adminRole = roleRepository.findOneByName(RoleStore.ADMIN).get();
+
+            if (!user.getRoles().contains(adminRole)) {
+                user.getRoles().add(adminRole);
+
+                userRepository.save(user);
+            }
+
+            return user;
+        } else {
+            throw new ServiceException("Couldn't find user with id " + userId);
+        }
     }
 
     @Override
@@ -76,8 +123,8 @@ public class UserServiceImpl implements UserService {
         user.setImagePath(userDto.getImagePath());
         user.setEnabled(true);
 
-        if (userRepository.findOneByUsername(userDto.getUsername()).isPresent()) {
-            throw new ServiceException("Found already existing user with username " + userDto.getUsername());
+        if (userRepository.findOneByUsernameAndEnabledTrue(userDto.getUsername()).isPresent()) {
+            throw new ServiceException("Found already existing, enabled user with username " + userDto.getUsername());
         }
 
         user.getRoles().add(roleRepository.findOneByName(RoleStore.USER).get());
@@ -100,9 +147,9 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Couldn't find user with id " + userId);
         }
 
-        final Optional<User> existingUser = userRepository.findOneByUsername(userDto.getUsername());
+        final Optional<User> existingUser = userRepository.findOneByUsernameAndEnabledTrue(userDto.getUsername());
         if (userId != existingUser.get().getId()) {
-            throw new ServiceException("Can't set username (already used!");
+            throw new ServiceException("Can't set username (already used!)");
         }
 
         return updateUser(user, userDto, true);
@@ -125,7 +172,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (all) {
-            if (userDto.getImagePath() != null) {
+            if (userDto.getUsername() != null) {
                 user.setUsername(userDto.getUsername());
             }
             if (userDto.getRoles() != null) {
@@ -169,7 +216,7 @@ public class UserServiceImpl implements UserService {
 
         Validate.notNullOrEmpty(username);
 
-        final Optional<User> user = userRepository.findOneByUsername(username);
+        final Optional<User> user = userRepository.findOneByUsernameAndEnabledTrue(username);
         if (user.isPresent()) {
             return user.get();
         } else {
@@ -189,7 +236,7 @@ public class UserServiceImpl implements UserService {
         final Optional<User> currentUser = getCurrentUser();
 
         if (currentUser.isPresent()) {
-            final Optional<User> loadedUser = userRepository.findOneByUsername(currentUser.get().getUsername());
+            final Optional<User> loadedUser = userRepository.findOneByUsernameAndEnabledTrue(currentUser.get().getUsername());
 
             if (!loadedUser.isPresent()) {
                 throw new ServiceException("Can't find user anymore: " + currentUser.get().getUsername());

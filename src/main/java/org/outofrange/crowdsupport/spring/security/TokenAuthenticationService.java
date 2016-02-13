@@ -7,6 +7,7 @@ import org.outofrange.crowdsupport.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -69,7 +70,12 @@ public class TokenAuthenticationService {
 		if (token != null) {
 			final UserAuthDto user = getTokenHandler().parseUserFromToken(token);
 			if (user != null) {
-				return new UserAuthentication(userService.loadUserByUsername(user.getUsername()));
+                try {
+                    return new UserAuthentication(userService.loadUserByUsername(user.getUsername()));
+                } catch (UsernameNotFoundException e) {
+                    log.info("Couldn't authenticate unknown user: {}", user.getUsername());
+                    return null;
+                }
 			}
 		}
 		return null;

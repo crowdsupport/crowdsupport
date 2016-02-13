@@ -29,6 +29,10 @@ md-select-menu.md-default-theme md-option[selected]:focus, md-select-menu md-opt
 md-select-menu.md-default-theme md-option[selected], md-select-menu md-option[selected] {
     color: #039BE5;
 }
+
+md-icon.fa {
+    height: auto;
+}
 /* END GENERAL */
 
 

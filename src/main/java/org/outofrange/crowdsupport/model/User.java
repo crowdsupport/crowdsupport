@@ -1,5 +1,6 @@
 package org.outofrange.crowdsupport.model;
 
+import org.outofrange.crowdsupport.util.RoleStore;
 import org.outofrange.crowdsupport.util.Validate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,8 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "USERS")
 public class User extends BaseEntity implements UserDetails {
+    private static final Role ADMIN_ROLE = new Role(RoleStore.ADMIN);
+
     @Column(name = "username")
     private String username;
 
@@ -63,6 +66,10 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    public boolean isAdmin() {
+        return getRoles().contains(ADMIN_ROLE);
     }
 
     public void setUsername(String username) {

@@ -86,7 +86,7 @@ public class PlaceServiceImpl implements PlaceService {
         final Place placeDb = placeRepository.findOne(placeId);
         checkNull(placeDb, "Couldn't find place with id " + placeId);
 
-        final User userDb = userRepository.findOneByUsername(username).get();
+        final User userDb = userRepository.findOneByUsernameAndEnabledTrue(username).get();
 
         if (!placeDb.getTeam().getMembers().contains(userDb)) {
             placeDb.getTeam().getMembers().add(userDb);
@@ -117,7 +117,7 @@ public class PlaceServiceImpl implements PlaceService {
         final Place placeDb = placeRepository.findOne(placeId);
         checkNull(placeDb, "Couldn't find place with id " + placeId);
 
-        final User userDb = userRepository.findOneByUsername(username).get();
+        final User userDb = userRepository.findOneByUsernameAndEnabledTrue(username).get();
 
         if (placeDb.getTeam().getMembers().remove(userDb)) {
             // we don't need to save the whole place again
