@@ -2,13 +2,21 @@
     <p md-whiteframe="1" layout-padding>Crowdsupport allows you to quickly see where your help is needed!</p>
 
     <div layout="column" layout-padding class="dashboard__search" md-whiteframe="1">
-        <md-input-container>
-            <label>Search for places</label>
-            <input>
-        </md-input-container>
+        <md-autocomplete md-search-text="searchText" md-selected-item="selectedPlace" md-items="place in query(searchText)"
+                         md-item-text="place.name" md-min-length="2" md-delay="100" md-floating-label="Seach for places"
+                         md-selected-item-change="gotoPlace(selectedPlace)">
+            <md-item-template>
+                <md-button>
+                    <md-icon md-font-set="fa" md-font-icon="fa-arrow-circle-right"></md-icon>
+                </md-button>
+
+                <span md-highlight-text="searchText">{{place.name}} ({{place.city.name}} / {{place.city.state.name}})</span>
+            </md-item-template>
+        </md-autocomplete>
+
         <div>or</div>
         <div>
-            <a href="/support">browse through all states</a>
+            <md-button href="/support">browse through all states</md-button>
         </div>
     </div>
 

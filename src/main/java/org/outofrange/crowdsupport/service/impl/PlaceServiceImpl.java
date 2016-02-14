@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -147,6 +148,15 @@ public class PlaceServiceImpl implements PlaceService {
         Events.donationRequest(ChangeType.CREATE, donationRequest).publish();
 
         return donationRequest;
+    }
+
+    @Override
+    public List<Place> loadPlaceSuggestions(String text) {
+        if (text == null || text.equals("")) {
+            return Collections.emptyList();
+        }
+
+        return placeRepository.findPlacesRelatedToText(text.toUpperCase());
     }
 
     private void checkNull(Object object, String message) {

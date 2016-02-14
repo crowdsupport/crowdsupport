@@ -22,4 +22,6 @@ public interface PlaceService {
     Place save(Place entity);
 
     List<Place> loadAll();
+
+    List<Place> loadPlaceSuggestions(String text);
 }

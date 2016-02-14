@@ -4,7 +4,20 @@
             'crowdsupport.controller.admin', 'crowdsupport.controller.donationrequests',
             'crowdsupport.service.status', 'crowdsupport.service.auth', 'crowdsupport.service.previousstate',
             'restangular', 'ngAnimate', 'chart.js'])
-        .controller('DashboardController', function ($scope, $statistics, Websocket) {
+        .controller('DashboardController', function ($scope, $statistics, Websocket, Restangular, $state) {
+            $scope.query = function (query) {
+                return Restangular.all('place').getList({query: query});
+            };
+
+            $scope.gotoPlace = function (place) {
+                $state.go('state.city.place', {
+                    stateIdentifier: place.city.state.identifier,
+                    cityIdentifier: place.city.identifier,
+                    placeIdentifier: place.identifier
+                });
+            };
+
+            // statistics
             $scope.states = $statistics.states;
             $scope.cities = $statistics.cities;
             $scope.places = $statistics.places;

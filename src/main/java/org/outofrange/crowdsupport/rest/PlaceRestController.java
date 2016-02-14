@@ -1,10 +1,7 @@
 package org.outofrange.crowdsupport.rest;
 
 import org.modelmapper.ModelMapper;
-import org.outofrange.crowdsupport.dto.DonationRequestDto;
-import org.outofrange.crowdsupport.dto.PlaceDto;
-import org.outofrange.crowdsupport.dto.PlaceWithDonationRequestsDto;
-import org.outofrange.crowdsupport.dto.UserDto;
+import org.outofrange.crowdsupport.dto.*;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Team;
 import org.outofrange.crowdsupport.service.PlaceService;
@@ -30,6 +27,13 @@ public class PlaceRestController extends TypedMappingController<PlaceDto> {
     public PlaceRestController(ModelMapper mapper, PlaceService placeService) {
         super(mapper, PlaceDto.class);
         this.placeService = placeService;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "query")
+    public List<PlaceDto> getAllPlacesLike(@RequestParam String query) {
+        log.info("Querying places like {}", query);
+
+        return mapToList(placeService.loadPlaceSuggestions(query));
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"identifier", "cityIdentifier", "stateIdentifier"})
