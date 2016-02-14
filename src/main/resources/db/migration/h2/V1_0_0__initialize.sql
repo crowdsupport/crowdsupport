@@ -267,3 +267,6 @@ INSERT INTO USERS_ROLES (user, role) VALUES (
    FROM ROLES
    WHERE name = 'ROLE_USER')
 );
+
+-- Disable mail per default
+INSERT INTO PROPERTIES (version, created, key, value) VALUES (0, sysdate, 'crowdsupport.mail.enabled', 'false');

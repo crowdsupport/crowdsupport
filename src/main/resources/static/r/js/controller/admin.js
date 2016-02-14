@@ -196,15 +196,38 @@
                 });
             };
         })
-        .controller('SettingsController', function ($scope, Restangular, Status, Auth, $log) {
+        .controller('SettingsController', function ($scope, Restangular, Status, Auth, $log, $settings) {
+            $scope.config = $settings;
+
             $scope.refreshToken = function () {
-                Restangular.one('setting', 'refreshApplicationSecret').post().then(function () {
-                    Auth.logout();
-                    Status.success('Refreshed application token - you have to login again!');
-                }, function (response) {
-                    $log.debug(response);
-                    Status.error('Could not refresh token');
-                });
+                Restangular.one('setting', 'refreshApplicationSecret').post()
+                    .then(function () {
+                        Auth.logout();
+                        Status.success('Refreshed application token - you have to login again!');
+                    }, function (response) {
+                        $log.debug(response);
+                        Status.error('Could not refresh token');
+                    });
+            };
+
+            $scope.changeMailSettings = function () {
+                Restangular.one('setting').post('mail', $scope.config.mail)
+                    .then(function () {
+                        Status.success('Successfully changed mail settings');
+                    }, function (response) {
+                        $log.debug(response);
+                        Status.error('Error while changing mail settings');
+                    });
+            };
+
+            $scope.sendTestMail = function (email) {
+                Restangular.one('setting').post('sendTestEmail', email)
+                    .then(function () {
+                        Status.success('Successfully sent test email');
+                    }, function (response) {
+                        $log.debug(response);
+                        Status.error('Could not send test email');
+                    });
             };
         });
 })();

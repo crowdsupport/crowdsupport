@@ -1,4 +1,4 @@
-<div flex layout="column" layout-padding>
+<div flex layout-padding>
     <md-card>
         <md-card-title>
             <md-card-title-text>
@@ -13,6 +13,69 @@
             <md-button ng-click="refreshToken()">
                 <md-tooltip md-direction="top">Refresh token</md-tooltip>
                 <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
+
+    <md-card>
+        <md-card-title>
+            <md-card-title-text layout>
+                <div class="md-headline" flex>Mail settings</div>
+                <md-checkbox flex="none" ng-model="config.mail.enabled">Enabled</md-checkbox>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="column">
+            <md-input-container>
+                <label>From</label>
+                <input type="email" ng-model="config.mail.from">
+            </md-input-container>
+
+            <div layout>
+                <md-input-container flex>
+                    <label>SMTP Host</label>
+                    <input ng-model="config.mail.host">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>SMTP Port</label>
+                    <input ng-model="config.mail.port">
+                </md-input-container>
+            </div>
+
+            <div layout>
+                <md-input-container flex>
+                    <label>SMTP Username</label>
+                    <input ng-model="config.mail.user">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>SMTP Password</label>
+                    <input type="password" ng-model="config.mail.pass">
+                </md-input-container>
+            </div>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-click="changeMailSettings()">
+                <md-tooltip md-direction="top">Change mail settings</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card>
+
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Send test email</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="column">
+            <md-input-container>
+                <label>Recipient</label>
+                <input type="email" ng-model="config.test.mail">
+            </md-input-container>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-click="sendTestMail(config.test.mail)">
+                <md-tooltip md-direction="top">Send test mail</md-tooltip>
+                <md-icon md-font-set="fa" md-font-icon="fa-envelope"></md-icon>
             </md-button>
         </md-card-actions>
     </md-card>

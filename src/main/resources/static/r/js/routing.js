@@ -189,6 +189,9 @@
                     resolve: {
                         $title: function() {
                             return 'Configuration'
+                        },
+                        $settings: function (Restangular) {
+                            return Restangular.one('setting').get();
                         }
                     },
                     data: {

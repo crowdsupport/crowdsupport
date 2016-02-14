@@ -1,9 +1,14 @@
 package org.outofrange.crowdsupport.event;
 
+import org.outofrange.crowdsupport.dto.config.MailSettingsDto;
 import org.outofrange.crowdsupport.model.*;
 
 public class Events {
     private Events() { /* no instantiation */ }
+
+    public static Event mailSettingsChanged(MailSettingsDto newSettings) {
+        return new MailSettingsChangedEvent(newSettings);
+    }
 
     public static Event indexRequested() {
         return new SimpleClientEvent("indexRequested");
