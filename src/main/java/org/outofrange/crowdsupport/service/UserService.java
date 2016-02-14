@@ -26,7 +26,7 @@ public interface UserService extends UserDetailsService {
     @Override
     User loadUserByUsername(String username) throws UsernameNotFoundException;
 
-    Optional<User> getCurrentUser();
+    Optional<String> getCurrentUsername();
 
     Optional<User> getCurrentUserUpdated();
 

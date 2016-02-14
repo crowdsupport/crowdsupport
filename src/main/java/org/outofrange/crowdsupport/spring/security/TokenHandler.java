@@ -3,6 +3,8 @@ package org.outofrange.crowdsupport.spring.security;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.outofrange.crowdsupport.dto.UserAuthDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -14,7 +16,6 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Date;
 
 public final class TokenHandler {
     private static class Header {
@@ -22,13 +23,15 @@ public final class TokenHandler {
         public String typ = "JWT";
     }
 
-    private static final Header HEADER = new Header();
+    private static final Logger log = LoggerFactory.getLogger(TokenHandler.class);
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
 	private static final String HMAC_ALGO = "HmacSHA256";
 	private static final String SEPARATOR = ".";
 	private static final String SEPARATOR_SPLITTER = "\\.";
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private static final String HEADER_BASE64 = toBase64(toJSON(new Header()));
 
 	private final Mac hmac;
 
@@ -59,40 +62,40 @@ public final class TokenHandler {
 					}
 				}
 			} catch (IllegalArgumentException e) {
-				//log tempering attempt here
+				log.warn("Couldn't parse token! " + token, e);
 			}
 		}
 		return null;
 	}
 
 	public String createTokenForUser(UserAuthDto user) {
-        final String headerAndUser = toBase64(toJSON(HEADER)) + SEPARATOR + toBase64(toJSON(user));
+        final String headerAndUser = HEADER_BASE64 + SEPARATOR + toBase64(toJSON(user));
 		final String hash = toBase64(createHmac(headerAndUser.getBytes()));
 
         return headerAndUser + SEPARATOR + hash;
 	}
 
-	private UserAuthDto fromJSON(final byte[] userBytes) {
+	private static UserAuthDto fromJSON(final byte[] userBytes) {
 		try {
-			return mapper.readValue(new ByteArrayInputStream(userBytes), UserAuthDto.class);
+			return MAPPER.readValue(new ByteArrayInputStream(userBytes), UserAuthDto.class);
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
 	}
 
-	private byte[] toJSON(Object object) {
+	private static byte[] toJSON(Object object) {
 		try {
-			return mapper.writeValueAsBytes(object);
+			return MAPPER.writeValueAsBytes(object);
 		} catch (JsonProcessingException e) {
 			throw new IllegalStateException(e);
 		}
 	}
 
-	private String toBase64(byte[] content) {
+	private static String toBase64(byte[] content) {
 		return DatatypeConverter.printBase64Binary(content);
 	}
 
-	private byte[] fromBase64(String content) {
+	private static byte[] fromBase64(String content) {
 		return DatatypeConverter.parseBase64Binary(content);
 	}
 

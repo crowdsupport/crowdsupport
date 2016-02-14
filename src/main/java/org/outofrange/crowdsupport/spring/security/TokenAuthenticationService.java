@@ -2,8 +2,8 @@ package org.outofrange.crowdsupport.spring.security;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.UserAuthDto;
+import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.service.ConfigurationService;
-import org.outofrange.crowdsupport.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -24,7 +24,7 @@ public class TokenAuthenticationService {
 	private static final String AUTH_HEADER_NAME = "authorization";
 
     private final ModelMapper mapper;
-    private final UserService userService;
+    private final AuthorityService authorityService;
 
     private ConfigurationService configurationService;
     private TokenHandler tokenHandler;
@@ -32,11 +32,11 @@ public class TokenAuthenticationService {
 
 	@Inject
 	public TokenAuthenticationService(ConfigurationService configurationService, ModelMapper mapper,
-                                      UserService userService) {
+                                      AuthorityService authorityService) {
         this.configurationService = configurationService;
 
         this.mapper = mapper;
-        this.userService = userService;
+        this.authorityService = authorityService;
 	}
 
     private TokenHandler getTokenHandler() {
@@ -59,7 +59,7 @@ public class TokenAuthenticationService {
         return tokenHandler;
     }
 
-	public void addAuthentication(HttpServletResponse response, UserAuthentication authentication) {
+	public void addAuthenticationToResponse(HttpServletResponse response, UserAuthentication authentication) {
 		final UserAuthDto user = mapper.map(authentication.getDetails(), UserAuthDto.class);
 		user.setExp(LocalDateTime.now().plusDays(7).toEpochSecond(ZoneOffset.UTC));
 		response.addHeader(AUTH_HEADER_NAME, getTokenHandler().createTokenForUser(user));
@@ -71,7 +71,7 @@ public class TokenAuthenticationService {
 			final UserAuthDto user = getTokenHandler().parseUserFromToken(token);
 			if (user != null) {
                 try {
-                    return new UserAuthentication(userService.loadUserByUsername(user.getUsername()));
+                    return new UserAuthentication(user, authorityService.mapRolesToAuthorities(user.getRoles()));
                 } catch (UsernameNotFoundException e) {
                     log.info("Couldn't authenticate unknown user: {}", user.getUsername());
                     return null;

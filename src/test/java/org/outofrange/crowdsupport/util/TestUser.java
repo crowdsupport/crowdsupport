@@ -19,6 +19,7 @@ public enum TestUser {
         userAuthDto.setUsername(username);
         userAuthDto.setPassword(password);
         userAuthDto.setExp(ZonedDateTime.now().plusDays(1).toEpochSecond());
+        userAuthDto.setRoles(new HashSet<>(Arrays.asList(roles)));
 
         fullUserDto = new FullUserDto();
         fullUserDto.setUsername(username);

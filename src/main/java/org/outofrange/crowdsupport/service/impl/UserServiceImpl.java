@@ -225,26 +225,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getCurrentUser() {
-        log.debug("Reading current user from security context...");
+    public Optional<String> getCurrentUsername() {
+        log.debug("Reading current username from security context...");
 
-        return currentUserProvider.getCurrentUser();
+        return currentUserProvider.getCurrentUsername();
     }
 
     @Override
     public Optional<User> getCurrentUserUpdated() {
-        final Optional<User> currentUser = getCurrentUser();
+        final Optional<String> currentUsername = getCurrentUsername();
 
-        if (currentUser.isPresent()) {
-            final Optional<User> loadedUser = userRepository.findOneByUsernameAndEnabledTrue(currentUser.get().getUsername());
+        if (currentUsername.isPresent()) {
+            final Optional<User> loadedUser = userRepository.findOneByUsernameAndEnabledTrue(currentUsername.get());
 
             if (!loadedUser.isPresent()) {
-                throw new ServiceException("Can't find user anymore: " + currentUser.get().getUsername());
+                throw new ServiceException("Can't find user anymore: " + currentUsername.get());
             }
 
             return loadedUser;
         } else {
-            return currentUser;
+            return Optional.empty();
         }
     }
 }

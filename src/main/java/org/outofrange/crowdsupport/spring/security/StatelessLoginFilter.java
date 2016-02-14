@@ -1,8 +1,9 @@
 package org.outofrange.crowdsupport.spring.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.UserAuthDto;
-import org.outofrange.crowdsupport.model.User;
+import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,39 +20,43 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
-
 	private final TokenAuthenticationService tokenAuthenticationService;
 	private final UserService userDetailsService;
+    private final AuthorityService authorityService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ModelMapper modelMapper;
 
 	protected StatelessLoginFilter(String urlMapping, TokenAuthenticationService tokenAuthenticationService,
-                                   UserService userDetailsService, AuthenticationManager authManager) {
+                                   UserService userDetailsService, AuthenticationManager authManager,
+                                   AuthorityService authorityService, ModelMapper modelMapper) {
 		super(new AntPathRequestMatcher(urlMapping));
 		this.userDetailsService = userDetailsService;
 		this.tokenAuthenticationService = tokenAuthenticationService;
+        this.authorityService = authorityService;
+        this.modelMapper = modelMapper;
+
 		setAuthenticationManager(authManager);
 	}
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		final UserAuthDto user = new ObjectMapper().readValue(request.getInputStream(), UserAuthDto.class);
+		final UserAuthDto user = objectMapper.readValue(request.getInputStream(), UserAuthDto.class);
 		final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
 				user.getUsername(), user.getPassword());
+
 		return getAuthenticationManager().authenticate(loginToken);
 	}
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
+		final UserAuthDto userAuthDto = modelMapper.map(userDetailsService.loadUserByUsername(authentication.getName()), UserAuthDto.class);
+		final UserAuthentication userAuthentication = new UserAuthentication(userAuthDto, authorityService.mapRolesToAuthorities(userAuthDto.getRoles()));
 
-		// Lookup the complete User object from the database and create an Authentication for it
-		final User authenticatedUser = userDetailsService.loadUserByUsername(authentication.getName());
-		final UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
+		tokenAuthenticationService.addAuthenticationToResponse(response, userAuthentication);
 
-		// Add the custom token as HTTP header to the response
-		tokenAuthenticationService.addAuthentication(response, userAuthentication);
-
-		// Add the authentication to the Security context
 		SecurityContextHolder.getContext().setAuthentication(userAuthentication);
 	}
 }

@@ -86,21 +86,21 @@ public class UserServiceImplTest {
 
     @Test
     public void getCurrentUserWhenUserLoggedIn() {
-        when(currentUserProvider.getCurrentUser()).thenReturn(Optional.of(user));
+        when(currentUserProvider.getCurrentUsername()).thenReturn(Optional.of(user.getUsername()));
 
-        assertThat(user, is(equalTo(userService.getCurrentUser().get())));
+        assertThat(user.getUsername(), is(equalTo(userService.getCurrentUsername().get())));
     }
 
     @Test
     public void getCurrentUserWhenNoUserLoggedIn() {
-        when(currentUserProvider.getCurrentUser()).thenReturn(Optional.empty());
+        when(currentUserProvider.getCurrentUsername()).thenReturn(Optional.empty());
 
-        assertFalse(userService.getCurrentUser().isPresent());
+        assertFalse(userService.getCurrentUsername().isPresent());
     }
 
     @Test(expected = ServiceException.class)
     public void getCurrentUserUpdatedWhenUserLoggedInButWasDeletedInDb() {
-        when(currentUserProvider.getCurrentUser()).thenReturn(Optional.of(user));
+        when(currentUserProvider.getCurrentUsername()).thenReturn(Optional.of(user.getUsername()));
         when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.empty());
 
         userService.getCurrentUserUpdated();
@@ -111,7 +111,7 @@ public class UserServiceImplTest {
         User updatedUser = new User(user.getUsername(), user.getPassword());
         updatedUser.setEmail("some@mail.com");
 
-        when(currentUserProvider.getCurrentUser()).thenReturn(Optional.of(user));
+        when(currentUserProvider.getCurrentUsername()).thenReturn(Optional.of(user.getUsername()));
         when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(updatedUser));
 
         assertThat(updatedUser.getEmail(), is(equalTo(userService.getCurrentUserUpdated().get().getEmail())));
@@ -119,7 +119,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getCurrentUserUpdatedWhenNoUserLoggedIn() {
-        when(currentUserProvider.getCurrentUser()).thenReturn(Optional.empty());
+        when(currentUserProvider.getCurrentUsername()).thenReturn(Optional.empty());
 
         assertFalse(userService.getCurrentUserUpdated().isPresent());
 
@@ -236,7 +236,7 @@ public class UserServiceImplTest {
     @Test
     public void updateProfileWithCurrentUserWorks() {
         when(userRepository.findOneByUsernameAndEnabledTrue(user.getUsername())).thenReturn(Optional.of(user));
-        when(currentUserProvider.getCurrentUser()).thenReturn(Optional.of(user));
+        when(currentUserProvider.getCurrentUsername()).thenReturn(Optional.of(user.getUsername()));
 
         userService.updateProfile(userDto);
 
@@ -245,7 +245,7 @@ public class UserServiceImplTest {
 
     @Test(expected = ServiceException.class)
     public void updateProfileWithNoCurrentUserThrowsException() {
-        when(currentUserProvider.getCurrentUser()).thenReturn(Optional.empty());
+        when(currentUserProvider.getCurrentUsername()).thenReturn(Optional.empty());
 
         userService.updateProfile(userDto);
     }

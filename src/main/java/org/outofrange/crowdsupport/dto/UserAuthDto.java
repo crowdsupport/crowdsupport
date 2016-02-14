@@ -2,6 +2,10 @@ package org.outofrange.crowdsupport.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.outofrange.crowdsupport.model.Role;
+
+import java.util.Set;
 
 public class UserAuthDto extends BaseDto {
     private long exp;
@@ -9,6 +13,16 @@ public class UserAuthDto extends BaseDto {
     private String username;
 
     private String password;
+
+    private Set<String> roles;
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
 
     public long getExp() {
         return exp;
@@ -38,9 +52,10 @@ public class UserAuthDto extends BaseDto {
 
     @Override
     public String toString() {
-        return "UserAuthDto{" +
-                "exp=" + exp +
-                ", username='" + username + '\'' +
-                '}';
+        return new ToStringBuilder(this)
+                .append("exp", exp)
+                .append("username", username)
+                .append("roles", roles)
+                .toString();
     }
 }

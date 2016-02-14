@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.spring.security;
 
+import org.modelmapper.ModelMapper;
+import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.Config;
 import org.springframework.context.annotation.Configuration;
@@ -25,10 +27,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Inject
+    private AuthorityService authorityService;
+
+    @Inject
     private Config config;
 
     @Inject
     private TokenAuthenticationService tokenAuthenticationService;
+
+    @Inject
+    private ModelMapper mapper;
 
     public WebSecurityConfig() {
         super(true);
@@ -69,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // custom JSON based authentication by POST of {"username":"<name>","password":"<password>"} which sets the token header upon authentication
                 .addFilterBefore(new StatelessLoginFilter("/service/v1/user/login", tokenAuthenticationService, userService,
-                        authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                        authenticationManager(), authorityService, mapper), UsernamePasswordAuthenticationFilter.class)
 
                 // custom Token based authentication based on the header previously given to the client
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);

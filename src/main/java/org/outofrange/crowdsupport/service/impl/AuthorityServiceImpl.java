@@ -1,5 +1,7 @@
 package org.outofrange.crowdsupport.service.impl;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.outofrange.crowdsupport.model.Permission;
 import org.outofrange.crowdsupport.model.Role;
 import org.outofrange.crowdsupport.persistence.PermissionRepository;
@@ -9,20 +11,20 @@ import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 public class AuthorityServiceImpl implements AuthorityService {
     private static final Logger log = LoggerFactory.getLogger(AuthorityServiceImpl.class);
+
+    private final Multimap<String, GrantedAuthority> roleMappingCache = HashMultimap.create();
 
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
@@ -55,6 +57,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                     return optionalPermission.get();
                 }).collect(Collectors.toSet()));
 
+        invalidateRoleMappingCache(role);
         return roleRepository.save(roleDb);
     }
 
@@ -84,6 +87,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         }
 
         roleRepository.delete(role);
+        invalidateRoleMappingCache(roleName);
     }
 
     @Override
@@ -105,5 +109,42 @@ public class AuthorityServiceImpl implements AuthorityService {
         log.debug("Querying all permissions");
 
         return new HashSet<>(permissionRepository.findAll());
+    }
+
+    @Override
+    public Set<GrantedAuthority> mapRolesToAuthorities(Collection<String> roleNames) {
+        if (roleNames == null) {
+            return Collections.emptySet();
+        }
+
+        final Set<GrantedAuthority> authorities = new HashSet<>();
+        roleNames.forEach(name -> authorities.addAll(mapRoleToAuthorities(name)));
+
+        return authorities;
+    }
+
+    private void invalidateRoleMappingCache(String roleName) {
+        roleMappingCache.removeAll(roleName);
+    }
+
+    private Set<GrantedAuthority> mapRoleToAuthorities(String roleName) {
+        log.trace("Mapping role {} to authorities", roleName);
+
+        if (roleMappingCache.containsKey(roleName)) {
+            return new HashSet<>(roleMappingCache.get(roleName));
+        } else {
+            final Optional<Role> loadedRole = roleRepository.findOneByName(roleName);
+            if (!loadedRole.isPresent()) {
+                log.warn("Tried to map non existent role {} - returning empty authorities");
+                return Collections.emptySet();
+            }
+
+            final Set<GrantedAuthority> authorities = new HashSet<>();
+            authorities.add(loadedRole.get());
+            authorities.addAll(loadedRole.get().getPermissions());
+
+            roleMappingCache.putAll(roleName, authorities);
+            return authorities;
+        }
     }
 }

@@ -1,7 +1,6 @@
 package org.outofrange.crowdsupport.util;
 
-import org.outofrange.crowdsupport.model.User;
-import org.outofrange.crowdsupport.spring.security.UserAuthentication;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,15 +17,12 @@ import java.util.Set;
  * The mapping between roles and {@link GrantedAuthority}s is done in {@link AuthorityResolver}
  */
 public class Authorized {
+    private static final ModelMapper mapper = new ModelMapper();
+
     private Authentication authentication;
 
     private Authorized(Set<GrantedAuthority> authorities) {
         authentication = new TestingAuthenticationToken(null, null, new ArrayList<>(authorities));
-        authentication.setAuthenticated(true);
-    }
-
-    private Authorized(User user) {
-        authentication = new UserAuthentication(user);
         authentication.setAuthenticated(true);
     }
 
@@ -36,10 +32,6 @@ public class Authorized {
 
     public static Authorized asNormal() {
         return withRoles(RoleStore.USER);
-    }
-
-    public static Authorized asUser(User user) {
-        return new Authorized(user);
     }
 
     public static Authorized withRoles(String... roles) {
