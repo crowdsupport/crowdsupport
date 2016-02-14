@@ -2,6 +2,7 @@ package org.outofrange.crowdsupport.spring;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.spring.logging.RequestLoggingUtility;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletListenerRegistrationBean;
@@ -20,6 +21,9 @@ import javax.servlet.ServletContext;
 public class SpringConfiguration {
     private RequestLoggingUtility requestLoggingUtility = new RequestLoggingUtility();
 
+    @Value("${crowdsupport.tuckey.debug}")
+    private Boolean tuckeyDebug;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -33,6 +37,10 @@ public class SpringConfiguration {
         registrationBean.setDispatcherTypes(DispatcherType.REQUEST);
         registrationBean.addUrlPatterns("/*");
         registrationBean.addInitParameter("confPath", "urlrewrite.xml");
+
+        if (tuckeyDebug != null && tuckeyDebug) {
+            registrationBean.addInitParameter("logLevel", "DEBUG");
+        }
 
         // we have to do our rewriting first, before security sees us /o\
         registrationBean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
