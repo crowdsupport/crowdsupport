@@ -6,16 +6,20 @@ import org.outofrange.crowdsupport.dto.config.MailSettingsDto;
 import org.outofrange.crowdsupport.event.EventDispatcher;
 import org.outofrange.crowdsupport.event.MailSettingsChangedEvent;
 import org.outofrange.crowdsupport.service.ConfigurationService;
+import org.outofrange.crowdsupport.util.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Service("mailSender")
@@ -106,12 +110,18 @@ public class MailSenderImpl implements MailSender {
         return connectionTested;
     }
 
-    public SimpleMailMessage getNewMessage(String to) {
-        final SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(configurationService.getProperty(ConfigurationService.MAIL_FROM));
-        message.setTo(to);
+    public void sendMessage(String to, String subject, String text) {
+        final MimeMessage msg = sender.createMimeMessage();
+        final MimeMessageHelper helper = new MimeMessageHelper(msg);
+        try {
+            msg.setContent(text, "text/html");
+            helper.setFrom(configurationService.getProperty(ConfigurationService.MAIL_FROM));
+            helper.setTo(to);
 
-        return message;
+            sender.send(msg);
+        } catch (MessagingException e) {
+            throw new ServiceException("Couldn't create message template");
+        }
     }
 
     private static JavaMailSenderImpl createMailSender(String host, int port, String user, String pass) {
