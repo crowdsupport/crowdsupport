@@ -164,11 +164,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
                 <groupId>ro.isdc.wro4j</groupId>
                 <artifactId>wro4j-maven-plugin</artifactId>
                 <version>${wro4j.version}</version>
@@ -203,6 +198,19 @@
                 </executions>
                 <configuration>
                     <mainClass>org.outofrange.crowdsupport.CrowdsupportApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>spring.profiles.active</name>
+                            <value>test</value>
+                        </property>
+                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>

@@ -71,4 +71,11 @@ spring:
   profiles: debug
 logging:
   level:
-    org.outofrange.crowdsupport: TRACE
+    org: TRACE
+
+---
+
+spring:
+  profiles: test
+server:
+  port: 9080

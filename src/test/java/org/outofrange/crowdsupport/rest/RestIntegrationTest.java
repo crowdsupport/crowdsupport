@@ -2,8 +2,10 @@ package org.outofrange.crowdsupport.rest;
 
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
+import org.junit.experimental.categories.Category;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.CrowdsupportApplication;
+import org.outofrange.crowdsupport.IntegrationTest;
 import org.outofrange.crowdsupport.service.ConfigurationService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.util.TestUser;
@@ -22,7 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringApplicationConfiguration(classes = CrowdsupportApplication.class)
-@WebIntegrationTest("server.port:8090")
+@WebIntegrationTest
+@Category(IntegrationTest.class)
 public class RestIntegrationTest {
     protected TestRestTemplate rest;
 
