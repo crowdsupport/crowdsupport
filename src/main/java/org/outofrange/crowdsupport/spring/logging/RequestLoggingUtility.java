@@ -18,19 +18,44 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * This class is responsible for adding a request id to every log statement.
+ */
 public class RequestLoggingUtility extends OncePerRequestFilter implements ServletRequestListener {
+    private static final Logger log = LoggerFactory.getLogger(RequestLoggingUtility.class);
+
+    /**
+     * The key to store the id in.
+     */
     public static final String ID_PROPERTY = "requestId";
+
+    /**
+     * The key to store the color to use in.
+     */
     public static final String COLOR_PROPERTY = "requestColor";
+
+    /**
+     * The key to store the start timestamp in.
+     */
     public static final String START_TIME_PROPERTY = "started";
 
-    private static final Logger log = LoggerFactory.getLogger(RequestLoggingUtility.class);
     private static final Random R = new Random();
 
+    /**
+     * An array of colors usable for logs.
+     */
     private static final String[] COLORS = getColors();
 
-    // start with random color
+    /**
+     * A random starting color of {@link #COLORS} to start with.
+     */
     private int c = (int) (R.nextFloat() * COLORS.length);
 
+    /**
+     * Reads all defined colors of {@link ColorConverter} through reflection and returns them.
+     *
+     * @return an array of all usable colors
+     */
     @SuppressWarnings("unchecked")
     private static String[] getColors() {
         try {
@@ -49,10 +74,20 @@ public class RequestLoggingUtility extends OncePerRequestFilter implements Servl
         }
     }
 
+    /**
+     * Returns the next color in the array, cycling when reaching the end.
+     *
+     * @return the next color
+     */
     private String getNextColor() {
         return COLORS[c++ % COLORS.length];
     }
 
+    /**
+     * Called at the beginning of each request.
+     * <p/>
+     * Stores the request id, the color to use when logging and the start timestamp of the request in {@link MDC}
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestId = Integer.toHexString(R.nextInt());
@@ -66,10 +101,15 @@ public class RequestLoggingUtility extends OncePerRequestFilter implements Servl
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Called at the end of each request.
+     * <p/>
+     * Calculates the total time of the request, logs it and calls {@link MDC#clear()} afterwards.
+     */
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {
         final String requestId = MDC.get(ID_PROPERTY);
-        if(requestId != null) {
+        if (requestId != null) {
             final long nanos = System.nanoTime() - Long.valueOf(MDC.get(START_TIME_PROPERTY));
             final long ms = nanos / 1000000;
 
@@ -80,5 +120,7 @@ public class RequestLoggingUtility extends OncePerRequestFilter implements Servl
     }
 
     @Override
-    public void requestInitialized(ServletRequestEvent sre) { }
+    public void requestInitialized(ServletRequestEvent sre) {
+        // doing nothing
+    }
 }

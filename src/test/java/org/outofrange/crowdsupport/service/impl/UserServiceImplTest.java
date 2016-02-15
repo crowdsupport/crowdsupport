@@ -10,7 +10,6 @@ import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.util.Reflection;
 import org.outofrange.crowdsupport.util.RoleStore;
 import org.outofrange.crowdsupport.util.ServiceException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -75,7 +74,7 @@ public class UserServiceImplTest {
         assertFalse(createdUser.rehashPassword());
         verify(userRepository).save(any(User.class));
 
-        verify(mailSender).send(any(SimpleMailMessage.class));
+        verify(mailSender).sendMessage(anyString(), anyString(), anyString());
     }
 
     @Test(expected = ServiceException.class)

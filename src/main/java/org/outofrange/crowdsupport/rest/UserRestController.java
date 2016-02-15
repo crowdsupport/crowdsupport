@@ -5,7 +5,7 @@ import org.outofrange.crowdsupport.dto.FullUserDto;
 import org.outofrange.crowdsupport.dto.UserDto;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.spring.ApiVersion;
+import org.outofrange.crowdsupport.spring.api.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

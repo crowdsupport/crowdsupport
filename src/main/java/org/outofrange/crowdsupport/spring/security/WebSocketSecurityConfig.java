@@ -1,12 +1,9 @@
-package org.outofrange.crowdsupport.spring;
+package org.outofrange.crowdsupport.spring.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 
-/**
- * @author Markus Möslinger
- */
 @Configuration
 public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
     @Override

@@ -19,8 +19,6 @@ import javax.servlet.ServletContext;
 
 @Configuration
 public class SpringConfiguration {
-    private RequestLoggingUtility requestLoggingUtility = new RequestLoggingUtility();
-
     @Value("${crowdsupport.tuckey.debug}")
     private Boolean tuckeyDebug;
 
@@ -48,8 +46,13 @@ public class SpringConfiguration {
     }
 
     @Bean
+    public RequestLoggingUtility requestLoggingUtility() {
+        return new RequestLoggingUtility();
+    }
+
+    @Bean
     public FilterRegistrationBean loggingMdcFilter() {
-        final FilterRegistrationBean registrationBean = new FilterRegistrationBean(requestLoggingUtility);
+        final FilterRegistrationBean registrationBean = new FilterRegistrationBean(requestLoggingUtility());
 
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         registrationBean.addUrlPatterns("/service/*");
@@ -59,7 +62,7 @@ public class SpringConfiguration {
 
     @Bean
     public ServletListenerRegistrationBean<RequestLoggingUtility> loggingMdcListener() {
-        return new ServletListenerRegistrationBean<>(requestLoggingUtility);
+        return new ServletListenerRegistrationBean<>(requestLoggingUtility());
     }
 
     @Bean
@@ -67,9 +70,9 @@ public class SpringConfiguration {
         return new ModelMapper();
     }
 
-    @Bean
+    /*@Bean
     @Inject
     public Config config(ServletContext servletContext) {
         return new Config(servletContext);
-    }
+    }*/
 }

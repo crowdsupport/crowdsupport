@@ -5,7 +5,7 @@ import org.outofrange.crowdsupport.dto.*;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Team;
 import org.outofrange.crowdsupport.service.PlaceService;
-import org.outofrange.crowdsupport.spring.ApiVersion;
+import org.outofrange.crowdsupport.spring.api.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

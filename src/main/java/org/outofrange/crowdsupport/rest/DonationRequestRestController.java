@@ -5,7 +5,7 @@ import org.outofrange.crowdsupport.dto.CommentDto;
 import org.outofrange.crowdsupport.model.Comment;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.DonationRequestService;
-import org.outofrange.crowdsupport.spring.ApiVersion;
+import org.outofrange.crowdsupport.spring.api.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

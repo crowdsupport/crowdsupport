@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.CityDto;
 import org.outofrange.crowdsupport.dto.CityWithPlacesDto;
 import org.outofrange.crowdsupport.service.CityService;
-import org.outofrange.crowdsupport.spring.ApiVersion;
+import org.outofrange.crowdsupport.spring.api.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

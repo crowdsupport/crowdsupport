@@ -10,6 +10,9 @@ import javax.inject.Inject;
 import javax.xml.bind.DatatypeConverter;
 import java.security.SecureRandom;
 
+/**
+ * This service contains tasks done when the application has been started.
+ */
 @Service
 public class ApplicationInitialization {
     private static final Logger log = LoggerFactory.getLogger(ApplicationInitialization.class);
@@ -21,6 +24,9 @@ public class ApplicationInitialization {
         this.configurationService = configurationService;
     }
 
+    /**
+     * Creates a new secret token if none could be found.
+     */
     @PostConstruct
     public void initializeSecretToken() {
         String base64Secret = configurationService.getProperty(ConfigurationService.HMAC_TOKEN_SECRET);

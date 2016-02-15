@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.service.impl;
 
-import org.outofrange.crowdsupport.spring.security.UserAuthentication;
+import org.outofrange.crowdsupport.spring.security.jwt.UserAuthentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;

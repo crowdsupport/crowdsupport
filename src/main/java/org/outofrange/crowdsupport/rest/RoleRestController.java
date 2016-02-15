@@ -3,7 +3,7 @@ package org.outofrange.crowdsupport.rest;
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.RoleDto;
 import org.outofrange.crowdsupport.service.AuthorityService;
-import org.outofrange.crowdsupport.spring.ApiVersion;
+import org.outofrange.crowdsupport.spring.api.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

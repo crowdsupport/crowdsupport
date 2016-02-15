@@ -5,7 +5,7 @@ import org.outofrange.crowdsupport.dto.StateDto;
 import org.outofrange.crowdsupport.dto.StateWithCitiesDto;
 import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.service.StateService;
-import org.outofrange.crowdsupport.spring.ApiVersion;
+import org.outofrange.crowdsupport.spring.api.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

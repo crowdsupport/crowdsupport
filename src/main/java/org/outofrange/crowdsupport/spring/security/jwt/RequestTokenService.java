@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.spring.security;
+package org.outofrange.crowdsupport.spring.security.jwt;
 
 import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.dto.UserAuthDto;
@@ -17,11 +17,15 @@ import javax.xml.bind.DatatypeConverter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+/**
+ * This service is capable of adding JSON Web Tokens based on UserAuthentication objects to responses,
+ * and read those Authentication objects again from requests.
+ */
 @Service
-public class TokenAuthenticationService {
-    private static final Logger log = LoggerFactory.getLogger(TokenAuthenticationService.class);
+public class RequestTokenService {
+    private static final Logger log = LoggerFactory.getLogger(RequestTokenService.class);
 
-	private static final String AUTH_HEADER_NAME = "authorization";
+    private static final String AUTH_HEADER_NAME = "authorization";
 
     private final ModelMapper mapper;
     private final AuthorityService authorityService;
@@ -30,15 +34,20 @@ public class TokenAuthenticationService {
     private TokenHandler tokenHandler;
     private String secretCache = null;
 
-	@Inject
-	public TokenAuthenticationService(ConfigurationService configurationService, ModelMapper mapper,
-                                      AuthorityService authorityService) {
+    @Inject
+    public RequestTokenService(ConfigurationService configurationService, ModelMapper mapper,
+                               AuthorityService authorityService) {
         this.configurationService = configurationService;
 
         this.mapper = mapper;
         this.authorityService = authorityService;
-	}
+    }
 
+    /**
+     * Laziliy initializes a new tokenHandler if it hasn't been created before, or if the {@code secret} has changed.
+     *
+     * @return a TokenHandler
+     */
     private TokenHandler getTokenHandler() {
         if (tokenHandler == null) {
             log.info("Creating new token handler");
@@ -59,25 +68,41 @@ public class TokenAuthenticationService {
         return tokenHandler;
     }
 
-	public void addAuthenticationToResponse(HttpServletResponse response, UserAuthentication authentication) {
-		final UserAuthDto user = mapper.map(authentication.getDetails(), UserAuthDto.class);
-		user.setExp(LocalDateTime.now().plusDays(7).toEpochSecond(ZoneOffset.UTC));
-		response.addHeader(AUTH_HEADER_NAME, getTokenHandler().createTokenForUser(user));
-	}
+    /**
+     * Adds the token for a UserAuthentication to a response.
+     *
+     * @param response       the response to add the token to
+     * @param authentication the authentication to use for creating the token
+     */
+    public void setToResponse(HttpServletResponse response, UserAuthentication authentication) {
+        final UserAuthDto user = mapper.map(authentication.getDetails(), UserAuthDto.class);
+        user.setExp(LocalDateTime.now().plusDays(7).toEpochSecond(ZoneOffset.UTC));
 
-	public Authentication getAuthentication(HttpServletRequest request) {
-		final String token = request.getHeader(AUTH_HEADER_NAME);
-		if (token != null) {
-			final UserAuthDto user = getTokenHandler().parseUserFromToken(token);
-			if (user != null) {
+        response.addHeader(AUTH_HEADER_NAME, getTokenHandler().createTokenForUser(user));
+    }
+
+    /**
+     * Reads an Authentication from a request by parsing the JSON Web Token in it.
+     *
+     * @param request the request to look for the JWT
+     * @return the parsed Authentication
+     */
+    public Authentication getFromRequest(HttpServletRequest request) {
+        final String token = request.getHeader(AUTH_HEADER_NAME);
+
+        if (token != null) {
+            final UserAuthDto user = getTokenHandler().parseUserFromToken(token);
+
+            if (user != null) {
                 try {
                     return new UserAuthentication(user, authorityService.mapRolesToAuthorities(user.getRoles()));
                 } catch (UsernameNotFoundException e) {
                     log.info("Couldn't authenticate unknown user: {}", user.getUsername());
                     return null;
                 }
-			}
-		}
-		return null;
-	}
+            }
+        }
+
+        return null;
+    }
 }

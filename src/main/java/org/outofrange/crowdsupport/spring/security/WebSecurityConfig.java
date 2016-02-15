@@ -4,6 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.outofrange.crowdsupport.service.AuthorityService;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.spring.Config;
+import org.outofrange.crowdsupport.spring.security.jwt.StatelessAuthenticationFilter;
+import org.outofrange.crowdsupport.spring.security.jwt.StatelessLoginFilter;
+import org.outofrange.crowdsupport.spring.security.jwt.RequestTokenService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private Config config;
 
     @Inject
-    private TokenAuthenticationService tokenAuthenticationService;
+    private RequestTokenService requestTokenService;
 
     @Inject
     private ModelMapper mapper;
@@ -77,11 +80,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().hasRole("USER").and()
 
                 // custom JSON based authentication by POST of {"username":"<name>","password":"<password>"} which sets the token header upon authentication
-                .addFilterBefore(new StatelessLoginFilter("/service/v1/user/login", tokenAuthenticationService, userService,
+                .addFilterBefore(new StatelessLoginFilter("/service/v1/user/login", requestTokenService, userService,
                         authenticationManager(), authorityService, mapper), UsernamePasswordAuthenticationFilter.class)
 
                 // custom Token based authentication based on the header previously given to the client
-                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new StatelessAuthenticationFilter(requestTokenService), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

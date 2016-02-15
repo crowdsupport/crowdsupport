@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.spring.security;
+package org.outofrange.crowdsupport.spring.security.jwt;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.outofrange.crowdsupport.dto.UserAuthDto;
@@ -8,6 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * Authentication object to store a user authentication object and resolved authorities.
+ */
 public class UserAuthentication implements Authentication {
 	private final UserAuthDto userAuthDto;
     private final Set<GrantedAuthority> resolvedAuthorities;

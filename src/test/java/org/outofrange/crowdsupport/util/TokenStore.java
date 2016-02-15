@@ -1,6 +1,6 @@
 package org.outofrange.crowdsupport.util;
 
-import org.outofrange.crowdsupport.spring.security.TokenHandler;
+import org.outofrange.crowdsupport.spring.security.jwt.TokenHandler;
 
 public class TokenStore {
     private final TokenHandler tokenHandler;
