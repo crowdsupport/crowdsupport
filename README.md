@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/crowdsupport/crowdsupport.svg?branch=master)](https://travis-ci.org/crowdsupport/crowdsupport)
+
 Crowdsupport
 ============
 Crowdsupport has been created by Markus Möslinger during his BSc. Computing (Hons.) degree at University of Central Lancashire / United Kingdom.
