@@ -1,7 +1,5 @@
 package org.outofrange.crowdsupport.automation.data;
 
-import org.outofrange.crowdsupport.automation.ActionStack;
-import org.outofrange.crowdsupport.automation.Cleanable;
 import org.outofrange.crowdsupport.model.User;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.util.Authorized;
@@ -11,9 +9,8 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 
 @Component
-public class UserDataProvider implements Cleanable {
+public class UserDataProvider {
     private final UserService userService;
-    private final ActionStack undoActions = new ActionStack();
 
     @Inject
     public UserDataProvider(UserService userService) {
@@ -32,7 +29,7 @@ public class UserDataProvider implements Cleanable {
             Authorized.asAdmin().run(() ->  userService.makeAdmin(created.getId()));
         }
 
-        undoActions.addAction(() -> userService.disableUser(created.getId()));
+        DataProvider.registerUndo(() -> userService.disableUser(created.getId()));
 
         return created;
     }
@@ -42,10 +39,5 @@ public class UserDataProvider implements Cleanable {
         userService.disableUser(created.getId());
 
         return created;
-    }
-
-    @Override
-    public void cleanUp() {
-        undoActions.executeAll();
     }
 }

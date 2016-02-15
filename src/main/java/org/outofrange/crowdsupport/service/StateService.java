@@ -47,4 +47,10 @@ public interface StateService {
      * @return all persisted states
      */
     List<State> loadAll();
+
+    /**
+     * Deletes an state, or does nothing if it doesn't exist.
+     * @param id the id of the state
+     */
+    void deleteState(long id);
 }

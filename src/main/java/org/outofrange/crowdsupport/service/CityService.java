@@ -53,4 +53,10 @@ public interface CityService {
      * @return all persisted cities
      */
     List<City> loadAll();
+
+    /**
+     * Deletes a city if it's there, or does nothing otherwise.
+     * @param id the id of the city
+     */
+    void deleteCity(long id);
 }

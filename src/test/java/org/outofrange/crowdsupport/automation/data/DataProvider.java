@@ -1,38 +1,46 @@
 package org.outofrange.crowdsupport.automation.data;
 
-import com.google.common.collect.ClassToInstanceMap;
-import com.google.common.collect.MutableClassToInstanceMap;
+import org.outofrange.crowdsupport.automation.ActionStack;
 import org.outofrange.crowdsupport.automation.Cleanable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-@Component
-public class DataProvider implements Cleanable, ApplicationContextAware {
-    private final ClassToInstanceMap<Cleanable> PROVIDERS = MutableClassToInstanceMap.create();
+import javax.inject.Inject;
 
-    private ApplicationContext ctx;
+@Component
+public class DataProvider implements Cleanable {
+    private static final ActionStack undoActions = new ActionStack();
+
+    @Inject
+    private UserDataProvider userDataProvider;
+    @Inject
+    private PlaceDataProvider placeDataProvider;
+    @Inject
+    private StateDataProvider stateDataProvider;
+    @Inject
+    private CityDataProvider cityDataProvider;
 
     public UserDataProvider user() {
-        final UserDataProvider existing = PROVIDERS.getInstance(UserDataProvider.class);
-        if (existing != null) {
-            return existing;
-        } else {
-            final UserDataProvider newProvider = ctx.getBean(UserDataProvider.class);
-            PROVIDERS.putInstance(UserDataProvider.class, newProvider);
-            return newProvider;
-        }
+        return userDataProvider;
     }
 
+    public StateDataProvider state() {
+        return stateDataProvider;
+    }
+
+    public CityDataProvider city() {
+        return cityDataProvider;
+    }
+
+    public PlaceDataProvider place() {
+        return placeDataProvider;
+    }
 
     @Override
     public void cleanUp() {
-        PROVIDERS.forEach((c, i) -> i.cleanUp());
-        PROVIDERS.clear();
+        undoActions.executeAll();
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.ctx = applicationContext;
+    public static void registerUndo(Runnable runnable) {
+        undoActions.addAction(runnable);
     }
 }

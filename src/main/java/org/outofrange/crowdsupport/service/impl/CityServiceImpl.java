@@ -39,6 +39,14 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void deleteCity(long id) {
+        log.debug("Deleting city with id {}", id);
+
+        cityRepository.delete(id);
+    }
+
+    @Override
     public Optional<City> load(String identifier, String stateIdentifier) {
         Validate.notNullOrEmpty(identifier);
         Validate.notNullOrEmpty(stateIdentifier);

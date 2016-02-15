@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * This class is only for testing purposes and is meant to execute service which require certain authorities.
@@ -51,5 +53,16 @@ public class Authorized {
         context.setAuthentication(authentication);
         task.run();
         context.setAuthentication(originalAuthentication);
+    }
+
+    public <T> T run(Supplier<T> task) {
+        final SecurityContext context = SecurityContextHolder.getContext();
+        final Authentication originalAuthentication = context.getAuthentication();
+
+        context.setAuthentication(authentication);
+        T result = task.get();
+        context.setAuthentication(originalAuthentication);
+
+        return result;
     }
 }

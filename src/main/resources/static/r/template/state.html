@@ -1,5 +1,6 @@
 <div flex layout layout-padding layout-align="space-around center" layout-wrap>
-    <md-card flex-xs="80" flex-sm="50" flex-gt-sm="33" ng-repeat="city in state.cities">
+    <md-card flex-xs="80" flex-sm="50" flex-gt-sm="33" ng-repeat="city in state.cities"
+             id="cities__{{city.identifier}}">
         <md-card-title>
             <md-card-title-text>
                 <span class="md-headline">{{city.name}}</span>
@@ -11,7 +12,9 @@
             </md-card-title-media>
         </md-card-title>
         <md-card-actions layout="row" layout-align="end center">
-            <md-button href="/support/{{city.state.identifier}}/{{city.identifier}}">Places</md-button>
+            <md-button href="/support/{{city.state.identifier}}/{{city.identifier}}" class="cities__places-button">
+                Places
+            </md-button>
         </md-card-actions>
     </md-card>
 </div>

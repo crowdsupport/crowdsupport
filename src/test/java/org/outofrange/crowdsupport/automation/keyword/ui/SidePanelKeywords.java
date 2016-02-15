@@ -3,6 +3,8 @@ package org.outofrange.crowdsupport.automation.keyword.ui;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.outofrange.crowdsupport.automation.keyword.ui.core.Waiter;
+import org.outofrange.crowdsupport.model.User;
+import org.outofrange.crowdsupport.util.TestUser;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,6 +33,10 @@ public class SidePanelKeywords extends KeywordBase {
         web().click(LOGIN_BUTTON);
 
         return web().waiter(ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
+    }
+
+    public Waiter login(User user) {
+        return login(user.getUsername(), user.getPassword());
     }
 
     public void logout() {

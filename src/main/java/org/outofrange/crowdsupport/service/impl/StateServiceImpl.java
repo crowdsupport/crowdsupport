@@ -67,6 +67,14 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void deleteState(long id) {
+        log.debug("Deleting state with id {}", id);
+
+        stateRepository.delete(id);
+    }
+
+    @Override
     public List<State> searchStates(String query) {
         Validate.notNull(query);
 

@@ -146,7 +146,7 @@
             </md-button>
         </md-fab-trigger>
         <md-fab-actions>
-            <md-button class="md-fab md-mini md-primary" ng-click="addRequest()">
+            <md-button id="place__speeddial-add-request" class="md-fab md-mini md-primary" ng-click="addRequest()">
                 <md-tooltip md-direction="left" md-visible="speedDial.tooltipVisible">Add new request</md-tooltip>
                 <md-icon md-font-set="fa" md-font-icon="fa-plus"></md-icon>
             </md-button>
@@ -169,12 +169,12 @@
                 <div layout="column" layout-padding>
                     <md-input-container>
                         <label>Title</label>
-                        <input md-autofocus ng-model="request.title" md-maxlength="20" required>
+                        <input id="new-request__title" md-autofocus ng-model="request.title" md-maxlength="20" required>
                     </md-input-container>
 
                     <md-input-container>
                         <label>Description</label>
-                        <textarea ng-model="request.description" md-maxlength="400" cols="4" required></textarea>
+                        <textarea id="new-request__description" ng-model="request.description" md-maxlength="400" cols="4" required></textarea>
                     </md-input-container>
 
                     <div layout="row">
@@ -191,11 +191,11 @@
                         <div layout="row">
                             <md-input-container>
                                 <label>Quantity</label>
-                                <input ng-model="request.quantity" type="number" min="0" max="9999"/>
+                                <input id="new-request__quantity" ng-model="request.quantity" type="number" min="0" max="9999"/>
                             </md-input-container>
                             <md-input-container flex>
                                 <label>Units</label>
-                                <input placeholder="Liters, bottles, people..."
+                                <input placeholder="Liters, bottles, people..." id="new-request__units"
                                        ng-model="request.units" ng-disabled="!request.quantity"
                                        ng-required="request.quantity" md-maxlength="15"/>
                             </md-input-container>
@@ -219,7 +219,7 @@
                     <md-tooltip md-direction="up">Cancel</md-tooltip>
                     <md-icon md-font-set="fa" md-font-icon="fa-times"></md-icon>
                 </md-button>
-                <md-button type="submit" class="md-fab">
+                <md-button type="submit" class="md-fab" id="new-request__create">
                     <md-tooltip md-direction="up">Create</md-tooltip>
                     <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
                 </md-button>
