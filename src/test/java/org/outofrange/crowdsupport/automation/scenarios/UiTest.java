@@ -10,7 +10,7 @@ import org.springframework.boot.test.WebIntegrationTest;
 import javax.inject.Inject;
 
 @SpringApplicationConfiguration(classes = CrowdsupportApplication.class)
-@WebIntegrationTest
+@WebIntegrationTest("server.port:8090")
 public class UiTest {
     @Inject
     private DataProvider data;

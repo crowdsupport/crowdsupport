@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringApplicationConfiguration(classes = CrowdsupportApplication.class)
-@WebIntegrationTest
+@WebIntegrationTest("server.port:8090")
 public class RestIntegrationTest {
     protected TestRestTemplate rest;
 
@@ -32,7 +32,7 @@ public class RestIntegrationTest {
     @Inject
     private Flyway flyway;
 
-    @Value("${local.server.port}")
+    @Value("${server.port}")
     private int port;
 
     @Inject
