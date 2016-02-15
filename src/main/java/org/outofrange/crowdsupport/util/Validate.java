@@ -13,7 +13,7 @@ public class Validate {
      *
      * @param object the object to check
      * @return {@code object}
-     * @throws NullPointerException when {@code object} is null
+     * @throws NullPointerException if {@code object} is null
      */
     public static <T> T notNull(T object) {
         return Preconditions.checkNotNull(object);
@@ -24,8 +24,8 @@ public class Validate {
      *
      * @param string the string to check
      * @return {@code string}
-     * @throws NullPointerException     when {@code string} is null
-     * @throws IllegalArgumentException when {@code string} is empty
+     * @throws NullPointerException     if {@code string} is null
+     * @throws IllegalArgumentException if {@code string} is empty
      */
     public static String notNullOrEmpty(String string) {
         if (notNull(string).isEmpty()) {
@@ -41,8 +41,8 @@ public class Validate {
      * @param string  the string to check
      * @param pattern the regular expression to use
      * @return {@code string}
-     * @throws NullPointerException     when {@code string} or {@code regex} is null
-     * @throws IllegalArgumentException when {@code string} or {@code regex} is empty, or when {@code string} matches
+     * @throws NullPointerException     if {@code string} or {@code regex} is null
+     * @throws IllegalArgumentException if {@code string} or {@code regex} is empty, or if {@code string} matches
      *                                  {@code pattern}
      */
     public static String doesntMatch(String string, String pattern) {
@@ -61,7 +61,7 @@ public class Validate {
      *
      * @param number the number to check
      * @return {@code number}
-     * @throws IllegalArgumentException when {@code number < 0}
+     * @throws IllegalArgumentException if {@code number < 0}
      */
     public static int greaterOrEqualZero(int number) {
         if (number < 0) {

@@ -32,6 +32,11 @@ public class WebSocketServiceImpl {
         EventDispatcher.register(this);
     }
 
+    /**
+     * Listens to {@link ClientEvent}s and automatically sends them to all necessary topics over the WebSocket.
+     *
+     * @param event the event
+     */
     @Subscribe
     public void clientEvent(ClientEvent event) {
         if (event == null) {
@@ -52,6 +57,13 @@ public class WebSocketServiceImpl {
         });
     }
 
+    /**
+     * If necessary, tries to map the payload of an event to an instance of {@link BaseDto}
+     *
+     * @param event the event with the payload
+     * @return a new event with the mapped payload, if it was necessary
+     * @throws ServiceException if the payload couldn't have been mapped automatically
+     */
     @SuppressWarnings("unchecked")
     private ClientEntityChangeEvent<BaseDto> mapPayloadToDto(ClientEntityChangeEvent event) {
         if (event.getPayload() == null) {

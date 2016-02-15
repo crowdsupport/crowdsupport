@@ -278,7 +278,7 @@ public class UserServiceImpl implements UserService {
     public void sendConfirmationEmail(User user) {
         log.info("Sending confirmation email to {}", user.getEmail());
 
-        final String text = "<html><body>Hi! You've used your email address on crowdsupport. Please follow this link to " +
+        String text = "<html><body>Hi! You've used your email address on crowdsupport. Please follow this link to " +
                 "confirm your address!<br/><br/><a href=\"http://localhost/profile/confirmMail/" +
                 user.getEmailConfirmationId() + "\">Crowdsupport</a></body></html>";
 

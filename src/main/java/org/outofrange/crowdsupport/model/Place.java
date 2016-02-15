@@ -105,7 +105,7 @@ public class Place extends BaseEntity {
      * Sets the city the place is in.
      *
      * @param city the city the place is in.
-     * @throws NullPointerException when {@code city} is null
+     * @throws NullPointerException if {@code city} is null
      */
     public void setCity(City city) {
         this.city = Validate.notNull(city);
@@ -124,8 +124,8 @@ public class Place extends BaseEntity {
      * Sets the location the place can be found in the city.
      *
      * @param location the location the place can be found in the city
-     * @throws NullPointerException     when {@code location} is null
-     * @throws IllegalArgumentException when {@code location} is empty
+     * @throws NullPointerException     if {@code location} is null
+     * @throws IllegalArgumentException if {@code location} is empty
      */
     public void setLocation(String location) {
         this.location = Validate.notNullOrEmpty(location);
@@ -144,8 +144,8 @@ public class Place extends BaseEntity {
      * Sets the name of the place.
      *
      * @param name the name of the place
-     * @throws NullPointerException     when {@code name} is null
-     * @throws IllegalArgumentException when {@code name} is empty
+     * @throws NullPointerException     if {@code name} is null
+     * @throws IllegalArgumentException if {@code name} is empty
      */
     public void setName(String name) {
         this.name = Validate.notNullOrEmpty(name);
@@ -182,7 +182,7 @@ public class Place extends BaseEntity {
      * Sets a list of donation requests created for this place.
      *
      * @param donationRequests a list of donation requests created for this place
-     * @throws NullPointerException when {@code donationRequests} is null
+     * @throws NullPointerException if {@code donationRequests} is null
      */
     public void setDonationRequests(List<DonationRequest> donationRequests) {
         this.donationRequests = Validate.notNull(donationRequests);
@@ -201,8 +201,8 @@ public class Place extends BaseEntity {
      * Sets the identifier for the place.
      *
      * @param identifier the identifier for the place
-     * @throws NullPointerException     when {@code name} is null
-     * @throws IllegalArgumentException when {@code name} is empty, or contains other characters than lowercase letters
+     * @throws NullPointerException     if {@code name} is null
+     * @throws IllegalArgumentException if {@code name} is empty, or contains other characters than lowercase letters
      */
     public void setIdentifier(String identifier) {
         this.identifier = Validate.doesntMatch(identifier, ".*[^a-z].*");

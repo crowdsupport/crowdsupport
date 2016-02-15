@@ -74,7 +74,6 @@ public class SettingsServiceImpl implements SettingsService {
         return dto;
     }
 
-
     @Override
     @Transactional(readOnly = false)
     @PreAuthorize("hasAuthority(@perm.CONFIGURE_APPLICATION)")

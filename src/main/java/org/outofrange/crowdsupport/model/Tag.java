@@ -47,8 +47,8 @@ public class Tag extends BaseEntity {
      * Will automatically be converted to lowercase characters.
      *
      * @param name the name of the tag
-     * @throws NullPointerException     when {@code name} is null
-     * @throws IllegalArgumentException when {@code name} is empty or contains other characters than letters
+     * @throws NullPointerException     if {@code name} is null
+     * @throws IllegalArgumentException if {@code name} is empty or contains other characters than letters
      */
     public void setName(String name) {
         String sanitizedName = Validate.notNullOrEmpty(name).toLowerCase();

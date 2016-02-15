@@ -17,11 +17,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+/**
+ * Wrapper for {@link JavaMailSenderImpl} that supports hot reloading when properties have changed.
+ */
 @Service("mailSender")
 public class MailSenderImpl implements MailSender {
     private static final Logger log = LoggerFactory.getLogger(MailSenderImpl.class);
@@ -95,6 +97,11 @@ public class MailSenderImpl implements MailSender {
         }
     }
 
+    /**
+     * Tests the configured connection to the SMTP server.
+     *
+     * @throws MessagingException if no configuration has been done, or the connection has failed
+     */
     public void testConnection() throws MessagingException {
         if (sender == null) {
             throw new MessagingException("Sender isn't configured yet!");
@@ -106,16 +113,28 @@ public class MailSenderImpl implements MailSender {
         connectionTested = true;
     }
 
+    /**
+     * Returns if the connection has already been tested with the current configuration.
+     * @return if the connection has already been tested with the current configuration.
+     */
     public boolean isConnectionTested() {
         return connectionTested;
     }
 
+    /**
+     * Sends an HTML message.
+     *
+     * @param to      the recipient address
+     * @param subject the subject
+     * @param text    the HTML content of the message
+     */
     public void sendMessage(String to, String subject, String text) {
         final MimeMessage msg = sender.createMimeMessage();
         final MimeMessageHelper helper = new MimeMessageHelper(msg);
         try {
             msg.setContent(text, "text/html");
             helper.setFrom(configurationService.getProperty(ConfigurationService.MAIL_FROM));
+            helper.setSubject(subject);
             helper.setTo(to);
 
             sender.send(msg);

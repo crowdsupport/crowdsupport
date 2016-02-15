@@ -76,7 +76,7 @@ public class City extends BaseEntity {
      * Sets the state of the city.
      *
      * @param state the state of the city
-     * @throws NullPointerException when {@code state} is null
+     * @throws NullPointerException if {@code state} is null
      */
     public void setState(State state) {
         this.state = Validate.notNull(state);
@@ -95,8 +95,8 @@ public class City extends BaseEntity {
      * Sets the name of the city.
      *
      * @param name the name of the city
-     * @throws NullPointerException     when {@code name} is null
-     * @throws IllegalArgumentException when {@code name} is empty
+     * @throws NullPointerException     if {@code name} is null
+     * @throws IllegalArgumentException if {@code name} is empty
      */
     public void setName(String name) {
         this.name = Validate.notNullOrEmpty(name);
@@ -135,7 +135,7 @@ public class City extends BaseEntity {
      * Sets the places of the city.
      *
      * @param places the places of the city
-     * @throws NullPointerException when {@code places} is null
+     * @throws NullPointerException if {@code places} is null
      */
     public void setPlaces(List<Place> places) {
         this.places = Validate.notNull(places);
@@ -156,8 +156,8 @@ public class City extends BaseEntity {
      * The identifier must not be {@code null} or empty, and may only contain lowercase characters.
      *
      * @param identifier the identifier of the city
-     * @throws NullPointerException     when {@code identifier} is null
-     * @throws IllegalArgumentException when {@code identifier} is empty or has other characters than lowercase letters
+     * @throws NullPointerException     if {@code identifier} is null
+     * @throws IllegalArgumentException if {@code identifier} is empty or has other characters than lowercase letters
      */
     public void setIdentifier(String identifier) {
         this.identifier = Validate.doesntMatch(identifier, ".*[^a-z].*");

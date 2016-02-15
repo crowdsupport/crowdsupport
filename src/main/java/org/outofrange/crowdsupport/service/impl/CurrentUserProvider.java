@@ -5,7 +5,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
+/**
+ * This class simply provides access to the currently authenticated user.
+ */
 public class CurrentUserProvider {
+    /**
+     * Returns the username of the currently authenticated user.
+     *
+     * @return the username of the currently authenticated user, or {@link Optional#empty()} if none could be found
+     */
     public Optional<String> getCurrentUsername() {
         final Object userAuth = SecurityContextHolder.getContext().getAuthentication();
 

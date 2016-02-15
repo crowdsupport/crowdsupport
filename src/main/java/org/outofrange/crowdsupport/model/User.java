@@ -133,8 +133,8 @@ public class User extends BaseEntity implements UserDetails {
      * Sets the username of the user.
      *
      * @param username the username of the user
-     * @throws NullPointerException     when {@code username} is null
-     * @throws IllegalArgumentException when {@code username} is empty
+     * @throws NullPointerException     if {@code username} is null
+     * @throws IllegalArgumentException if {@code username} is empty
      */
     public void setUsername(String username) {
         Validate.notNullOrEmpty(username);
@@ -290,8 +290,8 @@ public class User extends BaseEntity implements UserDetails {
      * After this call, {@link #rehashPassword()} will return {@code true}.
      *
      * @param passwordHash the hashed password
-     * @throws NullPointerException     when {@code passwordHash} is null
-     * @throws IllegalArgumentException when {@code passwordHash} is Empty
+     * @throws NullPointerException     if {@code passwordHash} is null
+     * @throws IllegalArgumentException if {@code passwordHash} is Empty
      */
     public void setPasswordHash(String passwordHash) {
         Validate.notNullOrEmpty(username);

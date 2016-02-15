@@ -66,8 +66,8 @@ public class State extends BaseEntity {
      * Sets the name of the state.
      *
      * @param name the name of the state
-     * @throws NullPointerException when {@code name} is null
-     * @throws IllegalArgumentException when {@code name} is empty
+     * @throws NullPointerException if {@code name} is null
+     * @throws IllegalArgumentException if {@code name} is empty
      */
     public void setName(String name) {
         this.name = Validate.notNullOrEmpty(name);
@@ -104,7 +104,7 @@ public class State extends BaseEntity {
      * Sets the list of cities in the state.
      *
      * @param cities a list of cities in the state
-     * @throws NullPointerException when {@code cities} is null
+     * @throws NullPointerException if {@code cities} is null
      */
     public void setCities(List<City> cities) {
         this.cities = Validate.notNull(cities);

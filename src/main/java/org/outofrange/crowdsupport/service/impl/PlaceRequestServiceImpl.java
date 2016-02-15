@@ -118,8 +118,6 @@ public class PlaceRequestServiceImpl implements PlaceRequestService {
         team.getMembers().add(placeRequestDb.getRequestingUser());
         placeRequestDb.getPlace().setTeam(team);
 
-        // TODO notify user about accepting new place
-
         placeRequestDb = placeRequestRepository.save(placeRequestDb);
 
         Events.place(ChangeType.CREATE, placeRequestDb.getPlace()).publish();

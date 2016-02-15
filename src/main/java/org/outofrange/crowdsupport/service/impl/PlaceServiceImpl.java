@@ -88,6 +88,7 @@ public class PlaceServiceImpl implements PlaceService {
         checkNull(placeDb, "Couldn't find place with id " + placeId);
 
         final User userDb = userRepository.findOneByUsernameAndEnabledTrue(username).get();
+        checkNull(userDb, "Couldn't find user with name " + username);
 
         if (!placeDb.getTeam().getMembers().contains(userDb)) {
             placeDb.getTeam().getMembers().add(userDb);
@@ -119,6 +120,7 @@ public class PlaceServiceImpl implements PlaceService {
         checkNull(placeDb, "Couldn't find place with id " + placeId);
 
         final User userDb = userRepository.findOneByUsernameAndEnabledTrue(username).get();
+        checkNull(userDb, "Couldn't find enable user with username " + username);
 
         if (placeDb.getTeam().getMembers().remove(userDb)) {
             // we don't need to save the whole place again
@@ -133,7 +135,6 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional(readOnly = false)
     public DonationRequest addDonationRequest(long placeId, DonationRequest donationRequest) {
-        // TODO move to donation request service
         log.debug("Adding donation request {} to place {}", donationRequest, placeId);
 
         Validate.notNull(donationRequest);
@@ -159,6 +160,13 @@ public class PlaceServiceImpl implements PlaceService {
         return placeRepository.findPlacesRelatedToText(text.toUpperCase());
     }
 
+    /**
+     * Check if an object is not null, and throws a ServiceException if it is
+     *
+     * @param object  the object to check
+     * @param message a message to use in the exception
+     * @throws ServiceException if {@code object} is null
+     */
     private void checkNull(Object object, String message) {
         if (object == null) {
             throw new ServiceException(message);

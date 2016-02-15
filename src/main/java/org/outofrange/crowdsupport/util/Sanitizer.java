@@ -12,8 +12,8 @@ public class Sanitizer {
      * @param name   the name to process.
      * @param prefix an optional prefix, can be {@code null}.
      * @return the sanitized authority name.
-     * @throws NullPointerException     when {@code name} is null.
-     * @throws IllegalArgumentException when {@code name} is empty or contains other characters than letters, numbers
+     * @throws NullPointerException     if {@code name} is null.
+     * @throws IllegalArgumentException if {@code name} is empty or contains other characters than letters, numbers
      *                                  or underscores.
      * @see #sanitizeAuthorityName(String)
      */
@@ -45,8 +45,8 @@ public class Sanitizer {
      *
      * @param name the name to process.
      * @return the sanitized authority name.
-     * @throws NullPointerException     when {@code name} is null.
-     * @throws IllegalArgumentException when {@code name} is empty or contains other characters than letters, numbers
+     * @throws NullPointerException     if {@code name} is null.
+     * @throws IllegalArgumentException if {@code name} is empty or contains other characters than letters, numbers
      *                                  or underscores.
      * @see #sanitizeAuthorityName(String, String)
      */

@@ -2,6 +2,9 @@ package org.outofrange.crowdsupport.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+/**
+ * Base DTO, meant for DTOs representing models inheriting from {@link org.outofrange.crowdsupport.model.BaseEntity}
+ */
 public class BaseDto {
     private Long id;
 

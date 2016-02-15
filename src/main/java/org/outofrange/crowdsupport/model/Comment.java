@@ -75,8 +75,8 @@ public class Comment extends BaseEntity {
      * Sets the text of the comment.
      *
      * @param text the text of the comment
-     * @throws NullPointerException     when {@code text} is null
-     * @throws IllegalArgumentException when {@code text} is empty
+     * @throws NullPointerException     if {@code text} is null
+     * @throws IllegalArgumentException if {@code text} is empty
      */
     public void setText(String text) {
         this.text = Validate.notNullOrEmpty(text);
@@ -95,7 +95,7 @@ public class Comment extends BaseEntity {
      * Sets the author of the comment.
      *
      * @param author the author of the comment
-     * @throws NullPointerException when {@code author} is null
+     * @throws NullPointerException if {@code author} is null
      */
     public void setAuthor(User author) {
         this.author = Validate.notNull(author);
@@ -114,7 +114,7 @@ public class Comment extends BaseEntity {
      * Sets the donation request the comment belongs to.
      *
      * @param donationRequest the donation request the comment belongs to
-     * @throws NullPointerException when {@code donationRequest} is null
+     * @throws NullPointerException if {@code donationRequest} is null
      */
     public void setDonationRequest(DonationRequest donationRequest) {
         this.donationRequest = Validate.notNull(donationRequest);
@@ -134,7 +134,7 @@ public class Comment extends BaseEntity {
      * of the comment is quantified by itself.
      *
      * @param quantity the quantity of the comment
-     * @throws IllegalArgumentException when quantity is either negative, or greater than zero, while having
+     * @throws IllegalArgumentException if quantity is either negative, or greater than zero, while having
      *                                  no {@code donationRequest} at all, or an unquantified one
      */
     public void setQuantity(int quantity) {

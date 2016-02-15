@@ -50,8 +50,8 @@ public class Permission extends BaseEntity implements GrantedAuthority {
      * The {@code name} will automatically be converted to uppercase characters.
      *
      * @param name the name of the permission.
-     * @throws NullPointerException     when {@code name} is null
-     * @throws IllegalArgumentException when {@code name} is empty or contains other characters than letters, numbers
+     * @throws NullPointerException     if {@code name} is null
+     * @throws IllegalArgumentException if {@code name} is empty or contains other characters than letters, numbers
      *                                  and underscores
      */
     public void setName(String name) {

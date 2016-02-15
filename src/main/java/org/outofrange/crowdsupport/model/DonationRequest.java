@@ -101,7 +101,7 @@ public class DonationRequest extends BaseEntity {
      * Sets the place of a donation request.
      *
      * @param place the place of a donation request
-     * @throws NullPointerException when {@code place} is null
+     * @throws NullPointerException if {@code place} is null
      */
     public void setPlace(Place place) {
         this.place = Validate.notNull(place);
@@ -120,8 +120,8 @@ public class DonationRequest extends BaseEntity {
      * Sets the title of the donation request.
      *
      * @param title the title of the donation request
-     * @throws NullPointerException     when {@code title} is null
-     * @throws IllegalArgumentException when {@code title} is empty
+     * @throws NullPointerException     if {@code title} is null
+     * @throws IllegalArgumentException if {@code title} is empty
      */
     public void setTitle(String title) {
         this.title = Validate.notNullOrEmpty(title);
@@ -140,8 +140,8 @@ public class DonationRequest extends BaseEntity {
      * Sets the description of the donation request.
      *
      * @param description the description of the donation request
-     * @throws NullPointerException     when {@code description} is null
-     * @throws IllegalArgumentException when {@code description} is empty
+     * @throws NullPointerException     if {@code description} is null
+     * @throws IllegalArgumentException if {@code description} is empty
      */
     public void setDescription(String description) {
         this.description = Validate.notNullOrEmpty(description);
@@ -182,7 +182,7 @@ public class DonationRequest extends BaseEntity {
      * Indicates how much donations are needed.
      *
      * @param quantity the quantity of the donation request
-     * @throws IllegalArgumentException when {@code quantity} is negative
+     * @throws IllegalArgumentException if {@code quantity} is negative
      */
     public void setQuantity(int quantity) {
         Validate.greaterOrEqualZero(quantity);
@@ -268,7 +268,7 @@ public class DonationRequest extends BaseEntity {
      * Sets a list of associated tags with this donation request.
      *
      * @param tags a list of associated tags with this donation request
-     * @throws NullPointerException when {@code tags} is null
+     * @throws NullPointerException if {@code tags} is null
      */
     public void setTags(List<Tag> tags) {
         this.tags = Validate.notNull(tags);

@@ -15,6 +15,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A LinkBaseDto can provide hypermedia links used for HATEOAS.
+ */
 public abstract class LinkBaseDto extends BaseDto {
     private static String cachedContextPath = null;
 
@@ -52,8 +55,19 @@ public abstract class LinkBaseDto extends BaseDto {
         return getWholeContextPath() + "/service/v1" + self();
     }
 
+    /**
+     * Returns the path of this particular resource - a typical implementation may look like
+     * {@code return "/user/" + getId();} or something similar.
+     *
+     * @return the string representing the resource
+     */
     protected abstract String self();
 
+    /**
+     * Returns the whole context path, and caches it if necessary.
+     *
+     * @return the whole context path
+     */
     private static String getWholeContextPath() {
         if (cachedContextPath != null) {
             return cachedContextPath;
@@ -81,6 +95,11 @@ public abstract class LinkBaseDto extends BaseDto {
         return cachedContextPath;
     }
 
+    /**
+     * Returns the current HTTP request
+     *
+     * @return the current HTTP request
+     */
     private static HttpServletRequest getCurrentRequest() {
         RequestAttributes attr = RequestContextHolder.getRequestAttributes();
         return attr == null ? null : ((ServletRequestAttributes) attr).getRequest();

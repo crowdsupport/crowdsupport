@@ -76,8 +76,8 @@ public class Role extends BaseEntity implements GrantedAuthority {
      * This will automatically add {@link #ROLE_PREFIX} if it's not there already and uppercase all letters.
      *
      * @param name the name of the role, will be uppercased and prefixed if necessary
-     * @throws NullPointerException     when {@code name} is null
-     * @throws IllegalArgumentException when {@code name} is empty or contains other charachters than letters, numbers
+     * @throws NullPointerException     if {@code name} is null
+     * @throws IllegalArgumentException if {@code name} is empty or contains other charachters than letters, numbers
      *                                  and underscores
      */
     public void setName(String name) {

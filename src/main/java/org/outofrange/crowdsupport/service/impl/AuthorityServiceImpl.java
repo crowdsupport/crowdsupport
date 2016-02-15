@@ -46,7 +46,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             throw new ServiceException("Couldn't find role with name " + role);
         }
 
-        final Role roleDb =  optionalRole.get();
+        final Role roleDb = optionalRole.get();
 
         roleDb.setPermissions(permissions.stream()
                 .map(p -> {
@@ -82,12 +82,14 @@ public class AuthorityServiceImpl implements AuthorityService {
         log.debug("Deleting role {}", roleName);
 
         final Role role = roleRepository.findOneByName(roleName).get();
-        if (role.isSystemRole()) {
-            throw new ServiceException("Can't delete system roles");
-        }
+        if (role != null) {
+            if (role.isSystemRole()) {
+                throw new ServiceException("Can't delete system roles");
+            }
 
-        roleRepository.delete(role);
-        invalidateRoleMappingCache(roleName);
+            roleRepository.delete(role);
+            invalidateRoleMappingCache(roleName);
+        }
     }
 
     @Override
@@ -123,10 +125,24 @@ public class AuthorityServiceImpl implements AuthorityService {
         return authorities;
     }
 
+    /**
+     * Invalidates the roleMapping cache of a specific role
+     * @param roleName the name of the role to invalidate the cache for
+     */
     private void invalidateRoleMappingCache(String roleName) {
         roleMappingCache.removeAll(roleName);
     }
 
+    /**
+     * Creates a set of {@link GrantedAuthority}s for a role.
+     * <p>
+     * The role itself and all of its permissions are added to the set.
+     * <p>
+     * This method uses a cache to avoid querying the database more than necessary.
+     *
+     * @param roleName the name of the role to map
+     * @return the mapped authorities
+     */
     private Set<GrantedAuthority> mapRoleToAuthorities(String roleName) {
         log.trace("Mapping role {} to authorities", roleName);
 
