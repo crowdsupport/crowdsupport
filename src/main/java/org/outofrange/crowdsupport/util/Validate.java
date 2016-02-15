@@ -35,4 +35,12 @@ public class Validate {
 
         return string;
     }
+
+    public static int greaterOrEqualZero(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("Number " + number + " must not be smaller than zero!");
+        }
+
+        return number;
+    }
 }

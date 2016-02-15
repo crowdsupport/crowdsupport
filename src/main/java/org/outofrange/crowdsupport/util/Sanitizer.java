@@ -11,7 +11,8 @@ public class Sanitizer {
         }
 
         if (prefix != null) {
-            if (sanitizedName.length() < prefix.length() || !sanitizedName.substring(0, prefix.length()).equalsIgnoreCase(prefix)) {
+            if (sanitizedName.length() < prefix.length() ||
+                    !sanitizedName.substring(0, prefix.length()).equalsIgnoreCase(prefix)) {
                 sanitizedName = prefix + sanitizedName;
             }
 
