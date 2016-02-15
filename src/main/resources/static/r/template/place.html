@@ -160,7 +160,7 @@
 
 <script type="text/ng-template" id="addRequest.html">
     <md-dialog aria-label="Create new request-dialog" class="ng-cloak">
-        <form ng-submit="create()">
+        <form name="addRequestForm" ng-submit="create()">
             <md-dialog-content layout="column">
                 <md-toolbar>
                     <div class="md-toolbar-tools">Create new request</div>
@@ -169,12 +169,22 @@
                 <div layout="column" layout-padding>
                     <md-input-container>
                         <label>Title</label>
-                        <input id="new-request__title" md-autofocus ng-model="request.title" md-maxlength="20" required>
+                        <input id="new-request__title" md-autofocus ng-model="request.title" md-maxlength="20" required
+                               name="title">
+                        <div ng-messages="addRequestForm.title.$error">
+                            <ng-message when="required">Title is required!</ng-message>
+                            <ng-message when="md-maxlength">Title must not be longer than 20 characters!</ng-message>
+                        </div>
                     </md-input-container>
 
                     <md-input-container>
                         <label>Description</label>
-                        <textarea id="new-request__description" ng-model="request.description" md-maxlength="400" cols="4" required></textarea>
+                        <textarea id="new-request__description" ng-model="request.description" md-maxlength="400"
+                                  cols="4" required name="description"></textarea>
+                        <div ng-messages="addRequestForm.description.$error">
+                            <ng-message when="required">Description is required!</ng-message>
+                            <ng-message when="md-maxlength">Description must not be longer than 400 characters!</ng-message>
+                        </div>
                     </md-input-container>
 
                     <div layout="row">
@@ -183,7 +193,11 @@
                         </md-checkbox>
                         <md-input-container ng-show="expires">
                             <label>Expires</label>
-                            <input type="datetime-local" ng-model="date" ng-required="expires" min="{{minDate}}">
+                            <input type="datetime-local" ng-model="date" ng-required="expires" min="{{minDate}}" name="expires">
+                            <div ng-messages="addRequestForm.expires.$error">
+                                <ng-message when="required">You have to set a date or uncheck Expires!</ng-message>
+                                <ng-message when="min">Date must not be in the past!</ng-message>
+                            </div>
                         </md-input-container>
                     </div>
 
@@ -191,13 +205,20 @@
                         <div layout="row">
                             <md-input-container>
                                 <label>Quantity</label>
-                                <input id="new-request__quantity" ng-model="request.quantity" type="number" min="0" max="9999"/>
+                                <input id="new-request__quantity" ng-model="request.quantity" type="number"
+                                       min="0" max="9999" name="quantity"/>
+                                <div ng-messages="addRequestForm.quantity.$error">
+                                    <ng-message when="min,max">Quantity must be between 0 and 9999!</ng-message>
+                                </div>
                             </md-input-container>
                             <md-input-container flex>
                                 <label>Units</label>
-                                <input placeholder="Liters, bottles, people..." id="new-request__units"
+                                <input placeholder="Liters, bottles, people..." id="new-request__units" name="units"
                                        ng-model="request.units" ng-disabled="!request.quantity"
                                        ng-required="request.quantity" md-maxlength="15"/>
+                                <div ng-messages="addRequestForm.units.$error">
+                                    <ng-message when="required">You have to enter a unit if you're using quantity!</ng-message>
+                                </div>
                             </md-input-container>
                         </div>
                     </div>
@@ -219,7 +240,7 @@
                     <md-tooltip md-direction="up">Cancel</md-tooltip>
                     <md-icon md-font-set="fa" md-font-icon="fa-times"></md-icon>
                 </md-button>
-                <md-button type="submit" class="md-fab" id="new-request__create">
+                <md-button type="submit" class="md-fab" id="new-request__create" ng-disabled="addRequestForm.$invalid">
                     <md-tooltip md-direction="up">Create</md-tooltip>
                     <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
                 </md-button>

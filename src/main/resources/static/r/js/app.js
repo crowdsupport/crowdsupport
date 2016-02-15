@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('crowdsupport', ['crowdsupport.routing', 'angular-jwt', 'ngMaterial'])
+        .module('crowdsupport', ['crowdsupport.routing', 'angular-jwt', 'ngMaterial', 'ngMessages'])
         .config(function Config($httpProvider, jwtInterceptorProvider) {
             jwtInterceptorProvider.tokenGetter = function(config) {
                 // Skip authentication for any requests ending in .html

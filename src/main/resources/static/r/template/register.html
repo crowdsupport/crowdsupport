@@ -1,21 +1,31 @@
 <div flex layout-padding>
-    <form layout="column" ng-submit="register()">
+    <form name="registerForm" layout="column" ng-submit="register()">
         <md-input-container>
             <label>Username</label>
-            <input autofocus required ng-model="user.username" id="register__username-input"/>
+            <input autofocus required name="username" ng-model="user.username" id="register__username-input"/>
+            <div ng-messages="registerForm.username.$error">
+                <ng-message when="required">Username is required!</ng-message>
+            </div>
         </md-input-container>
 
         <md-input-container>
             <label>Password</label>
-            <input type="password" pattern=".{4,}" required="true" ng-model="user.password" id="register__password-input"/>
+            <input type="password" name="password" pattern=".{4,}" required ng-model="user.password" id="register__password-input"/>
+            <div ng-messages="registerForm.password.$error">
+                <ng-message when="required">Password is required!</ng-message>
+                <ng-message when="pattern">Your password has to have at least four characters!</ng-message>
+            </div>
         </md-input-container>
 
         <md-input-container>
             <label>E-Mail (optional)</label>
-            <input type="email" ng-model="user.email" id="register__email-input"/>
+            <input type="email" name="email" ng-model="user.email" id="register__email-input"/>
+            <div ng-messages="registerForm.email.$error">
+                <ng-message when="email">Your email is invalid!</ng-message>
+            </div>
         </md-input-container>
 
-        <md-button type="submit" id="register__register-button">
+        <md-button type="submit" id="register__register-button" ng-disabled="registerForm.$invalid">
             <md-tooltip md-direction="top">Register</md-tooltip>
             <md-icon md-font-set="fa" md-font-icon="fa-user-plus"></md-icon>
         </md-button>
