@@ -11,11 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
-import javax.inject.Inject;
 import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
 
 @Configuration
 public class SpringConfiguration {
@@ -31,7 +28,7 @@ public class SpringConfiguration {
     public FilterRegistrationBean filterRegistrationBean() {
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 
-        registrationBean.setFilter(new UrlRewriteFilter());
+        registrationBean.setFilter(new TuckeyFilter());
         registrationBean.setDispatcherTypes(DispatcherType.REQUEST);
         registrationBean.addUrlPatterns("/*");
         registrationBean.addInitParameter("confPath", "urlrewrite.xml");
