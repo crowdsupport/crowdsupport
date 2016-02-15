@@ -1,1 +1,1 @@
-mvnw package exec:java -DskipTests -Dspring.profiles.active=debug
+mvnw spring-boot:run -Dspring.profiles.active=dev
