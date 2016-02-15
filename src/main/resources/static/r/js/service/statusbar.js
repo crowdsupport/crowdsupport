@@ -59,7 +59,8 @@
             this.statusPromise.then(null, null, function(newStatus) {
                 $mdToast.show({
                     template: '<md-toast layout>' + newStatus.defaultHtml + '</md-toast>',
-                    position: 'bottom'
+                    position: 'bottom',
+                    hideDelay: 5000
                 });
             });
         });
