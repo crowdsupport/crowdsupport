@@ -9,7 +9,7 @@ import org.outofrange.crowdsupport.persistence.TeamRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.service.PlaceService;
 import org.outofrange.crowdsupport.util.Reflection;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 
 import java.util.Collections;
 import java.util.Optional;

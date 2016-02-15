@@ -9,7 +9,7 @@ import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.service.UserService;
 import org.outofrange.crowdsupport.util.RoleStore;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -6,7 +6,7 @@ import org.outofrange.crowdsupport.model.Permission;
 import org.outofrange.crowdsupport.model.Role;
 import org.outofrange.crowdsupport.persistence.PermissionRepository;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 
 import java.util.*;
 

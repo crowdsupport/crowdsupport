@@ -2,7 +2,6 @@ package org.outofrange.crowdsupport.service;
 
 import org.outofrange.crowdsupport.model.Permission;
 import org.outofrange.crowdsupport.model.Role;
-import org.outofrange.crowdsupport.util.ServiceException;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;

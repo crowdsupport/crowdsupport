@@ -11,7 +11,7 @@ import org.outofrange.crowdsupport.persistence.PlaceRequestRepository;
 import org.outofrange.crowdsupport.service.PlaceRequestService;
 import org.outofrange.crowdsupport.service.PlaceService;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;

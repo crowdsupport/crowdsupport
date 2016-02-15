@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.StateRepository;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 
 import java.util.Collections;
 import java.util.List;

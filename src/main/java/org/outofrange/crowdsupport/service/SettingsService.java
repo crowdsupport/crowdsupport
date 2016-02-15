@@ -2,7 +2,6 @@ package org.outofrange.crowdsupport.service;
 
 import org.outofrange.crowdsupport.dto.config.MailSettingsDto;
 import org.outofrange.crowdsupport.dto.config.SettingsDto;
-import org.outofrange.crowdsupport.util.ServiceException;
 
 public interface SettingsService {
     /**

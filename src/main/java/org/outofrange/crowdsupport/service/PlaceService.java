@@ -3,7 +3,6 @@ package org.outofrange.crowdsupport.service;
 import org.outofrange.crowdsupport.model.DonationRequest;
 import org.outofrange.crowdsupport.model.Place;
 import org.outofrange.crowdsupport.persistence.PlaceRepository;
-import org.outofrange.crowdsupport.util.ServiceException;
 
 import java.util.List;
 import java.util.Optional;

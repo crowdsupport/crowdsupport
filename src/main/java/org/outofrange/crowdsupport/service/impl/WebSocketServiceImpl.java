@@ -6,7 +6,7 @@ import org.outofrange.crowdsupport.dto.BaseDto;
 import org.outofrange.crowdsupport.event.ClientEntityChangeEvent;
 import org.outofrange.crowdsupport.event.ClientEvent;
 import org.outofrange.crowdsupport.event.EventDispatcher;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

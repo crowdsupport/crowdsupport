@@ -1,4 +1,4 @@
-package org.outofrange.crowdsupport.util;
+package org.outofrange.crowdsupport.service;
 
 /**
  * An unchecked exception which can be thrown in the service layer to indicate a problem.

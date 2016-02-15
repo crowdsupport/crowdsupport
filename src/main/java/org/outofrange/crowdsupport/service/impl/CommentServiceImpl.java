@@ -9,7 +9,7 @@ import org.outofrange.crowdsupport.persistence.CommentRepository;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.CommentService;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -7,7 +7,7 @@ import org.outofrange.crowdsupport.model.*;
 import org.outofrange.crowdsupport.persistence.CommentRepository;
 import org.outofrange.crowdsupport.persistence.DonationRequestRepository;
 import org.outofrange.crowdsupport.service.UserService;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 
 import java.util.Collections;
 import java.util.Optional;

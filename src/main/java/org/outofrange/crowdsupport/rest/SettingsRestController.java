@@ -4,7 +4,7 @@ import org.outofrange.crowdsupport.dto.config.MailSettingsDto;
 import org.outofrange.crowdsupport.dto.config.SettingsDto;
 import org.outofrange.crowdsupport.service.SettingsService;
 import org.outofrange.crowdsupport.spring.api.ApiVersion;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

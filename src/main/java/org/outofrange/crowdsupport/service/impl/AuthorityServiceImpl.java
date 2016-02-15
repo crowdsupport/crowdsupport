@@ -7,7 +7,7 @@ import org.outofrange.crowdsupport.model.Role;
 import org.outofrange.crowdsupport.persistence.PermissionRepository;
 import org.outofrange.crowdsupport.persistence.RoleRepository;
 import org.outofrange.crowdsupport.service.AuthorityService;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;

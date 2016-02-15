@@ -1,7 +1,6 @@
 package org.outofrange.crowdsupport.service;
 
 import org.outofrange.crowdsupport.model.State;
-import org.outofrange.crowdsupport.util.ServiceException;
 
 import java.util.List;
 import java.util.Optional;

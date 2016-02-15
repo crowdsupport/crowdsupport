@@ -1,7 +1,6 @@
 package org.outofrange.crowdsupport.service;
 
 import org.outofrange.crowdsupport.model.Comment;
-import org.outofrange.crowdsupport.util.ServiceException;
 
 import java.util.List;
 

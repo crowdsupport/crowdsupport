@@ -6,7 +6,7 @@ import org.outofrange.crowdsupport.dto.config.MailSettingsDto;
 import org.outofrange.crowdsupport.event.EventDispatcher;
 import org.outofrange.crowdsupport.event.MailSettingsChangedEvent;
 import org.outofrange.crowdsupport.service.ConfigurationService;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;

@@ -6,7 +6,7 @@ import org.outofrange.crowdsupport.model.City;
 import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.CityRepository;
 import org.outofrange.crowdsupport.persistence.StateRepository;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 
 import java.util.Collections;
 import java.util.Optional;

@@ -5,7 +5,7 @@ import org.outofrange.crowdsupport.event.Events;
 import org.outofrange.crowdsupport.model.State;
 import org.outofrange.crowdsupport.persistence.StateRepository;
 import org.outofrange.crowdsupport.service.StateService;
-import org.outofrange.crowdsupport.util.ServiceException;
+import org.outofrange.crowdsupport.service.ServiceException;
 import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
