@@ -71,7 +71,7 @@ spring:
   profiles: debug
 logging:
   level:
-    org: TRACE
+    org.outofrange.crowdsupport: TRACE
 
 ---
 

@@ -121,6 +121,8 @@ public class UserUiTest extends UiTest {
         registration.enterDetails(username, password, null);
         registration.clickRegister();
 
+        sleep(500);
+
         assertTrue(keywords().ui().status().isMessageDisplayed("Could not register"));
     }
 
