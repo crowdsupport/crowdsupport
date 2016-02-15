@@ -97,7 +97,7 @@
                                                 <label>Quantity ({{req.units}})</label>
                                                 <input placeholder="{{req.ui.quantityLeft | posNum}}"
                                                        ng-model="req.ui.commentQuantity"
-                                                       type="number" rows="2" min="0" max="9999"/>
+                                                       type="number" min="0" max="9999"/>
                                             </md-input-container>
                                             <md-button class="md-fab md-mini md-primary"
                                                        ng-click="confirmComment(comment.id)" ng-if="!req.resolved">
@@ -150,7 +150,9 @@
                 <md-tooltip md-direction="left" md-visible="speedDial.tooltipVisible">Add new request</md-tooltip>
                 <md-icon md-font-set="fa" md-font-icon="fa-plus"></md-icon>
             </md-button>
-            <md-button href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/manage" class="md-fab md-mini md-primary">
+            <md-button
+                    href="/support/{{place.city.state.identifier}}/{{place.city.identifier}}/{{place.identifier}}/manage"
+                    class="md-fab md-mini md-primary">
                 <md-tooltip md-direction="left" md-visible="speedDial.tooltipVisible">Manage place</md-tooltip>
                 <md-icon md-font-set="fa" md-font-icon="fa-cogs"></md-icon>
             </md-button>
@@ -183,7 +185,8 @@
                                   cols="4" required name="description"></textarea>
                         <div ng-messages="addRequestForm.description.$error">
                             <ng-message when="required">Description is required!</ng-message>
-                            <ng-message when="md-maxlength">Description must not be longer than 400 characters!</ng-message>
+                            <ng-message when="md-maxlength">Description must not be longer than 400 characters!
+                            </ng-message>
                         </div>
                     </md-input-container>
 
@@ -193,7 +196,8 @@
                         </md-checkbox>
                         <md-input-container ng-show="expires">
                             <label>Expires</label>
-                            <input type="datetime-local" ng-model="date" ng-required="expires" min="{{minDate}}" name="expires">
+                            <input type="datetime-local" ng-model="date" ng-required="expires" min="{{minDate}}"
+                                   name="expires">
                             <div ng-messages="addRequestForm.expires.$error">
                                 <ng-message when="required">You have to set a date or uncheck Expires!</ng-message>
                                 <ng-message when="min">Date must not be in the past!</ng-message>
@@ -217,22 +221,29 @@
                                        ng-model="request.units" ng-disabled="!request.quantity"
                                        ng-required="request.quantity" md-maxlength="15"/>
                                 <div ng-messages="addRequestForm.units.$error">
-                                    <ng-message when="required">You have to enter a unit if you're using quantity!</ng-message>
+                                    <ng-message when="required">You have to enter a unit if you're using quantity!
+                                    </ng-message>
                                 </div>
                             </md-input-container>
                         </div>
                     </div>
 
-                    <md-input-container>
-                        <label>Tags</label>
-                        <input ng-model="inputTag" on-keypress="addTag"/>
-                    </md-input-container>
-                    <div>
-                        <span ng-repeat="tag in request.tags">
-                            <a ng-click="removeTag($index)" uib-tooltip="Remove tag">{{tag.name}}</a><span
-                                ng-hide="$last"> | </span>
-                        </span>
-                    </div>
+                    <md-chips ng-model="request.tags" md-autocomplete-snap md-require-match="false"
+                              md-transform-chip="transformChip($chip)">
+                        <md-autocomplete
+                                md-selected-item="selectedTag"
+                                md-search-text="searchText"
+                                md-items="tag in queryTags(searchText)"
+                                md-item-text="tag.name"
+                                placeholder="Tags">
+                            <span md-highlight-text="searchText">{{tag.name}}</span>
+                        </md-autocomplete>
+                        <md-chip-template>
+                            <span>
+                              <strong>{{$chip.name}}</strong>
+                            </span>
+                        </md-chip-template>
+                    </md-chips>
                 </div>
             </md-dialog-content>
             <md-dialog-actions flex="none">

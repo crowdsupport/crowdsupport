@@ -11,35 +11,17 @@
             $scope.date = new Date();
             $scope.date.setSeconds(0);
             $scope.date.setMilliseconds(0);
-            $scope.date.addDays(1);
+            $scope.date = $scope.date.addDays(1);
 
-            $scope.addTag = function (keyEvent) {
-                var input = $scope.inputTag;
-                if (typeof input !== 'undefined' && (typeof keyEvent === 'undefined' || keyEvent.which === 32)) {
-                    if (isString(input)) {
-                        input = input.trim();
-                        if (input.length !== 0) {
-                            if (_.findIndex($scope.request.tags, 'name', input) === -1) {
-                                $scope.request.tags.push({name: input});
-                            }
-                        }
-                    } else {
-                        if (_.findIndex($scope.request.tags, 'name', input.name) === -1) {
-                            $scope.request.tags.push(input);
-                        }
-                    }
-
-                    $scope.inputTag = null;
-                    if (keyEvent) {
-                        keyEvent.preventDefault();
-                    }
-                }
+            $scope.queryTags = function (query) {
+                return Restangular.all('tag').getList({query: query});
             };
 
-            $scope.removeTag = function (index) {
-                var removed = $scope.request.tags.splice(index, 1);
-                if (removed.length >= 1) {
-                    $scope.inputTag = removed[0];
+            $scope.transformChip = function (chip) {
+                if (angular.isObject(chip)) {
+                    return chip;
+                } else {
+                    return { name: chip.replace(/[^a-z]/g, '') };
                 }
             };
 
@@ -53,7 +35,6 @@
                     r.validToDateTime = $scope.date;
                 }
                 r.resolved = false;
-                $scope.addTag();
 
                 $log.debug("Saving donation request");
                 $log.debug(r);
