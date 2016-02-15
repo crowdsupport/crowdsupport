@@ -38,6 +38,9 @@
                         <li>
                             <div>Logged in as <b id="sidepanel__loggedin-name">{{$root.user.username}}</b></div>
                         </li>
+                        <li>
+                            <md-button id="sidepanel__dashboard-button" th:href="@{/}">Dashboard</md-button>
+                        </li>
                         <li auth="ROLE_ADMIN">
                             <md-button id="sidepanel__admin-button" th:href="@{/admin}">Admin panel</md-button>
                         </li>
