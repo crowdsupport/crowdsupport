@@ -126,6 +126,11 @@
                         authorities: AuthStore.ROLE_USER
                     }
                 })
+                .state('confirmMail', {
+                    url: '/profile/confirmMail/:uuid',
+                    controller: 'ConfirmMailController',
+                    templateUrl: '/r/template/profileConfirmMail.html'
+                })
                 .state('register', {
                     url: '/register',
                     controller: 'RegistrationController',

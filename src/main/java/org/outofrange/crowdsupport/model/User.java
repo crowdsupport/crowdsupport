@@ -23,6 +23,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "emailconfirmation")
+    private String emailConfirmationId;
+
     @Column(name = "imagepath")
     private String imagePath;
 
@@ -106,11 +109,16 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void setEmail(String email) {
-        if ("".equals(email)) {
-            email = null;
+        if (email == null || "".equals(email)) {
+            this.email = null;
+        } else {
+            this.email = email;
+            emailConfirmationId = UUID.randomUUID().toString();
         }
+    }
 
-        this.email = email;
+    public boolean hasEmailToBeConfirmed() {
+        return emailConfirmationId != null;
     }
 
     public String getImagePath() {
@@ -168,5 +176,13 @@ public class User extends BaseEntity implements UserDetails {
 
     public List<Place> getManagedPlaces() {
         return teams.stream().map(Team::getPlace).collect(Collectors.toList());
+    }
+
+    public String getEmailConfirmationId() {
+        return emailConfirmationId;
+    }
+
+    public void setEmailConfirmationIdNull() {
+        this.emailConfirmationId = null;
     }
 }

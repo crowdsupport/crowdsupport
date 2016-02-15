@@ -13,6 +13,7 @@ import org.outofrange.crowdsupport.util.ServiceException;
 import org.outofrange.crowdsupport.util.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,14 +34,19 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
+    private final MailSenderImpl mailSender;
+
     // it's easier to test this way...
     private CurrentUserProvider currentUserProvider = new CurrentUserProvider();
 
     @Inject
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository,
+                           MailSenderImpl mailSender) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+
+        this.mailSender = mailSender;
     }
 
     protected void setCurrentUserProvider(CurrentUserProvider currentUserProvider) {
@@ -132,6 +138,10 @@ public class UserServiceImpl implements UserService {
         user = userRepository.save(user);
         Events.user(ChangeType.CREATE, user).publish();
 
+        if (user.hasEmailToBeConfirmed()) {
+            sendConfirmationEmail(user);
+        }
+
         return user;
     }
 
@@ -161,6 +171,7 @@ public class UserServiceImpl implements UserService {
 
         if (userDto.getEmail() != null) {
             user.setEmail(userDto.getEmail());
+            sendConfirmationEmail(user);
         }
 
         if (userDto.getImagePath() != null) {
@@ -192,14 +203,14 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findAll();
     }
-    
+
     @Override
     @PreAuthorize("hasAuthority(@perm.QUERY_USERS)")
     public List<User> queryUsers(String like) {
         log.debug("Searching users for {}", like);
 
         Validate.notNull(like);
-        
+
         return userRepository.findAllByUsernameContainingIgnoreCase(like);
     }
 
@@ -246,5 +257,34 @@ public class UserServiceImpl implements UserService {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void confirmEmail(String emailConfirmationId) {
+        final Optional<User> user = userRepository.findOneByEmailConfirmationId(emailConfirmationId);
+
+        if (user.isPresent()) {
+            final User u = user.get();
+            log.debug("Found user {} with email {} for confirmation id {} - confirming", u.getUsername(), u.getEmail(),
+                    emailConfirmationId);
+            u.setEmailConfirmationIdNull();
+            userRepository.save(u);
+        } else {
+            throw new ServiceException("Couldn't find a user to confirm with id " + emailConfirmationId);
+        }
+    }
+
+    @Override
+    public void sendConfirmationEmail(User user) {
+        log.info("Sending confirmation email to {}", user.getEmail());
+
+        final SimpleMailMessage message = mailSender.getNewMessage(user.getEmail());
+        message.setSubject("Confirm your email address");
+        message.setText("<html><body>Hi! You've used your email address on crowdsupport. Please follow this link to " +
+                "confirm your address!<br/><br/><a href=\"http://localhost/profile/confirmMail/" +
+                user.getEmailConfirmationId() + "\">Crowdsupport</a></body></html>");
+
+        mailSender.send(message);
     }
 }

@@ -31,4 +31,8 @@ public interface UserService extends UserDetailsService {
     Optional<User> getCurrentUserUpdated();
 
     List<User> loadAll();
+
+    void confirmEmail(String emailConfirmationId);
+
+    void sendConfirmationEmail(User user);
 }

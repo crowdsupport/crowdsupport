@@ -10,6 +10,7 @@ import org.outofrange.crowdsupport.persistence.UserRepository;
 import org.outofrange.crowdsupport.util.Reflection;
 import org.outofrange.crowdsupport.util.RoleStore;
 import org.outofrange.crowdsupport.util.ServiceException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -27,6 +28,7 @@ public class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
     private CurrentUserProvider currentUserProvider;
+    private MailSenderImpl mailSender;
 
     private UserServiceImpl userService;
 
@@ -39,14 +41,16 @@ public class UserServiceImplTest {
         passwordEncoder = mock(PasswordEncoder.class);
         roleRepository = mock(RoleRepository.class);
         currentUserProvider = mock(CurrentUserProvider.class);
+        mailSender = mock(MailSenderImpl.class);
 
-        userService = new UserServiceImpl(userRepository, passwordEncoder, roleRepository);
+        userService = new UserServiceImpl(userRepository, passwordEncoder, roleRepository, mailSender);
         userService.setCurrentUserProvider(currentUserProvider);
 
         user = new User("username", "password");
         userDto = new FullUserDto();
         userDto.setUsername("username");
         userDto.setPassword("password");
+        userDto.setEmail("some@email.com");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -70,6 +74,8 @@ public class UserServiceImplTest {
         assertThat("hashed", is(equalTo(createdUser.getPassword())));
         assertFalse(createdUser.rehashPassword());
         verify(userRepository).save(any(User.class));
+
+        verify(mailSender).send(any(SimpleMailMessage.class));
     }
 
     @Test(expected = ServiceException.class)

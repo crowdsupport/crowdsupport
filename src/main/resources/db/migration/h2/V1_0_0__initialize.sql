@@ -26,14 +26,15 @@ CREATE TABLE ROLES_PERMISSIONS (
 );
 
 CREATE TABLE USERS (
-  id        BIGINT IDENTITY,
-  version   BIGINT        NOT NULL,
-  created   TIMESTAMP     NOT NULL,
-  username  VARCHAR2(100) NOT NULL,
-  password  VARCHAR2(300) NOT NULL,
-  enabled   BOOL          NOT NULL,
-  email     VARCHAR2(255),
-  imagepath VARCHAR2(255)
+  id                BIGINT IDENTITY,
+  version           BIGINT        NOT NULL,
+  created           TIMESTAMP     NOT NULL,
+  username          VARCHAR2(100) NOT NULL,
+  password          VARCHAR2(300) NOT NULL,
+  enabled           BOOL          NOT NULL,
+  email             VARCHAR2(255),
+  emailconfirmation VARCHAR2(50),
+  imagepath         VARCHAR2(255)
 );
 
 CREATE TABLE USERS_ROLES (
@@ -249,7 +250,8 @@ INSERT INTO ROLES_PERMISSIONS (role, permission) VALUES (
 -- Default admin user, password: adminadmin (change as soon as possible!)
 -- ----------------------------------------------------------------------
 INSERT INTO USERS (version, created, username, password, enabled, email, imagepath) VALUES (
-  0, sysdate, 'admin', '$2a$10$f45dG7EISyMIlkF0wlcAXOYDizsR21758EEuGJWAAh.kVQS1vyFoq', TRUE, NULL, '/r/image/placeholder.jpg'
+  0, sysdate, 'admin', '$2a$10$f45dG7EISyMIlkF0wlcAXOYDizsR21758EEuGJWAAh.kVQS1vyFoq', TRUE, NULL,
+  '/r/image/placeholder.jpg'
 );
 INSERT INTO USERS_ROLES (user, role) VALUES (
   (SELECT id

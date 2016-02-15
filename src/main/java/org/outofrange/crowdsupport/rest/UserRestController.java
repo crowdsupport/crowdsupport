@@ -51,6 +51,15 @@ public class UserRestController extends TypedMappingController<UserDto> {
         return map(userService.loadUser(userId));
     }
 
+    @RequestMapping(value = "/confirmMail", method = RequestMethod.POST)
+    public ResponseEntity<Void> confirmUserMail(@RequestBody String confirmationId) {
+        log.info("Confirming user email with id {}", confirmationId);
+
+        userService.confirmEmail(confirmationId);
+
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(value = "/{userId}", method = RequestMethod.PATCH)
     public FullUserDto changeUserDetails(@PathVariable Long userId, @RequestBody FullUserDto userDto) {
         log.info("Changing details of user with id {}", userId);

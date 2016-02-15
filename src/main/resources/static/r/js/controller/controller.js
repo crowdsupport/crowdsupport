@@ -165,5 +165,18 @@
                     Status.error('Could not register new user');
                 });
             };
+        })
+        .controller('ConfirmMailController', function ($scope, $state, $stateParams, Restangular, Status, $log) {
+            $scope.confirmMail = function () {
+                Restangular.one('user').post('confirmMail', $stateParams.uuid)
+                    .then(function () {
+                        Status.success('Successfully confirmed email');
+                    }, function (response) {
+                        $log.debug(response);
+                        Status.error('Could not confirm email');
+                    });
+
+                $state.go('dashboard');
+            };
         });
 })();

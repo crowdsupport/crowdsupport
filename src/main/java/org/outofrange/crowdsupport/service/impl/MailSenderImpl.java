@@ -23,6 +23,7 @@ public class MailSenderImpl implements MailSender {
     private static final Logger log = LoggerFactory.getLogger(MailSenderImpl.class);
 
     private static final Properties JAVA_MAIL_PROPERTIES = new Properties();
+    private final ConfigurationService configurationService;
 
     static {
         JAVA_MAIL_PROPERTIES.setProperty("mail.smtp.auth", "true");
@@ -35,6 +36,8 @@ public class MailSenderImpl implements MailSender {
     @Inject
     public MailSenderImpl(ConfigurationService config) {
         EventDispatcher.register(this);
+
+        this.configurationService = config;
 
         final String smtpPort = config.getProperty(ConfigurationService.SMTP_PORT);
         final String smtpHost = config.getProperty(ConfigurationService.SMTP_HOST);
@@ -101,6 +104,14 @@ public class MailSenderImpl implements MailSender {
 
     public boolean isConnectionTested() {
         return connectionTested;
+    }
+
+    public SimpleMailMessage getNewMessage(String to) {
+        final SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(configurationService.getProperty(ConfigurationService.MAIL_FROM));
+        message.setTo(to);
+
+        return message;
     }
 
     private static JavaMailSenderImpl createMailSender(String host, int port, String user, String pass) {
