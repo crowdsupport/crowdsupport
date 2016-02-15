@@ -50,8 +50,8 @@ public class City extends BaseEntity {
      * Creates a new instance of the city. The arguments have to follow the same rules as they would've when
      * calling their setter methods.
      *
-     * @param state      the state the city is in.
-     * @param name       the name of the city.
+     * @param state      the state the city is in
+     * @param name       the name of the city
      * @param identifier the identifier of the city
      * @see #setState(State)
      * @see #setName(String)
@@ -66,7 +66,7 @@ public class City extends BaseEntity {
     /**
      * Returns the state of the city.
      *
-     * @return the state of the city.
+     * @return the state of the city
      */
     public State getState() {
         return state;
@@ -94,7 +94,7 @@ public class City extends BaseEntity {
     /**
      * Sets the name of the city.
      *
-     * @param name the name of the city.
+     * @param name the name of the city
      * @throws NullPointerException     when {@code name} is null
      * @throws IllegalArgumentException when {@code name} is empty
      */
@@ -105,7 +105,7 @@ public class City extends BaseEntity {
     /**
      * Returns the image path of the city.
      *
-     * @return the image path of the city.
+     * @return the image path of the city
      */
     public String getImagePath() {
         return imagePath;
@@ -114,7 +114,7 @@ public class City extends BaseEntity {
     /**
      * Sets the image path of the city.
      *
-     * @param imagePath the image path of the city.
+     * @param imagePath the image path of the city
      */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
@@ -125,7 +125,7 @@ public class City extends BaseEntity {
      * <p>
      * If the city has no places yet, the returned {@link List} will be empty, but never {@code null}.
      *
-     * @return all places of the city.
+     * @return all places of the city
      */
     public List<Place> getPlaces() {
         return places;
@@ -134,8 +134,8 @@ public class City extends BaseEntity {
     /**
      * Sets the places of the city.
      *
-     * @param places the places of the city.
-     * @throws NullPointerException when {@code places} is null.
+     * @param places the places of the city
+     * @throws NullPointerException when {@code places} is null
      */
     public void setPlaces(List<Place> places) {
         this.places = Validate.notNull(places);
@@ -144,7 +144,7 @@ public class City extends BaseEntity {
     /**
      * Returns the identifier of the city.
      *
-     * @return the identifier of the city.
+     * @return the identifier of the city
      */
     public String getIdentifier() {
         return identifier;
@@ -155,8 +155,8 @@ public class City extends BaseEntity {
      * <p>
      * The identifier must not be {@code null} or empty, and may only contain lowercase characters.
      *
-     * @param identifier the identifier of the city.
-     * @throws NullPointerException     when {@code identifier} is null.
+     * @param identifier the identifier of the city
+     * @throws NullPointerException     when {@code identifier} is null
      * @throws IllegalArgumentException when {@code identifier} is empty or has other characters than lowercase letters
      */
     public void setIdentifier(String identifier) {
@@ -166,8 +166,8 @@ public class City extends BaseEntity {
     /**
      * Equality of a city is defined by it's {@code state} and it's {@code identifier}.
      *
-     * @param o the object to compare equality with.
-     * @return true if {@code o} is another {@code City} with the same {@code state} and {@code identifier}.
+     * @param o the object to compare equality with
+     * @return true if {@code o} is another {@code City} with the same {@code state} and {@code identifier}
      */
     @Override
     public boolean equals(Object o) {
@@ -184,6 +184,8 @@ public class City extends BaseEntity {
     }
 
     /**
+     * Returns a hash code for this city.
+     *
      * @return a hash code for the {@code City}
      * @see #equals(Object)
      */

@@ -25,7 +25,7 @@ public class Tag extends BaseEntity {
     /**
      * Creates a new tag with a given name.
      *
-     * @param name the name of the tag.
+     * @param name the name of the tag
      * @see #setName(String)
      */
     public Tag(String name) {
@@ -46,9 +46,9 @@ public class Tag extends BaseEntity {
      * <p>
      * Will automatically be converted to lowercase characters.
      *
-     * @param name the name of the tag.
-     * @throws NullPointerException     when {@code name} is null.
-     * @throws IllegalArgumentException when {@code name} is empty or contains other characters than letters.
+     * @param name the name of the tag
+     * @throws NullPointerException     when {@code name} is null
+     * @throws IllegalArgumentException when {@code name} is empty or contains other characters than letters
      */
     public void setName(String name) {
         String sanitizedName = Validate.notNullOrEmpty(name).toLowerCase();
@@ -63,8 +63,8 @@ public class Tag extends BaseEntity {
     /**
      * A tag is equal to another tag if their name is equal.
      *
-     * @param o the object to check equality with.
-     * @return true if their name is equal.
+     * @param o the object to check equality with
+     * @return true if their name is equal
      */
     @Override
     public boolean equals(Object o) {
@@ -81,7 +81,8 @@ public class Tag extends BaseEntity {
 
     /**
      * Returns a hash code for the tag.
-     * @return a hash code for the tag.
+     *
+     * @return a hash code for the tag
      * @see #equals(Object)
      */
     @Override

@@ -64,7 +64,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
     /**
      * Returns the name of the role.
      *
-     * @return the name of the role.
+     * @return the name of the role
      */
     public String getName() {
         return name;
@@ -75,10 +75,10 @@ public class Role extends BaseEntity implements GrantedAuthority {
      * <p>
      * This will automatically add {@link #ROLE_PREFIX} if it's not there already and uppercase all letters.
      *
-     * @param name the name of the role, will be uppercased and prefixed if necessary.
-     * @throws NullPointerException     when {@code name} is null.
+     * @param name the name of the role, will be uppercased and prefixed if necessary
+     * @throws NullPointerException     when {@code name} is null
      * @throws IllegalArgumentException when {@code name} is empty or contains other charachters than letters, numbers
-     *                                  and underscores.
+     *                                  and underscores
      */
     public void setName(String name) {
         this.name = Sanitizer.sanitizeAuthorityName(name, ROLE_PREFIX);
@@ -87,7 +87,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
     /**
      * Returns the set of permissions for this role.
      *
-     * @return the set of permissions for this role.
+     * @return the set of permissions for this role
      */
     public Set<Permission> getPermissions() {
         return permissions;
@@ -98,7 +98,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
      * <p>
      * Duplicate permissions will be removed.
      *
-     * @param permissions the permissions to set for this role.
+     * @param permissions the permissions to set for this role
      */
     public void setPermissions(Collection<Permission> permissions) {
         final Set<Permission> permissionSet;
@@ -119,8 +119,8 @@ public class Role extends BaseEntity implements GrantedAuthority {
     /**
      * A role is equal to another role if they share the same name.
      *
-     * @param o the other object to check equality with.
-     * @return true if Role {@code o} has the same name.
+     * @param o the other object to check equality with
+     * @return true if Role {@code o} has the same name
      */
     @Override
     public boolean equals(Object o) {
@@ -138,7 +138,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
     /**
      * Returns a hash code for the role.
      *
-     * @return a hash code for the role.
+     * @return a hash code for the role
      * @see #equals(Object)
      */
     @Override
@@ -158,7 +158,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
      * <p>
      * System roles can't be deleted, as they are defined by the application, not by users.
      *
-     * @return if the role is a system role.
+     * @return if the role is a system role
      */
     public boolean isSystemRole() {
         return systemRole;
@@ -167,7 +167,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
     /**
      * Sets if the role is a system role.
      *
-     * @param systemRole the value indicating if the role is a system role.
+     * @param systemRole the value indicating if the role is a system role
      * @return this
      */
     public Role setSystemRole(boolean systemRole) {

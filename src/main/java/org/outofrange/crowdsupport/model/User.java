@@ -86,8 +86,8 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Creates a new user.
      *
-     * @param username the username.
-     * @param password the raw password.
+     * @param username the username
+     * @param password the raw password
      * @see #setUsername(String)
      * @see #setPassword(String)
      */
@@ -99,7 +99,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns the username of the user.
      *
-     * @return the username of the user.
+     * @return the username of the user
      */
     public String getUsername() {
         return username;
@@ -123,7 +123,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns if the user has the admin role.
      *
-     * @return if the user has the admin role.
+     * @return if the user has the admin role
      */
     public boolean isAdmin() {
         return getRoles().contains(ADMIN_ROLE);
@@ -132,9 +132,9 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Sets the username of the user.
      *
-     * @param username the username of the user.
-     * @throws NullPointerException     when {@code username} is null.
-     * @throws IllegalArgumentException when {@code username} is empty.
+     * @param username the username of the user
+     * @throws NullPointerException     when {@code username} is null
+     * @throws IllegalArgumentException when {@code username} is empty
      */
     public void setUsername(String username) {
         Validate.notNullOrEmpty(username);
@@ -147,7 +147,7 @@ public class User extends BaseEntity implements UserDetails {
      * <p>
      * This set will contain all {@link Role}s and their associated {@link Permission}s.
      *
-     * @return a set of granted authorities.
+     * @return a set of granted authorities
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -165,7 +165,7 @@ public class User extends BaseEntity implements UserDetails {
      * <p>
      * After persisting a newly set password, this method will return its hash.
      *
-     * @return the password of the user.
+     * @return the password of the user
      */
     @Override
     public String getPassword() {
@@ -175,7 +175,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Sets a raw password for the user, flagging it for hashing when persisting the user.
      *
-     * @param password the raw password.
+     * @param password the raw password
      */
     public void setPassword(String password) {
         Validate.notNullOrEmpty(password);
@@ -187,7 +187,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns the email address of the user.
      *
-     * @return the email address of the user.
+     * @return the email address of the user
      */
     public String getEmail() {
         return email;
@@ -198,7 +198,7 @@ public class User extends BaseEntity implements UserDetails {
      * <p>
      * If the email address is neither null nor empty, a random string will be assigned to {@code emailConfirmationId}.
      *
-     * @param email the email address of the user.
+     * @param email the email address of the user
      */
     public void setEmail(String email) {
         if (email == null || "".equals(email)) {
@@ -212,7 +212,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns true if an email confirmation id has been stored.
      *
-     * @return true if an email confirmation id has been stored.
+     * @return true if an email confirmation id has been stored
      */
     public boolean hasEmailToBeConfirmed() {
         return emailConfirmationId != null;
@@ -221,7 +221,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns the image path of the user.
      *
-     * @return the image path of the user.
+     * @return the image path of the user
      */
     public String getImagePath() {
         return imagePath;
@@ -230,7 +230,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Sets the image path of the user.
      *
-     * @param imagePath the image path of the user.
+     * @param imagePath the image path of the user
      */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
@@ -241,7 +241,7 @@ public class User extends BaseEntity implements UserDetails {
      * <p>
      * Only enabled users are able to log in.
      *
-     * @return if the user is enabled.
+     * @return if the user is enabled
      */
     @Override
     public boolean isEnabled() {
@@ -251,7 +251,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Sets if the user is enabled.
      *
-     * @param enabled if the user is enabled.
+     * @param enabled if the user is enabled
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -260,7 +260,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns a list of comments the user is the author of.
      *
-     * @return a list of comments the user is the author of.
+     * @return a list of comments the user is the author of
      */
     public List<Comment> getComments() {
         return comments;
@@ -269,7 +269,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Sets the list of comments the user is the author of.
      *
-     * @param comments the list of comments the user is the author of.
+     * @param comments the list of comments the user is the author of
      */
     public void setComments(List<Comment> comments) {
         this.comments = comments;
@@ -278,7 +278,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns if the password retrieved by {@link #getPassword()} has to be hashed.
      *
-     * @return if the password has to be hashed.
+     * @return if the password has to be hashed
      */
     public boolean rehashPassword() {
         return rehashPassword;
@@ -287,7 +287,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Sets a hashed password.
      * <p>
-     * After this call, {@link #rehashPassword()} will return {@code true}
+     * After this call, {@link #rehashPassword()} will return {@code true}.
      *
      * @param passwordHash the hashed password
      * @throws NullPointerException     when {@code passwordHash} is null
@@ -303,7 +303,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns the set of roles assigned to the user.
      *
-     * @return the set of roles assigned to the user.
+     * @return the set of roles assigned to the user
      */
     public Set<Role> getRoles() {
         return roles;
@@ -314,7 +314,7 @@ public class User extends BaseEntity implements UserDetails {
      * <p>
      * Duplicate roles will be removed.
      *
-     * @param roles the roles assigned to the user.
+     * @param roles the roles assigned to the user
      */
     public void setRoles(Collection<Role> roles) {
         final Set<Role> roleSet;
@@ -332,7 +332,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns all places the user is in the managing team for.
      *
-     * @return all places the user is in the managing team for.
+     * @return all places the user is in the managing team for
      */
     public List<Place> getManagedPlaces() {
         return teams.stream().map(Team::getPlace).collect(Collectors.toList());
@@ -341,7 +341,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * Returns the email confirmation id used to confirm the email address.
      * <p>
-     * After confirming the email address, this method will return {@code null}
+     * After confirming the email address, this method will return {@code null}.
      *
      * @return the email confirmation id
      */

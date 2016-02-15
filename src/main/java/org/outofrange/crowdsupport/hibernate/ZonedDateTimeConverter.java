@@ -6,6 +6,9 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
+/**
+ * This custom converted is necessary to support the persisting of {@link ZonedDateTime} by Hibernate.
+ */
 @Converter(autoApply = true)
 public class ZonedDateTimeConverter implements AttributeConverter<ZonedDateTime, Date> {
     @Override

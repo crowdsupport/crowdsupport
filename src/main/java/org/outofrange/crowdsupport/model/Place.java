@@ -76,10 +76,10 @@ public class Place extends BaseEntity {
     /**
      * Creates a new place. See respective setter methods for more information.
      *
-     * @param city       the city the place is in.
-     * @param name       the name of the place.
-     * @param identifier the identifier of the place.
-     * @param location   the location the place can be found at.
+     * @param city       the city the place is in
+     * @param name       the name of the place
+     * @param identifier the identifier of the place
+     * @param location   the location the place can be found at
      * @see #setCity(City)
      * @see #setName(String)
      * @see #setIdentifier(String)
@@ -95,7 +95,7 @@ public class Place extends BaseEntity {
     /**
      * Returns the city the place is in.
      *
-     * @return the city the place is in.
+     * @return the city the place is in
      */
     public City getCity() {
         return city;
@@ -105,7 +105,7 @@ public class Place extends BaseEntity {
      * Sets the city the place is in.
      *
      * @param city the city the place is in.
-     * @throws NullPointerException when {@code city} is null.
+     * @throws NullPointerException when {@code city} is null
      */
     public void setCity(City city) {
         this.city = Validate.notNull(city);
@@ -114,7 +114,7 @@ public class Place extends BaseEntity {
     /**
      * Returns the location the place can be found in the city.
      *
-     * @return the location the place can be found in the city.
+     * @return the location the place can be found in the city
      */
     public String getLocation() {
         return location;
@@ -123,9 +123,9 @@ public class Place extends BaseEntity {
     /**
      * Sets the location the place can be found in the city.
      *
-     * @param location the location the place can be found in the city.
-     * @throws NullPointerException     when {@code location} is null.
-     * @throws IllegalArgumentException when {@code location} is empty.
+     * @param location the location the place can be found in the city
+     * @throws NullPointerException     when {@code location} is null
+     * @throws IllegalArgumentException when {@code location} is empty
      */
     public void setLocation(String location) {
         this.location = Validate.notNullOrEmpty(location);
@@ -134,7 +134,7 @@ public class Place extends BaseEntity {
     /**
      * Returns the name of the place.
      *
-     * @return the name of the place.
+     * @return the name of the place
      */
     public String getName() {
         return name;
@@ -143,9 +143,9 @@ public class Place extends BaseEntity {
     /**
      * Sets the name of the place.
      *
-     * @param name the name of the place.
-     * @throws NullPointerException     when {@code name} is null.
-     * @throws IllegalArgumentException when {@code name} is empty.
+     * @param name the name of the place
+     * @throws NullPointerException     when {@code name} is null
+     * @throws IllegalArgumentException when {@code name} is empty
      */
     public void setName(String name) {
         this.name = Validate.notNullOrEmpty(name);
@@ -154,7 +154,7 @@ public class Place extends BaseEntity {
     /**
      * Returns the image path of the place.
      *
-     * @return the image path of the place.
+     * @return the image path of the place
      */
     public String getImagePath() {
         return imagePath;
@@ -163,7 +163,7 @@ public class Place extends BaseEntity {
     /**
      * Sets the image path of the place.
      *
-     * @param imagePath the image path of the place.
+     * @param imagePath the image path of the place
      */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
@@ -172,7 +172,7 @@ public class Place extends BaseEntity {
     /**
      * Returns a list of donation requests created for this place.
      *
-     * @return a list of donation requests created for this place.
+     * @return a list of donation requests created for this place
      */
     public List<DonationRequest> getDonationRequests() {
         return donationRequests;
@@ -181,8 +181,8 @@ public class Place extends BaseEntity {
     /**
      * Sets a list of donation requests created for this place.
      *
-     * @param donationRequests a list of donation requests created for this place.
-     * @throws NullPointerException when {@code donationRequests} is null.
+     * @param donationRequests a list of donation requests created for this place
+     * @throws NullPointerException when {@code donationRequests} is null
      */
     public void setDonationRequests(List<DonationRequest> donationRequests) {
         this.donationRequests = Validate.notNull(donationRequests);
@@ -191,7 +191,7 @@ public class Place extends BaseEntity {
     /**
      * Returns the identifier for the place.
      *
-     * @return the identifier for the place.
+     * @return the identifier for the place
      */
     public String getIdentifier() {
         return identifier;
@@ -200,9 +200,9 @@ public class Place extends BaseEntity {
     /**
      * Sets the identifier for the place.
      *
-     * @param identifier the identifier for the place.
-     * @throws NullPointerException     when {@code name} is null.
-     * @throws IllegalArgumentException when {@code name} is empty, or contains other characters than lowercase letters.
+     * @param identifier the identifier for the place
+     * @throws NullPointerException     when {@code name} is null
+     * @throws IllegalArgumentException when {@code name} is empty, or contains other characters than lowercase letters
      */
     public void setIdentifier(String identifier) {
         this.identifier = Validate.doesntMatch(identifier, ".*[^a-z].*");
@@ -211,7 +211,7 @@ public class Place extends BaseEntity {
     /**
      * Returns if the place is active, indicating if has been confirmed by an admin already.
      *
-     * @return if the place is active.
+     * @return if the place is active
      */
     public boolean isActive() {
         return active;
@@ -220,7 +220,7 @@ public class Place extends BaseEntity {
     /**
      * Sets if the place is active, indicating if has been confirmed by an admin already.
      *
-     * @param active a boolean value indicating if the place is active.
+     * @param active a boolean value indicating if the place is active
      */
     public void setActive(boolean active) {
         this.active = active;
@@ -229,7 +229,7 @@ public class Place extends BaseEntity {
     /**
      * Returns the place request the place has been created with.
      *
-     * @return the place request the place has been created with.
+     * @return the place request the place has been created with
      */
     public PlaceRequest getPlaceRequest() {
         return placeRequest;
@@ -238,7 +238,7 @@ public class Place extends BaseEntity {
     /**
      * Sets the place request the place has been created with.
      *
-     * @param placeRequest the place request the place has been created with.
+     * @param placeRequest the place request the place has been created with
      */
     public void setPlaceRequest(PlaceRequest placeRequest) {
         this.placeRequest = placeRequest;
@@ -247,7 +247,7 @@ public class Place extends BaseEntity {
     /**
      * Returns the team of users who are managing the place.
      *
-     * @return the team of users who are managing the place.
+     * @return the team of users who are managing the place
      */
     public Team getTeam() {
         return team;
@@ -256,7 +256,7 @@ public class Place extends BaseEntity {
     /**
      * Sets the team of users who are managing the place.
      *
-     * @param team the team of users who are managing the place.
+     * @param team the team of users who are managing the place
      */
     public void setTeam(Team team) {
         this.team = team;
@@ -265,7 +265,7 @@ public class Place extends BaseEntity {
     /**
      * A place is equal to another place if they share the same {@code identifier} in the same {@code city}.
      *
-     * @param o the object to check for equality with.
+     * @param o the object to check for equality with
      * @return true if equal
      * @see City#equals(Object)
      */
@@ -286,7 +286,7 @@ public class Place extends BaseEntity {
     /**
      * Returns a hash code for the place.
      *
-     * @return a hash code for the place.
+     * @return a hash code for the place
      * @see #equals(Object)
      */
     @Override

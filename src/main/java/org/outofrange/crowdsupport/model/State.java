@@ -43,8 +43,8 @@ public class State extends BaseEntity {
     /**
      * Creates a new state with a given name and identifier.
      *
-     * @param name       the name of the state.
-     * @param identifier the identifier of the state.
+     * @param name       the name of the state
+     * @param identifier the identifier of the state
      * @see #setName(String)
      * @see #setIdentifier(String)
      */
@@ -56,7 +56,7 @@ public class State extends BaseEntity {
     /**
      * Returns the name of the state.
      *
-     * @return the name of the state.
+     * @return the name of the state
      */
     public String getName() {
         return name;
@@ -65,9 +65,9 @@ public class State extends BaseEntity {
     /**
      * Sets the name of the state.
      *
-     * @param name the name of the state.
-     * @throws NullPointerException when {@code name} is null.
-     * @throws IllegalArgumentException when {@code name} is empty.
+     * @param name the name of the state
+     * @throws NullPointerException when {@code name} is null
+     * @throws IllegalArgumentException when {@code name} is empty
      */
     public void setName(String name) {
         this.name = Validate.notNullOrEmpty(name);
@@ -76,7 +76,7 @@ public class State extends BaseEntity {
     /**
      * Returns the image path of the state.
      *
-     * @return the image path of the state.
+     * @return the image path of the state
      */
     public String getImagePath() {
         return imagePath;
@@ -85,7 +85,7 @@ public class State extends BaseEntity {
     /**
      * Sets the image path of the state.
      *
-     * @param imagePath the image path of the state.
+     * @param imagePath the image path of the state
      */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
@@ -94,7 +94,7 @@ public class State extends BaseEntity {
     /**
      * Returns a list of cities in the state.
      *
-     * @return a list of cities in the state.
+     * @return a list of cities in the state
      */
     public List<City> getCities() {
         return cities;
@@ -103,8 +103,8 @@ public class State extends BaseEntity {
     /**
      * Sets the list of cities in the state.
      *
-     * @param cities a list of cities in the state.
-     * @throws NullPointerException when {@code cities} is null.
+     * @param cities a list of cities in the state
+     * @throws NullPointerException when {@code cities} is null
      */
     public void setCities(List<City> cities) {
         this.cities = Validate.notNull(cities);
@@ -113,7 +113,7 @@ public class State extends BaseEntity {
     /**
      * Returns the identifier of the state.
      *
-     * @return the identifier of the state.
+     * @return the identifier of the state
      */
     public String getIdentifier() {
         return identifier;
@@ -122,7 +122,7 @@ public class State extends BaseEntity {
     /**
      * Sets the identifier of the state.
      *
-     * @param identifier the identifier of the state.
+     * @param identifier the identifier of the state
      */
     public void setIdentifier(String identifier) {
         this.identifier = Validate.doesntMatch(identifier, ".*[^a-z].*");
@@ -131,7 +131,7 @@ public class State extends BaseEntity {
     /**
      * A state is equal to another state if they share the same {@code identifier}.
      *
-     * @param o the object to check for equality with.
+     * @param o the object to check for equality with
      * @return true if they share the same {@code identifier}
      */
     @Override
@@ -150,7 +150,7 @@ public class State extends BaseEntity {
     /**
      * Returns a hash code for the state.
      *
-     * @return a hash code for the state.
+     * @return a hash code for the state
      * @see #equals(Object)
      */
     @Override

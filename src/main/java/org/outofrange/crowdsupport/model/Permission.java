@@ -28,7 +28,7 @@ public class Permission extends BaseEntity implements GrantedAuthority {
     /**
      * Creates a new permission.
      *
-     * @param name the name of the newly created permission.
+     * @param name the name of the newly created permission
      * @see #setName(String)
      */
     public Permission(String name) {
@@ -38,7 +38,7 @@ public class Permission extends BaseEntity implements GrantedAuthority {
     /**
      * Returns the name of the permission.
      *
-     * @return the name of the permission.
+     * @return the name of the permission
      */
     public String getName() {
         return name;
@@ -50,9 +50,9 @@ public class Permission extends BaseEntity implements GrantedAuthority {
      * The {@code name} will automatically be converted to uppercase characters.
      *
      * @param name the name of the permission.
-     * @throws NullPointerException     when {@code name} is null.
+     * @throws NullPointerException     when {@code name} is null
      * @throws IllegalArgumentException when {@code name} is empty or contains other characters than letters, numbers
-     *                                  and underscores.
+     *                                  and underscores
      */
     public void setName(String name) {
         this.name = Sanitizer.sanitizeAuthorityName(name);
@@ -66,8 +66,8 @@ public class Permission extends BaseEntity implements GrantedAuthority {
     /**
      * A permission is equal to another permission if they have the same {@code name}.
      *
-     * @param o another permission to check equality with.
-     * @return true if {@code o} is another permission with the same {@code name}.
+     * @param o another permission to check equality with
+     * @return true if {@code o} is another permission with the same {@code name}
      */
     @Override
     public boolean equals(Object o) {
@@ -85,7 +85,7 @@ public class Permission extends BaseEntity implements GrantedAuthority {
     /**
      * Returns a hashcode for the permission.
      *
-     * @return a hashcode for the permissions.
+     * @return a hashcode for the permissions
      * @see #equals(Object)
      */
     @Override

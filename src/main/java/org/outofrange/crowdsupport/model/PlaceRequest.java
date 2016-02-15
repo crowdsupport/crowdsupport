@@ -41,7 +41,7 @@ public class PlaceRequest extends BaseEntity {
      * Creates a new place request.
      *
      * @param place          the place to request
-     * @param requestingUser the user who is requesting the place.
+     * @param requestingUser the user who is requesting the place
      * @see #setPlace(Place)
      * @see #setRequestingUser(User)
      */
@@ -52,7 +52,8 @@ public class PlaceRequest extends BaseEntity {
 
     /**
      * Returns the requesting user.
-     * @return the requesting user.
+     *
+     * @return the requesting user
      */
     public User getRequestingUser() {
         return requestingUser;
@@ -60,7 +61,8 @@ public class PlaceRequest extends BaseEntity {
 
     /**
      * Sets the requesting user.
-     * @param requestingUser the requesting user.
+     *
+     * @param requestingUser the requesting user
      */
     public void setRequestingUser(User requestingUser) {
         this.requestingUser = requestingUser;
@@ -68,7 +70,8 @@ public class PlaceRequest extends BaseEntity {
 
     /**
      * Returns the requested place.
-     * @return the requested place.
+     *
+     * @return the requested place
      */
     public Place getPlace() {
         return place;
@@ -77,7 +80,7 @@ public class PlaceRequest extends BaseEntity {
     /**
      * Sets the requested place.
      *
-     * @param place the requested place.
+     * @param place the requested place
      */
     public void setPlace(Place place) {
         this.place = place;
@@ -85,7 +88,8 @@ public class PlaceRequest extends BaseEntity {
 
     /**
      * Returns the requested state the place should be in, if it's in an unknown state.
-     * @return the state the place should be in, or null if the state is already persisted.
+     *
+     * @return the state the place should be in, or null if the state is already persisted
      */
     public String getState() {
         return state;
@@ -93,7 +97,8 @@ public class PlaceRequest extends BaseEntity {
 
     /**
      * Sets the state the requested place should be in, if the state is not yet known.
-     * @param state the state the requested place should be in.
+     *
+     * @param state the state the requested place should be in
      */
     public void setState(String state) {
         this.state = state;
@@ -101,7 +106,8 @@ public class PlaceRequest extends BaseEntity {
 
     /**
      * Returns the requested city the place should be in, if it's in an unknown city.
-     * @return the city the place should be in, or null if the city is already persisted.
+     *
+     * @return the city the place should be in, or null if the city is already persisted
      */
     public String getCity() {
         return city;
@@ -109,7 +115,8 @@ public class PlaceRequest extends BaseEntity {
 
     /**
      * Sets the city the requested place should be in, if the city is not yet known.
-     * @param city the city the requested place should be in.
+     *
+     * @param city the city the requested place should be in
      */
     public void setCity(String city) {
         this.city = city;

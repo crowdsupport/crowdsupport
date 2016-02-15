@@ -74,9 +74,9 @@ public class DonationRequest extends BaseEntity {
     /**
      * Creates a new donation request. See the respective setter methods for further information.
      *
-     * @param place       the place of the donation request.
-     * @param title       the title of the donation request.
-     * @param description the description of the donation request.
+     * @param place       the place of the donation request
+     * @param title       the title of the donation request
+     * @param description the description of the donation request
      * @see #setPlace(Place)
      * @see #setTitle(String)
      * @see #setDescription(String)
@@ -91,7 +91,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Returns the place of the donation request.
      *
-     * @return the place of the donation request.
+     * @return the place of the donation request
      */
     public Place getPlace() {
         return place;
@@ -100,8 +100,8 @@ public class DonationRequest extends BaseEntity {
     /**
      * Sets the place of a donation request.
      *
-     * @param place the place of a donation request.
-     * @throws NullPointerException when {@code place} is null.
+     * @param place the place of a donation request
+     * @throws NullPointerException when {@code place} is null
      */
     public void setPlace(Place place) {
         this.place = Validate.notNull(place);
@@ -110,7 +110,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Returns the title of the donation request.
      *
-     * @return the title of the donation request.
+     * @return the title of the donation request
      */
     public String getTitle() {
         return title;
@@ -119,9 +119,9 @@ public class DonationRequest extends BaseEntity {
     /**
      * Sets the title of the donation request.
      *
-     * @param title the title of the donation request.
-     * @throws NullPointerException     when {@code title} is null.
-     * @throws IllegalArgumentException when {@code title} is empty.
+     * @param title the title of the donation request
+     * @throws NullPointerException     when {@code title} is null
+     * @throws IllegalArgumentException when {@code title} is empty
      */
     public void setTitle(String title) {
         this.title = Validate.notNullOrEmpty(title);
@@ -139,9 +139,9 @@ public class DonationRequest extends BaseEntity {
     /**
      * Sets the description of the donation request.
      *
-     * @param description the description of the donation request.
-     * @throws NullPointerException     when {@code description} is null.
-     * @throws IllegalArgumentException when {@code description} is empty.
+     * @param description the description of the donation request
+     * @throws NullPointerException     when {@code description} is null
+     * @throws IllegalArgumentException when {@code description} is empty
      */
     public void setDescription(String description) {
         this.description = Validate.notNullOrEmpty(description);
@@ -150,7 +150,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Returns until when the donation request is valid.
      *
-     * @return until when the donation request is valid.
+     * @return until when the donation request is valid
      */
     public ZonedDateTime getValidToDateTime() {
         return validToDateTime;
@@ -161,7 +161,7 @@ public class DonationRequest extends BaseEntity {
      * <p>
      * Indicates that donations after this date aren't needed anymore.
      *
-     * @param validToDateTime a date until when the donation request is valid.
+     * @param validToDateTime a date until when the donation request is valid
      */
     public void setValidToDateTime(ZonedDateTime validToDateTime) {
         this.validToDateTime = validToDateTime;
@@ -170,7 +170,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Returns the quantity of the donation request.
      *
-     * @return the quantity of the donation request.
+     * @return the quantity of the donation request
      */
     public int getQuantity() {
         return quantity;
@@ -181,8 +181,8 @@ public class DonationRequest extends BaseEntity {
      * <p>
      * Indicates how much donations are needed.
      *
-     * @param quantity the quantity of the donation request.
-     * @throws IllegalArgumentException when {@code quantity} is negative.
+     * @param quantity the quantity of the donation request
+     * @throws IllegalArgumentException when {@code quantity} is negative
      */
     public void setQuantity(int quantity) {
         Validate.greaterOrEqualZero(quantity);
@@ -193,7 +193,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Returns a list of the comments made on this donation request.
      *
-     * @return a list of the comments made on this donation request.
+     * @return a list of the comments made on this donation request
      */
     public List<Comment> getComments() {
         return comments;
@@ -202,7 +202,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Adds a comment to the donation request, and sets the donation request on the comment.
      *
-     * @param comment the comment to add to the donation request.
+     * @param comment the comment to add to the donation request
      * @throws NullPointerException if {@code comment} is null
      */
     public void addComment(Comment comment) {
@@ -222,7 +222,7 @@ public class DonationRequest extends BaseEntity {
      * <p>
      * A newly created donation request is unresolved by default.
      *
-     * @return a boolean value indicating if the donation request has been resolved.
+     * @return a boolean value indicating if the donation request has been resolved
      */
     public boolean isResolved() {
         return resolved;
@@ -231,7 +231,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Sets the resolved value for a donation request.
      *
-     * @param resolved a boolean value indicating if the request has been resolved.
+     * @param resolved a boolean value indicating if the request has been resolved
      */
     public void setResolved(boolean resolved) {
         this.resolved = resolved;
@@ -240,7 +240,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Returns the units the {@code quantity} is measured in.
      *
-     * @return the units the {@code quantity} is measured in.
+     * @return the units the {@code quantity} is measured in
      */
     public String getUnits() {
         return units;
@@ -249,7 +249,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Sets the units the {@code quantity} is measured in.
      *
-     * @param units the units the {@code quantity} is measured in.
+     * @param units the units the {@code quantity} is measured in
      */
     public void setUnits(String units) {
         this.units = units;
@@ -258,7 +258,7 @@ public class DonationRequest extends BaseEntity {
     /**
      * Returns a list of associated tags with this donation request.
      *
-     * @return a list of associated tags with this donation request.
+     * @return a list of associated tags with this donation request
      */
     public List<Tag> getTags() {
         return tags;
@@ -267,8 +267,8 @@ public class DonationRequest extends BaseEntity {
     /**
      * Sets a list of associated tags with this donation request.
      *
-     * @param tags a list of associated tags with this donation request.
-     * @throws NullPointerException when {@code tags} is null.
+     * @param tags a list of associated tags with this donation request
+     * @throws NullPointerException when {@code tags} is null
      */
     public void setTags(List<Tag> tags) {
         this.tags = Validate.notNull(tags);

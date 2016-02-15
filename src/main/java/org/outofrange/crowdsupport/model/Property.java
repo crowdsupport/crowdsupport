@@ -31,8 +31,8 @@ public class Property extends BaseEntity {
     /**
      * Creates a new property with the given key/value pair.
      *
-     * @param key   the key for the new property; will be immutable.
-     * @param value the value of the property, can be changed later.
+     * @param key   the key for the new property; will be immutable
+     * @param value the value of the property, can be changed later
      */
     public Property(String key, String value) {
         this.key = key;
@@ -42,7 +42,7 @@ public class Property extends BaseEntity {
     /**
      * Returns the key of the property.
      *
-     * @return the key of the property.
+     * @return the key of the property
      */
     public String getKey() {
         return key;
@@ -51,7 +51,7 @@ public class Property extends BaseEntity {
     /**
      * Returns the value of the property.
      *
-     * @return the value of the property.
+     * @return the value of the property
      */
     public String getValue() {
         return value;
@@ -60,7 +60,7 @@ public class Property extends BaseEntity {
     /**
      * Sets the value of the property.
      *
-     * @param value the value of the property.
+     * @param value the value of the property
      */
     public void setValue(String value) {
         this.value = value;
@@ -69,7 +69,7 @@ public class Property extends BaseEntity {
     /**
      * A property is equal to another property if they share the same {@code key}.
      *
-     * @param o the object to check for equality with.
+     * @param o the object to check for equality with
      * @return true if the other property has the same {@code key}
      */
     @Override
@@ -89,7 +89,7 @@ public class Property extends BaseEntity {
     /**
      * Returns a hash code for the property.
      *
-     * @return a hash code for the property.
+     * @return a hash code for the property
      * @see #equals(Object)
      */
     @Override

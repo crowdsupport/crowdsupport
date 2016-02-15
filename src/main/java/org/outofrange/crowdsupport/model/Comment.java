@@ -49,9 +49,9 @@ public class Comment extends BaseEntity {
     /**
      * Creates a new instance of a comment. See the respective setter methods for constraints on the arguments.
      *
-     * @param donationRequest the donation request the comment belongs to.
-     * @param author          the user who has written the comment.
-     * @param text            the text of the comment.
+     * @param donationRequest the donation request the comment belongs to
+     * @param author          the user who has written the comment
+     * @param text            the text of the comment
      * @see #setDonationRequest(DonationRequest)
      * @see #setAuthor(User)
      * @see #setText(String)
@@ -65,7 +65,7 @@ public class Comment extends BaseEntity {
     /**
      * Returns the text of the comment.
      *
-     * @return the text of the comment.
+     * @return the text of the comment
      */
     public String getText() {
         return text;
@@ -74,9 +74,9 @@ public class Comment extends BaseEntity {
     /**
      * Sets the text of the comment.
      *
-     * @param text the text of the comment.
-     * @throws NullPointerException     when {@code text} is null.
-     * @throws IllegalArgumentException when {@code text} is empty.
+     * @param text the text of the comment
+     * @throws NullPointerException     when {@code text} is null
+     * @throws IllegalArgumentException when {@code text} is empty
      */
     public void setText(String text) {
         this.text = Validate.notNullOrEmpty(text);
@@ -85,7 +85,7 @@ public class Comment extends BaseEntity {
     /**
      * Returns the author of the comment.
      *
-     * @return the author of the comment.
+     * @return the author of the comment
      */
     public User getAuthor() {
         return author;
@@ -94,8 +94,8 @@ public class Comment extends BaseEntity {
     /**
      * Sets the author of the comment.
      *
-     * @param author the author of the comment.
-     * @throws NullPointerException when {@code author} is null.
+     * @param author the author of the comment
+     * @throws NullPointerException when {@code author} is null
      */
     public void setAuthor(User author) {
         this.author = Validate.notNull(author);
@@ -104,7 +104,7 @@ public class Comment extends BaseEntity {
     /**
      * Returns the donation request the comment belongs to.
      *
-     * @return the donation request the comment belongs to.
+     * @return the donation request the comment belongs to
      */
     public DonationRequest getDonationRequest() {
         return donationRequest;
@@ -113,8 +113,8 @@ public class Comment extends BaseEntity {
     /**
      * Sets the donation request the comment belongs to.
      *
-     * @param donationRequest the donation request the comment belongs to.
-     * @throws NullPointerException when {@code donationRequest} is null.
+     * @param donationRequest the donation request the comment belongs to
+     * @throws NullPointerException when {@code donationRequest} is null
      */
     public void setDonationRequest(DonationRequest donationRequest) {
         this.donationRequest = Validate.notNull(donationRequest);
@@ -123,7 +123,7 @@ public class Comment extends BaseEntity {
     /**
      * Returns the quantity of the comment. Is 0 if the comment hasn't been quantified.
      *
-     * @return the quantity of the comment.
+     * @return the quantity of the comment
      */
     public int getQuantity() {
         return quantity;
@@ -135,7 +135,7 @@ public class Comment extends BaseEntity {
      *
      * @param quantity the quantity of the comment
      * @throws IllegalArgumentException when quantity is either negative, or greater than zero, while having
-     *                                  no {@code donationRequest} at all, or an unquantified one.
+     *                                  no {@code donationRequest} at all, or an unquantified one
      */
     public void setQuantity(int quantity) {
         Validate.greaterOrEqualZero(quantity);
@@ -151,7 +151,7 @@ public class Comment extends BaseEntity {
     /**
      * Returns if the comment has been confirmed.
      *
-     * @return if the comment has been confirmed.
+     * @return if the comment has been confirmed
      */
     public boolean isConfirmed() {
         return confirmed;
@@ -160,7 +160,7 @@ public class Comment extends BaseEntity {
     /**
      * Sets if the comment has been confirmed.
      *
-     * @param confirmed a boolean value indicating if the comment has been confirmed.
+     * @param confirmed a boolean value indicating if the comment has been confirmed
      */
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;

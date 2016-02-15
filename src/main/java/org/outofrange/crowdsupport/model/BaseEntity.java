@@ -29,7 +29,7 @@ public class BaseEntity extends AbstractPersistable<Long> {
      * <p>
      * A value of 0 means that the entity never has been updated in the database.
      *
-     * @return the version of the entity.
+     * @return the version of the entity
      */
     public long getVersion() {
         return version;
@@ -46,7 +46,7 @@ public class BaseEntity extends AbstractPersistable<Long> {
      * <p>
      * Note that this is <b>not</b> the timestamp it has been persisted for the first time!
      *
-     * @return the {@code ZonedDateTime} of the initiation of the entity.
+     * @return the {@code ZonedDateTime} of the initiation of the entity
      */
     public ZonedDateTime getCreatedDateTime() {
         return createdDateTime;

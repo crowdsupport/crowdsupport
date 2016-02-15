@@ -31,7 +31,7 @@ public class Team extends BaseEntity {
     /**
      * Creates a new team for the place.
      *
-     * @param place the place the team is managing.
+     * @param place the place the team is managing
      * @see #setPlace(Place)
      */
     public Team(Place place) {
@@ -41,7 +41,7 @@ public class Team extends BaseEntity {
     /**
      * Returns the place the team is managing.
      *
-     * @return the place the team is managing.
+     * @return the place the team is managing
      */
     public Place getPlace() {
         return place;
@@ -50,7 +50,7 @@ public class Team extends BaseEntity {
     /**
      * Sets the place the team is managing.
      *
-     * @param place the place the team is managing.
+     * @param place the place the team is managing
      */
     public void setPlace(Place place) {
         this.place = place;
@@ -59,7 +59,7 @@ public class Team extends BaseEntity {
     /**
      * Returns the members of the team.
      *
-     * @return the members of the team.
+     * @return the members of the team
      */
     public List<User> getMembers() {
         return members;
@@ -68,7 +68,7 @@ public class Team extends BaseEntity {
     /**
      * Sets the members of the team.
      *
-     * @param members the members of the team.
+     * @param members the members of the team
      */
     public void setMembers(List<User> members) {
         this.members = members;
