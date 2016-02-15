@@ -4,6 +4,9 @@ import com.google.common.eventbus.EventBus;
 
 import java.util.List;
 
+/**
+ * A wrapper for an instance of {@link EventBus} to create and use a singleton.
+ */
 public class EventDispatcher {
     private static final EventBus INSTANCE = new EventBus();
 

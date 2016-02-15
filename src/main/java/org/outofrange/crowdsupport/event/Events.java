@@ -3,6 +3,9 @@ package org.outofrange.crowdsupport.event;
 import org.outofrange.crowdsupport.dto.config.MailSettingsDto;
 import org.outofrange.crowdsupport.model.*;
 
+/**
+ * Factory class for all events.
+ */
 public class Events {
     private Events() { /* no instantiation */ }
 

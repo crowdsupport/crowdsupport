@@ -3,6 +3,9 @@ package org.outofrange.crowdsupport.event;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A nested event is an event which can contain other events, which will be published too.
+ */
 public class NestedEvent implements Event {
     private final List<Event> subEvents = new ArrayList<>();
 
