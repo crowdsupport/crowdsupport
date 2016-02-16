@@ -10,6 +10,3 @@ before_install:
 
 before_script:
   - "export DISPLAY=:99.0"
-
-script:
-  mvn test -Dserver.port=8090
