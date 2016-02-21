@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.outofrange.crowdsupport.automation.keyword.ui.ProfileKeywords;
 import org.outofrange.crowdsupport.automation.keyword.ui.RegisterKeywords;
 import org.outofrange.crowdsupport.automation.keyword.ui.SidePanelKeywords;
+import org.outofrange.crowdsupport.automation.keyword.ui.core.Sleeper;
 import org.outofrange.crowdsupport.model.User;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -121,7 +122,7 @@ public class UserUiTest extends UiTest {
         registration.enterDetails(username, password, null);
         registration.clickRegister();
 
-        sleep(500);
+        Sleeper.sleep(500);
 
         assertTrue(keywords().ui().status().isMessageDisplayed("Could not register"));
     }

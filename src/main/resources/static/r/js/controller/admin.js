@@ -87,7 +87,7 @@
 
                 request.ui = {
                     citySearch: citySelected,
-                    stateSearch: true,
+                    stateSearch: citySelected,
                     city: request.place.city,
                     state: request.place.city.state,
                     setCitySearch: function (citySearch) {
@@ -96,6 +96,8 @@
                                 state: '',
                                 name: request.ui.city
                             };
+
+                            this.setStateSearch(false);
                         }
 
                         request.ui.citySearch = citySearch;

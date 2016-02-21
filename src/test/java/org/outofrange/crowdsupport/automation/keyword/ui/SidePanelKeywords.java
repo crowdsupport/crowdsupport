@@ -2,9 +2,9 @@ package org.outofrange.crowdsupport.automation.keyword.ui;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.outofrange.crowdsupport.automation.keyword.ui.admin.AdminKeywords;
 import org.outofrange.crowdsupport.automation.keyword.ui.core.Waiter;
 import org.outofrange.crowdsupport.model.User;
-import org.outofrange.crowdsupport.util.TestUser;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +14,9 @@ public class SidePanelKeywords extends KeywordBase {
     private static final By LOGIN_BUTTON = By.id("sidepanel__login-button");
     private static final By LOGOUT_BUTTON = By.id("sidepanel__logout-button");
     private static final By REGISTER_BUTTON = By.id("sidepanel__register-button");
+    private static final By ADMIN_BUTTON = By.id("sidepanel__admin-button");
     private static final By PROFILE_BUTTON = By.id("sidepanel__profile-button");
+    private static final By REQUEST_PLACE_BUTTON = By.id("sidepanel__request-place-button");
 
     private static final By LOGGEDIN_USER_TEXT = By.id("sidepanel__loggedin-name");
 
@@ -57,5 +59,17 @@ public class SidePanelKeywords extends KeywordBase {
         web().click(REGISTER_BUTTON);
 
         return getKeywords(RegisterKeywords.class);
+    }
+
+    public PlaceRequestKeywords gotoPlaceRequest() {
+        web().click(REQUEST_PLACE_BUTTON);
+
+        return getKeywords(PlaceRequestKeywords.class);
+    }
+
+    public AdminKeywords gotoAdmin() {
+        web().click(ADMIN_BUTTON);
+
+        return getKeywords(AdminKeywords.class);
     }
 }

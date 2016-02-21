@@ -14,14 +14,19 @@ public class ActionStack {
         actions.addFirst(action);
     }
 
-    public void executeAll() {
+    public boolean executeAll() {
+        boolean noExceptions = true;
+
         for (Runnable action : actions) {
             try {
                 action.run();
             } catch (Exception e) {
                 log.warn("Exception while executing {}", action, e);
+                noExceptions = false;
             }
         }
         actions.clear();
+
+        return noExceptions;
     }
 }

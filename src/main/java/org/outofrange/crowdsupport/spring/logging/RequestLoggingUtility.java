@@ -96,7 +96,7 @@ public class RequestLoggingUtility extends OncePerRequestFilter implements Servl
         MDC.put(COLOR_PROPERTY, getNextColor());
         MDC.put(START_TIME_PROPERTY, String.valueOf(System.nanoTime()));
 
-        log.trace("Start of request {}", requestId);
+        log.trace("Start of request {}: {} {}", requestId, request.getMethod(), request.getRequestURI());
 
         filterChain.doFilter(request, response);
     }

@@ -2,7 +2,7 @@
     <form name="placeRequestForm" layout="column" ng-submit="ctrl.submit()">
         <md-input-container>
             <label>Place name</label>
-            <input autofocus required ng-model="name" md-maxlength="100" name="name"/>
+            <input autofocus required ng-model="name" md-maxlength="100" name="name" id="placerequest__name-input"/>
             <div ng-messages="placeRequestForm.name.$error">
                 <ng-message when="required">Name is required</ng-message>
                 <ng-message when="md-maxlength">Name must not be longer than 100 characters</ng-message>
@@ -11,7 +11,8 @@
 
         <md-input-container>
             <label>Unique identifier</label>
-            <input required ng-model="identifier" md-maxlength="50" name="identifier" pattern="[a-z]*"/>
+            <input required ng-model="identifier" md-maxlength="50" name="identifier" pattern="[a-z]*"
+                   id="placerequest__identifier-input"/>
             <div ng-messages="placeRequestForm.identifier.$error">
                 <ng-message when="required">Identifier is required</ng-message>
                 <ng-message when="pattern">Identifier must only have lowercase characters</ng-message>
@@ -20,19 +21,21 @@
 
         <md-autocomplete md-search-text="citySearch" md-selected-item="city" md-item-text="city.name"
                          md-items="city in queryCity(citySearch)" md-min-length="2" md-delay="100"
-                         md-floating-label="City" ng-hide="addCity">
+                         md-select-on-match="true" md-floating-label="City" ng-hide="addCity"
+                         md-input-id="placerequest__city-autocomplete">
             <md-item-template>
                 <span md-highlight-text="citySearch">{{city.name}} ({{city.state.name}})</span>
             </md-item-template>
             <md-not-found>
-                No city found - <a href="" ng-click="addCityInfo()">don't worry, that's fine!</a>
+                No city found - <a href="" ng-click="addCityInfo()" id="placerequest__to-city-input-button">don't worry,
+                that's fine!</a>
             </md-not-found>
         </md-autocomplete>
 
         <div ng-show="addCity" layout>
             <md-input-container flex>
                 <label>City name</label>
-                <input ng-model="cityname" name="cityName" ng-required="addCity"/>
+                <input ng-model="cityname" name="cityName" ng-required="addCity" id="placerequest__city-input"/>
                 <div ng-messages="placeRequestForm.cityName.$error">
                     <ng-message when="required">You have to enter a city name, or search an existing one!</ng-message>
                 </div>
@@ -40,13 +43,13 @@
 
             <md-input-container flex>
                 <label>State name</label>
-                <input ng-model="statename" name="stateName" ng-required="addCity"/>
+                <input ng-model="statename" name="stateName" ng-required="addCity" id="placerequest__state-input"/>
                 <div ng-messages="placeRequestForm.stateName.$error">
                     <ng-message when="required">You have to enter a state name, or search an existing city!</ng-message>
                 </div>
             </md-input-container>
 
-            <md-button flex="none" ng-click="searchCity()">
+            <md-button flex="none" ng-click="searchCity()" id="placerequest__to-city-search-button">
                 <md-tooltip md-direction="top">Back to city search</md-tooltip>
                 <md-icon md-font-set="fa" md-font-icon="fa-search"></md-icon>
             </md-button>
@@ -54,13 +57,13 @@
 
         <md-input-container>
             <label>Location of your place</label>
-            <input required ng-model="location" name="location"/>
+            <input required ng-model="location" name="location" id="placerequest__location-input"/>
             <div ng-messages="placeRequestForm.location.$error">
                 <ng-message when="required">Location is required!</ng-message>
             </div>
         </md-input-container>
 
-        <md-button type="submit" ng-disabled="placeRequestForm.$invalid">
+        <md-button type="submit" ng-disabled="placeRequestForm.$invalid" id="placerequest__request-button">
             <md-tooltip md-direction="top">Request new place</md-tooltip>
             <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
         </md-button>

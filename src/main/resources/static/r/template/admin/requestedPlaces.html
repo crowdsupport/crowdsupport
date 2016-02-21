@@ -1,26 +1,35 @@
 <div layout-padding>
     <h3 ng-show="allRequests.length === 0">Currently no pending place requests</h3>
 
-    <md-card ng-repeat="request in allRequests">
+    <md-card ng-form="requestedPlace" ng-repeat="request in allRequests"
+             class="requested-place {{request.place.identifier}}">
         <md-card-content ng-init="initRequest(request)">
             <div layout>
                 <md-input-container>
                     <label>Place name</label>
-                    <input ng-model="request.place.name"/>
+                    <input ng-model="request.place.name" class="name-input" name="name" required md-maxlength="100"/>
+                    <div ng-messages="requestedPlace.name.$error">
+                        <ng-message when="required">Name is required</ng-message>
+                        <ng-message when="md-maxlength">Name must not be longer than 100 characters</ng-message>
+                    </div>
                 </md-input-container>
 
                 <md-input-container>
                     <label>Place identifier</label>
-                    <input ng-model="request.place.identifier"/>
+                    <input ng-model="request.place.identifier" class="identifier-input" required pattern="[a-z]*"
+                           md-maxlength="50" name="identifier"/>
+                    <div ng-messages="requestedPlace.identifier.$error">
+                        <ng-message when="required">Identifier is required</ng-message>
+                        <ng-message when="pattern">Identifier must only have lowercase characters</ng-message>
+                    </div>
                 </md-input-container>
             </div>
 
             <div layout>
                 <md-autocomplete flex md-search-text="request.ui.city" md-selected-item="request.place.city"
-                                 md-item-text="city.name"
-                                 md-items="city in queryCity(request.ui.city)" md-min-length="2"
-                                 md-delay="100"
-                                 md-floating-label="City" ng-show="request.ui.citySearch">
+                                 md-item-text="city.name" md-delay="100" md-min-length="2" md-floating-label="City"
+                                 md-items="city in queryCity(request.ui.city)" ng-show="request.ui.citySearch"
+                                 class="city-autocomplete" md-select-on-match="true">
                     <md-item-template>
                         <span md-highlight-text="request.ui.city">{{city.name}} ({{city.state.name}})</span>
                     </md-item-template>
@@ -29,41 +38,19 @@
                     </md-not-found>
                 </md-autocomplete>
 
-                <md-button flex="none" ng-click="request.ui.setCitySearch(false)" ng-hide="request.place.city">
+                <md-button flex="none" ng-click="request.ui.setCitySearch(false)" ng-hide="request.place.city"
+                           class="to-city-input-button">
                     <md-tooltip md-direction="top">Manual input</md-tooltip>
                     <md-icon md-font-set="fa" md-font-icon="fa-pencil"></md-icon>
                 </md-button>
             </div>
 
-            <div layout="column" ng-hide="request.ui.citySearch">
-                <div layout>
-                    <md-button flex="none" ng-click="request.ui.setCitySearch(true)">
-                        <md-tooltip md-direction="top">Back to city search</md-tooltip>
-                        <md-icon md-font-set="fa" md-font-icon="fa-search"></md-icon>
-                    </md-button>
-
-                    <md-input-container flex>
-                        <label>City name</label>
-                        <input ng-model="request.place.city.name"/>
-                    </md-input-container>
-
-                    <md-input-container flex>
-                        <label>City identifier</label>
-                        <input ng-model="request.place.city.identifier"/>
-                    </md-input-container>
-
-                    <md-button flex="none" ng-click="createCity(request)">
-                        <md-tooltip md-direction="top">Create city</md-tooltip>
-                        <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
-                    </md-button>
-                </div>
-
+            <div ng-form="cityInput" layout="column" ng-hide="request.ui.citySearch">
                 <div layout>
                     <md-autocomplete flex md-search-text="request.ui.state" md-selected-item="request.place.city.state"
-                                     md-delay="100"
-                                     md-item-text="state.name" md-items="state in queryState(request.ui.state)"
-                                     md-min-length="2"
-                                     md-floating-label="State" ng-show="request.ui.stateSearch">
+                                     md-delay="100" md-min-length="2" md-items="state in queryState(request.ui.state)"
+                                     md-item-text="state.name" md-floating-label="State" class="state-autocomplete"
+                                     ng-show="request.ui.stateSearch" md-select-on-match="true">
                         <md-item-template>
                             <span md-highlight-text="request.ui.state">{{state.name}}</span>
                         </md-item-template>
@@ -73,29 +60,74 @@
                         </md-not-found>
                     </md-autocomplete>
 
-                    <md-button flex="none" ng-click="request.ui.setStateSearch(false)" ng-hide="request.place.city.state">
+                    <md-button flex="none" ng-click="request.ui.setStateSearch(false)" class="to-state-input-button"
+                               ng-hide="request.place.city.state">
                         <md-tooltip md-direction="top">Manual input</md-tooltip>
                         <md-icon md-font-set="fa" md-font-icon="fa-pencil"></md-icon>
                     </md-button>
                 </div>
 
-                <div layout ng-hide="request.ui.stateSearch">
-                    <md-button flex="none" ng-click="request.ui.setStateSearch(true)">
+                <div ng-form="stateInput" layout ng-hide="request.ui.stateSearch">
+                    <md-button flex="none" ng-click="request.ui.setStateSearch(true)" class="to-state-search-button">
                         <md-tooltip md-direction="top">Back to state search</md-tooltip>
                         <md-icon md-font-set="fa" md-font-icon="fa-search"></md-icon>
                     </md-button>
 
                     <md-input-container flex>
                         <label>State name</label>
-                        <input ng-model="request.place.city.state.name"/>
+                        <input ng-model="request.place.city.state.name" class="state-name-input" name="stateName"
+                               ng-required="!request.ui.stateSearch"/>
+                        <div ng-messages="requestedPlace.cityInput.stateInput.stateName.$error">
+                            <ng-message when="required">Name is required!</ng-message>
+                        </div>
                     </md-input-container>
 
                     <md-input-container flex>
                         <label>State identifier</label>
-                        <input ng-model="request.place.city.state.identifier"/>
+                        <input ng-model="request.place.city.state.identifier" class="state-identifier-input"
+                               name="stateIdentifier" ng-required="!request.ui.stateSearch" pattern="[a-z]*"/>
+                        <div ng-messages="requestedPlace.cityInput.stateInput.stateIdentifier.$error">
+                            <ng-message when="required">Identifier is required!</ng-message>
+                            <ng-message when="pattern">Identifier must only have lowercase characters</ng-message>
+                        </div>
                     </md-input-container>
 
-                    <md-button flex="none" ng-click="createState(request)">
+                    <md-button flex="none" ng-click="createState(request)" class="create-state-button"
+                               ng-disabled="requestedPlace.cityInput.stateInput.$invalid">
+                        <md-tooltip md-direction="top">Create state</md-tooltip>
+                        <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
+                    </md-button>
+                </div>
+
+                <div layout>
+                    <md-button flex="none" ng-click="request.ui.setCitySearch(true)"
+                               class="to-city-search-button">
+                        <md-tooltip md-direction="top">Back to city search</md-tooltip>
+                        <md-icon md-font-set="fa" md-font-icon="fa-search"></md-icon>
+                    </md-button>
+
+                    <md-input-container flex>
+                        <label>City name</label>
+                        <input ng-model="request.place.city.name" class="city-name-input" name="cityName"
+                               ng-required="!request.ui.citySearch"/>
+                        <div ng-messages="requestedPlace.cityInput.cityName.$error">
+                            <ng-message when="required">Name is required!</ng-message>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex>
+                        <label>City identifier</label>
+                        <input ng-model="request.place.city.identifier" class="city-identifier-input"
+                               ng-required="!request.ui.citySearch" name="cityIdentifier" pattern="[a-z]*"/>
+                        <div ng-messages="requestedPlace.cityInput.cityIdentifier.$error">
+                            <ng-message when="required">Identifier is required!</ng-message>
+                            <ng-message when="pattern">Identifier must only have lowercase characters</ng-message>
+                        </div>
+                    </md-input-container>
+
+                    <md-button flex="none" ng-click="createCity(request)" class="create-city-button"
+                               ng-disabled="requestedPlace.cityInput.$invalid ||
+                               !request.place.city.state.hasOwnProperty('id')">
                         <md-tooltip md-direction="top">Create city</md-tooltip>
                         <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
                     </md-button>
@@ -104,24 +136,29 @@
 
             <md-input-container>
                 <label>Location of your place</label>
-                <input required ng-model="request.place.location"/>
+                <input required ng-model="request.place.location" class="location-input" name="location"/>
+                <div ng-messages="requestedPlace.location.$error">
+                    <ng-message when="required">Location is required!</ng-message>
+                </div>
             </md-input-container>
         </md-card-content>
         <md-card-actions>
             <div layout="row" layout-align="space-between center">
                 <div flex="none">
-                    Requested by {{request.requestingUser.username}},
+                    Requested by <span class="requesting-user">{{request.requestingUser.username}}</span>,
                     <time class="time-ago" datetime="{{request.createdDateTime}}">
                         <md-tooltip md-direction="top">{{request.createdDateTime | time}}</md-tooltip>
                         {{request.createdDateTime | time}}
                     </time>
                 </div>
                 <div layout flex="none">
-                    <md-button ng-click="decline($index)">
+                    <md-button ng-click="decline($index)" class="decline-button">
                         <md-tooltip md-direction="top">Decline place request</md-tooltip>
                         <md-icon md-font-set="fa" md-font-icon="fa-trash"></md-icon>
                     </md-button>
-                    <md-button ng-click="save($index)">
+
+                    <md-button ng-click="save($index)" class="accept-button"
+                               ng-disabled="!request.place.city.hasOwnProperty('id') || requestedPlace.$invalid">
                         <md-tooltip md-direction="top">Accept place request</md-tooltip>
                         <md-icon md-font-set="fa" md-font-icon="fa-check"></md-icon>
                     </md-button>

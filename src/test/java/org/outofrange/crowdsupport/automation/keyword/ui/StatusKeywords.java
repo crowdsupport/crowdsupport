@@ -3,6 +3,7 @@ package org.outofrange.crowdsupport.automation.keyword.ui;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.outofrange.crowdsupport.automation.keyword.ui.core.CustomConditions;
+import org.outofrange.crowdsupport.automation.keyword.ui.core.Sleeper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,11 +18,13 @@ public class StatusKeywords extends KeywordBase {
     }
 
     public String getMessage() {
-        web().waiter(CustomConditions.anyTextInElement(LASTMESSAGE)).doWait(10);
+        Sleeper.sleep(500);
+        web().waiter(CustomConditions.anyTextInElement(LASTMESSAGE)).doWait(5);
         return web().getText(LASTMESSAGE);
     }
 
     public boolean isMessageDisplayed(String containingText) {
+        Sleeper.sleep(500);
         web().waiter(ExpectedConditions.textToBePresentInElementLocated(LASTMESSAGE, containingText)).doWait();
         return web().getText(LASTMESSAGE).contains(containingText);
     }

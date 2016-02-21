@@ -88,7 +88,7 @@
 
             $scope.logout = Auth.logout;
         })
-        .controller('PlaceRequestCtrl', function ($scope, Restangular, $previousState, Status) {
+        .controller('PlaceRequestCtrl', function ($scope, Restangular, $previousState, Status, $timeout) {
             $scope.city = null;
             $scope.name = '';
             $scope.identifier = '';
@@ -102,6 +102,10 @@
             $scope.addCityInfo = function () {
                 $scope.cityname = $scope.city;
                 $scope.addCity = true;
+
+                $timeout(function () {
+                    $('#placerequest__city-input').focus();
+                });
             };
 
             $scope.searchCity = function () {
