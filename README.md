@@ -40,6 +40,7 @@ Troubleshooting
 ===============
 
 * Do you have the correct version of Java in your `$PATH`? Executing `java -version` in the command line should tell you something about java version 1.8. Or higher, if you're from the future.
+* When you are trying to build the project (i.e. by starting `demo.cmd`, make sure you've [`$JAVA_HOME`](http://lmgtfy.com/?q=java_home) correctly set, pointing to your JDK installation.
 * Is your port 8080 free?
 
 Simply create a [new issue](https://github.com/crowdsupport/crowdsupport/issues) :)
